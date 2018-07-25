@@ -1,7 +1,4 @@
-﻿using Steeltoe.Management.Census.Trace;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace Steeltoe.Management.Census.Common
 {
@@ -22,23 +19,19 @@ namespace Steeltoe.Management.Census.Common
             get
             {
                 var nowNanoTicks = NowNanos;
-                var nowSecTicks = nowNanoTicks / NANOS_PER_SECOND;
-                var excessNanos = nowNanoTicks - (nowSecTicks * NANOS_PER_SECOND);
-                return new Timestamp(nowSecTicks, (int)excessNanos);
-
+                double nowSecTicks = (double)nowNanoTicks / NANOS_PER_SECOND;
+                var excessNanos = (int)((nowSecTicks - Math.Truncate(nowSecTicks)) * NANOS_PER_SECOND);
+                return new Timestamp((long)nowSecTicks, excessNanos);
             }
-
         }
 
         public long NowNanos
         {
             get
             {
-                var millis = DateTimeOffset.UtcNow.UtcTicks / TimeSpan.TicksPerMillisecond;
+                var millis = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeMilliseconds();
                 return millis * NANOS_PER_MILLI;
             }
         }
-
-
     }
 }

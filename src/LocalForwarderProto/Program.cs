@@ -117,11 +117,11 @@ namespace LocalForwarderProto
                 {
                     request.ResponseCode = span.Status.Message;
                 }
-
-                SetLinks(span.Links, request.Properties);
-
-                telemetryClient.TrackRequest(request);
             }
+
+            SetLinks(span.Links, request.Properties);
+
+            telemetryClient.TrackRequest(request);
         }
 
         private void TrackDependencyFromSpan(Span span)
