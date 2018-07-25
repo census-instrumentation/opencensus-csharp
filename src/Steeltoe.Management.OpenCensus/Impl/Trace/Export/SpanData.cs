@@ -17,7 +17,7 @@ namespace Steeltoe.Management.Census.Trace.Export
                         ITimedEvents<IAnnotation> annotations,
                         ITimedEvents<IMessageEvent> messageOrNetworkEvents,
                         ILinks links,
-                        int? childSpanCount,
+                        uint? childSpanCount,
                         Status status,
                         ITimestamp endTimestamp)
         {
@@ -55,7 +55,7 @@ namespace Steeltoe.Management.Census.Trace.Export
             ITimedEvents<IAnnotation> annotations,
             ITimedEvents<IMessageEvent> messageEvents,
             ILinks links,
-            int? childSpanCount,
+            uint? childSpanCount,
             Status status,
             ITimestamp endTimestamp)
         {
@@ -118,7 +118,7 @@ namespace Steeltoe.Management.Census.Trace.Export
 
         public ILinks Links { get; }
 
-        public int? ChildSpanCount { get; }
+        public uint? ChildSpanCount { get; }
 
         public Status Status { get; }
 

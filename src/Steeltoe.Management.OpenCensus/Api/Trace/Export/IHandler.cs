@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Steeltoe.Management.Census.Trace.Export
 {
     public interface IHandler
     {
-        void Export(IList<ISpanData> spanDataList);
+        Task ExportAsync(IList<ISpanData> spanDataList);
     }
 }

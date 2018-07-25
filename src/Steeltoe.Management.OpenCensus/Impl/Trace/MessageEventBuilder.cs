@@ -1,24 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Steeltoe.Management.Census.Trace
 {
     public class MessageEventBuilder
     {
         private MessageEventType? type;
-        private Int64? messageId;
-        private Int64? uncompressedMessageSize;
-        private Int64? compressedMessageSize;
+        private UInt64? messageId;
+        private UInt64? uncompressedMessageSize;
+        private UInt64? compressedMessageSize;
 
         internal MessageEventBuilder()
         {
         }
         internal MessageEventBuilder(
             MessageEventType type,
-            long messageId,
-            long uncompressedMessageSize,
-            long compressedMessageSize)
+            ulong messageId,
+            ulong uncompressedMessageSize,
+            ulong compressedMessageSize)
         {
             this.type = type;
             this.messageId = messageId;
@@ -30,17 +28,17 @@ namespace Steeltoe.Management.Census.Trace
             this.type = type;
             return this;
         }
-        internal MessageEventBuilder SetMessageId(long messageId)
+        internal MessageEventBuilder SetMessageId(ulong messageId)
         {
             this.messageId = messageId;
             return this;
         }
-        public MessageEventBuilder SetUncompressedMessageSize(long uncompressedMessageSize)
+        public MessageEventBuilder SetUncompressedMessageSize(ulong uncompressedMessageSize)
         {
             this.uncompressedMessageSize = uncompressedMessageSize;
             return this;
         }
-        public MessageEventBuilder SetCompressedMessageSize(long compressedMessageSize)
+        public MessageEventBuilder SetCompressedMessageSize(ulong compressedMessageSize)
         {
             this.compressedMessageSize = compressedMessageSize;
             return this;

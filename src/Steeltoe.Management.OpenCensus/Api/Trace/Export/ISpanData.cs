@@ -16,7 +16,7 @@ namespace Steeltoe.Management.Census.Trace.Export
         ITimedEvents<IAnnotation> Annotations { get; }
         ITimedEvents<IMessageEvent> MessageEvents { get; }
         ILinks Links { get; }
-        int? ChildSpanCount { get; }
+        uint? ChildSpanCount { get; }
         Status Status { get; }
         ITimestamp EndTimestamp { get; }
     }

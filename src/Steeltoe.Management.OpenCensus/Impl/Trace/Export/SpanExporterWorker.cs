@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
+using System.Threading.Tasks;
 using Steeltoe.Management.Census.Common;
 
 namespace Steeltoe.Management.Census.Trace.Export
@@ -51,7 +53,7 @@ namespace Steeltoe.Management.Census.Trace.Export
                         BuildList(item, toExport);
 
                         // Export them
-                        Export(toExport);
+                        ExportAsync(toExport).GetAwaiter().GetResult();
 
                         // Get ready for next batch
                         toExport.Clear();
@@ -92,20 +94,23 @@ namespace Steeltoe.Management.Census.Trace.Export
             }
         }
 
-        private void Export(IList<ISpanData> export)
+        private Task ExportAsync(IList<ISpanData> export)
         {
+            var tasks = new List<Task>();
             var handlers = _serviceHandlers.Values;
             foreach (var handler in handlers)
             {
                 try
                 {
-                    handler.Export(export);
+                    tasks.Add(handler.ExportAsync(export));
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    // Log warning
+                    Debug.WriteLine(e);
                 }
             }
+
+            return Task.WhenAll(tasks);
         }
 
         internal void RegisterHandler(string name, IHandler handler)

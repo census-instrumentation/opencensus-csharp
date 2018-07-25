@@ -1,6 +1,4 @@
-﻿
-
-using Steeltoe.Management.Census.Common;
+﻿using Steeltoe.Management.Census.Common;
 
 namespace Steeltoe.Management.Census.Trace.Export
 {

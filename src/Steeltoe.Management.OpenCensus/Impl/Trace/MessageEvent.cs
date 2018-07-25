@@ -4,7 +4,7 @@ namespace Steeltoe.Management.Census.Trace
 {
     public class MessageEvent : IMessageEvent
     {
-        internal MessageEvent(MessageEventType type, long messageId, long uncompressedMessageSize, long compressedMessageSize)
+        internal MessageEvent(MessageEventType type, ulong messageId, ulong uncompressedMessageSize, ulong compressedMessageSize)
         {
             Type = type;
             MessageId = messageId;
@@ -14,13 +14,13 @@ namespace Steeltoe.Management.Census.Trace
 
         public MessageEventType Type { get; }
 
-        public long MessageId { get; }
+        public ulong MessageId { get; }
 
-        public long UncompressedMessageSize { get; }
+        public ulong UncompressedMessageSize { get; }
 
-        public long CompressedMessageSize { get; }
+        public ulong CompressedMessageSize { get; }
 
-        public static MessageEventBuilder Builder(MessageEventType type, long messageId)
+        public static MessageEventBuilder Builder(MessageEventType type, ulong messageId)
         {
             return new MessageEventBuilder()
                     .SetType(type)
@@ -60,9 +60,9 @@ namespace Steeltoe.Management.Census.Trace
 
         public override int GetHashCode()
         {
-            long h = 1;
+            ulong h = 1;
             h *= 1000003;
-            h ^= this.Type.GetHashCode();
+            h ^= (ulong)this.Type.GetHashCode();
             h *= 1000003;
             h ^= (this.MessageId >> 32) ^ this.MessageId;
             h *= 1000003;

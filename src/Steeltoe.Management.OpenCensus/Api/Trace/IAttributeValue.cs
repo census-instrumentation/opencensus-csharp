@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Steeltoe.Management.Census.Trace
 {
@@ -12,9 +10,10 @@ namespace Steeltoe.Management.Census.Trace
              Func<long, T> longFunction,
              Func<object, T> defaultFunction);
     }
-    public interface IAttributeValue<T> : IAttributeValue
+
+    public interface IAttributeValue<out T> : IAttributeValue
     {
         T Value { get; }
-        M Apply<M>(Func<T, M> function);
+        TM Apply<TM>(Func<T, TM> function);
     }
 }
