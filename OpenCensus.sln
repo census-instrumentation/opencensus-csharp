@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2042
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenCensus", "src\OpenCensus\OpenCensus.csproj", "{AE3E3DF5-4083-4C6E-A840-8271B0ACDE7E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenCensus.Test", "test\OpenCensus.Test\OpenCensus.Test.csproj", "{CC62B3C1-5875-4986-A7F6-C4B26E42B0A1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AE3E3DF5-4083-4C6E-A840-8271B0ACDE7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE3E3DF5-4083-4C6E-A840-8271B0ACDE7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE3E3DF5-4083-4C6E-A840-8271B0ACDE7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE3E3DF5-4083-4C6E-A840-8271B0ACDE7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC62B3C1-5875-4986-A7F6-C4B26E42B0A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC62B3C1-5875-4986-A7F6-C4B26E42B0A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC62B3C1-5875-4986-A7F6-C4B26E42B0A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC62B3C1-5875-4986-A7F6-C4B26E42B0A1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {55639B5C-0770-4A22-AB56-859604650521}
+	EndGlobalSection
+EndGlobal
