@@ -1,10 +1,10 @@
-﻿using Steeltoe.Management.Census.Common;
-using Steeltoe.Management.Census.Trace.Unsafe;
+﻿using OpenCensus.Common;
+using OpenCensus.Trace.Unsafe;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Trace
+namespace OpenCensus.Trace
 {
     internal static class CurrentSpanUtils
     {

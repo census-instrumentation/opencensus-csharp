@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Trace.Sampler
+namespace OpenCensus.Trace.Sampler
 {
     internal sealed class NeverSampleSampler : ISampler
     {

@@ -1,5 +1,5 @@
-﻿using Steeltoe.Management.Census.Internal;
-using Steeltoe.Management.Census.Tags.Propagation;
+﻿using OpenCensus.Internal;
+using OpenCensus.Tags.Propagation;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Steeltoe.Management.Census.Tags.Test
+namespace OpenCensus.Tags.Test
 {
     public class NoopTagsTest
     {

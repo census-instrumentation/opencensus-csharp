@@ -1,10 +1,10 @@
-﻿using Steeltoe.Management.Census.Common;
-using Steeltoe.Management.Census.Internal;
+﻿using OpenCensus.Common;
+using OpenCensus.Internal;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Tags
+namespace OpenCensus.Tags
 {
     internal sealed class NoopTagContextBuilder : TagContextBuilderBase
     {

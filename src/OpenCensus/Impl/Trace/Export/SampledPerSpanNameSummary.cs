@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Trace.Export
+namespace OpenCensus.Trace.Export
 {
     public sealed class SampledPerSpanNameSummary : ISampledPerSpanNameSummary
     {

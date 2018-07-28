@@ -1,10 +1,10 @@
-﻿using Steeltoe.Management.Census.Internal;
-using Steeltoe.Management.Census.Utils;
+﻿using OpenCensus.Internal;
+using OpenCensus.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Trace.Export
+namespace OpenCensus.Trace.Export
 {
     public sealed class InProcessSampledSpanStore : SampledSpanStoreBase
     {

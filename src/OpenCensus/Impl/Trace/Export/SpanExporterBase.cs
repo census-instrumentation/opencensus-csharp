@@ -1,10 +1,10 @@
-﻿using Steeltoe.Management.Census.Common;
+﻿using OpenCensus.Common;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 
-namespace Steeltoe.Management.Census.Trace.Export
+namespace OpenCensus.Trace.Export
 {
     public abstract class SpanExporterBase : ISpanExporter
     {

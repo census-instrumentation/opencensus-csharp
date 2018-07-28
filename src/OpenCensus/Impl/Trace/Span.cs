@@ -1,14 +1,14 @@
-﻿using Steeltoe.Management.Census.Common;
-using Steeltoe.Management.Census.Trace.Config;
-using Steeltoe.Management.Census.Trace.Export;
-using Steeltoe.Management.Census.Internal;
-using Steeltoe.Management.Census.Utils;
+﻿using OpenCensus.Common;
+using OpenCensus.Trace.Config;
+using OpenCensus.Trace.Export;
+using OpenCensus.Internal;
+using OpenCensus.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 
-namespace Steeltoe.Management.Census.Trace
+namespace OpenCensus.Trace
 {
     public sealed class Span : SpanBase
     {
@@ -411,7 +411,7 @@ namespace Steeltoe.Management.Census.Trace
             this.sampleToLocalSpanStore = false;
             if (options.HasFlag(SpanOptions.RECORD_EVENTS))
             {
-                this.timestampConverter =  timestampConverter != null ? timestampConverter : Census.Internal.TimestampConverter.Now(clock);
+                this.timestampConverter =  timestampConverter != null ? timestampConverter : OpenCensus.Internal.TimestampConverter.Now(clock);
                 startNanoTime = clock.NowNanos;
             }
             else

@@ -1,10 +1,10 @@
-﻿using Steeltoe.Management.Census.Stats.Measures;
-using Steeltoe.Management.Census.Utils;
+﻿using OpenCensus.Stats.Measures;
+using OpenCensus.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Stats.Measurements
+namespace OpenCensus.Stats.Measurements
 {
     public sealed class MeasurementDouble : Measurement, IMeasurementDouble
     {

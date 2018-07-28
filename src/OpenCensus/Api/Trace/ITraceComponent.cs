@@ -1,11 +1,11 @@
 ﻿
 
-using Steeltoe.Management.Census.Common;
-using Steeltoe.Management.Census.Trace.Config;
-using Steeltoe.Management.Census.Trace.Export;
-using Steeltoe.Management.Census.Trace.Propagation;
+using OpenCensus.Common;
+using OpenCensus.Trace.Config;
+using OpenCensus.Trace.Export;
+using OpenCensus.Trace.Propagation;
 
-namespace Steeltoe.Management.Census.Trace
+namespace OpenCensus.Trace
 {
     public interface ITraceComponent
     {

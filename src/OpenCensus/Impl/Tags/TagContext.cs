@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace Steeltoe.Management.Census.Tags
+namespace OpenCensus.Tags
 {
     public sealed class TagContext : TagContextBase
     {

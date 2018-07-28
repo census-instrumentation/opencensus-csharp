@@ -1,8 +1,8 @@
 ﻿
 
-using Steeltoe.Management.Census.Common;
+using OpenCensus.Common;
 
-namespace Steeltoe.Management.Census.Trace.Export
+namespace OpenCensus.Trace.Export
 {
     public interface ITimedEvent<T>
     {

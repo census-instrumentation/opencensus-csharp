@@ -1,10 +1,10 @@
-﻿using Steeltoe.Management.Census.Tags;
-using Steeltoe.Management.Census.Common;
+﻿using OpenCensus.Tags;
+using OpenCensus.Common;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Stats
+namespace OpenCensus.Stats
 {
     public interface IViewData
     {

@@ -1,10 +1,10 @@
-﻿using Steeltoe.Management.Census.Trace;
+﻿using OpenCensus.Trace;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Trace
+namespace OpenCensus.Trace
 {
     public static class SpanExtensions
     {

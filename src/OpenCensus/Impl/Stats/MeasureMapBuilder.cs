@@ -1,11 +1,11 @@
-﻿using Steeltoe.Management.Census.Stats;
-using Steeltoe.Management.Census.Stats.Measurements;
-using Steeltoe.Management.Census.Stats.Measures;
+﻿using OpenCensus.Stats;
+using OpenCensus.Stats.Measurements;
+using OpenCensus.Stats.Measures;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Stats
+namespace OpenCensus.Stats
 {
     internal class MeasureMapBuilder
     {

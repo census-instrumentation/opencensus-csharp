@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Trace.Propagation
+namespace OpenCensus.Trace.Propagation
 {
     internal class NoopPropagationComponent : IPropagationComponent
     {

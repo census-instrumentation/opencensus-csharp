@@ -1,9 +1,9 @@
 ﻿using Moq;
-using Steeltoe.Management.Census.Testing.Common;
-using Steeltoe.Management.Census.Trace.Config;
-using Steeltoe.Management.Census.Trace.Export;
-using Steeltoe.Management.Census.Trace.Internal;
-using Steeltoe.Management.Census.Trace.Sampler;
+using OpenCensus.Testing.Common;
+using OpenCensus.Trace.Config;
+using OpenCensus.Trace.Export;
+using OpenCensus.Trace.Internal;
+using OpenCensus.Trace.Sampler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Steeltoe.Management.Census.Trace.Test
+namespace OpenCensus.Trace.Test
 {
     public class SpanBuilderTest
     {

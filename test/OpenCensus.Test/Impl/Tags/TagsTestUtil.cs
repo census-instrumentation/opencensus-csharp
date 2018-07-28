@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Steeltoe.Management.Census.Tags.Test
+namespace OpenCensus.Tags.Test
 {
     internal static class TagsTestUtil
     {

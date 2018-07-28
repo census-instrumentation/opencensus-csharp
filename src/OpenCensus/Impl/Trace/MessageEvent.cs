@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Steeltoe.Management.Census.Trace
+namespace OpenCensus.Trace
 {
     public class MessageEvent : IMessageEvent
     {

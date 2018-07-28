@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-namespace Steeltoe.Management.Census.Trace.Internal
+namespace OpenCensus.Trace.Internal
 {
     internal class RandomGenerator : IRandomGenerator
     {

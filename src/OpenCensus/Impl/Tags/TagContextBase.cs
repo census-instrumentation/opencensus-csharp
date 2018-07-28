@@ -1,10 +1,10 @@
-﻿using Steeltoe.Management.Census.Utils;
+﻿using OpenCensus.Utils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Steeltoe.Management.Census.Tags
+namespace OpenCensus.Tags
 {
     public abstract class TagContextBase : ITagContext
     {

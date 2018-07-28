@@ -1,10 +1,10 @@
-﻿using Steeltoe.Management.Census.Utils;
+﻿using OpenCensus.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace Steeltoe.Management.Census.Trace
+namespace OpenCensus.Trace
 {
     public sealed class Link : ILink
     {

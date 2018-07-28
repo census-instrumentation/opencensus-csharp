@@ -1,9 +1,9 @@
-﻿using Steeltoe.Management.Census.Stats.Measures;
+﻿using OpenCensus.Stats.Measures;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Stats.Measurements
+namespace OpenCensus.Stats.Measurements
 {
     public sealed class MeasurementLong : Measurement, IMeasurementLong
     {

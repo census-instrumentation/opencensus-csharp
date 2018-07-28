@@ -1,4 +1,4 @@
-﻿using Steeltoe.Management.Census.Utils;
+﻿using OpenCensus.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Steeltoe.Management.Census.Trace.Internal.Test
+namespace OpenCensus.Trace.Internal.Test
 {
     public class ConcurrentIntrusiveListTest
     {

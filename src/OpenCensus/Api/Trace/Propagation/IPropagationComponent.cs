@@ -1,4 +1,4 @@
-﻿namespace Steeltoe.Management.Census.Trace.Propagation
+﻿namespace OpenCensus.Trace.Propagation
 {
     public interface IPropagationComponent
     {

@@ -1,9 +1,9 @@
-﻿using Steeltoe.Management.Census.Common;
-using Steeltoe.Management.Census.Internal;
-using Steeltoe.Management.Census.Testing.Common;
-using Steeltoe.Management.Census.Trace.Config;
-using Steeltoe.Management.Census.Trace.Internal;
-using Steeltoe.Management.Census.Utils;
+﻿using OpenCensus.Common;
+using OpenCensus.Internal;
+using OpenCensus.Testing.Common;
+using OpenCensus.Trace.Config;
+using OpenCensus.Trace.Internal;
+using OpenCensus.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Steeltoe.Management.Census.Trace.Export.Test
+namespace OpenCensus.Trace.Export.Test
 {
     public class InProcessSampledSpanStoreTest
     {

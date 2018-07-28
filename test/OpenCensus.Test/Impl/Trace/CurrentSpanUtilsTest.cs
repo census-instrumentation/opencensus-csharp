@@ -1,7 +1,7 @@
 ﻿using Moq;
-using Steeltoe.Management.Census.Common;
-using Steeltoe.Management.Census.Trace.Internal;
-using Steeltoe.Management.Census.Trace.Unsafe;
+using OpenCensus.Common;
+using OpenCensus.Trace.Internal;
+using OpenCensus.Trace.Unsafe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Steeltoe.Management.Census.Trace.Test
+namespace OpenCensus.Trace.Test
 {
     public class CurrentSpanUtilsTest
     {

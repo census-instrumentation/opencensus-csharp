@@ -1,10 +1,10 @@
-﻿using Steeltoe.Management.Census.Trace.Internal;
-using Steeltoe.Management.Census.Utils;
+﻿using OpenCensus.Trace.Internal;
+using OpenCensus.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Trace
+namespace OpenCensus.Trace
 {
     public sealed class SpanId : ISpanId
     {

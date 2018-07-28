@@ -1,10 +1,10 @@
-﻿using Steeltoe.Management.Census.Common;
-using Steeltoe.Management.Census.Trace;
+﻿using OpenCensus.Common;
+using OpenCensus.Trace;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Internal
+namespace OpenCensus.Internal
 {
     public sealed class NoopScope : IScope
     {

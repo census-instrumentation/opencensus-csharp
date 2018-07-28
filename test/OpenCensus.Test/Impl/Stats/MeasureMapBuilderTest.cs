@@ -1,6 +1,6 @@
-﻿using Steeltoe.Management.Census.Stats.Measurements;
-using Steeltoe.Management.Census.Stats.Measures;
-using Steeltoe.Management.Census.Utils;
+﻿using OpenCensus.Stats.Measurements;
+using OpenCensus.Stats.Measures;
+using OpenCensus.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Steeltoe.Management.Census.Stats.Test
+namespace OpenCensus.Stats.Test
 {
     public class MeasureMapBuilderTest
     {

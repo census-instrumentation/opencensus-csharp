@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Trace.Unsafe
+namespace OpenCensus.Trace.Unsafe
 {
     public interface IAsyncLocalContextListener
     {

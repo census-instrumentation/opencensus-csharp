@@ -2,9 +2,9 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
-using Steeltoe.Management.Census.Common;
+using OpenCensus.Common;
 
-namespace Steeltoe.Management.Census.Trace.Export
+namespace OpenCensus.Trace.Export
 {
     internal class SpanExporterWorker : IDisposable
     {

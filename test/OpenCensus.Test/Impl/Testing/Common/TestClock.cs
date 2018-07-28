@@ -1,11 +1,11 @@
-﻿using Steeltoe.Management.Census.Common;
+﻿using OpenCensus.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Steeltoe.Management.Census.Testing.Common
+namespace OpenCensus.Testing.Common
 { 
     public class TestClock : IClock
     {

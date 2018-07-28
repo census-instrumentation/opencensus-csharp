@@ -1,10 +1,10 @@
 ﻿using Moq;
-using Steeltoe.Management.Census.Trace.Internal;
+using OpenCensus.Trace.Internal;
 using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace Steeltoe.Management.Census.Trace.Test
+namespace OpenCensus.Trace.Test
 {
     public class SpanBaseTest
     {

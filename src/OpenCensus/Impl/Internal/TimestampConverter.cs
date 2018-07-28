@@ -1,7 +1,7 @@
-﻿using Steeltoe.Management.Census.Common;
+﻿using OpenCensus.Common;
 
 
-namespace Steeltoe.Management.Census.Internal
+namespace OpenCensus.Internal
 {
     internal class TimestampConverter : ITimestampConverter
     {

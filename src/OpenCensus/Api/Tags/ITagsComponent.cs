@@ -1,9 +1,9 @@
-﻿using Steeltoe.Management.Census.Tags.Propagation;
+﻿using OpenCensus.Tags.Propagation;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Tags
+namespace OpenCensus.Tags
 {
     public interface ITagsComponent
     {

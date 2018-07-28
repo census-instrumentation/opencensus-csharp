@@ -1,11 +1,11 @@
-﻿using Steeltoe.Management.Census.Common;
-using Steeltoe.Management.Census.Internal;
-using Steeltoe.Management.Census.Tags;
+﻿using OpenCensus.Common;
+using OpenCensus.Internal;
+using OpenCensus.Tags;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Stats
+namespace OpenCensus.Stats
 {
     internal sealed class StatsManager
     {

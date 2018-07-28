@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Common
+namespace OpenCensus.Common
 {
     public class Timestamp : ITimestamp
     {

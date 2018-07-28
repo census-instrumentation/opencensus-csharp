@@ -1,5 +1,5 @@
-﻿using Steeltoe.Management.Census.Stats.Measures;
-using Steeltoe.Management.Census.Tags;
+﻿using OpenCensus.Stats.Measures;
+using OpenCensus.Tags;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Steeltoe.Management.Census.Stats.Test
+namespace OpenCensus.Stats.Test
 {
     public class NoopStatsTest
     {

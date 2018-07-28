@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Utils
+namespace OpenCensus.Utils
 {
     internal sealed class ConcurrentIntrusiveList<T> where T : IElement<T>
     {

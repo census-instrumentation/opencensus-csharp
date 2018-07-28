@@ -1,11 +1,11 @@
 ﻿
-using Steeltoe.Management.Census.Trace.Export;
-using Steeltoe.Management.Census.Utils;
+using OpenCensus.Trace.Export;
+using OpenCensus.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Trace
+namespace OpenCensus.Trace
 {
     public abstract class SpanBase : ISpan, IElement<SpanBase>
     {

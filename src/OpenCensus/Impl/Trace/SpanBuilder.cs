@@ -1,11 +1,11 @@
-﻿using Steeltoe.Management.Census.Internal;
-using Steeltoe.Management.Census.Trace.Config;
-using Steeltoe.Management.Census.Trace.Internal;
+﻿using OpenCensus.Internal;
+using OpenCensus.Trace.Config;
+using OpenCensus.Trace.Internal;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Trace
+namespace OpenCensus.Trace
 {
     public class SpanBuilder : SpanBuilderBase
     {

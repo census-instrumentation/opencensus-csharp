@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Stats.Measurements
+namespace OpenCensus.Stats.Measurements
 {
     public interface IMeasurementDouble : IMeasurement
     {

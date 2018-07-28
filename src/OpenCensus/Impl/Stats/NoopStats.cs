@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Stats
+namespace OpenCensus.Stats
 {
     internal sealed class NoopStats
     {
@@ -19,7 +19,7 @@ namespace Steeltoe.Management.Census.Stats
         {
             get
             {
-                return Census.Stats.NoopStatsRecorder.INSTANCE;
+                return OpenCensus.Stats.NoopStatsRecorder.INSTANCE;
             }
         }
 
@@ -27,7 +27,7 @@ namespace Steeltoe.Management.Census.Stats
         {
             get
             {
-                return Census.Stats.NoopMeasureMap.INSTANCE;
+                return OpenCensus.Stats.NoopMeasureMap.INSTANCE;
             }
         }
         internal static IViewManager NewNoopViewManager()

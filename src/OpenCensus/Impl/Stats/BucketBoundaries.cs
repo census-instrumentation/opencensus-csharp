@@ -1,10 +1,10 @@
-﻿using Steeltoe.Management.Census.Utils;
+﻿using OpenCensus.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Stats
+namespace OpenCensus.Stats
 {
     public sealed class BucketBoundaries : IBucketBoundaries
     {

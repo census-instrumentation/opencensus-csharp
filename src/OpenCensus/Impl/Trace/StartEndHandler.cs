@@ -1,10 +1,10 @@
-﻿using Steeltoe.Management.Census.Internal;
-using Steeltoe.Management.Census.Trace.Export;
+﻿using OpenCensus.Internal;
+using OpenCensus.Trace.Export;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Trace
+namespace OpenCensus.Trace
 {
     public sealed class StartEndHandler : IStartEndHandler
     {

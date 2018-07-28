@@ -1,9 +1,9 @@
-﻿using Steeltoe.Management.Census.Common;
+﻿using OpenCensus.Common;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Trace
+namespace OpenCensus.Trace
 {
     public abstract class TracerBase : ITracer
     {

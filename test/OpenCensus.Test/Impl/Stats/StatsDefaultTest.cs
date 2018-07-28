@@ -1,7 +1,7 @@
 ﻿
 using Xunit;
 
-namespace Steeltoe.Management.Census.Stats.Test
+namespace OpenCensus.Stats.Test
 {
     public class StatsDefaultTest
     {

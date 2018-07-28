@@ -1,9 +1,9 @@
-﻿using Steeltoe.Management.Census.Trace;
+﻿using OpenCensus.Trace;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Utils
+namespace OpenCensus.Utils
 {
     public static class CanonicalCodeExtensions
     {

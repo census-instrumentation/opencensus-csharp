@@ -1,10 +1,10 @@
-﻿using Steeltoe.Management.Census.Trace.Internal;
-using Steeltoe.Management.Census.Trace.Test;
+﻿using OpenCensus.Trace.Internal;
+using OpenCensus.Trace.Test;
 using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace Steeltoe.Management.Census.Trace.Sampler.Test
+namespace OpenCensus.Trace.Sampler.Test
 {
     public class SamplersTest
     {

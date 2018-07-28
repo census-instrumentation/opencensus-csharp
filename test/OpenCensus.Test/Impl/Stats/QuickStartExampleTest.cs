@@ -1,6 +1,6 @@
-﻿using Steeltoe.Management.Census.Stats.Aggregations;
-using Steeltoe.Management.Census.Stats.Measures;
-using Steeltoe.Management.Census.Tags;
+﻿using OpenCensus.Stats.Aggregations;
+using OpenCensus.Stats.Measures;
+using OpenCensus.Tags;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Steeltoe.Management.Census.Stats.Test
+namespace OpenCensus.Stats.Test
 {
     public class QuickStartExampleTest
     {

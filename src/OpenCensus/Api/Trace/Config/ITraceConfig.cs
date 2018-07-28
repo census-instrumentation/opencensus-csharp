@@ -1,4 +1,4 @@
-﻿namespace Steeltoe.Management.Census.Trace.Config
+﻿namespace OpenCensus.Trace.Config
 {
     public interface ITraceConfig
     {

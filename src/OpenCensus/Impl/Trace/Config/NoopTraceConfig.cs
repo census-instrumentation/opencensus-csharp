@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Trace.Config
+namespace OpenCensus.Trace.Config
 {
     public class NoopTraceConfig : TraceConfigBase
     {

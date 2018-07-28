@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Common
+namespace OpenCensus.Common
 {
     public interface ITimestamp : IComparable<ITimestamp>
     {

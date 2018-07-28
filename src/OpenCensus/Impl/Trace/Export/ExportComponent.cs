@@ -1,7 +1,7 @@
-﻿using Steeltoe.Management.Census.Common;
-using Steeltoe.Management.Census.Internal;
+﻿using OpenCensus.Common;
+using OpenCensus.Internal;
 
-namespace Steeltoe.Management.Census.Trace.Export
+namespace OpenCensus.Trace.Export
 {
     public sealed class ExportComponent : ExportComponentBase
     {

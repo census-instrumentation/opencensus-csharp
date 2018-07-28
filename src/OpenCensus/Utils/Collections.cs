@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Utils
+namespace OpenCensus.Utils
 {
     public static class Collections
     {

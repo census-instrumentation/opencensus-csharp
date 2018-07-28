@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Steeltoe.Management.Census.Trace.Export;
+using OpenCensus.Trace.Export;
 
-namespace Steeltoe.Management.Census.Trace.Test
+namespace OpenCensus.Trace.Test
 {
     public class NoopSpan : SpanBase
     {

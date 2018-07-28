@@ -1,10 +1,10 @@
-﻿using Steeltoe.Management.Census.Common;
-using Steeltoe.Management.Census.Tags.Unsafe;
+﻿using OpenCensus.Common;
+using OpenCensus.Tags.Unsafe;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Tags
+namespace OpenCensus.Tags
 {
     internal static class CurrentTagContextUtils
     {

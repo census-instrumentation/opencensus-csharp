@@ -1,10 +1,10 @@
-﻿using Steeltoe.Management.Census.Common;
-using Steeltoe.Management.Census.Internal;
+﻿using OpenCensus.Common;
+using OpenCensus.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Steeltoe.Management.Census.Tags
+namespace OpenCensus.Tags
 {
     public sealed class Tagger : TaggerBase
     {

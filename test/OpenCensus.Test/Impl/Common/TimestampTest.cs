@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Steeltoe.Management.Census.Common.Test
+namespace OpenCensus.Common.Test
 {
     public class TimestampTest
     {

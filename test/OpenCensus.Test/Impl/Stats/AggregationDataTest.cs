@@ -1,9 +1,9 @@
-﻿using Steeltoe.Management.Census.Stats.Aggregations;
+﻿using OpenCensus.Stats.Aggregations;
 using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace Steeltoe.Management.Census.Stats.Test
+namespace OpenCensus.Stats.Test
 {
     public class AggregationDataTest
     {

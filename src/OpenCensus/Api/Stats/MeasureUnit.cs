@@ -1,4 +1,4 @@
-﻿namespace Steeltoe.Management.Census.Stats
+﻿namespace OpenCensus.Stats
 {
     public static class MeasureUnit
     {

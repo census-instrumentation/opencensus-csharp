@@ -1,10 +1,10 @@
-﻿using Steeltoe.Management.Census.Internal;
+﻿using OpenCensus.Internal;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Tags.Propagation
+namespace OpenCensus.Tags.Propagation
 {
     internal static class SerializationUtils
     {

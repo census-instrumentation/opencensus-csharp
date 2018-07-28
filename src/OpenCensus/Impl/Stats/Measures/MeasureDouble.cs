@@ -1,9 +1,9 @@
-﻿using Steeltoe.Management.Census.Utils;
+﻿using OpenCensus.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Stats.Measures
+namespace OpenCensus.Stats.Measures
 {
     public class MeasureDouble : Measure, IMeasureDouble
     {

@@ -1,10 +1,10 @@
-﻿using Steeltoe.Management.Census.Common;
-using Steeltoe.Management.Census.Trace.Internal;
+﻿using OpenCensus.Common;
+using OpenCensus.Trace.Internal;
 using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace Steeltoe.Management.Census.Trace.Export.Test
+namespace OpenCensus.Trace.Export.Test
 {
     public class SpanDataTest
     {

@@ -1,8 +1,8 @@
-﻿using Steeltoe.Management.Census.Common;
+﻿using OpenCensus.Common;
 using Xunit;
 using Moq;
 
-namespace Steeltoe.Management.Census.Internal.Test
+namespace OpenCensus.Internal.Test
 {
     public class TimestampConverterTest
     {

@@ -1,4 +1,4 @@
-﻿using Steeltoe.Management.Census.Trace.Sampler;
+﻿using OpenCensus.Trace.Sampler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Steeltoe.Management.Census.Trace.Config.Test
+namespace OpenCensus.Trace.Config.Test
 {
     public class TraceConfigTest
     {

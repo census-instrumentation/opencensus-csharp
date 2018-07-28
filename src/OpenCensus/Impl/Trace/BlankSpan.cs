@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Steeltoe.Management.Census.Trace.Export;
+using OpenCensus.Trace.Export;
 
-namespace Steeltoe.Management.Census.Trace
+namespace OpenCensus.Trace
 {
     public sealed class BlankSpan : SpanBase
     {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Steeltoe.Management.Census.Trace.Propagation.Test
+namespace OpenCensus.Trace.Propagation.Test
 {
     public class SpanContextParseExceptionTest
     {

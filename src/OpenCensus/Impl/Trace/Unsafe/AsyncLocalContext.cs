@@ -1,11 +1,11 @@
-﻿using Steeltoe.Management.Census.Trace;
+﻿using OpenCensus.Trace;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Steeltoe.Management.Census.Trace.Unsafe
+namespace OpenCensus.Trace.Unsafe
 {
     public static class AsyncLocalContext
     {

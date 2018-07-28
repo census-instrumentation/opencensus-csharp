@@ -1,9 +1,9 @@
-﻿using Steeltoe.Management.Census.Utils;
+﻿using OpenCensus.Utils;
 using System;
 using System.Collections.Generic;
 using Xunit;
-using Steeltoe.Management.Census.Stats;
-namespace Steeltoe.Management.Census.Trace.Test
+using OpenCensus.Stats;
+namespace OpenCensus.Trace.Test
 {
     public class AnnotationTest
     {

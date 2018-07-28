@@ -1,9 +1,9 @@
-﻿using Steeltoe.Management.Census.Trace.Sampler;
+﻿using OpenCensus.Trace.Sampler;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Trace.Config
+namespace OpenCensus.Trace.Config
 {
     public sealed class TraceParams : ITraceParams
     {

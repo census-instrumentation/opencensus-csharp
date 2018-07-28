@@ -1,13 +1,13 @@
-﻿using Steeltoe.Management.Census.Common;
-using Steeltoe.Management.Census.Stats;
-using Steeltoe.Management.Census.Stats.Measurements;
-using Steeltoe.Management.Census.Tags;
+﻿using OpenCensus.Common;
+using OpenCensus.Stats;
+using OpenCensus.Stats.Measurements;
+using OpenCensus.Tags;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Stats
+namespace OpenCensus.Stats
 {
     internal sealed class MeasureToViewMap
     {

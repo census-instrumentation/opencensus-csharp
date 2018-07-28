@@ -1,11 +1,11 @@
-﻿using Steeltoe.Management.Census.Stats;
-using Steeltoe.Management.Census.Stats.Aggregations;
-using Steeltoe.Management.Census.Tags;
+﻿using OpenCensus.Stats;
+using OpenCensus.Stats.Aggregations;
+using OpenCensus.Tags;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Steeltoe.Management.Census.Stats
+namespace OpenCensus.Stats
 {
     public static class StatsExtensions
     {

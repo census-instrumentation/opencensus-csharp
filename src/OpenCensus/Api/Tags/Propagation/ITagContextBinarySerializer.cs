@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Tags.Propagation
+namespace OpenCensus.Tags.Propagation
 {
     public interface ITagContextBinarySerializer
     {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Steeltoe.Management.Census.Trace.Propagation.Test
+namespace OpenCensus.Trace.Propagation.Test
 {
     public class B3FormatTest
     {

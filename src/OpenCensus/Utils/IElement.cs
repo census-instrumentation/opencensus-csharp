@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Utils
+namespace OpenCensus.Utils
 {
     public interface IElement<T> where T: IElement<T> 
     {

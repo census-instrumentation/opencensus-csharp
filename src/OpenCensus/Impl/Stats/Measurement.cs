@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Steeltoe.Management.Census.Stats.Measurements;
+using OpenCensus.Stats.Measurements;
 
-namespace Steeltoe.Management.Census.Stats
+namespace OpenCensus.Stats
 {
     public abstract class Measurement : IMeasurement
     {

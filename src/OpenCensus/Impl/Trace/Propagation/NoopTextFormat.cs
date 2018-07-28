@@ -1,9 +1,9 @@
-﻿using Steeltoe.Management.Census.Trace;
+﻿using OpenCensus.Trace;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Trace.Propagation
+namespace OpenCensus.Trace.Propagation
 {
     internal class NoopTextFormat : TextFormatBase
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Internal
+namespace OpenCensus.Internal
 {
     public static class VarInt
     {

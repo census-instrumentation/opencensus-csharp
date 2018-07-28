@@ -1,7 +1,7 @@
 ﻿
-using Steeltoe.Management.Census.Tags.Propagation;
+using OpenCensus.Tags.Propagation;
 
-namespace Steeltoe.Management.Census.Tags
+namespace OpenCensus.Tags
 {
     public interface ITags
     {

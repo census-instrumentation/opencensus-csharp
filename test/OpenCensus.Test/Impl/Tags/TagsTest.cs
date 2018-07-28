@@ -1,4 +1,4 @@
-﻿using Steeltoe.Management.Census.Tags.Propagation;
+﻿using OpenCensus.Tags.Propagation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Steeltoe.Management.Census.Tags.Test
+namespace OpenCensus.Tags.Test
 {
     public class TagsTest
     {

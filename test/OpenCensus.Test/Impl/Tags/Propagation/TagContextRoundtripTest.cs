@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Steeltoe.Management.Census.Tags.Propagation.Test
+namespace OpenCensus.Tags.Propagation.Test
 {
     public class TagContextRoundtripTest
     {

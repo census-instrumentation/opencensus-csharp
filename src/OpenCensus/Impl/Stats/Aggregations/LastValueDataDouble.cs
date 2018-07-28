@@ -1,9 +1,9 @@
-﻿using Steeltoe.Management.Census.Utils;
+﻿using OpenCensus.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Stats.Aggregations
+namespace OpenCensus.Stats.Aggregations
 {
     public sealed class LastValueDataDouble : AggregationData, ILastValueDataDouble
     {

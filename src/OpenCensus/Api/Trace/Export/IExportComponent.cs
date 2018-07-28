@@ -1,4 +1,4 @@
-﻿namespace Steeltoe.Management.Census.Trace.Export
+﻿namespace OpenCensus.Trace.Export
 {
     public interface IExportComponent
     {

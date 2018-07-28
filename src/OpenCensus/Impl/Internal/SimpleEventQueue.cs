@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Internal
+namespace OpenCensus.Internal
 {
     public class SimpleEventQueue : IEventQueue
     {

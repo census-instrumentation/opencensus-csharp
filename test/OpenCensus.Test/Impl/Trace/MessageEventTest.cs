@@ -2,7 +2,7 @@
 
 using Xunit;
 
-namespace Steeltoe.Management.Census.Trace.Test
+namespace OpenCensus.Trace.Test
 {
     public class MessageEventTest
     {

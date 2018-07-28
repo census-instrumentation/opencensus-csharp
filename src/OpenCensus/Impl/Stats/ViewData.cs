@@ -1,15 +1,15 @@
-﻿using Steeltoe.Management.Census.Common;
-using Steeltoe.Management.Census.Stats.Aggregations;
-using Steeltoe.Management.Census.Stats.Measures;
-using Steeltoe.Management.Census.Tags;
-using Steeltoe.Management.Census.Utils;
+﻿using OpenCensus.Common;
+using OpenCensus.Stats.Aggregations;
+using OpenCensus.Stats.Measures;
+using OpenCensus.Tags;
+using OpenCensus.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Stats
+namespace OpenCensus.Stats
 {
     public sealed class ViewData : IViewData
     {

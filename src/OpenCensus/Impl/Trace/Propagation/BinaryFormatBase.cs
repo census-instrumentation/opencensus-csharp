@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Steeltoe.Management.Census.Trace;
+using OpenCensus.Trace;
 
-namespace Steeltoe.Management.Census.Trace.Propagation
+namespace OpenCensus.Trace.Propagation
 {
     public abstract class BinaryFormatBase : IBinaryFormat
     {

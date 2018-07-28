@@ -1,9 +1,9 @@
-﻿using Steeltoe.Management.Census.Stats.Measurements;
+﻿using OpenCensus.Stats.Measurements;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Stats
+namespace OpenCensus.Stats
 {
     public interface IMeasurement
     {

@@ -1,9 +1,9 @@
-﻿using Steeltoe.Management.Census.Tags.Propagation;
+﻿using OpenCensus.Tags.Propagation;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Tags
+namespace OpenCensus.Tags
 {
     internal sealed class NoopTags
     {
@@ -17,7 +17,7 @@ namespace Steeltoe.Management.Census.Tags
         {
             get
             {
-                return Census.Tags.NoopTagger.INSTANCE;
+                return OpenCensus.Tags.NoopTagger.INSTANCE;
             }
         }
 
@@ -25,7 +25,7 @@ namespace Steeltoe.Management.Census.Tags
         {
             get
             {
-                return Census.Tags.NoopTagContextBuilder.INSTANCE;
+                return OpenCensus.Tags.NoopTagContextBuilder.INSTANCE;
             }
         }
 
@@ -33,7 +33,7 @@ namespace Steeltoe.Management.Census.Tags
         {
             get
             {
-                return Census.Tags.NoopTagContext.INSTANCE;
+                return OpenCensus.Tags.NoopTagContext.INSTANCE;
             }
         }
 
@@ -41,7 +41,7 @@ namespace Steeltoe.Management.Census.Tags
         {
             get
             {
-                return Census.Tags.NoopTagPropagationComponent.INSTANCE;
+                return OpenCensus.Tags.NoopTagPropagationComponent.INSTANCE;
             }
         }
 
@@ -49,7 +49,7 @@ namespace Steeltoe.Management.Census.Tags
         {
             get
             {
-                return Census.Tags.NoopTagContextBinarySerializer.INSTANCE;
+                return OpenCensus.Tags.NoopTagContextBinarySerializer.INSTANCE;
             }
         }
     }

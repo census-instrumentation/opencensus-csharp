@@ -1,5 +1,5 @@
 ﻿using Moq;
-using Steeltoe.Management.Census.Common;
+using OpenCensus.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Steeltoe.Management.Census.Trace.Test
+namespace OpenCensus.Trace.Test
 {
     public class TracerBaseTest
     {

@@ -1,12 +1,12 @@
-﻿using Steeltoe.Management.Census.Common;
-using Steeltoe.Management.Census.Stats.Aggregations;
-using Steeltoe.Management.Census.Tags;
+﻿using OpenCensus.Common;
+using OpenCensus.Stats.Aggregations;
+using OpenCensus.Tags;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace Steeltoe.Management.Census.Stats.Test
+namespace OpenCensus.Stats.Test
 {
     internal static class StatsTestUtil
     {

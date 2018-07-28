@@ -1,5 +1,5 @@
-﻿using Steeltoe.Management.Census.Trace.Internal;
-using Steeltoe.Management.Census.Utils;
+﻿using OpenCensus.Trace.Internal;
+using OpenCensus.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Steeltoe.Management.Census.Trace.Test
+namespace OpenCensus.Trace.Test
 {
     public class LinkTest
     {

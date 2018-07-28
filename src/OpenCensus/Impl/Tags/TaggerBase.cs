@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Steeltoe.Management.Census.Common;
+using OpenCensus.Common;
 
-namespace Steeltoe.Management.Census.Tags
+namespace OpenCensus.Tags
 {
     public abstract class TaggerBase : ITagger
     {

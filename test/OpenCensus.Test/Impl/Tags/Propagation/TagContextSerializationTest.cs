@@ -1,4 +1,4 @@
-﻿using Steeltoe.Management.Census.Internal;
+﻿using OpenCensus.Internal;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Steeltoe.Management.Census.Tags.Propagation.Test
+namespace OpenCensus.Tags.Propagation.Test
 {
     public class TagContextSerializationTest
     {

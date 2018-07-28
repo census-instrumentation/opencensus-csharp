@@ -1,10 +1,10 @@
-﻿using Steeltoe.Management.Census.Trace.Config;
-using Steeltoe.Management.Census.Trace.Export;
-using Steeltoe.Management.Census.Trace.Propagation;
+﻿using OpenCensus.Trace.Config;
+using OpenCensus.Trace.Export;
+using OpenCensus.Trace.Propagation;
 
 using Xunit;
 
-namespace Steeltoe.Management.Census.Trace.Test
+namespace OpenCensus.Trace.Test
 {
     public class TracingTest
     {

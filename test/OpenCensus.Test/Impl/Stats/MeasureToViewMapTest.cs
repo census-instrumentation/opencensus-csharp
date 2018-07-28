@@ -1,8 +1,8 @@
-﻿using Steeltoe.Management.Census.Common;
-using Steeltoe.Management.Census.Stats.Aggregations;
-using Steeltoe.Management.Census.Stats.Measures;
-using Steeltoe.Management.Census.Tags;
-using Steeltoe.Management.Census.Testing.Common;
+﻿using OpenCensus.Common;
+using OpenCensus.Stats.Aggregations;
+using OpenCensus.Stats.Measures;
+using OpenCensus.Tags;
+using OpenCensus.Testing.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Steeltoe.Management.Census.Stats.Test
+namespace OpenCensus.Stats.Test
 {
     public class MeasureToViewMapTest
     {

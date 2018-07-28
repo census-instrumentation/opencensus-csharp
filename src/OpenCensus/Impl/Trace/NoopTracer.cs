@@ -1,6 +1,6 @@
 ﻿
 
-namespace Steeltoe.Management.Census.Trace
+namespace OpenCensus.Trace
 {
     public sealed class NoopTracer : TracerBase, ITracer
     {

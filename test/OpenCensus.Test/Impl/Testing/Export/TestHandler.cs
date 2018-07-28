@@ -1,4 +1,4 @@
-﻿using Steeltoe.Management.Census.Trace.Export;
+﻿using OpenCensus.Trace.Export;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Steeltoe.Management.Census.Testing.Export
+namespace OpenCensus.Testing.Export
 {
     public class TestHandler : IHandler
     {

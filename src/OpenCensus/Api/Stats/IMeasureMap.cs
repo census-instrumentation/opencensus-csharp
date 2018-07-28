@@ -1,10 +1,10 @@
-﻿using Steeltoe.Management.Census.Stats.Measures;
-using Steeltoe.Management.Census.Tags;
+﻿using OpenCensus.Stats.Measures;
+using OpenCensus.Tags;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Steeltoe.Management.Census.Stats
+namespace OpenCensus.Stats
 {
     public interface IMeasureMap
     {
