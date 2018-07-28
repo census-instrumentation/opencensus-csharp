@@ -6,7 +6,7 @@
     <AssemblyName>OpenCensus.Test</AssemblyName>
     <PackageId>OpenCensus.Test</PackageId>
     <PackageTags>OpenCensus;Tracing;Management;Monitoring</PackageTags>
-    <PackageProjectUrl>http://steeltoe.io</PackageProjectUrl>
+    <PackageProjectUrl>http://opencensus.io</PackageProjectUrl>
     <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
     <RootNamespace>OpenCensus</RootNamespace>
   </PropertyGroup>
