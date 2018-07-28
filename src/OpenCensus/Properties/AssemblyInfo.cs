@@ -14,5 +14,5 @@
 
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Steeltoe.Management.OpenCensus.Test")]
+[assembly: InternalsVisibleTo("OpenCensus.Test")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

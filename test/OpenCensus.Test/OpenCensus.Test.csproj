@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>Unit test project for Steeltoe.Management.OpenCensus</Description>
-    <TargetFrameworks>net45;net46;netstandard1.3</TargetFrameworks>
-    <AssemblyName>Steeltoe.Management.OpenCensus.Test</AssemblyName>
-    <PackageId>Steeltoe.Management.OpenCensus.Test</PackageId>
+    <Description>Unit test project for OpenCensus</Description>
+    <TargetFrameworks>net46;netstandard2.0</TargetFrameworks>
+    <AssemblyName>OpenCensus.Test</AssemblyName>
+    <PackageId>OpenCensus.Test</PackageId>
     <PackageTags>OpenCensus;Tracing;Management;Monitoring</PackageTags>
     <PackageProjectUrl>http://steeltoe.io</PackageProjectUrl>
     <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
-    <RootNamespace>Steeltoe.Management.Census</RootNamespace>
+    <RootNamespace>OpenCensus</RootNamespace>
   </PropertyGroup>
   
   
@@ -19,16 +19,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Steeltoe.Management.OpenCensus\Steeltoe.Management.OpenCensus.csproj" />
+    <ProjectReference Include="..\..\src\OpenCensus\OpenCensus.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(TestSdkVersion)" />
-    <PackageReference Include="Moq" Version="$(MoqVersion)" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
+    <PackageReference Include="Moq" Version="4.9.0" />
 
-    <PackageReference Include="xunit" Version="$(XunitVersion)" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="$(XunitStudioVersion)" />
-    <DotNetCliToolReference Include="dotnet-xunit" Version="$(XunitVersion)" />
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
 
 </Project>
