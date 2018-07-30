@@ -2,6 +2,7 @@
 using OpenCensus.Trace.Test;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Xunit;
 
 namespace OpenCensus.Trace.Sampler.Test
@@ -240,7 +241,8 @@ namespace OpenCensus.Trace.Sampler.Test
         [Fact]
         public void ProbabilitySampler_ToString()
         {
-            Assert.Contains("0.5", Samplers.GetProbabilitySampler(0.5).ToString());
+            var result = Samplers.GetProbabilitySampler(0.5).ToString();
+            Assert.Contains($"0{CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator}5", result);
         }
 
         // Applies the given sampler to NUM_SAMPLE_TRIES random traceId/spanId pairs.
