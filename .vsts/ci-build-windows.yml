@@ -2,29 +2,34 @@ queue:
   name: Hosted VS2017
 steps:
 - task: DotNetCoreInstaller@0
+  displayName: force use of desired dotnet version
   inputs:
     version: "2.0.3"
 
 - task: DotNetCoreCLI@1
+  displayName: restore packages
   inputs:
     command: "restore"
     projects: "*.sln"
 
 - task: DotNetCoreCLI@1
+  displayName: build
   inputs:
     command: "build"
     projects: "*.sln"
     arguments: "--configuration Release"
 
 - task: DotNetCoreCLI@1
+  displayName: test
   inputs:
     command: "test"
-    projects: "Test/**/*netcoreapp20*.csproj"
-    arguments: "--configuration Release --filter TestCategory!=WindowsOnly"
+    projects: "test/**/*.csproj"
+    arguments: "--configuration Release"
 
 - task: PublishTestResults@2
 
 - task: DotNetCoreCLI@1
+  displayName: publish
   inputs:
     command: "publish"
     publishWebProjects: "True"
