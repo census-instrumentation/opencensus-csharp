@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>Unit test project for OpenCensus</Description>
-    <TargetFrameworks>net46;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net46;netcoreapp2.0</TargetFrameworks>
     <AssemblyName>OpenCensus.Tests</AssemblyName>
     <PackageId>OpenCensus.Tests</PackageId>
     <PackageTags>OpenCensus;Tracing;Management;Monitoring</PackageTags>
@@ -13,9 +13,9 @@
   
   
   <ItemGroup>
-    <None Update="xunit.runner.json">
+    <!--None Update="xunit.runner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </None-->
   </ItemGroup>
 
   <ItemGroup>
@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
     <PackageReference Include="Moq" Version="4.9.0" />
 
     <PackageReference Include="xunit" Version="2.3.1" />
