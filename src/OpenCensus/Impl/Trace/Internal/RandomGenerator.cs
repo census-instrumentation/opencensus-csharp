@@ -6,7 +6,6 @@ namespace OpenCensus.Trace.Internal
     internal class RandomGenerator : IRandomGenerator
     {
         private static readonly Random _global = new Random();
-        private static readonly object _lockObj = new object();
 
         private readonly int _seed;
         private readonly bool _sameSeed;
@@ -29,14 +28,10 @@ namespace OpenCensus.Trace.Internal
         }
 
         public void NextBytes(byte[] bytes)
-        {
+        {            
             if (_local == null)
-            {
-                lock(_lockObj)
-                {
-                    if (_local == null)
-                        _local = new Random(_sameSeed ? _seed : _global.Next());
-                }
+            {                
+                _local = new Random(_sameSeed ? _seed : _global.Next());                
             }
             _local.NextBytes(bytes);
         }
