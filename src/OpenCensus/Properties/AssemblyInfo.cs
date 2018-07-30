@@ -14,5 +14,5 @@
 
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("OpenCensus.Test")]
+[assembly: InternalsVisibleTo("OpenCensus.Tests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

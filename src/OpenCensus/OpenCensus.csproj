@@ -2,20 +2,24 @@
 
   <PropertyGroup>
     <Description>OpenCensus .NET API</Description>
-    <Authors>OpenCensus authors</Authors>
     <VersionPrefix>0.1.0</VersionPrefix>
-    <VersionSuffix>-beta1</VersionSuffix>
+    <VersionSuffix>beta1</VersionSuffix>
     <TargetFrameworks>net46;netstandard2.0</TargetFrameworks>
     <AssemblyName>OpenCensus</AssemblyName>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <RootNamespace>OpenCensus</RootNamespace>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <IncludeSymbols>True</IncludeSymbols>
     <PackageId>OpenCensus</PackageId>
     <PackageTags>Tracing;OpenCensus;Management;Monitoring</PackageTags>
     <PackageIconUrl>https://opencensus.io/images/opencensus-logo.png</PackageIconUrl>
     <PackageProjectUrl>https://opencensus.io</PackageProjectUrl>
     <PackageLicenseUrl>https://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <RootNamespace>OpenCensus</RootNamespace>
+    <Authors>OpenCensus authors</Authors>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+
   </PropertyGroup>
 
   <ItemGroup>

@@ -3,8 +3,8 @@
   <PropertyGroup>
     <Description>Unit test project for OpenCensus</Description>
     <TargetFrameworks>net46;netstandard2.0</TargetFrameworks>
-    <AssemblyName>OpenCensus.Test</AssemblyName>
-    <PackageId>OpenCensus.Test</PackageId>
+    <AssemblyName>OpenCensus.Tests</AssemblyName>
+    <PackageId>OpenCensus.Tests</PackageId>
     <PackageTags>OpenCensus;Tracing;Management;Monitoring</PackageTags>
     <PackageProjectUrl>http://opencensus.io</PackageProjectUrl>
     <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
