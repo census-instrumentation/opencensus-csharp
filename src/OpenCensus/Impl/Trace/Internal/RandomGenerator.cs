@@ -5,20 +5,34 @@ namespace OpenCensus.Trace.Internal
 {
     internal class RandomGenerator : IRandomGenerator
     {
-        private Random _random;
+        private static readonly Random _global = new Random();
+        private static readonly object _lockObj = new object();
+
+        private readonly int _seed;
+        [ThreadStatic] private static Random _local;
+
+
         internal RandomGenerator()
         {
-            _random = new Random();
+            _seed = _global.Next();
         }
 
         internal RandomGenerator(int seed)
         {
-            _random = new Random(seed);
+            _seed = seed;
         }
 
         public void NextBytes(byte[] bytes)
         {
-            _random.NextBytes(bytes);
+            if (_local == null)
+            {
+                lock(_lockObj)
+                {
+                    if (_local == null)
+                        _local = new Random(_seed);
+                }
+            }
+            _local.NextBytes(bytes);
         }
     }
 }
