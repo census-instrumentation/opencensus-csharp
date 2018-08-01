@@ -3,6 +3,7 @@
   <PropertyGroup>
     <Description>Unit test project for OpenCensus</Description>
     <TargetFrameworks>net46;netcoreapp2.0</TargetFrameworks>
+    <TargetFrameworks Condition="$(OS) != 'Windows_NT'">netcoreapp2.0</TargetFrameworks>
     <AssemblyName>OpenCensus.Tests</AssemblyName>
     <PackageId>OpenCensus.Tests</PackageId>
     <PackageTags>OpenCensus;Tracing;Management;Monitoring</PackageTags>
@@ -10,13 +11,6 @@
     <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
     <RootNamespace>OpenCensus</RootNamespace>
   </PropertyGroup>
-  
-  
-  <ItemGroup>
-    <!--None Update="xunit.runner.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None-->
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\OpenCensus\OpenCensus.csproj" />
