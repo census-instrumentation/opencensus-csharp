@@ -8,7 +8,7 @@
 
     internal sealed class MeasureToViewMap
     {
-        private object _lck = new object();
+        private readonly object lck = new object();
         private readonly IDictionary<string, IList<MutableViewData>> mutableMap = new Dictionary<string, IList<MutableViewData>>();
 
         private IDictionary<IViewName, IView> registeredViews = new Dictionary<IViewName, IView>();
@@ -23,7 +23,7 @@
         /** Returns a {@link ViewData} corresponding to the given {@link View.Name}. */
         internal IViewData GetView(IViewName viewName, IClock clock, StatsCollectionState state)
         {
-            lock (_lck)
+            lock (lck)
             {
                 MutableViewData view = GetMutableViewData(viewName);
                 return view == null ? null : view.ToViewData(clock.Now, state);
@@ -37,7 +37,7 @@
                 ISet<IView> views = exportedViews;
                 if (views == null)
                 {
-                    lock (_lck)
+                    lock (lck)
                     {
                         exportedViews = views = FilterExportedViews(registeredViews.Values);
                     }
@@ -56,7 +56,7 @@
         /** Enable stats collection for the given {@link View}. */
         internal void RegisterView(IView view, IClock clock)
         {
-            lock (_lck)
+            lock (lck)
             {
                 exportedViews = null;
                 registeredViews.TryGetValue(view.Name, out IView existing);
@@ -104,7 +104,7 @@
 
         private MutableViewData GetMutableViewData(IViewName viewName)
         {
-            lock (_lck)
+            lock (lck)
             {
                 registeredViews.TryGetValue(viewName, out IView view);
                 if (view == null)
@@ -137,7 +137,7 @@
         // Records stats with a set of tags.
         internal void Record(ITagContext tags, IList<IMeasurement> stats, ITimestamp timestamp)
         {
-            lock (_lck)
+            lock (lck)
             {
                 foreach (var measurement in stats)
                 {
@@ -175,7 +175,7 @@
         // Clear stats for all the current MutableViewData
         internal void ClearStats()
         {
-            lock (_lck)
+            lock (lck)
             {
                 foreach (var entry in mutableMap)
                 {
@@ -190,7 +190,7 @@
         // Resume stats collection for all MutableViewData.
         internal void ResumeStatsCollection(ITimestamp now)
         {
-            lock (_lck)
+            lock (lck)
             {
                 foreach (var entry in mutableMap)
                 {

@@ -43,7 +43,8 @@
                 return ViewData.Create(
                     View,
                     new Dictionary<TagValues, IAggregationData>(),
-                    ZERO_TIMESTAMP, ZERO_TIMESTAMP);
+                    ZERO_TIMESTAMP,
+                    ZERO_TIMESTAMP);
             }
         }
 

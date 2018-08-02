@@ -127,7 +127,7 @@
                     parentContext = parent.Context;
                     // Pass the timestamp converter from the parent to ensure that the recorded events are in
                     // the right order. Implementation uses System.nanoTime() which is monotonically increasing.
-                    
+
                     if (parent is Span)
                     {
                         timestampConverter = ((Span)parent).TimestampConverter;

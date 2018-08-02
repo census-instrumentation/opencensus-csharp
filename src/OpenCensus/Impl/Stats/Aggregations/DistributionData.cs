@@ -34,7 +34,7 @@
             this.BucketCounts = bucketCounts;
         }
 
-        public static IDistributionData Create(double mean,long count, double min, double max, double sumOfSquaredDeviations, IList<long> bucketCounts)
+        public static IDistributionData Create(double mean, long count, double min, double max, double sumOfSquaredDeviations, IList<long> bucketCounts)
         {
             if (!double.IsPositiveInfinity(min) ||  !double.IsNegativeInfinity(max))
             {

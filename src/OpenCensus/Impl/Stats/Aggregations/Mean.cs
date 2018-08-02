@@ -2,7 +2,7 @@
 {
     using System;
 
-    public sealed class Mean : Aggregation , IMean
+    public sealed class Mean : Aggregation, IMean
     {
         internal Mean() { }
 

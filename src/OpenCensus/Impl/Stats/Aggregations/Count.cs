@@ -12,7 +12,7 @@
         {
             return INSTANCE;
         }
-        
+
         public override M Match<M>(Func<ISum, M> p0, Func<ICount, M> p1, Func<IMean, M> p2, Func<IDistribution, M> p3, Func<ILastValue, M> p4, Func<IAggregation, M> p5)
         {
             return p1.Invoke(this);

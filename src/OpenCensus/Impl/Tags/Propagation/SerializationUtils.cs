@@ -75,7 +75,6 @@
         }
 
         internal static IDictionary<ITagKey, ITagValue> ParseTags(MemoryStream buffer)
-
         {
             IDictionary<ITagKey, ITagValue> tags = new Dictionary<ITagKey, ITagValue>();
             long limit = buffer.Length;

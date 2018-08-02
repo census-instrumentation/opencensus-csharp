@@ -14,6 +14,6 @@
 
         internal abstract void Combine(MutableAggregation other, double fraction);
 
-        internal abstract T Match<T>( Func<MutableSum, T> p0, Func<MutableCount, T> p1, Func<MutableMean, T> p2, Func<MutableDistribution, T> p3, Func<MutableLastValue, T> p4);
+        internal abstract T Match<T>(Func<MutableSum, T> p0, Func<MutableCount, T> p1, Func<MutableMean, T> p2, Func<MutableDistribution, T> p3, Func<MutableLastValue, T> p4);
     }
 }

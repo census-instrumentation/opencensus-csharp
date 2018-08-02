@@ -12,7 +12,7 @@
         private const int DEFAULT_SPAN_MAX_NUM_MESSAGE_EVENTS = 128;
         private const int DEFAULT_SPAN_MAX_NUM_LINKS = 128;
 
-        public static readonly ITraceParams DEFAULT = 
+        public static readonly ITraceParams DEFAULT =
             new TraceParams(DEFAULT_SAMPLER, DEFAULT_SPAN_MAX_NUM_ATTRIBUTES, DEFAULT_SPAN_MAX_NUM_ANNOTATIONS, DEFAULT_SPAN_MAX_NUM_MESSAGE_EVENTS, DEFAULT_SPAN_MAX_NUM_LINKS);
 
         internal TraceParams(ISampler sampler, int maxNumberOfAttributes, int maxNumberOfAnnotations, int maxNumberOfMessageEvents, int maxNumberOfLinks)

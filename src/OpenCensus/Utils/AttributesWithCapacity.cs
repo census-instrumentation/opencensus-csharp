@@ -8,7 +8,7 @@
 
     internal class AttributesWithCapacity : IDictionary<string, IAttributeValue>
     {
-        private OrderedDictionary _delegate = new OrderedDictionary();
+        private OrderedDictionary @delegate = new OrderedDictionary();
         private readonly int capacity;
         private int totalRecordedAttributes;
 
@@ -24,7 +24,7 @@
         {
             get
             {
-                return (ICollection<string>)_delegate.Keys;
+                return (ICollection<string>)@delegate.Keys;
             }
         }
 
@@ -32,7 +32,7 @@
         {
             get
             {
-                return (ICollection<IAttributeValue>)_delegate.Values;
+                return (ICollection<IAttributeValue>)@delegate.Values;
             }
         }
 
@@ -40,7 +40,7 @@
         {
             get
             {
-                return _delegate.Count;
+                return @delegate.Count;
             }
         }
 
@@ -48,7 +48,7 @@
         {
             get
             {
-                return _delegate.IsReadOnly;
+                return @delegate.IsReadOnly;
             }
         }
 
@@ -56,16 +56,16 @@
         {
             get
             {
-                return (IAttributeValue)_delegate[key];
+                return (IAttributeValue)@delegate[key];
             }
 
             set
             {
-                _delegate[key] = value;
+                @delegate[key] = value;
             }
         }
 
-        public AttributesWithCapacity(int capacity) 
+        public AttributesWithCapacity(int capacity)
         {
             this.capacity = capacity;
         }
@@ -76,7 +76,7 @@
             this[key] = value;
             if (Count > capacity)
             {
-                _delegate.RemoveAt(0);
+                @delegate.RemoveAt(0);
             }
         }
 
@@ -92,19 +92,19 @@
 
         public void Add(string key, IAttributeValue value)
         {
-            _delegate.Add(key, value);
+            @delegate.Add(key, value);
         }
 
         public bool ContainsKey(string key)
         {
-            return _delegate.Contains(key);
+            return @delegate.Contains(key);
         }
 
         public bool Remove(string key)
         {
-            if (_delegate.Contains(key))
+            if (@delegate.Contains(key))
             {
-                _delegate.Remove(key);
+                @delegate.Remove(key);
                 return true;
             }
             else
@@ -118,7 +118,7 @@
             value = null;
             if (ContainsKey(key))
             {
-                value = (IAttributeValue)_delegate[key];
+                value = (IAttributeValue)@delegate[key];
                 return true;
             }
 
@@ -127,12 +127,12 @@
 
         public void Add(KeyValuePair<string, IAttributeValue> item)
         {
-            _delegate.Add(item.Key, item.Value);
+            @delegate.Add(item.Key, item.Value);
         }
 
         public void Clear()
         {
-            _delegate.Clear();
+            @delegate.Clear();
         }
 
         public bool Contains(KeyValuePair<string, IAttributeValue> item)
@@ -148,9 +148,9 @@
 
         public void CopyTo(KeyValuePair<string, IAttributeValue>[] array, int arrayIndex)
         {
-            DictionaryEntry[] entries = new DictionaryEntry[_delegate.Count];
-            _delegate.CopyTo(entries, 0);
-     
+            DictionaryEntry[] entries = new DictionaryEntry[@delegate.Count];
+            @delegate.CopyTo(entries, 0);
+
             for (int i = 0; i < entries.Length; i++)
             {
                 array[i + arrayIndex] = new KeyValuePair<string, IAttributeValue>((string)entries[i].Key, (IAttributeValue)entries[i].Value);
@@ -164,14 +164,14 @@
 
         public IEnumerator<KeyValuePair<string, IAttributeValue>> GetEnumerator()
         {
-            var array = new KeyValuePair<string, IAttributeValue>[_delegate.Count];
+            var array = new KeyValuePair<string, IAttributeValue>[@delegate.Count];
             CopyTo(array, 0);
             return array.ToList().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return _delegate.GetEnumerator();
+            return @delegate.GetEnumerator();
         }
     }
 }

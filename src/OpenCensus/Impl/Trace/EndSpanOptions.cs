@@ -2,7 +2,7 @@
 {
     public class EndSpanOptions
     {
-        public static readonly EndSpanOptions DEFAULT = new EndSpanOptions(false); 
+        public static readonly EndSpanOptions DEFAULT = new EndSpanOptions(false);
 
         public bool SampleToLocalSpanStore { get; }
 

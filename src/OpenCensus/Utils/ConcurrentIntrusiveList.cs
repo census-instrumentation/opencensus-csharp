@@ -7,13 +7,13 @@
     {
         private int size = 0;
         private T head = default(T);
-        private object _lck = new object();
+        private readonly object lck = new object();
 
         public ConcurrentIntrusiveList() { }
 
         public void AddElement(T element)
         {
-            lock (_lck)
+            lock (lck)
             {
                 if (element.Next != null || element.Previous != null || element.Equals(head))
                 {
@@ -36,7 +36,7 @@
 
         public void RemoveElement(T element)
         {
-            lock (_lck)
+            lock (lck)
             {
                 if (element.Next == null && element.Previous == null && !element.Equals(head))
                 {
@@ -82,7 +82,7 @@
 
         public IList<T> Copy()
         {
-            lock (_lck)
+            lock (lck)
             {
                 List<T> all = new List<T>(size);
                 for (T e = head; e != null; e = e.Next)

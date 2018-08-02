@@ -7,17 +7,17 @@
     {
         private SpanExporterWorker _worker { get; }
 
-        private readonly Thread _workerThread;
+        private readonly Thread workerThread;
 
         internal SpanExporter(SpanExporterWorker worker)
         {
             _worker = worker;
-            _workerThread = new Thread(worker.Run)
+            workerThread = new Thread(worker.Run)
             {
                 IsBackground = true,
                 Name = "SpanExporter"
             };
-            _workerThread.Start();
+            workerThread.Start();
         }
 
         internal static ISpanExporter Create(int bufferSize, IDuration scheduleDelay)
@@ -50,7 +50,7 @@
         {
             get
             {
-                return _workerThread;
+                return workerThread;
             }
         }
     }

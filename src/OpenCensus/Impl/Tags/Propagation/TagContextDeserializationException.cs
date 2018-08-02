@@ -4,7 +4,7 @@
 
     public sealed class TagContextDeserializationException : Exception
     {
-        public TagContextDeserializationException(string message) 
+        public TagContextDeserializationException(string message)
             : base(message)
         {
         }

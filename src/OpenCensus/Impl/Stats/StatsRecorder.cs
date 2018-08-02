@@ -4,7 +4,7 @@
 
     public sealed class StatsRecorder : StatsRecorderBase
     {
-        private StatsManager statsManager;
+        private readonly StatsManager statsManager;
 
         internal StatsRecorder(StatsManager statsManager)
         {

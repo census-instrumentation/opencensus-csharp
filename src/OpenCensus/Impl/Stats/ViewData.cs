@@ -134,7 +134,7 @@
                             throw new ArgumentException();
                         });
                     return null;
-                }, 
+                },
                 (arg) =>
                 {
                     if (!(aggregationData is ICountData))
@@ -187,8 +187,7 @@
                 (arg) =>
                 {
                     throw new ArgumentException();
-                }
-                );
+                });
         }
 
         private static string CreateErrorMessageForAggregation(IAggregation aggregation, IAggregationData aggregationData)

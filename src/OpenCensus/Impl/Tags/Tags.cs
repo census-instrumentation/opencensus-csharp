@@ -4,20 +4,20 @@
 
     public sealed class Tags
     {
-        private static object _lck = new object();
+        private static readonly object lck = new object();
 
         internal static void Initialize(bool enabled)
         {
-            if (_tags == null)
+            if (tags == null)
             {
-                lock (_lck)
+                lock (lck)
                 {
-                    _tags =_tags ?? new Tags(enabled);
+                    tags =tags ?? new Tags(enabled);
                 }
             }
         }
 
-        private static Tags _tags;
+        private static Tags tags;
 
         internal Tags()
             : this(false)
@@ -43,7 +43,7 @@
             get
             {
                 Initialize(false);
-                return _tags.tagsComponent.Tagger;
+                return tags.tagsComponent.Tagger;
             }
         }
 
@@ -52,7 +52,7 @@
             get
             {
                 Initialize(false);
-                return _tags.tagsComponent.TagPropagationComponent;
+                return tags.tagsComponent.TagPropagationComponent;
             }
         }
 
@@ -61,7 +61,7 @@
             get
             {
                 Initialize(false);
-                return _tags.tagsComponent.State;
+                return tags.tagsComponent.State;
             }
         }
     }

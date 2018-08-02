@@ -114,13 +114,13 @@
         public override string ToString()
         {
             return "TraceOptions{"
-                + "sampled=" + IsSampled 
+                + "sampled=" + IsSampled
                 + "}";
         }
 
         internal sbyte Options
         {
-            get { return (sbyte) options; }
+            get { return (sbyte)options; }
         }
 
         private bool HasOption(int mask)

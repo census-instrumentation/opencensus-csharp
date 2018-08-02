@@ -1,5 +1,4 @@
-﻿
-namespace OpenCensus.Trace.Config
+﻿namespace OpenCensus.Trace.Config
 {
     public interface ITraceParams
     {

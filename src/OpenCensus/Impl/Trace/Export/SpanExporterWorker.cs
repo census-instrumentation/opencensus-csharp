@@ -7,30 +7,30 @@
 
     internal class SpanExporterWorker : IDisposable
     {
-        private int _bufferSize;
-        private TimeSpan _scheduleDelay;
-        private bool _shutdown = false;
-        private BlockingCollection<ISpan> _spans;
-        private ConcurrentDictionary<string, IHandler> _serviceHandlers = new ConcurrentDictionary<string, IHandler>();
+        private readonly int bufferSize;
+        private TimeSpan scheduleDelay;
+        private bool shutdown = false;
+        private BlockingCollection<ISpan> spans;
+        private ConcurrentDictionary<string, IHandler> serviceHandlers = new ConcurrentDictionary<string, IHandler>();
 
         public SpanExporterWorker(int bufferSize, IDuration scheduleDelay)
         {
-            _bufferSize = bufferSize;
-            _scheduleDelay = TimeSpan.FromSeconds(scheduleDelay.Seconds);
-            _spans = new BlockingCollection<ISpan>();
+            this.bufferSize = bufferSize;
+            this.scheduleDelay = TimeSpan.FromSeconds(scheduleDelay.Seconds);
+            spans = new BlockingCollection<ISpan>();
         }
 
         public void Dispose()
         {
-            _shutdown = true;
-            _spans.CompleteAdding();
+            shutdown = true;
+            spans.CompleteAdding();
         }
 
         internal void AddSpan(ISpan span)
         {
-            if (!_spans.IsAddingCompleted)
+            if (!spans.IsAddingCompleted)
             {
-                if (!_spans.TryAdd(span))
+                if (!spans.TryAdd(span))
                 {
                     // Log failure, dropped span
                 }
@@ -40,11 +40,11 @@
         internal void Run(object obj)
         {
             List<ISpanData> toExport = new List<ISpanData>();
-            while (!_shutdown)
+            while (!shutdown)
             {
                 try
                 {
-                    if (_spans.TryTake(out ISpan item, _scheduleDelay))
+                    if (spans.TryTake(out ISpan item, scheduleDelay))
                     {
                         // Build up list
                         BuildList(item, toExport);
@@ -56,7 +56,7 @@
                         toExport.Clear();
                     }
 
-                    if (_spans.IsCompleted)
+                    if (spans.IsCompleted)
                     {
                         break;
                     }
@@ -78,7 +78,7 @@
             }
 
             // Grab as many as we can
-            while (_spans.TryTake(out item))
+            while (spans.TryTake(out item))
             {
                 span = item as Span;
                 if (span != null)
@@ -86,7 +86,7 @@
                     toExport.Add(span.ToSpanData());
                 }
 
-                if (toExport.Count >= _bufferSize)
+                if (toExport.Count >= bufferSize)
                 {
                     break;
                 }
@@ -95,7 +95,7 @@
 
         private void Export(IList<ISpanData> export)
         {
-            var handlers = _serviceHandlers.Values;
+            var handlers = serviceHandlers.Values;
             foreach (var handler in handlers)
             {
                 try
@@ -111,12 +111,12 @@
 
         internal void RegisterHandler(string name, IHandler handler)
         {
-            _serviceHandlers[name] = handler;
+            serviceHandlers[name] = handler;
         }
 
         internal void UnregisterHandler(string name)
         {
-            _serviceHandlers.TryRemove(name, out IHandler prev);
+            serviceHandlers.TryRemove(name, out IHandler prev);
         }
 
         internal ISpanData ToSpanData(ISpan span)

@@ -7,7 +7,7 @@
         ITagger Tagger { get; }
 
         ITagPropagationComponent TagPropagationComponent { get; }
-  
+
         TaggingState State { get; }
     }
 }

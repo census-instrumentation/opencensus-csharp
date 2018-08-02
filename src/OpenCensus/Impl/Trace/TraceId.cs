@@ -104,7 +104,7 @@
                     result |= bytes[i] & 0xff;
 #pragma warning restore CS0675 // Bitwise-or operator used on a sign-extended operand
                 }
- 
+
                 if (result < 0)
                 {
                     return -result;

@@ -10,7 +10,7 @@
 
         public IDictionary<ITagKey, ITagValue> Tags { get; }
 
-        public TagContext(IDictionary<ITagKey,ITagValue> tags)
+        public TagContext(IDictionary<ITagKey, ITagValue> tags)
         {
             this.Tags = new ReadOnlyDictionary<ITagKey, ITagValue>(new Dictionary<ITagKey, ITagValue>(tags));
         }

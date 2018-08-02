@@ -9,7 +9,7 @@
             new Dictionary<ISampledLatencyBucketBoundaries, int>(), new Dictionary<CanonicalCode, int>());
 
         private static readonly ISampledSpanStoreSummary EMPTY_SUMMARY = SampledSpanStoreSummary.Create(new Dictionary<string, ISampledPerSpanNameSummary>());
-  
+
         private static readonly IList<ISpanData> EMPTY_SPANDATA = new List<ISpanData>();
 
         private readonly HashSet<string> registeredSpanNames = new HashSet<string>();

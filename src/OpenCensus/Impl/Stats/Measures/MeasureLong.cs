@@ -42,7 +42,7 @@
                     + NAME_MAX_LENGTH
                     + " characters.");
             }
-    
+
             return new MeasureLong(name, description, unit);
         }
 

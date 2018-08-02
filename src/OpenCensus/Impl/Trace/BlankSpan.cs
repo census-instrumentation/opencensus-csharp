@@ -78,7 +78,7 @@
         public override void End(EndSpanOptions options)
         {
         }
- 
+
         public override string ToString()
         {
             return "BlankSpan";

@@ -27,8 +27,8 @@
         private long endNanoTime;
         private bool hasBeenEnded;
         private bool sampleToLocalSpanStore;
-        private object _lock = new object();
-     
+        private readonly object @lock = new object();
+
        public override string Name
         {
             get
@@ -41,7 +41,7 @@
         {
             get
             {
-                lock (_lock)
+                lock (@lock)
                 {
                     return StatusWithDefault;
                 }
@@ -54,7 +54,7 @@
                     return;
                 }
 
-                lock (_lock)
+                lock (@lock)
                 {
                     if (hasBeenEnded)
                     {
@@ -71,7 +71,7 @@
         {
             get
             {
-                lock (_lock)
+                lock (@lock)
                 {
                     return hasBeenEnded ? endNanoTime : clock.NowNanos;
                 }
@@ -82,7 +82,7 @@
         {
             get
             {
-                lock (_lock)
+                lock (@lock)
                 {
                     return hasBeenEnded ? endNanoTime - startNanoTime : clock.NowNanos - startNanoTime;
                 }
@@ -93,7 +93,7 @@
         {
             get
             {
-                lock (_lock)
+                lock (@lock)
                 {
                     if (!hasBeenEnded)
                     {
@@ -112,7 +112,7 @@
                 return;
             }
 
-            lock (_lock)
+            lock (@lock)
             {
                 if (hasBeenEnded)
                 {
@@ -131,7 +131,7 @@
                 return;
             }
 
-            lock (_lock)
+            lock (@lock)
             {
                 if (hasBeenEnded)
                 {
@@ -150,7 +150,7 @@
                 return;
             }
 
-            lock (_lock)
+            lock (@lock)
             {
                 if (hasBeenEnded)
                 {
@@ -169,7 +169,7 @@
                 return;
             }
 
-            lock (_lock)
+            lock (@lock)
             {
                 if (hasBeenEnded)
                 {
@@ -193,7 +193,7 @@
                 return;
             }
 
-            lock (_lock)
+            lock (@lock)
             {
                 if (hasBeenEnded)
                 {
@@ -217,7 +217,7 @@
                 return;
             }
 
-            lock (_lock)
+            lock (@lock)
             {
                 if (hasBeenEnded)
                 {
@@ -241,7 +241,7 @@
                 return;
             }
 
-            lock (_lock)
+            lock (@lock)
             {
                 if (hasBeenEnded)
                 {
@@ -387,8 +387,7 @@
                 ITraceParams traceParams,
                 IStartEndHandler startEndHandler,
                 ITimestampConverter timestampConverter,
-                IClock clock
-            )
+                IClock clock)
         {
             var span = new Span(
                context,
@@ -428,7 +427,7 @@
                 ITraceParams traceParams,
                 IStartEndHandler startEndHandler,
                 ITimestampConverter timestampConverter,
-                IClock clock) 
+                IClock clock)
             : base(context, options)
         {
             this.parentSpanId = parentSpanId;

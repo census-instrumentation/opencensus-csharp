@@ -6,14 +6,14 @@
     {
 
         private TaggingState currentState = TaggingState.ENABLED;
-        private object _lck = new object();
+        private readonly object lck = new object();
         private bool isRead;
 
         public TaggingState Value
         {
             get
             {
-                lock (_lck)
+                lock (lck)
                 {
                     isRead = true;
                     return Internal;
@@ -25,7 +25,7 @@
         {
             get
             {
-                lock (_lck)
+                lock (lck)
                 {
                     return currentState;
                 }
@@ -35,7 +35,7 @@
         // Sets current state to the given state.
         internal void Set(TaggingState state)
         {
-            lock (_lck)
+            lock (lck)
             {
                 if (isRead)
                 {

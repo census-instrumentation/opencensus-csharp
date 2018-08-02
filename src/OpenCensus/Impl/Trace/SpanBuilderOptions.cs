@@ -14,7 +14,7 @@
 
         internal ITraceConfig TraceConfig { get; }
 
-        internal SpanBuilderOptions(IRandomGenerator randomGenerator, IStartEndHandler startEndHandler, IClock clock, ITraceConfig traceConfig )
+        internal SpanBuilderOptions(IRandomGenerator randomGenerator, IStartEndHandler startEndHandler, IClock clock, ITraceConfig traceConfig)
         {
             RandomHandler = randomGenerator;
             StartEndHandler = startEndHandler;

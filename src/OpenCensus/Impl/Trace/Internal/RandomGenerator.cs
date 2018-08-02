@@ -4,15 +4,15 @@
 
     internal class RandomGenerator : IRandomGenerator
     {
-        private static readonly Random _global = new Random();
+        private static readonly Random global = new Random();
 
-        private readonly int _seed;
-        private readonly bool _sameSeed;
-        [ThreadStatic] private static Random _local;
+        private readonly int seed;
+        private readonly bool sameSeed;
+        [ThreadStatic] private static Random local;
 
         internal RandomGenerator()
         {
-            _sameSeed = false;
+            sameSeed = false;
         }
 
         /// <summary>
@@ -22,18 +22,18 @@
         /// </summary>
         internal RandomGenerator(int seed)
         {
-            _sameSeed = true;
-            _seed = seed;
+            sameSeed = true;
+            this.seed = seed;
         }
 
         public void NextBytes(byte[] bytes)
-        {            
-            if (_local == null)
-            {                
-                _local = new Random(_sameSeed ? _seed : _global.Next());                
+        {
+            if (local == null)
+            {
+                local = new Random(sameSeed ? seed : global.Next());
             }
 
-            _local.NextBytes(bytes);
+            local.NextBytes(bytes);
         }
     }
 }

@@ -76,7 +76,7 @@
             char[] result = new char[2];
             if (high > 9)
             {
-                result[0] = (char) (high - 10 + 'a');
+                result[0] = (char)(high - 10 + 'a');
             }
             else
             {

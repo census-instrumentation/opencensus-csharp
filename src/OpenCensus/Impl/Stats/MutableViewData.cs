@@ -65,7 +65,7 @@ else
             }
         }
 
-        internal static IList<ITagValue> GetTagValues( IDictionary<ITagKey,ITagValue> tags, IList<ITagKey> columns)
+        internal static IList<ITagValue> GetTagValues(IDictionary<ITagKey, ITagValue> tags, IList<ITagKey> columns)
         {
             IList<ITagValue> tagValues = new List<ITagValue>(columns.Count);
             // Record all the measures in a "Greedy" way.
@@ -107,7 +107,7 @@ else
         internal static IAggregationData CreateAggregationData(MutableAggregation aggregation, IMeasure measure)
         {
             return aggregation.Match<IAggregationData>(
-                (msum) => 
+                (msum) =>
                 {
                     return measure.Match<IAggregationData>(
                         (mdouble) =>
@@ -146,8 +146,7 @@ else
                         {
                             throw new ArgumentException();
                         });
-                }
-                );
+                });
         }
 
         // Covert a mapping from TagValues to MutableAggregation, to a mapping from TagValues to
@@ -179,7 +178,7 @@ else
 
         private static Func<MutableMean, IAggregationData> CreateMeanData { get; } = (s) => { return MeanData.Create(s.Mean, s.Count, s.Min, s.Max); };
 
-        private static Func<MutableDistribution, IAggregationData> CreateDistributionData { get; } = (s) => 
+        private static Func<MutableDistribution, IAggregationData> CreateDistributionData { get; } = (s) =>
             {
                 List<long> boxedBucketCounts = new List<long>();
                 foreach (long bucketCount in s.BucketCounts)

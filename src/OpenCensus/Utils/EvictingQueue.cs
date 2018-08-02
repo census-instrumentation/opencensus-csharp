@@ -6,14 +6,14 @@
 
     public class EvictingQueue<T> : IEnumerable<T>, IEnumerable
     {
-        private readonly Queue<T> _delegate;
-        private readonly int _maxSize;
+        private readonly Queue<T> @delegate;
+        private readonly int maxSize;
 
         public int Count
         {
             get
             {
-                return _delegate.Count;
+                return @delegate.Count;
             }
         }
 
@@ -24,13 +24,13 @@
                 throw new ArgumentOutOfRangeException("maxSize must be >= 0");
             }
 
-            _maxSize = maxSize;
-            _delegate = new Queue<T>(maxSize);
+            this.maxSize = maxSize;
+            @delegate = new Queue<T>(maxSize);
         }
 
         public int RemainingCapacity()
         {
-            return _maxSize - _delegate.Count;
+            return maxSize - @delegate.Count;
         }
 
         public bool Offer(T e)
@@ -45,17 +45,17 @@
                 throw new ArgumentNullException();
             }
 
-            if (_maxSize == 0)
+            if (maxSize == 0)
             {
                 return true;
             }
 
-            if (_delegate.Count == _maxSize)
+            if (@delegate.Count == maxSize)
             {
-                _delegate.Dequeue();
+                @delegate.Dequeue();
             }
 
-            _delegate.Enqueue(e);
+            @delegate.Enqueue(e);
             return true;
         }
 
@@ -76,22 +76,22 @@
                 throw new ArgumentNullException();
             }
 
-            return _delegate.Contains(e);
+            return @delegate.Contains(e);
         }
 
         public T[] ToArray()
         {
-            return _delegate.ToArray();
+            return @delegate.ToArray();
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            return _delegate.GetEnumerator();
+            return @delegate.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return _delegate.GetEnumerator();
+            return @delegate.GetEnumerator();
         }
     }
 }

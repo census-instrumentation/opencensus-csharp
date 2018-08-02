@@ -5,37 +5,37 @@
 
     public sealed class StartEndHandler : IStartEndHandler
     {
-        private readonly ISpanExporter _spanExporter;
-        private readonly IRunningSpanStore _runningSpanStore;
-        private readonly ISampledSpanStore _sampledSpanStore;
-        private readonly IEventQueue _eventQueue;
+        private readonly ISpanExporter spanExporter;
+        private readonly IRunningSpanStore runningSpanStore;
+        private readonly ISampledSpanStore sampledSpanStore;
+        private readonly IEventQueue eventQueue;
         // true if any of (runningSpanStore OR sampledSpanStore) are different than null, which
         // means the spans with RECORD_EVENTS should be enqueued in the queue.
-        private readonly bool _enqueueEventForNonSampledSpans;
+        private readonly bool enqueueEventForNonSampledSpans;
 
         public StartEndHandler(ISpanExporter spanExporter, IRunningSpanStore runningSpanStore, ISampledSpanStore sampledSpanStore, IEventQueue eventQueue)
         {
-            this._spanExporter = spanExporter;
-            this._runningSpanStore = runningSpanStore;
-            this._sampledSpanStore = sampledSpanStore;
-            this._enqueueEventForNonSampledSpans = runningSpanStore != null || sampledSpanStore != null;
-            this._eventQueue = eventQueue;
+            this.spanExporter = spanExporter;
+            this.runningSpanStore = runningSpanStore;
+            this.sampledSpanStore = sampledSpanStore;
+            this.enqueueEventForNonSampledSpans = runningSpanStore != null || sampledSpanStore != null;
+            this.eventQueue = eventQueue;
         }
 
         public void OnEnd(SpanBase span)
         {
-            if ((span.Options.HasFlag(SpanOptions.RECORD_EVENTS) && _enqueueEventForNonSampledSpans)
+            if ((span.Options.HasFlag(SpanOptions.RECORD_EVENTS) && enqueueEventForNonSampledSpans)
                 || span.Context.TraceOptions.IsSampled)
             {
-                _eventQueue.Enqueue(new SpanEndEvent(span, _spanExporter, _runningSpanStore, _sampledSpanStore));
+                eventQueue.Enqueue(new SpanEndEvent(span, spanExporter, runningSpanStore, sampledSpanStore));
             }
         }
 
         public void OnStart(SpanBase span)
         {
-            if (span.Options.HasFlag(SpanOptions.RECORD_EVENTS) && _enqueueEventForNonSampledSpans)
+            if (span.Options.HasFlag(SpanOptions.RECORD_EVENTS) && enqueueEventForNonSampledSpans)
             {
-                _eventQueue.Enqueue(new SpanStartEvent(span, _runningSpanStore));
+                eventQueue.Enqueue(new SpanStartEvent(span, runningSpanStore));
             }
         }
 

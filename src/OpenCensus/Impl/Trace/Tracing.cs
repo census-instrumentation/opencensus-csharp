@@ -10,7 +10,7 @@
     public sealed class Tracing
     {
 
-        private static Tracing _tracing = new Tracing();
+        private static Tracing tracing = new Tracing();
 
         internal Tracing()
             : this(false)
@@ -35,7 +35,7 @@
         {
             get
             {
-                return _tracing.traceComponent.Tracer;
+                return tracing.traceComponent.Tracer;
             }
         }
 
@@ -43,7 +43,7 @@
         {
             get
             {
-                return _tracing.traceComponent.PropagationComponent;
+                return tracing.traceComponent.PropagationComponent;
             }
         }
 
@@ -51,7 +51,7 @@
         {
             get
             {
-                return _tracing.traceComponent.ExportComponent;
+                return tracing.traceComponent.ExportComponent;
             }
         }
 
@@ -59,7 +59,7 @@
         {
             get
             {
-                return _tracing.traceComponent.TraceConfig;
+                return tracing.traceComponent.TraceConfig;
             }
         }
     }

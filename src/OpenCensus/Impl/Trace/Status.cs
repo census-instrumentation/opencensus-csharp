@@ -70,7 +70,7 @@
         {
             return "Status{"
                     + "canonicalCode=" + CanonicalCode + ", "
-                    + "description=" + Description 
+                    + "description=" + Description
                     + "}";
         }
 

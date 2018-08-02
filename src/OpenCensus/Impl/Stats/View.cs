@@ -51,7 +51,7 @@
             this.Columns = columns;
         }
 
-        public static IView Create(IViewName name, string description, IMeasure measure,IAggregation aggregation,IList<ITagKey> columns)
+        public static IView Create(IViewName name, string description, IMeasure measure, IAggregation aggregation, IList<ITagKey> columns)
         {
             var set = new HashSet<ITagKey>(columns);
             if (set.Count != columns.Count)

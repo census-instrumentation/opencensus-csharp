@@ -20,7 +20,7 @@
             {
                 throw new ArgumentOutOfRangeException(nameof(latencyUpperNs));
             }
-  
+
             return new SampledSpanStoreLatencyFilter(spanName, latencyLowerNs, latencyUpperNs, maxSpansToReturn);
         }
 

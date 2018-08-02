@@ -35,7 +35,7 @@
                 + "name=" + Name
                 + "}";
         }
-  
+
         public override bool Equals(object o)
         {
             if (o == this)

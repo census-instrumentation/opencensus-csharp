@@ -13,7 +13,7 @@
         ITagContextBuilder ToBuilder(ITagContext tags);
 
         ITagContextBuilder CurrentBuilder { get; }
-  
+
         IScope WithTagContext(ITagContext tags);
     }
 }

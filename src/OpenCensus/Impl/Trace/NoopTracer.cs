@@ -1,6 +1,4 @@
-﻿
-
-namespace OpenCensus.Trace
+﻿namespace OpenCensus.Trace
 {
     public sealed class NoopTracer : TracerBase, ITracer
     {

@@ -8,7 +8,7 @@
     {
         private static List<IAsyncLocalContextListener> callbacks = new List<IAsyncLocalContextListener>();
 
-        private static AsyncLocal<ISpan> _context = new AsyncLocal<ISpan>((arg) =>
+        private static AsyncLocal<ISpan> context = new AsyncLocal<ISpan>((arg) =>
         {
             CallListeners(arg);
             //var context = Thread.CurrentThread.ExecutionContext;
@@ -25,12 +25,12 @@
         {
             get
             {
-                return _context.Value;
+                return context.Value;
             }
 
             set
             {
-                _context.Value = value;
+                context.Value = value;
             }
         }
 

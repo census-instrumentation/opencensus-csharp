@@ -1,8 +1,8 @@
 ﻿namespace OpenCensus.Stats
 {
-    public class Stats 
+    public class Stats
     {
-        private static Stats _stats = new Stats();
+        private static Stats stats = new Stats();
 
         internal Stats()
             : this(false)
@@ -27,7 +27,7 @@
         {
             get
             {
-                return _stats.statsComponent.StatsRecorder;
+                return stats.statsComponent.StatsRecorder;
             }
         }
 
@@ -35,7 +35,7 @@
         {
             get
             {
-                return _stats.statsComponent.ViewManager;
+                return stats.statsComponent.ViewManager;
             }
         }
 
@@ -43,7 +43,7 @@
         {
             get
             {
-                return _stats.statsComponent.State;
+                return stats.statsComponent.State;
             }
         }
     }

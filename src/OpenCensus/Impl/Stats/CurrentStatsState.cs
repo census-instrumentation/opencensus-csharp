@@ -5,14 +5,14 @@
     public sealed class CurrentStatsState
     {
         private StatsCollectionState currentState = StatsCollectionState.ENABLED;
-        private object _lck = new object();
+        private readonly object lck = new object();
         private bool isRead;
 
         public StatsCollectionState Value
         {
             get
             {
-                lock (_lck)
+                lock (lck)
                 {
                     isRead = true;
                     return Internal;

@@ -1,6 +1,4 @@
-﻿
-
-namespace OpenCensus.Trace
+﻿namespace OpenCensus.Trace
 {
     public enum MessageEventType
     {

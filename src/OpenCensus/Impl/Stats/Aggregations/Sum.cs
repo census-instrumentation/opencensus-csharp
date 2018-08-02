@@ -2,7 +2,7 @@
 {
     using System;
 
-    public sealed class Sum : Aggregation ,ISum
+    public sealed class Sum : Aggregation, ISum
     {
         internal Sum() { }
 

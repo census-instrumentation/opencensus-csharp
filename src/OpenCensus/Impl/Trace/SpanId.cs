@@ -21,14 +21,14 @@
             }
         }
 
-        private SpanId(byte[] bytes) 
+        private SpanId(byte[] bytes)
         {
             this.bytes = bytes;
         }
 
         public static ISpanId FromBytes(byte[] buffer)
         {
-            if ( buffer == null)
+            if (buffer == null)
             {
                 throw new ArgumentNullException("buffer");
             }

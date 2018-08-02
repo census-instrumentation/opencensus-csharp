@@ -1,6 +1,4 @@
-﻿
-
-namespace OpenCensus.Trace.Internal
+﻿namespace OpenCensus.Trace.Internal
 {
     public interface IRandomGenerator
     {

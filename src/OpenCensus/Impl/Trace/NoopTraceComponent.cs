@@ -11,7 +11,7 @@
 
         public ITracer Tracer
         {
-         
+
             get
             {
                 return Trace.Tracer.NoopTracer;

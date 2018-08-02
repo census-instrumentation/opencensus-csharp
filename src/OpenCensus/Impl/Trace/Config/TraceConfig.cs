@@ -4,22 +4,22 @@
     {
         public TraceConfig()
         {
-            _activeTraceParams = TraceParams.DEFAULT;
+            activeTraceParams = TraceParams.DEFAULT;
         }
 
-        private ITraceParams _activeTraceParams;
+        private ITraceParams activeTraceParams;
 
         public override ITraceParams ActiveTraceParams
         {
             get
             {
-                return _activeTraceParams;
+                return activeTraceParams;
             }
         }
 
         public override void UpdateActiveTraceParams(ITraceParams traceParams)
         {
-            _activeTraceParams = traceParams;
+            activeTraceParams = traceParams;
         }
     }
 }
