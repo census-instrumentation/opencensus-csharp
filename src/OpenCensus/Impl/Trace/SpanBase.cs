@@ -12,17 +12,27 @@ namespace OpenCensus.Trace
         private static readonly IDictionary<string, IAttributeValue> EMPTY_ATTRIBUTES = new Dictionary<string, IAttributeValue>();
 
         public virtual ISpanContext Context { get; }
+
         public virtual SpanOptions Options { get; }
+
         public abstract Status Status { get; set; }
+
         public abstract string Name { get; }
+
         public SpanBase Next { get; set; }
+
         public SpanBase Previous { get; set; }
+
         public abstract long EndNanoTime { get; }
+
         public abstract long LatencyNs { get; }
+
         public abstract bool IsSampleToLocalSpanStore { get; }
+
         public abstract ISpanId ParentSpanId { get; }
 
         internal SpanBase() { }
+
         protected SpanBase(ISpanContext context, SpanOptions options = SpanOptions.NONE)
         {
             if (context == null)
@@ -45,17 +55,24 @@ namespace OpenCensus.Trace
         }
 
         public abstract void PutAttributes(IDictionary<string, IAttributeValue> attributes);
+
         public void AddAnnotation(string description)
         {
             AddAnnotation(description, EMPTY_ATTRIBUTES);
         }
 
         public abstract void AddAnnotation(string description, IDictionary<string, IAttributeValue> attributes);
+
         public abstract void AddAnnotation(IAnnotation annotation);
+
         public abstract void AddMessageEvent(IMessageEvent messageEvent);
+
         public abstract void AddLink(ILink link);
+
         public abstract void End(EndSpanOptions options);
+
         internal abstract ISpanData ToSpanData();
+
         public void End()
         {
             End(EndSpanOptions.DEFAULT);

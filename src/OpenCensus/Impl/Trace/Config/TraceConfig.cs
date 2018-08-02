@@ -12,6 +12,7 @@ namespace OpenCensus.Trace.Config
         }
 
         private ITraceParams _activeTraceParams;
+
         public override ITraceParams ActiveTraceParams
         {
             get

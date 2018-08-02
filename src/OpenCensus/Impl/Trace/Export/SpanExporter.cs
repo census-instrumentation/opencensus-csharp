@@ -9,6 +9,7 @@ namespace OpenCensus.Trace.Export
     public sealed class SpanExporter : SpanExporterBase
     {
         private SpanExporterWorker _worker { get; }
+
         private readonly Thread _workerThread;
 
         internal SpanExporter(SpanExporterWorker worker)

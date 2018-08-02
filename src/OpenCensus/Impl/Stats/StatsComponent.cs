@@ -40,6 +40,7 @@ namespace OpenCensus.Stats
         public override StatsCollectionState State
         {
             get { return state.Value; }
+
             set
             {
                 ViewManager manager = viewManager as ViewManager;

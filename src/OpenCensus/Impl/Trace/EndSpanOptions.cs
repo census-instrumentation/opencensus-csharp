@@ -9,6 +9,7 @@ namespace OpenCensus.Trace
         public static readonly EndSpanOptions DEFAULT = new EndSpanOptions(false); 
 
         public bool SampleToLocalSpanStore { get; }
+
         public Status Status { get; }
 
         internal EndSpanOptions()

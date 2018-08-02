@@ -20,6 +20,7 @@ namespace OpenCensus.Trace.Export
         }
 
         public IList<ITimedEvent<T>> Events { get; }
+
         public int DroppedEventsCount { get; }
 
         internal TimedEvents(IList<ITimedEvent<T>> events, int droppedEventsCount)

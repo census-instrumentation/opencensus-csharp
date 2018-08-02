@@ -11,6 +11,7 @@ namespace OpenCensus.Trace
     internal sealed class NoopTraceComponent : ITraceComponent
     {
         private readonly IExportComponent noopExportComponent = Export.ExportComponentBase.NewNoopExportComponent;
+
         public ITracer Tracer
         {
          

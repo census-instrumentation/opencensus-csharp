@@ -12,14 +12,18 @@ namespace OpenCensus.Trace
     public sealed class SpanContext : ISpanContext
     {
         public static readonly SpanContext INVALID = new SpanContext(Trace.TraceId.INVALID, Trace.SpanId.INVALID, TraceOptions.DEFAULT);
+
         public static ISpanContext Create(ITraceId traceId, ISpanId spanId, TraceOptions traceOptions)
         {
             return new SpanContext(traceId, spanId, traceOptions);
         }
 
         public ITraceId TraceId { get; }
+
         public ISpanId SpanId { get; }
+
         public TraceOptions TraceOptions { get; }
+
         public bool IsValid => TraceId.IsValid && SpanId.IsValid;
 
         public override int GetHashCode()

@@ -15,6 +15,7 @@ namespace OpenCensus.Trace
         // true if any of (runningSpanStore OR sampledSpanStore) are different than null, which
         // means the spans with RECORD_EVENTS should be enqueued in the queue.
         private readonly bool _enqueueEventForNonSampledSpans;
+
         public StartEndHandler(ISpanExporter spanExporter, IRunningSpanStore runningSpanStore, ISampledSpanStore sampledSpanStore, IEventQueue eventQueue)
         {
             this._spanExporter = spanExporter;

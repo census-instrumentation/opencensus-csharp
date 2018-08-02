@@ -13,6 +13,7 @@ namespace OpenCensus.Tags
         }
 
         public IList<ITagValue> Values { get; }
+
         public static TagValues Create(IList<ITagValue> values)
         {
             return new TagValues(values);

@@ -8,6 +8,7 @@ namespace OpenCensus.Trace
     {
         private bool? sampleToLocalSpanStore;
         private Status status;
+
         internal EndSpanOptionsBuilder()
         {
         }

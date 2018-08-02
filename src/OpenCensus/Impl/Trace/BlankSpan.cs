@@ -15,6 +15,7 @@ namespace OpenCensus.Trace
         }
 
         public override string Name { get; }
+
         public override Status Status { get; set; }
 
         public override long EndNanoTime

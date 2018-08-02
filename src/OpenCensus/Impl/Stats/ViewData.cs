@@ -14,8 +14,11 @@ namespace OpenCensus.Stats
     public sealed class ViewData : IViewData
     {
         public IView View { get; }
+
         public IDictionary<TagValues, IAggregationData> AggregationMap { get; }
+
         public ITimestamp Start { get; }
+
         public ITimestamp End { get; }
 
         internal ViewData(IView view, IDictionary<TagValues, IAggregationData> aggregationMap, ITimestamp start, ITimestamp end)

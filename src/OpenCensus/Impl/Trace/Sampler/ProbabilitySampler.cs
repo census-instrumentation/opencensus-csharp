@@ -80,6 +80,7 @@ namespace OpenCensus.Trace.Sampler
         }
 
         public double Probability { get; }
+
         public long IdUpperBound { get; }
 
         public override string ToString()

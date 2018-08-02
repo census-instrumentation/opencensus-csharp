@@ -10,9 +10,13 @@ namespace OpenCensus.Trace
     public interface ITraceComponent
     {
         ITracer Tracer { get; }
+
         IPropagationComponent PropagationComponent { get; }
+
         IClock Clock { get; }
+
         IExportComponent ExportComponent { get; }
+
         ITraceConfig TraceConfig { get; }
     }
 }

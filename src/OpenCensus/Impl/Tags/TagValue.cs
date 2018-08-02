@@ -8,6 +8,7 @@ namespace OpenCensus.Tags
     public sealed class TagValue : ITagValue
     {
         public const int MAX_LENGTH = 255;
+
         public string AsString { get; }
 
         internal TagValue(String asString)

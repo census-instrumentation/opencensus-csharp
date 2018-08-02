@@ -7,7 +7,9 @@ namespace OpenCensus.Tags
     public sealed class Tag : ITag
     {
         public ITagKey Key { get; }
+
         public ITagValue Value { get; }
+
         internal Tag(ITagKey key, ITagValue value)
         {
             if (key == null)

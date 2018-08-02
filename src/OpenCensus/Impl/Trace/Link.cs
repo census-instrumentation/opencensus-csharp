@@ -9,6 +9,7 @@ namespace OpenCensus.Trace
     public sealed class Link : ILink
     {
         private static readonly IDictionary<string, IAttributeValue> EMPTY_ATTRIBUTES = new Dictionary<string, IAttributeValue>();
+
         public static ILink FromSpanContext(ISpanContext context, LinkType type)
         {
             return new Link(context.TraceId, context.SpanId, type, EMPTY_ATTRIBUTES);

@@ -9,7 +9,9 @@ namespace OpenCensus.Tags
     public sealed class TagContext : TagContextBase
     {
         public static readonly ITagContext EMPTY =  new TagContext(new Dictionary<ITagKey, ITagValue>());
+
         public IDictionary<ITagKey, ITagValue> Tags { get; }
+
         public TagContext(IDictionary<ITagKey,ITagValue> tags)
         {
             this.Tags = new ReadOnlyDictionary<ITagKey, ITagValue>(new Dictionary<ITagKey, ITagValue>(tags));

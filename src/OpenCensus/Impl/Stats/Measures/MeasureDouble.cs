@@ -8,7 +8,9 @@ namespace OpenCensus.Stats.Measures
     public class MeasureDouble : Measure, IMeasureDouble
     {
         public override String Name { get; }
+
         public override String Description { get; }
+
         public override String Unit { get; }
 
         internal MeasureDouble(String name, String description, String unit)

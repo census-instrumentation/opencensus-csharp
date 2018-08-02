@@ -9,6 +9,7 @@ namespace OpenCensus.Stats
         public abstract ISet<IView> AllExportedViews { get; }
 
         public abstract IViewData GetView(IViewName view);
+
         public abstract void RegisterView(IView view);
     }
 }

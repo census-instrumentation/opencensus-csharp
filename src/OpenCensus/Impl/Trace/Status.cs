@@ -25,7 +25,9 @@ namespace OpenCensus.Trace
         public static readonly Status DATA_LOSS = new Status(CanonicalCode.DATA_LOSS);
 
         public CanonicalCode CanonicalCode { get; }
+
         public string Description { get; }
+
         public bool IsOk
         {
             get

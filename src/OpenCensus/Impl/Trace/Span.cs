@@ -47,6 +47,7 @@ namespace OpenCensus.Trace
                     return StatusWithDefault;
                 }
             }
+
             set
             {
                 if (!Options.HasFlag(SpanOptions.RECORD_EVENTS))

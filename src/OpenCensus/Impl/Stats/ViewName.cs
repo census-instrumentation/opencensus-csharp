@@ -8,6 +8,7 @@ namespace OpenCensus.Stats
     public sealed class ViewName : IViewName
     {
         internal const int NAME_MAX_LENGTH = 255;
+
         public String AsString { get; }
 
         internal ViewName(String asString)

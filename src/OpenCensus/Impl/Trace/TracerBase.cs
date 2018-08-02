@@ -8,6 +8,7 @@ namespace OpenCensus.Trace
     public abstract class TracerBase : ITracer
     {
         private static readonly NoopTracer noopTracer = new NoopTracer();
+
         internal static NoopTracer NoopTracer
         {
             get

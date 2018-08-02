@@ -19,8 +19,11 @@ namespace OpenCensus.Trace.Export
         protected RunningSpanStoreBase() { }
 
         public abstract IRunningSpanStoreSummary Summary { get; }
+
         public abstract IList<ISpanData> GetRunningSpans(IRunningSpanStoreFilter filter);
+
         public abstract void OnEnd(ISpan span);
+
         public abstract void OnStart(ISpan span);
     }
 }

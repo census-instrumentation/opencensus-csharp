@@ -12,10 +12,15 @@ namespace OpenCensus.Trace
         private SpanBuilderOptions Options { get; set; }
 
         private string Name { get; set; }
+
         private ISpan Parent { get; set; }
+
         private ISpanContext RemoteParentSpanContext { get; set; }
+
         private ISampler Sampler { get; set; }
+
         private IList<ISpan> ParentLinks { get; set; } = new List<ISpan>();
+
         private bool RecordEvents { get; set; }
 
         internal static ISpanBuilder CreateWithParent(string spanName, ISpan parent, SpanBuilderOptions options)

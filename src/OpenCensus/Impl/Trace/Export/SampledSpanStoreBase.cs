@@ -27,11 +27,17 @@ namespace OpenCensus.Trace.Export
         protected SampledSpanStoreBase() { }
 
         public abstract ISampledSpanStoreSummary Summary { get; }
+
         public abstract ISet<string> RegisteredSpanNamesForCollection { get; }
+
         public abstract void ConsiderForSampling(ISpan span);
+
         public abstract IList<ISpanData> GetErrorSampledSpans(ISampledSpanStoreErrorFilter filter);
+
         public abstract IList<ISpanData> GetLatencySampledSpans(ISampledSpanStoreLatencyFilter filter);
+
         public abstract void RegisterSpanNamesForCollection(IList<string> spanNames);
+
         public abstract void UnregisterSpanNamesForCollection(IList<string> spanNames);
     }
 }

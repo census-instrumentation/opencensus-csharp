@@ -60,6 +60,7 @@ namespace OpenCensus.Utils
             {
                 return (IAttributeValue)_delegate[key];
             }
+
             set
             {
                 _delegate[key] = value;

@@ -9,8 +9,11 @@ namespace OpenCensus.Stats
     public interface IViewData
     {
         IView View { get; }
+
         IDictionary<TagValues, IAggregationData> AggregationMap { get; }
+
         ITimestamp Start { get; }
+
         ITimestamp End { get; }
     }
 }

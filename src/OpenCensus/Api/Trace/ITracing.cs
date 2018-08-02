@@ -7,8 +7,11 @@ namespace OpenCensus.Trace
     public interface ITracing
     {
         ITracer Tracer { get; }
+
         IPropagationComponent PropagationComponent { get; }
+
         IExportComponent ExportComponent { get; }
+
         ITraceConfig TraceConfig { get; }
     }
 }

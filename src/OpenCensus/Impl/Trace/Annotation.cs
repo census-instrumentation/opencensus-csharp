@@ -29,6 +29,7 @@ namespace OpenCensus.Trace
         }
 
         public string Description { get; }
+
         public IDictionary<string, IAttributeValue> Attributes { get; }
 
         internal Annotation(string description, IDictionary<string, IAttributeValue> attributes)

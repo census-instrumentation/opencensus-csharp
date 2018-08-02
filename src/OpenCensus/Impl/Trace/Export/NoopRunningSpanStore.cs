@@ -7,6 +7,7 @@ namespace OpenCensus.Trace.Export
     internal sealed class NoopRunningSpanStore : RunningSpanStoreBase
     {
         private static readonly IRunningSpanStoreSummary EMPTY_SUMMARY =  RunningSpanStoreSummary.Create(new Dictionary<string, IRunningPerSpanNameSummary>());
+
         public override IRunningSpanStoreSummary Summary
         {
             get

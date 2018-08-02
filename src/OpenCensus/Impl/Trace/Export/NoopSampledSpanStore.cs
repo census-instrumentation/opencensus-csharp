@@ -14,6 +14,7 @@ namespace OpenCensus.Trace.Export
         private static readonly IList<ISpanData> EMPTY_SPANDATA = new List<ISpanData>();
 
         private readonly HashSet<string> registeredSpanNames = new HashSet<string>();
+
         public override ISampledSpanStoreSummary Summary
         {
             get

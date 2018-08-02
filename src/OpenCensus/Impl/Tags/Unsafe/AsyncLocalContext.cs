@@ -11,6 +11,7 @@ namespace OpenCensus.Tags.Unsafe
         private static readonly ITagContext EMPTY_TAG_CONTEXT = new EmptyTagContext();
 
         private static AsyncLocal<ITagContext> _context = new AsyncLocal<ITagContext>();
+
         public static ITagContext CurrentTagContext
         {
             get
@@ -22,6 +23,7 @@ namespace OpenCensus.Tags.Unsafe
 
                 return _context.Value;
             }
+
             set
             {
                 if (value == EMPTY_TAG_CONTEXT)

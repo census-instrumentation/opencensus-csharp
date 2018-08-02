@@ -8,8 +8,11 @@ namespace OpenCensus.Stats.Aggregations
     public class MeanData : AggregationData, IMeanData
     {
         public double Mean { get; }
+
         public long Count { get; }
+
         public double Max { get; }
+
         public double Min { get; }
 
         internal MeanData(double mean, long count, double min, double max)

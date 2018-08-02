@@ -23,12 +23,14 @@ namespace OpenCensus.Trace.Unsafe
             //System.Diagnostics.StackTrace t = new System.Diagnostics.StackTrace();
             //Console.WriteLine(t.ToString());
         });
+
         public static ISpan CurrentSpan
         {
             get
             {
                 return _context.Value;
             }
+
             set
             {
                 _context.Value = value;

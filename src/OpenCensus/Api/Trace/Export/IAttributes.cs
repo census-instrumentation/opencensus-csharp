@@ -7,6 +7,7 @@ namespace OpenCensus.Trace.Export
     public interface IAttributes
     {
         IDictionary<string, IAttributeValue> AttributeMap { get; }
+
         int DroppedAttributesCount { get; }
     }
 }

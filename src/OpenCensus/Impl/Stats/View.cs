@@ -9,10 +9,15 @@ namespace OpenCensus.Stats
     public sealed class View : IView
     {
         public IViewName Name { get; }
+
         public String Description { get; }
+
         public IMeasure Measure { get; }
+
         public IAggregation Aggregation { get; }
+
         public IList<ITagKey> Columns { get; }
+
         internal View(IViewName name, string description, IMeasure measure, IAggregation aggregation, IList<ITagKey> columns)
         {
             if (name == null)

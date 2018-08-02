@@ -20,6 +20,7 @@ namespace OpenCensus.Stats
                     return Internal;
                 }
             }
+
             set
             {
             }

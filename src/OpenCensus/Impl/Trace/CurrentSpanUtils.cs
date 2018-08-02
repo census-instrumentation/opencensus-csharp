@@ -26,6 +26,7 @@ namespace OpenCensus.Trace
             private readonly ISpan origContext;
             private readonly ISpan span;
             private bool endSpan;
+
             public ScopeInSpan(ISpan span, bool endSpan)
             {
                 this.span = span;

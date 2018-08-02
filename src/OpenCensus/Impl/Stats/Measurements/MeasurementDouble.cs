@@ -9,6 +9,7 @@ namespace OpenCensus.Stats.Measurements
     public sealed class MeasurementDouble : Measurement, IMeasurementDouble
     {
         public override IMeasure Measure { get; }
+
         public double Value { get; }
 
         internal MeasurementDouble(IMeasureDouble measure, double value)

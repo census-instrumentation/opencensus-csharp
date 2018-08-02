@@ -8,6 +8,7 @@ namespace OpenCensus.Stats.Measurements
     public sealed class MeasurementLong : Measurement, IMeasurementLong
     {
         public override IMeasure Measure { get; }
+
         public long Value { get; }
 
         MeasurementLong(IMeasureLong measure, long value)

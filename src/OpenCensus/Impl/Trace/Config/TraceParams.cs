@@ -52,10 +52,15 @@ namespace OpenCensus.Trace.Config
         }
 
         public ISampler Sampler { get; }
+
         public int MaxNumberOfAttributes { get; }
+
         public int MaxNumberOfAnnotations { get; }
+
         public int MaxNumberOfMessageEvents { get; }
+
         public int MaxNumberOfLinks { get; }
+
         public TraceParamsBuilder ToBuilder()
         {
             return new TraceParamsBuilder(this);

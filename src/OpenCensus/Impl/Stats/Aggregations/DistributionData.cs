@@ -9,10 +9,15 @@ namespace OpenCensus.Stats.Aggregations
     public class DistributionData : AggregationData, IDistributionData
     {
         public double Mean { get; }
+
         public long Count { get; }
+
         public double Min { get; }
+
         public double Max { get; }
+
         public double SumOfSquaredDeviations { get; }
+
         public IList<long> BucketCounts { get; }
 
         internal DistributionData(double mean, long count, double min, double max, double sumOfSquaredDeviations, IList<long> bucketCounts)

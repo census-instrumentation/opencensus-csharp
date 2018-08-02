@@ -32,6 +32,7 @@ namespace OpenCensus.Stats
                 //isRead = true;
                 return StatsCollectionState.DISABLED;
             }
+
             set
             {
             }

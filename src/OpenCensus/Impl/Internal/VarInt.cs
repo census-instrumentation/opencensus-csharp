@@ -12,6 +12,7 @@ namespace OpenCensus.Internal
 
         /** maximum encoded size of 64-bit longs, and negative 32-bit ints (in bytes) */
         public const int MAX_VARLONG_SIZE = 10;
+
         public static int VarIntSize(int i)
         {
             int result = 0;

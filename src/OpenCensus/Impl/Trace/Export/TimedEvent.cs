@@ -12,6 +12,7 @@ namespace OpenCensus.Trace.Export
         }
 
         public ITimestamp Timestamp { get; }
+
         public T Event { get; }
 
         internal TimedEvent(ITimestamp timestamp, T @event)

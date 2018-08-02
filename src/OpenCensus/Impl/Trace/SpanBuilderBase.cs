@@ -8,9 +8,13 @@ namespace OpenCensus.Trace
     public abstract class SpanBuilderBase : ISpanBuilder
     {
         public abstract ISpanBuilder SetSampler(ISampler sampler);
+
         public abstract ISpanBuilder SetParentLinks(IList<ISpan> parentLinks);
+
         public abstract ISpanBuilder SetRecordEvents(bool recordEvents);
+
         public abstract ISpan StartSpan();
+
         public IScope StartScopedSpan()
         {
             return CurrentSpanUtils.WithSpan(StartSpan(), true);

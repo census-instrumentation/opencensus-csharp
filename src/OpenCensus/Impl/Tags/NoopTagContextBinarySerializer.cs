@@ -9,6 +9,7 @@ namespace OpenCensus.Tags
     {
         internal static readonly ITagContextBinarySerializer INSTANCE = new NoopTagContextBinarySerializer();
         static readonly byte[] EMPTY_BYTE_ARRAY = { };
+
         public override byte[] ToByteArray(ITagContext tags)
         {
             if (tags == null)

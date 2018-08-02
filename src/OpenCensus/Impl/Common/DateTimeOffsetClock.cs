@@ -12,6 +12,7 @@ namespace OpenCensus.Common
         internal const long NANOS_PER_SECOND = NANOS_PER_MILLI * MILLIS_PER_SECOND;
 
         public static readonly DateTimeOffsetClock INSTANCE = new DateTimeOffsetClock();
+
         public static IClock GetInstance()
         {
             return INSTANCE;

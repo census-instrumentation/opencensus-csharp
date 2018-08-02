@@ -16,6 +16,7 @@ namespace OpenCensus.Trace
     public interface IAttributeValue<T> : IAttributeValue
     {
         T Value { get; }
+
         M Apply<M>(Func<T, M> function);
     }
 }

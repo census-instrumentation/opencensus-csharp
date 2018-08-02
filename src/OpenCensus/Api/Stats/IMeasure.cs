@@ -11,8 +11,11 @@ namespace OpenCensus.Stats
             Func<IMeasureDouble, M> p0,
             Func<IMeasureLong, M> p1,
             Func<IMeasure, M> defaultFunction);
+
         string Name { get; }
+
         string Description { get; }
+
         string Unit { get; }
     }
 }

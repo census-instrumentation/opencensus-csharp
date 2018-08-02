@@ -11,6 +11,7 @@ namespace OpenCensus.Utils
         private object _lck = new object();
 
         public ConcurrentIntrusiveList() { }
+
         public void AddElement(T element)
         {
             lock (_lck)

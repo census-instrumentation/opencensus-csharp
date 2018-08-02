@@ -8,6 +8,7 @@ namespace OpenCensus.Tags
     public sealed class Tags
     {
         private static object _lck = new object();
+
         internal static void Initialize(bool enabled)
         {
             if (_tags == null)

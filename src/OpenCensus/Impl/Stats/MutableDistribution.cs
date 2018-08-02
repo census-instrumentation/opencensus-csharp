@@ -7,16 +7,22 @@ namespace OpenCensus.Stats
     internal sealed class MutableDistribution : MutableAggregation
     {
         private const double TOLERANCE = 1e-6;
+
         internal double Sum { get; set; } = 0.0;
+
         internal double Mean { get; set; } = 0.0;
+
         internal long Count { get; set; } = 0;
+
         internal double SumOfSquaredDeviations { get; set; } = 0.0;
 
         // Initial "impossible" values, that will get reset as soon as first value is added.
         internal double Min { get; set; } = Double.PositiveInfinity;
+
         internal double Max { get; set; } = Double.NegativeInfinity;
 
         internal IBucketBoundaries BucketBoundaries { get; }
+
         internal long[] BucketCounts { get; }
 
         internal MutableDistribution(IBucketBoundaries bucketBoundaries)

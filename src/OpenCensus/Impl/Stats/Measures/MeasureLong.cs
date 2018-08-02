@@ -8,7 +8,9 @@ namespace OpenCensus.Stats.Measures
     public sealed class MeasureLong : Measure, IMeasureLong
     {
         public override String Name { get; }
+
         public override String Description { get; }
+
         public override String Unit { get; }
 
         internal MeasureLong(String name, String description, String unit)
