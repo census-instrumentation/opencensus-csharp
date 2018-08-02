@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Stats
+﻿namespace OpenCensus.Stats
 {
     public abstract class StatsComponentBase : IStatsComponent
     {

@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-
-namespace OpenCensus.Trace.Export
+﻿namespace OpenCensus.Trace.Export
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
+
     public sealed class RunningSpanStoreSummary : IRunningSpanStoreSummary
     {
         public static IRunningSpanStoreSummary Create(IDictionary<string, IRunningPerSpanNameSummary> perSpanNameSummary)

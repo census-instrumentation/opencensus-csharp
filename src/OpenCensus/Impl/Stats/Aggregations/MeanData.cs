@@ -1,10 +1,8 @@
-﻿using OpenCensus.Utils;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Stats.Aggregations
+﻿namespace OpenCensus.Stats.Aggregations
 {
+    using System;
+    using OpenCensus.Utils;
+
     public class MeanData : AggregationData, IMeanData
     {
         public double Mean { get; }

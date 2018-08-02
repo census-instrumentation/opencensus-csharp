@@ -1,11 +1,8 @@
-﻿using OpenCensus.Internal;
-using OpenCensus.Trace;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Utils
+﻿namespace OpenCensus.Utils
 {
+    using System;
+    using OpenCensus.Internal;
+
     public class DefaultEventQueue : IEventQueue
     {
         public void Enqueue(IEventQueueEntry entry)

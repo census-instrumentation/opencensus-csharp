@@ -1,10 +1,7 @@
-﻿using OpenCensus.Trace;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Common
+﻿namespace OpenCensus.Common
 {
+    using System;
+
     internal class DateTimeOffsetClock : IClock
     {
         internal const long MILLIS_PER_SECOND = 1000L;

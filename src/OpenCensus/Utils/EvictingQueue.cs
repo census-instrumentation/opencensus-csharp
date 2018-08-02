@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Utils
+﻿namespace OpenCensus.Utils
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+
     public class EvictingQueue<T> : IEnumerable<T>, IEnumerable
     {
         private readonly Queue<T> _delegate;

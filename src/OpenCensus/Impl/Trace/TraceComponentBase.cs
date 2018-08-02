@@ -1,13 +1,10 @@
-﻿using OpenCensus.Common;
-using OpenCensus.Trace.Config;
-using OpenCensus.Trace.Export;
-using OpenCensus.Trace.Propagation;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace
+﻿namespace OpenCensus.Trace
 {
+    using OpenCensus.Common;
+    using OpenCensus.Trace.Config;
+    using OpenCensus.Trace.Export;
+    using OpenCensus.Trace.Propagation;
+
     public abstract class TraceComponentBase : ITraceComponent
     {
         internal static ITraceComponent NewNoopTraceComponent

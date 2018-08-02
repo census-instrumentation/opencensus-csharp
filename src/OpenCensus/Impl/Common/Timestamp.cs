@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-
-namespace OpenCensus.Common
+﻿namespace OpenCensus.Common
 {
+    using System;
+
     public class Timestamp : ITimestamp
     {
         const long MAX_SECONDS = 315576000000L;

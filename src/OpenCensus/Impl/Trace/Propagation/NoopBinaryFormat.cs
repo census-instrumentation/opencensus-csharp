@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using OpenCensus.Trace;
-
-namespace OpenCensus.Trace.Propagation
+﻿namespace OpenCensus.Trace.Propagation
 {
+    using System;
+
     internal class NoopBinaryFormat : IBinaryFormat
     {
         public ISpanContext FromByteArray(byte[] bytes)

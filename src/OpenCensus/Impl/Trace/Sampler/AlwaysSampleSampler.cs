@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace.Sampler
+﻿namespace OpenCensus.Trace.Sampler
 {
+    using System.Collections.Generic;
+
     internal class AlwaysSampleSampler : ISampler
     {
         internal AlwaysSampleSampler() { }

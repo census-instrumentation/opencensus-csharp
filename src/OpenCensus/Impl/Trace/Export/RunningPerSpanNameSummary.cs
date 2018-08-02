@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace.Export
+﻿namespace OpenCensus.Trace.Export
 {
+    using System;
+
     public sealed class RunningPerSpanNameSummary : IRunningPerSpanNameSummary
     {
         internal RunningPerSpanNameSummary(int numRunningSpans)

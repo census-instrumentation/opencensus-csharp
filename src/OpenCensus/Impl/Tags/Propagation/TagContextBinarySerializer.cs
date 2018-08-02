@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Tags.Propagation
+﻿namespace OpenCensus.Tags.Propagation
 {
     internal sealed class TagContextBinarySerializer : TagContextBinarySerializerBase
     {

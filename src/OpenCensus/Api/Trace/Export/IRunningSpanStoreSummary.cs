@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace.Export
+﻿namespace OpenCensus.Trace.Export
 {
+    using System.Collections.Generic;
+
     public interface IRunningSpanStoreSummary
     {
         IDictionary<string, IRunningPerSpanNameSummary> PerSpanNameSummary { get; }

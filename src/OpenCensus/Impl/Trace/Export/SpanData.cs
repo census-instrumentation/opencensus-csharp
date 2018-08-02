@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using OpenCensus.Common;
-
-namespace OpenCensus.Trace.Export
+﻿namespace OpenCensus.Trace.Export
 {
+    using System;
+    using System.Collections.Generic;
+    using OpenCensus.Common;
+
     public sealed class SpanData : ISpanData
     {
         public static ISpanData Create(

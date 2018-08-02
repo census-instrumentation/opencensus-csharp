@@ -1,10 +1,9 @@
-﻿using OpenCensus.Utils;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Tags
+﻿namespace OpenCensus.Tags
 {
+    using System;
+    using System.Collections.Generic;
+    using OpenCensus.Utils;
+
     public sealed class TagValues
     {
         private TagValues(IList<ITagValue> values)

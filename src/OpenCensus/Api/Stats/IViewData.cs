@@ -1,11 +1,9 @@
-﻿using OpenCensus.Tags;
-using OpenCensus.Common;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Stats
+﻿namespace OpenCensus.Stats
 {
+    using System.Collections.Generic;
+    using OpenCensus.Common;
+    using OpenCensus.Tags;
+
     public interface IViewData
     {
         IView View { get; }

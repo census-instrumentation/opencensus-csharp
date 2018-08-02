@@ -1,12 +1,9 @@
-﻿using OpenCensus.Stats;
-using OpenCensus.Stats.Measurements;
-using OpenCensus.Stats.Measures;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Stats
+﻿namespace OpenCensus.Stats
 {
+    using System.Collections.Generic;
+    using OpenCensus.Stats.Measurements;
+    using OpenCensus.Stats.Measures;
+
     internal class MeasureMapBuilder
     {
         private IList<IMeasurement> measurements = new List<IMeasurement>();

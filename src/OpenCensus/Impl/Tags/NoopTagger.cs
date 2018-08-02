@@ -1,11 +1,9 @@
-﻿using OpenCensus.Common;
-using OpenCensus.Internal;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Tags
+﻿namespace OpenCensus.Tags
 {
+    using System;
+    using OpenCensus.Common;
+    using OpenCensus.Internal;
+
     internal sealed class NoopTagger : TaggerBase
     {
         internal static readonly ITagger INSTANCE = new NoopTagger();

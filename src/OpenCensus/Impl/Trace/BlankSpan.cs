@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using OpenCensus.Trace.Export;
-
-namespace OpenCensus.Trace
+﻿namespace OpenCensus.Trace
 {
+    using System;
+    using System.Collections.Generic;
+    using OpenCensus.Trace.Export;
+
     public sealed class BlankSpan : SpanBase
     {
         public static readonly BlankSpan INSTANCE = new BlankSpan();

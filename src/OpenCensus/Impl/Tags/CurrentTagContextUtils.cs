@@ -1,11 +1,8 @@
-﻿using OpenCensus.Common;
-using OpenCensus.Tags.Unsafe;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Tags
+﻿namespace OpenCensus.Tags
 {
+    using OpenCensus.Common;
+    using OpenCensus.Tags.Unsafe;
+
     internal static class CurrentTagContextUtils
     {
         internal static ITagContext CurrentTagContext

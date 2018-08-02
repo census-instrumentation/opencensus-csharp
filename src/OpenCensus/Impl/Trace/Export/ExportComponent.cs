@@ -1,8 +1,8 @@
-﻿using OpenCensus.Common;
-using OpenCensus.Internal;
-
-namespace OpenCensus.Trace.Export
+﻿namespace OpenCensus.Trace.Export
 {
+    using OpenCensus.Common;
+    using OpenCensus.Internal;
+
     public sealed class ExportComponent : ExportComponentBase
     {
         private const int EXPORTER_BUFFER_SIZE = 32;

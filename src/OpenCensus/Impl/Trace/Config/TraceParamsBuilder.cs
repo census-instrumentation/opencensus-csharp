@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace.Config
+﻿namespace OpenCensus.Trace.Config
 {
+    using System;
+
     public sealed class TraceParamsBuilder
     {
         private ISampler sampler;

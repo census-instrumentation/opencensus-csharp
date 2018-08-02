@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace.Export
+﻿namespace OpenCensus.Trace.Export
 {
+    using System.Collections.Generic;
+
     public abstract class RunningSpanStoreBase : IRunningSpanStore
     {
         private static readonly IRunningSpanStore NOOP_RUNNING_SPAN_STORE = new NoopRunningSpanStore();

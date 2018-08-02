@@ -1,10 +1,8 @@
-﻿using OpenCensus.Utils;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Stats.Measures
+﻿namespace OpenCensus.Stats.Measures
 {
+    using System;
+    using OpenCensus.Utils;
+
     public sealed class MeasureLong : Measure, IMeasureLong
     {
         public override String Name { get; }

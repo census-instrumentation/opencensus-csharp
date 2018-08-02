@@ -1,10 +1,4 @@
-﻿using OpenCensus.Common;
-using OpenCensus.Internal;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace.Export
+﻿namespace OpenCensus.Trace.Export
 {
     public abstract class ExportComponentBase : IExportComponent
     {

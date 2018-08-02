@@ -1,10 +1,7 @@
-﻿using OpenCensus.Utils;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace
+﻿namespace OpenCensus.Trace
 {
+    using OpenCensus.Utils;
+
     internal class TraceEvents<T>
     {
         private int totalRecordedEvents = 0;

@@ -1,12 +1,11 @@
-﻿using OpenCensus.Common;
-using OpenCensus.Stats.Aggregations;
-using OpenCensus.Tags;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Stats
+﻿namespace OpenCensus.Stats
 {
+    using System;
+    using System.Collections.Generic;
+    using OpenCensus.Common;
+    using OpenCensus.Stats.Aggregations;
+    using OpenCensus.Tags;
+
     internal abstract class MutableViewData
     {
         private const long MILLIS_PER_SECOND = 1000L;

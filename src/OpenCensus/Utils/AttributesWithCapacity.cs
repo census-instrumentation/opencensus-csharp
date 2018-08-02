@@ -1,13 +1,11 @@
-﻿using OpenCensus.Trace;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
-
-namespace OpenCensus.Utils
+﻿namespace OpenCensus.Utils
 {
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Collections.Specialized;
+    using System.Linq;
+    using OpenCensus.Trace;
+
     internal class AttributesWithCapacity : IDictionary<string, IAttributeValue>
     {
         private OrderedDictionary _delegate = new OrderedDictionary();

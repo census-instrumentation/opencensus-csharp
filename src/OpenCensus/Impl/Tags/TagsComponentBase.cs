@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using OpenCensus.Tags.Propagation;
-
-namespace OpenCensus.Tags
+﻿namespace OpenCensus.Tags
 {
+    using OpenCensus.Tags.Propagation;
+
     public abstract class TagsComponentBase : ITagsComponent
     {
         public abstract ITagger Tagger { get; }

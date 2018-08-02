@@ -1,10 +1,7 @@
-﻿using OpenCensus.Tags.Propagation;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Tags
+﻿namespace OpenCensus.Tags
 {
+    using OpenCensus.Tags.Propagation;
+
     internal sealed class NoopTags
     {
 

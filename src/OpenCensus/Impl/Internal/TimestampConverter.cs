@@ -1,7 +1,7 @@
-﻿using OpenCensus.Common;
-
-namespace OpenCensus.Internal
+﻿namespace OpenCensus.Internal
 {
+    using OpenCensus.Common;
+
     internal class TimestampConverter : ITimestampConverter
     {
         private readonly ITimestamp timestamp;

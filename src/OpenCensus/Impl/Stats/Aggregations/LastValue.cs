@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Stats.Aggregations
+﻿namespace OpenCensus.Stats.Aggregations
 {
+    using System;
+
     public sealed class LastValue : Aggregation, ILastValue
     {
         LastValue() { }

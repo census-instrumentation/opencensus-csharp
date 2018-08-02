@@ -1,10 +1,7 @@
-﻿using OpenCensus.Common;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace.Export
+﻿namespace OpenCensus.Trace.Export
 {
+    using OpenCensus.Common;
+
     public interface ISpanData
     {
         ISpanContext Context { get; }

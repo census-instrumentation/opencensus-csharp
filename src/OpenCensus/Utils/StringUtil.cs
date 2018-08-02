@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Utils
+﻿namespace OpenCensus.Utils
 {
+    using System;
+
     internal static class StringUtil
     {
         public static bool IsPrintableString(String str)

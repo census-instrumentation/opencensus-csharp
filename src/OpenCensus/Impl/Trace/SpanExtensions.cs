@@ -1,11 +1,8 @@
-﻿using OpenCensus.Trace;
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Text;
-
-namespace OpenCensus.Trace
+﻿namespace OpenCensus.Trace
 {
+    using System.Collections.Generic;
+    using System.Collections.Specialized;
+
     public static class SpanExtensions
     {
         public static ISpan PutClientSpanKindAttribute(this ISpan span)

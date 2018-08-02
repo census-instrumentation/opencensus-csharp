@@ -1,15 +1,14 @@
-﻿using OpenCensus.Common;
-using OpenCensus.Trace.Config;
-using OpenCensus.Trace.Export;
-using OpenCensus.Internal;
-using OpenCensus.Utils;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-
-namespace OpenCensus.Trace
+﻿namespace OpenCensus.Trace
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using OpenCensus.Common;
+    using OpenCensus.Internal;
+    using OpenCensus.Trace.Config;
+    using OpenCensus.Trace.Export;
+    using OpenCensus.Utils;
+
     public sealed class Span : SpanBase
     {
         private readonly ISpanId parentSpanId;

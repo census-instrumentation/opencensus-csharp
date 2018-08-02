@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Common
+﻿namespace OpenCensus.Common
 {
+    using System;
+
     public interface IScope : IDisposable
     {
     }

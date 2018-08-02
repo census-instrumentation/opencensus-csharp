@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using OpenCensus.Common;
-
-namespace OpenCensus.Tags
+﻿namespace OpenCensus.Tags
 {
+    using OpenCensus.Common;
+
     public abstract class TaggerBase : ITagger
     {
         public abstract ITagContext Empty { get; }

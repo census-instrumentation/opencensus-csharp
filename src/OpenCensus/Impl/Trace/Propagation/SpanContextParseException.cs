@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace.Propagation
+﻿namespace OpenCensus.Trace.Propagation
 {
+    using System;
+
     public class SpanContextParseException : Exception
     {
         public SpanContextParseException(string message)

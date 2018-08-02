@@ -1,11 +1,8 @@
-﻿using OpenCensus.Common;
-using OpenCensus.Internal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace OpenCensus.Tags
+﻿namespace OpenCensus.Tags
 {
+    using OpenCensus.Common;
+    using OpenCensus.Internal;
+
     public sealed class Tagger : TaggerBase
     {
         private readonly CurrentTaggingState state;

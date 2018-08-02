@@ -1,14 +1,12 @@
-﻿using OpenCensus.Common;
-using OpenCensus.Internal;
-using OpenCensus.Trace.Config;
-using OpenCensus.Trace.Export;
-using OpenCensus.Trace.Internal;
-using OpenCensus.Trace.Propagation;
-using OpenCensus.Utils;
-using System;
-
-namespace OpenCensus.Trace
+﻿namespace OpenCensus.Trace
 {
+    using OpenCensus.Common;
+    using OpenCensus.Internal;
+    using OpenCensus.Trace.Config;
+    using OpenCensus.Trace.Export;
+    using OpenCensus.Trace.Internal;
+    using OpenCensus.Trace.Propagation;
+
     public sealed class Tracing
     {
 

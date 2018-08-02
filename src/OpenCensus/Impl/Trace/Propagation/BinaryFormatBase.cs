@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using OpenCensus.Trace;
-
-namespace OpenCensus.Trace.Propagation
+﻿namespace OpenCensus.Trace.Propagation
 {
     public abstract class BinaryFormatBase : IBinaryFormat
     {

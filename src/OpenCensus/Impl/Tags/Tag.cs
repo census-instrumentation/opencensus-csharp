@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Tags
+﻿namespace OpenCensus.Tags
 {
+    using System;
+
     public sealed class Tag : ITag
     {
         public ITagKey Key { get; }

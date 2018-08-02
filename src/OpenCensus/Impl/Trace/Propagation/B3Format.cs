@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using OpenCensus.Trace;
-
-namespace OpenCensus.Trace.Propagation
+﻿namespace OpenCensus.Trace.Propagation
 {
+    using System;
+    using System.Collections.Generic;
+
     public sealed class B3Format : TextFormatBase
     {
         public const string X_B3_TRACE_ID = "X-B3-TraceId";

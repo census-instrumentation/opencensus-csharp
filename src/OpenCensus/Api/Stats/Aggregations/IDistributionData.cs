@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Stats.Aggregations
+﻿namespace OpenCensus.Stats.Aggregations
 {
+    using System.Collections.Generic;
+
     public interface IDistributionData : IAggregationData
     {
         double Mean { get; }

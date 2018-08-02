@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Common
+﻿namespace OpenCensus.Common
 {
     internal sealed class ZeroTimeClock : IClock
     {

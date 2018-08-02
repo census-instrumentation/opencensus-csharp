@@ -1,12 +1,11 @@
-﻿using OpenCensus.Internal;
-using OpenCensus.Trace.Config;
-using OpenCensus.Trace.Internal;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace
+﻿namespace OpenCensus.Trace
 {
+    using System;
+    using System.Collections.Generic;
+    using OpenCensus.Internal;
+    using OpenCensus.Trace.Config;
+    using OpenCensus.Trace.Internal;
+
     public class SpanBuilder : SpanBuilderBase
     {
         private SpanBuilderOptions Options { get; set; }

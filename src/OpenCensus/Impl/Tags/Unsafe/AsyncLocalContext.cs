@@ -1,11 +1,8 @@
-﻿using OpenCensus.Trace;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-
-namespace OpenCensus.Tags.Unsafe
+﻿namespace OpenCensus.Tags.Unsafe
 {
+    using System.Collections.Generic;
+    using System.Threading;
+
     internal static class AsyncLocalContext
     {
         private static readonly ITagContext EMPTY_TAG_CONTEXT = new EmptyTagContext();

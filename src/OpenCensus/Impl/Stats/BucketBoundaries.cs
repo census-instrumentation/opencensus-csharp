@@ -1,11 +1,10 @@
-﻿using OpenCensus.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace OpenCensus.Stats
+﻿namespace OpenCensus.Stats
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using OpenCensus.Utils;
+
     public sealed class BucketBoundaries : IBucketBoundaries
     {
         public IList<double> Boundaries { get; }

@@ -1,11 +1,10 @@
-﻿using OpenCensus.Tags;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace OpenCensus.Stats
+﻿namespace OpenCensus.Stats
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using OpenCensus.Tags;
+
     public sealed class View : IView
     {
         public IViewName Name { get; }

@@ -1,10 +1,7 @@
-﻿using OpenCensus.Common;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace
+﻿namespace OpenCensus.Trace
 {
+    using OpenCensus.Common;
+
     public interface ITracer
     {
         ISpan CurrentSpan { get; }

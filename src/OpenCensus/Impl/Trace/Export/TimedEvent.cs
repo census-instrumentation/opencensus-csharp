@@ -1,10 +1,7 @@
-﻿using OpenCensus.Common;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace.Export
+﻿namespace OpenCensus.Trace.Export
 {
+    using OpenCensus.Common;
+
     public sealed class TimedEvent<T> : ITimedEvent<T>
     {
         public static ITimedEvent<T> Create(ITimestamp timestamp, T @event) {

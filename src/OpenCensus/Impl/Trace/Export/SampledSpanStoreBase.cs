@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace.Export
+﻿namespace OpenCensus.Trace.Export
 {
+    using System.Collections.Generic;
+
     public abstract class SampledSpanStoreBase : ISampledSpanStore
     {
         private static readonly ISampledSpanStore NOOP_SAMPLED_SPAN_STORE = new NoopSampledSpanStore();

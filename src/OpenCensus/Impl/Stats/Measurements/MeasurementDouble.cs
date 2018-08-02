@@ -1,11 +1,9 @@
-﻿using OpenCensus.Stats.Measures;
-using OpenCensus.Utils;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Stats.Measurements
+﻿namespace OpenCensus.Stats.Measurements
 {
+    using System;
+    using OpenCensus.Stats.Measures;
+    using OpenCensus.Utils;
+
     public sealed class MeasurementDouble : Measurement, IMeasurementDouble
     {
         public override IMeasure Measure { get; }

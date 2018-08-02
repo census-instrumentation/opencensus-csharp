@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Tags.Propagation
+﻿namespace OpenCensus.Tags.Propagation
 {
+    using System;
+
     public sealed class TagContextDeserializationException : Exception
     {
         public TagContextDeserializationException(String message) 

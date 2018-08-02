@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace OpenCensus.Utils
+﻿namespace OpenCensus.Utils
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+
     public static class Collections
     {
         public static string ToString<K, V>(IDictionary<K, V> dict)

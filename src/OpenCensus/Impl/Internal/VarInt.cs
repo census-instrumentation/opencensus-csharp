@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-
-namespace OpenCensus.Internal
+﻿namespace OpenCensus.Internal
 {
+    using System;
+    using System.IO;
+
     public static class VarInt
     {
         /** Maximum encoded size of 32-bit positive integers (in bytes) */

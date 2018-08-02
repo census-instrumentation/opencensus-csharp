@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace
+﻿namespace OpenCensus.Trace
 {
+    using System.Collections.Generic;
+
     public interface ISpan
     {
         ISpanContext Context { get; }

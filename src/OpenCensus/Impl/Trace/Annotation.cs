@@ -1,12 +1,11 @@
-﻿using OpenCensus.Utils;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-
-namespace OpenCensus.Trace
+﻿namespace OpenCensus.Trace
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
+    using OpenCensus.Utils;
+
     public sealed class Annotation : IAnnotation
     {
         private static readonly ReadOnlyDictionary<string, IAttributeValue> EMPTY_ATTRIBUTES =

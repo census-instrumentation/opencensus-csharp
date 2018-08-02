@@ -1,10 +1,8 @@
-﻿using OpenCensus.Trace.Sampler;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace.Config
+﻿namespace OpenCensus.Trace.Config
 {
+    using System;
+    using OpenCensus.Trace.Sampler;
+
     public sealed class TraceParams : ITraceParams
     {
         private const double DEFAULT_PROBABILITY = 1e-4;

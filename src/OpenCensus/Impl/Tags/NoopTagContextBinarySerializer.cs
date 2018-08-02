@@ -1,10 +1,8 @@
-﻿using OpenCensus.Tags.Propagation;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Tags
+﻿namespace OpenCensus.Tags
 {
+    using System;
+    using OpenCensus.Tags.Propagation;
+
     public class NoopTagContextBinarySerializer : TagContextBinarySerializerBase
     {
         internal static readonly ITagContextBinarySerializer INSTANCE = new NoopTagContextBinarySerializer();

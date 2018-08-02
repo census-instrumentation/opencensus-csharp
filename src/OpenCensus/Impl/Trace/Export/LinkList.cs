@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace OpenCensus.Trace.Export
+﻿namespace OpenCensus.Trace.Export
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     public sealed class LinkList : ILinks
     {
         public static LinkList Create(IList<ILink> links, int droppedLinksCount)

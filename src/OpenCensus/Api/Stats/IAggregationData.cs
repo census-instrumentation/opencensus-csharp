@@ -1,10 +1,8 @@
-﻿using OpenCensus.Stats.Aggregations;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Stats
+﻿namespace OpenCensus.Stats
 {
+    using System;
+    using OpenCensus.Stats.Aggregations;
+
     public interface IAggregationData
     {
         M Match<M>(

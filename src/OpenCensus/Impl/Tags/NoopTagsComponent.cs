@@ -1,10 +1,7 @@
-﻿using OpenCensus.Tags.Propagation;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Tags
+﻿namespace OpenCensus.Tags
 {
+    using OpenCensus.Tags.Propagation;
+
     public sealed class NoopTagsComponent : TagsComponentBase
     {
         //private volatile bool isRead;

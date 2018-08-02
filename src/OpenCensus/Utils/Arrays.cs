@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Utils
+﻿namespace OpenCensus.Utils
 {
+    using System;
+    using System.Text;
+
     internal static class Arrays
     {
         public static bool Equals(byte[] array1, byte[] array2)

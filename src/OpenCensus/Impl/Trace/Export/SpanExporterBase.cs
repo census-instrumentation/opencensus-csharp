@@ -1,10 +1,4 @@
-﻿using OpenCensus.Common;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-
-namespace OpenCensus.Trace.Export
+﻿namespace OpenCensus.Trace.Export
 {
     public abstract class SpanExporterBase : ISpanExporter
     {

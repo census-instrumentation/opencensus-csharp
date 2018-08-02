@@ -1,9 +1,7 @@
-﻿
-
-using OpenCensus.Common;
-
-namespace OpenCensus.Trace.Export
+﻿namespace OpenCensus.Trace.Export
 {
+    using OpenCensus.Common;
+
     public interface ITimedEvent<T>
     {
         ITimestamp Timestamp { get; }

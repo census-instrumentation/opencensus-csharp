@@ -1,10 +1,8 @@
-﻿using OpenCensus.Common;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace
+﻿namespace OpenCensus.Trace
 {
+    using System.Collections.Generic;
+    using OpenCensus.Common;
+
     public interface ISpanBuilder
     {
         ISpanBuilder SetSampler(ISampler sampler);

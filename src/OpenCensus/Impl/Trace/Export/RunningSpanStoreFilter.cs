@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace.Export
+﻿namespace OpenCensus.Trace.Export
 {
+    using System;
+
     public sealed class RunningSpanStoreFilter : IRunningSpanStoreFilter
     {
         public static IRunningSpanStoreFilter Create(string spanName, int maxSpansToReturn)

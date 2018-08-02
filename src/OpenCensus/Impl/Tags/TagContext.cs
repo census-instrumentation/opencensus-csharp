@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-
-namespace OpenCensus.Tags
+﻿namespace OpenCensus.Tags
 {
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
+
     public sealed class TagContext : TagContextBase
     {
         public static readonly ITagContext EMPTY =  new TagContext(new Dictionary<ITagKey, ITagValue>());

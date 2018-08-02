@@ -1,8 +1,7 @@
-﻿
-using OpenCensus.Tags.Propagation;
-
-namespace OpenCensus.Tags
+﻿namespace OpenCensus.Tags
 {
+    using OpenCensus.Tags.Propagation;
+
     public interface ITags
     {
         ITagger Tagger { get; }

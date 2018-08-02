@@ -1,12 +1,11 @@
-﻿using OpenCensus.Common;
-using OpenCensus.Internal;
-using OpenCensus.Tags;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Stats
+﻿namespace OpenCensus.Stats
 {
+    using System;
+    using System.Collections.Generic;
+    using OpenCensus.Common;
+    using OpenCensus.Internal;
+    using OpenCensus.Tags;
+
     internal sealed class StatsManager
     {
         private readonly IEventQueue queue;

@@ -1,11 +1,11 @@
-﻿using OpenCensus.Utils;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-
-namespace OpenCensus.Trace
+﻿namespace OpenCensus.Trace
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
+    using OpenCensus.Utils;
+
     public sealed class Link : ILink
     {
         private static readonly IDictionary<string, IAttributeValue> EMPTY_ATTRIBUTES = new Dictionary<string, IAttributeValue>();

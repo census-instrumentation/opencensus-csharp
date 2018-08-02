@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace OpenCensus.Trace
+﻿namespace OpenCensus.Trace
 {
+    using System;
+
     public class MessageEvent : IMessageEvent
     {
         internal MessageEvent(MessageEventType type, long messageId, long uncompressedMessageSize, long compressedMessageSize)

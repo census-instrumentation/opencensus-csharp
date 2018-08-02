@@ -1,10 +1,8 @@
-﻿using OpenCensus.Stats.Measures;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Stats
+﻿namespace OpenCensus.Stats
 {
+    using System;
+    using OpenCensus.Stats.Measures;
+
     public abstract class Measure : IMeasure
     {
         internal const int NAME_MAX_LENGTH = 255;

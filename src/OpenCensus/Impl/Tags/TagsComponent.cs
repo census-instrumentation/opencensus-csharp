@@ -1,10 +1,7 @@
-﻿using OpenCensus.Tags.Propagation;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Tags
+﻿namespace OpenCensus.Tags
 {
+    using OpenCensus.Tags.Propagation;
+
     public class TagsComponent : TagsComponentBase
     {
         // The TaggingState shared between the TagsComponent, Tagger, and TagPropagationComponent

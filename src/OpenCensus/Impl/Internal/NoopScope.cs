@@ -1,11 +1,7 @@
-﻿using OpenCensus.Common;
-using OpenCensus.Trace;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Internal
+﻿namespace OpenCensus.Internal
 {
+    using OpenCensus.Common;
+
     public sealed class NoopScope : IScope
     {
         public static readonly IScope INSTANCE = new NoopScope();

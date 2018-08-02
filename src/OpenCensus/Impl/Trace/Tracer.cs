@@ -1,9 +1,9 @@
-﻿using OpenCensus.Common;
-using OpenCensus.Trace.Config;
-using OpenCensus.Trace.Internal;
-
-namespace OpenCensus.Trace
+﻿namespace OpenCensus.Trace
 {
+    using OpenCensus.Common;
+    using OpenCensus.Trace.Config;
+    using OpenCensus.Trace.Internal;
+
     public sealed class Tracer : TracerBase
     {
 

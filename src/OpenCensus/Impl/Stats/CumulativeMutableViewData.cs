@@ -1,11 +1,9 @@
-﻿using OpenCensus.Common;
-using OpenCensus.Tags;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Stats
+﻿namespace OpenCensus.Stats
 {
+    using System.Collections.Generic;
+    using OpenCensus.Common;
+    using OpenCensus.Tags;
+
     internal class CumulativeMutableViewData : MutableViewData
     {
         private ITimestamp start;

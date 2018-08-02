@@ -1,10 +1,7 @@
-﻿using OpenCensus.Common;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Tags
+﻿namespace OpenCensus.Tags
 {
+    using OpenCensus.Common;
+
     public interface ITagContextBuilder
     {
         ITagContextBuilder Put(ITagKey key, ITagValue value);

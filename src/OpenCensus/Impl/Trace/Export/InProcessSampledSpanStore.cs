@@ -1,11 +1,9 @@
-﻿using OpenCensus.Internal;
-using OpenCensus.Utils;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace.Export
+﻿namespace OpenCensus.Trace.Export
 {
+    using System.Collections.Generic;
+    using OpenCensus.Internal;
+    using OpenCensus.Utils;
+
     public sealed class InProcessSampledSpanStore : SampledSpanStoreBase
     {
         private const int NUM_SAMPLES_PER_LATENCY_BUCKET = 10;

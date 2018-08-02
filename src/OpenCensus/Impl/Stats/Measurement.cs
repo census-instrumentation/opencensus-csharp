@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using OpenCensus.Stats.Measurements;
-
-namespace OpenCensus.Stats
+﻿namespace OpenCensus.Stats
 {
+    using System;
+    using OpenCensus.Stats.Measurements;
+
     public abstract class Measurement : IMeasurement
     {
         public abstract IMeasure Measure { get; }

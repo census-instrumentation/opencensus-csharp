@@ -1,12 +1,10 @@
-﻿
-using OpenCensus.Trace.Export;
-using OpenCensus.Utils;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace
+﻿namespace OpenCensus.Trace
 {
+    using System;
+    using System.Collections.Generic;
+    using OpenCensus.Trace.Export;
+    using OpenCensus.Utils;
+
     public abstract class SpanBase : ISpan, IElement<SpanBase>
     {
         private static readonly IDictionary<string, IAttributeValue> EMPTY_ATTRIBUTES = new Dictionary<string, IAttributeValue>();

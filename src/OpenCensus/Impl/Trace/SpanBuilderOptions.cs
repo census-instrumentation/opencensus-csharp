@@ -1,12 +1,9 @@
-﻿using OpenCensus.Common;
-using OpenCensus.Trace.Config;
-using OpenCensus.Trace.Internal;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace
+﻿namespace OpenCensus.Trace
 {
+    using OpenCensus.Common;
+    using OpenCensus.Trace.Config;
+    using OpenCensus.Trace.Internal;
+
     internal class SpanBuilderOptions
     {
         internal IRandomGenerator RandomHandler { get; }

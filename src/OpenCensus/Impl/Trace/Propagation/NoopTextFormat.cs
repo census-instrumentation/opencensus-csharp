@@ -1,10 +1,8 @@
-﻿using OpenCensus.Trace;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace.Propagation
+﻿namespace OpenCensus.Trace.Propagation
 {
+    using System;
+    using System.Collections.Generic;
+
     internal class NoopTextFormat : TextFormatBase
     {
         internal NoopTextFormat() { }

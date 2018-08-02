@@ -1,12 +1,9 @@
-﻿using OpenCensus.Stats;
-using OpenCensus.Stats.Aggregations;
-using OpenCensus.Tags;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace OpenCensus.Stats
+﻿namespace OpenCensus.Stats
 {
+    using System;
+    using System.Collections.Generic;
+    using OpenCensus.Tags;
+
     public static class StatsExtensions
     {
         public static bool ContainsKeys(this IView view, List<ITagKey> keys)

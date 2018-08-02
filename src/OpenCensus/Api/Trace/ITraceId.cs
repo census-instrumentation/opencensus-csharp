@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace
+﻿namespace OpenCensus.Trace
 {
+    using System;
+
     public interface ITraceId : IComparable<ITraceId>
     {
         byte[] Bytes { get; }

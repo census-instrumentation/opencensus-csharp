@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Stats
+﻿namespace OpenCensus.Stats
 {
+    using System.Collections.Generic;
+
     public interface IBucketBoundaries
     {
         IList<double> Boundaries { get; }

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Stats
+﻿namespace OpenCensus.Stats
 {
+    using System.Collections.Generic;
+
     public abstract class ViewManagerBase : IViewManager
     {
         public abstract ISet<IView> AllExportedViews { get; }

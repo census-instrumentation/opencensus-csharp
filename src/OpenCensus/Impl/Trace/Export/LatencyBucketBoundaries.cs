@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace.Export
+﻿namespace OpenCensus.Trace.Export
 {
+    using System.Collections.Generic;
+
     public class LatencyBucketBoundaries : ISampledLatencyBucketBoundaries
     {
         public static readonly ISampledLatencyBucketBoundaries ZERO_MICROSx10 = new LatencyBucketBoundaries(0, 10000);

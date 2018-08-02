@@ -1,11 +1,8 @@
-﻿using OpenCensus.Common;
-using OpenCensus.Internal;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Stats
+﻿namespace OpenCensus.Stats
 {
+    using OpenCensus.Common;
+    using OpenCensus.Internal;
+
     public class StatsComponent : StatsComponentBase
     {
 

@@ -1,11 +1,11 @@
-﻿using OpenCensus.Internal;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-
-namespace OpenCensus.Tags.Propagation
+﻿namespace OpenCensus.Tags.Propagation
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
+    using OpenCensus.Internal;
+
     internal static class SerializationUtils
     {
         internal const int VERSION_ID = 0;

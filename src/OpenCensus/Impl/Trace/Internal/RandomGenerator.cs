@@ -1,8 +1,7 @@
-﻿
-using System;
-
-namespace OpenCensus.Trace.Internal
+﻿namespace OpenCensus.Trace.Internal
 {
+    using System;
+
     internal class RandomGenerator : IRandomGenerator
     {
         private static readonly Random _global = new Random();

@@ -1,10 +1,8 @@
-﻿using OpenCensus.Utils;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Tags
+﻿namespace OpenCensus.Tags
 {
+    using System;
+    using OpenCensus.Utils;
+
     public sealed class TagValue : ITagValue
     {
         public const int MAX_LENGTH = 255;

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace.Sampler
+﻿namespace OpenCensus.Trace.Sampler
 {
     public sealed class Samplers
     {

@@ -1,12 +1,11 @@
-﻿using OpenCensus.Common;
-using OpenCensus.Tags;
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Text;
-
-namespace OpenCensus.Stats
+﻿namespace OpenCensus.Stats
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.Immutable;
+    using OpenCensus.Common;
+    using OpenCensus.Tags;
+
     internal sealed class NoopViewManager : ViewManagerBase
     {
         private static readonly ITimestamp ZERO_TIMESTAMP = Timestamp.Create(0, 0);

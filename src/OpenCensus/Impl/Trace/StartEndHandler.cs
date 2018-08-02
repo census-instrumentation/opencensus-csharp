@@ -1,11 +1,8 @@
-﻿using OpenCensus.Internal;
-using OpenCensus.Trace.Export;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace
+﻿namespace OpenCensus.Trace
 {
+    using OpenCensus.Internal;
+    using OpenCensus.Trace.Export;
+
     public sealed class StartEndHandler : IStartEndHandler
     {
         private readonly ISpanExporter _spanExporter;

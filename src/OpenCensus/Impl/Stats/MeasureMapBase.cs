@@ -1,11 +1,8 @@
-﻿using OpenCensus.Stats.Measures;
-using OpenCensus.Tags;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Stats
+﻿namespace OpenCensus.Stats
 {
+    using OpenCensus.Stats.Measures;
+    using OpenCensus.Tags;
+
     public abstract class MeasureMapBase : IMeasureMap
     {
 

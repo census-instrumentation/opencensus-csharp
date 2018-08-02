@@ -1,11 +1,8 @@
-﻿using OpenCensus.Common;
-using OpenCensus.Trace.Unsafe;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace
+﻿namespace OpenCensus.Trace
 {
+    using OpenCensus.Common;
+    using OpenCensus.Trace.Unsafe;
+
     internal static class CurrentSpanUtils
     {
         public static ISpan CurrentSpan

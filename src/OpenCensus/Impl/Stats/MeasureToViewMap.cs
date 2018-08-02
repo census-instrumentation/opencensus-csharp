@@ -1,14 +1,11 @@
-﻿using OpenCensus.Common;
-using OpenCensus.Stats;
-using OpenCensus.Stats.Measurements;
-using OpenCensus.Tags;
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Text;
-
-namespace OpenCensus.Stats
+﻿namespace OpenCensus.Stats
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.Immutable;
+    using OpenCensus.Common;
+    using OpenCensus.Tags;
+
     internal sealed class MeasureToViewMap
     {
         private object _lck = new object();

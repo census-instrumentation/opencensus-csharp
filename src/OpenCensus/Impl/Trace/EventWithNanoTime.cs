@@ -1,10 +1,8 @@
-﻿
-
-using OpenCensus.Internal;
-using OpenCensus.Trace.Export;
-
-namespace OpenCensus.Trace
+﻿namespace OpenCensus.Trace
 {
+    using OpenCensus.Internal;
+    using OpenCensus.Trace.Export;
+
     internal class EventWithNanoTime<T>
     {
         private readonly long nanoTime;

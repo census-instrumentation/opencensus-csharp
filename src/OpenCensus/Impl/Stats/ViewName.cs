@@ -1,10 +1,8 @@
-﻿using OpenCensus.Utils;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Stats
+﻿namespace OpenCensus.Stats
 {
+    using System;
+    using OpenCensus.Utils;
+
     public sealed class ViewName : IViewName
     {
         internal const int NAME_MAX_LENGTH = 255;

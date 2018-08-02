@@ -1,11 +1,11 @@
-﻿using OpenCensus.Utils;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace OpenCensus.Tags
+﻿namespace OpenCensus.Tags
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using OpenCensus.Utils;
+
     public abstract class TagContextBase : ITagContext
     {
 

@@ -1,11 +1,9 @@
-﻿using OpenCensus.Trace.Internal;
-using OpenCensus.Utils;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace
+﻿namespace OpenCensus.Trace
 {
+    using System;
+    using OpenCensus.Trace.Internal;
+    using OpenCensus.Utils;
+
     public sealed class TraceId : ITraceId
     {
         public const int SIZE = 16;

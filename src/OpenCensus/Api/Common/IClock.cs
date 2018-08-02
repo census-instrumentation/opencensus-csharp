@@ -1,9 +1,4 @@
-﻿using OpenCensus.Trace;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Common
+﻿namespace OpenCensus.Common
 {
     public interface IClock
     {

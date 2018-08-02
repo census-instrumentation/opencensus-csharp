@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Tags
+﻿namespace OpenCensus.Tags
 {
+    using System.Collections.Generic;
+
     public sealed class NoopTagContext : TagContextBase
     {
         internal static readonly ITagContext INSTANCE = new NoopTagContext();

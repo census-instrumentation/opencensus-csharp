@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Stats
+﻿namespace OpenCensus.Stats
 {
+    using System;
+
     internal sealed class MutableDistribution : MutableAggregation
     {
         private const double TOLERANCE = 1e-6;

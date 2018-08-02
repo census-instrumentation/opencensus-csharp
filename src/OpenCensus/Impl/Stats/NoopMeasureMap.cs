@@ -1,11 +1,9 @@
-﻿using OpenCensus.Stats.Measures;
-using OpenCensus.Tags;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Stats
+﻿namespace OpenCensus.Stats
 {
+    using System;
+    using OpenCensus.Stats.Measures;
+    using OpenCensus.Tags;
+
     internal sealed class NoopMeasureMap : MeasureMapBase
     {
         internal static readonly NoopMeasureMap INSTANCE = new NoopMeasureMap();

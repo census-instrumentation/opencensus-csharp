@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace OpenCensus.Trace
+﻿namespace OpenCensus.Trace
 {
+    using System;
+    using System.Collections.Generic;
+
     public class NoopSpanBuilder : SpanBuilderBase
     {
         internal static ISpanBuilder CreateWithParent(string spanName, ISpan parent = null)

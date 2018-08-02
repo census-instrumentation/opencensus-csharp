@@ -1,10 +1,9 @@
-﻿using OpenCensus.Common;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Tags
+﻿namespace OpenCensus.Tags
 {
+    using System;
+    using System.Collections.Generic;
+    using OpenCensus.Common;
+
     internal sealed class TagContextBuilder : TagContextBuilderBase
     {
         internal IDictionary<ITagKey, ITagValue> Tags { get; }

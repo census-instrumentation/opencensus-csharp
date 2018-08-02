@@ -1,10 +1,9 @@
-﻿using OpenCensus.Utils;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace.Sampler
+﻿namespace OpenCensus.Trace.Sampler
 {
+    using System;
+    using System.Collections.Generic;
+    using OpenCensus.Utils;
+
     internal sealed class ProbabilitySampler : ISampler
     {
         internal ProbabilitySampler(double probability, long idUpperBound)

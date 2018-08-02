@@ -1,10 +1,8 @@
-﻿using OpenCensus.Common;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace
+﻿namespace OpenCensus.Trace
 {
+    using System;
+    using OpenCensus.Common;
+
     public abstract class TracerBase : ITracer
     {
         private static readonly NoopTracer noopTracer = new NoopTracer();

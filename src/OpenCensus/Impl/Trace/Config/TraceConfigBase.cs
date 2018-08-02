@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OpenCensus.Trace.Config
+﻿namespace OpenCensus.Trace.Config
 {
     public abstract class TraceConfigBase : ITraceConfig
     {

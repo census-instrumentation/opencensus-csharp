@@ -1,12 +1,9 @@
-﻿using OpenCensus.Trace;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace OpenCensus.Trace.Unsafe
+﻿namespace OpenCensus.Trace.Unsafe
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading;
+
     public static class AsyncLocalContext
     {
         private static List<IAsyncLocalContextListener> callbacks = new List<IAsyncLocalContextListener>();
