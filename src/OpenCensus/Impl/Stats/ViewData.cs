@@ -24,22 +24,26 @@ namespace OpenCensus.Stats
             {
                 throw new ArgumentNullException(nameof(view));
             }
+
             this.View = view;
             if (aggregationMap == null)
             {
                 throw new ArgumentNullException(nameof(aggregationMap));
             }
+
             this.AggregationMap = aggregationMap;
 
             if (start == null)
             {
                 throw new ArgumentNullException(nameof(start));
             }
+
             this.Start = start;
             if (end == null)
             {
                 throw new ArgumentNullException(nameof(end));
             }
+
             this.End = end;
         }
 
@@ -51,6 +55,7 @@ namespace OpenCensus.Stats
                 CheckAggregation(view.Aggregation, entry.Value, view.Measure);
                 deepCopy.Add(entry.Key, entry.Value);
             }
+
             return new ViewData(
                 view,
                 new ReadOnlyDictionary<TagValues, IAggregationData>(deepCopy),
@@ -74,6 +79,7 @@ namespace OpenCensus.Stats
             {
                 return true;
             }
+
             if (o is ViewData)
             {
                 ViewData that = (ViewData)o;
@@ -82,6 +88,7 @@ namespace OpenCensus.Stats
                      && (this.Start.Equals(that.Start))
                      && (this.End.Equals(that.End));
             }
+
             return false;
         }
 
@@ -98,6 +105,7 @@ namespace OpenCensus.Stats
             h ^= this.End.GetHashCode();
             return h;
         }
+
         private static void CheckAggregation(IAggregation aggregation, IAggregationData aggregationData, IMeasure measure)
         {
             aggregation.Match<object>(

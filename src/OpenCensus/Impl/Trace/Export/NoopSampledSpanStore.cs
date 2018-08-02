@@ -25,6 +25,7 @@ namespace OpenCensus.Trace.Export
                         result[registeredSpanName] = EMPTY_PER_SPAN_NAME_SUMMARY;
                     }
                 }
+
                 return SampledSpanStoreSummary.Create(result);
             }
         }

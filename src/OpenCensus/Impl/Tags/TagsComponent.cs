@@ -18,6 +18,7 @@ namespace OpenCensus.Tags
             tagger = new Tagger(state);
             tagPropagationComponent = new TagPropagationComponent(state);
         }
+
         public override ITagger Tagger
         {
             get { return tagger; }

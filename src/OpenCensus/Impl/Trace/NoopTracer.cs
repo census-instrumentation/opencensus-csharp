@@ -9,7 +9,6 @@ namespace OpenCensus.Trace
             return NoopSpanBuilder.CreateWithParent(spanName, parent);
         }
 
-
         public override ISpanBuilder SpanBuilderWithRemoteParent(string spanName, ISpanContext remoteParentSpanContext)
         {
             return NoopSpanBuilder.CreateWithRemoteParent(spanName, remoteParentSpanContext);

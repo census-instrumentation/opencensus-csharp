@@ -14,17 +14,21 @@ namespace OpenCensus.Tags
             {
                 throw new ArgumentNullException(nameof(key));
             }
+
             this.Key = key;
             if (value == null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
+
             this.Value = value;
         }
+
         public static ITag Create(ITagKey key, ITagValue value)
         {
             return new Tag(key, value);
         }
+
         public override string ToString()
         {
             return "Tag{"
@@ -39,12 +43,14 @@ namespace OpenCensus.Tags
             {
                 return true;
             }
+
             if (o is Tag)
             {
                 Tag that = (Tag)o;
                 return (this.Key.Equals(that.Key))
                      && (this.Value.Equals(that.Value));
             }
+
             return false;
         }
 

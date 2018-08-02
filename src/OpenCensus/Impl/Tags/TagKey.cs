@@ -17,6 +17,7 @@ namespace OpenCensus.Tags
             {
                 throw new ArgumentNullException(nameof(name));
             }
+
             this.Name = name;
         }
 
@@ -26,6 +27,7 @@ namespace OpenCensus.Tags
             {
                 throw new ArgumentOutOfRangeException(nameof(name));
             }
+
             return new TagKey(name);
         }
 
@@ -42,11 +44,13 @@ namespace OpenCensus.Tags
             {
                 return true;
             }
+
             if (o is TagKey)
             {
                 TagKey that = (TagKey)o;
                 return (this.Name.Equals(that.Name));
             }
+
             return false;
         }
 

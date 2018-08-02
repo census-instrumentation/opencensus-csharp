@@ -12,6 +12,7 @@ namespace OpenCensus.Trace
             {
                 throw new ArgumentNullException(nameof(stringValue));
             }
+
             return new AttributeValue<string>(stringValue);
         }
 
@@ -45,6 +46,7 @@ namespace OpenCensus.Trace
             {
                 throw new ArgumentNullException(nameof(stringValue));
             }
+
             return new AttributeValue<string>(stringValue);
         }
 

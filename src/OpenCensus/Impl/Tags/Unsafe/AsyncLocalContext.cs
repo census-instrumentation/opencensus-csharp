@@ -19,6 +19,7 @@ namespace OpenCensus.Tags.Unsafe
                 {
                     return EMPTY_TAG_CONTEXT;
                 }
+
                 return _context.Value;
             }
             set
@@ -33,6 +34,7 @@ namespace OpenCensus.Tags.Unsafe
                 }
             }
         }
+
         internal sealed class EmptyTagContext : TagContextBase
         {
 

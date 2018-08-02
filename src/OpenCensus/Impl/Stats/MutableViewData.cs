@@ -23,13 +23,10 @@ namespace OpenCensus.Stats
             this.View = view;
         }
 
-   
         internal static MutableViewData Create(IView view, ITimestamp start)
         {
             return new CumulativeMutableViewData(view, start);
         }
-
-
 
         /** Record double stats with the given tags. */
         internal abstract void Record(ITagContext context, double value, ITimestamp timestamp);
@@ -62,6 +59,7 @@ namespace OpenCensus.Stats
                 {
                     tags.Add(tag.Key, tag.Value);
                 }
+
                 return tags;
             }
         }
@@ -84,6 +82,7 @@ namespace OpenCensus.Stats
                     tagValues.Add(tags[tagKey]);
                 }
             }
+
             return tagValues;
         }
 
@@ -93,7 +92,6 @@ namespace OpenCensus.Stats
             return duration.Seconds * MILLIS_PER_SECOND + duration.Nanos / NANOS_PER_MILLI;
         }
 
- 
         internal static MutableAggregation CreateMutableAggregation(IAggregation aggregation)
         {
             return aggregation.Match(
@@ -105,7 +103,6 @@ namespace OpenCensus.Stats
                 ThrowArgumentException);
         }
 
- 
         internal static IAggregationData CreateAggregationData(MutableAggregation aggregation, IMeasure measure)
         {
             return aggregation.Match<IAggregationData>(
@@ -161,6 +158,7 @@ namespace OpenCensus.Stats
             {
                 map.Add(entry.Key, CreateAggregationData(entry.Value, measure));
             }
+
             return map;
         }
 
@@ -179,6 +177,7 @@ namespace OpenCensus.Stats
                 {
                     boxedBucketCounts.Add(bucketCount);
                 }
+
                 return DistributionData.Create(
                     s.Mean,
                     s.Count,

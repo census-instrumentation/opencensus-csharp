@@ -18,12 +18,10 @@ namespace OpenCensus.Utils
                 return false;
             }
 
-
             if (array2.Length != array1.Length)
             {
                 return false;
             }
-     
 
             for (int i = 0; i < array1.Length; i++)
             {
@@ -43,7 +41,6 @@ namespace OpenCensus.Utils
             {
                 return 0;
             }
-              
 
             int result = 1;
             foreach (byte b in array)
@@ -61,14 +58,17 @@ namespace OpenCensus.Utils
             {
                 return (c - '0');
             }
+
             if ((c >= 'a') && (c <= 'f'))
             {
                 return ((c - 'a') + 10);
             }
+
             if ((c >= 'A') && (c <= 'F'))
             {
                 return ((c - 'A') + 10);
             }
+
             throw new ArgumentOutOfRangeException("Invalid character: " + c);
         }
 
@@ -84,6 +84,7 @@ namespace OpenCensus.Utils
             {
                 result[0] = (char)(high + '0');
             }
+
             if (low > 9)
             {
                 result[1] = (char)(low - 10 + 'a');
@@ -106,6 +107,7 @@ namespace OpenCensus.Utils
                 int low = HexCharToInt(src[j++]);
                 bytes[i] = (byte)(high << 4 | low);
             }
+
             return bytes;
         }
 
@@ -116,6 +118,7 @@ namespace OpenCensus.Utils
             {
                 sb.Append(ByteToHexCharArray(bytes[i]));
             }
+
             return sb.ToString();
         }
     }

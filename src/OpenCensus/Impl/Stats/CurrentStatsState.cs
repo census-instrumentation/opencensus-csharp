@@ -42,6 +42,7 @@ namespace OpenCensus.Stats
             {
                 throw new ArgumentException("State was already read, cannot set state.");
             }
+
             if (state == currentState)
             {
                 return false;

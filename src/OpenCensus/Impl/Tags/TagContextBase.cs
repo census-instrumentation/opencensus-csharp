@@ -19,6 +19,7 @@ namespace OpenCensus.Tags
             if (!(other is TagContextBase)) {
                 return false;
             }
+
             TagContextBase otherTags = (TagContextBase)other;
 
             var t1Enumerator = this.GetEnumerator();
@@ -34,6 +35,7 @@ namespace OpenCensus.Tags
             {
                 tags1 = this.ToList();
             }
+
             if (t2Enumerator == null)
             {
                 tags2 = new List<ITag>();
@@ -42,6 +44,7 @@ namespace OpenCensus.Tags
             {
                 tags2 = otherTags.ToList();
             }
+
             return Collections.AreEquivalent(tags1, tags2);
         }
 

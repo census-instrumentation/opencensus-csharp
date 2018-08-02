@@ -57,7 +57,6 @@ namespace OpenCensus.Trace
                    + "}";
 
         }
-    
 
         private SpanContext(ITraceId traceId, ISpanId spanId, TraceOptions traceOptions)
         {
@@ -67,6 +66,5 @@ namespace OpenCensus.Trace
         }
 
     }
-
 
 }

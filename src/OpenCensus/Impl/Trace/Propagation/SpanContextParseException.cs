@@ -10,6 +10,7 @@ namespace OpenCensus.Trace.Propagation
             : base(message)
         { 
         }
+
         public SpanContextParseException(string message, Exception cause)
             : base(message, cause)
         { 

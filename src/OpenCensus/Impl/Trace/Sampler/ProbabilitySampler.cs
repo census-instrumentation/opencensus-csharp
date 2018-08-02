@@ -12,6 +12,7 @@ namespace OpenCensus.Trace.Sampler
             Probability = probability;
             IdUpperBound = idUpperBound;
         }
+
         internal static ProbabilitySampler Create(double probability)
         {
             if (probability < 0.0 || probability > 1.0)
@@ -36,8 +37,10 @@ namespace OpenCensus.Trace.Sampler
             {
                 idUpperBound = (long)(probability * Int64.MaxValue);
             }
+
             return new ProbabilitySampler(probability, idUpperBound);
         }
+
         public string Description
         {
             get
@@ -53,6 +56,7 @@ namespace OpenCensus.Trace.Sampler
             {
                 return true;
             }
+
             if (parentLinks != null)
             {
                 // If any parent link is sampled keep the sampling decision.
@@ -64,6 +68,7 @@ namespace OpenCensus.Trace.Sampler
                     }
                 }
             }
+
             // Always sample if we are within probability range. This is true even for child spans (that
             // may have had a different sampling decision made) to allow for different sampling policies,
             // and dynamic increases to sampling probabilities for debugging purposes.
@@ -73,6 +78,7 @@ namespace OpenCensus.Trace.Sampler
             // code is executed in-line for every Span creation).
             return Math.Abs(traceId.LowerLong) < IdUpperBound;
         }
+
         public double Probability { get; }
         public long IdUpperBound { get; }
 
@@ -90,11 +96,13 @@ namespace OpenCensus.Trace.Sampler
             {
                 return true;
             }
+
             if (o is ProbabilitySampler) {
                 ProbabilitySampler that = (ProbabilitySampler)o;
                 return (DoubleUtil.ToInt64(Probability) == DoubleUtil.ToInt64(that.Probability)
                      && (this.IdUpperBound == that.IdUpperBound));
             }
+
             return false;
         }
 

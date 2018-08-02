@@ -16,6 +16,7 @@ namespace OpenCensus.Trace.Propagation
                 return NOOP_TEXT_FORMAT;
             }
         }
+
         public abstract IList<string> Fields { get; }
 
         public abstract ISpanContext Extract<C>(C carrier, IGetter<C> getter);

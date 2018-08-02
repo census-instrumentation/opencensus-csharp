@@ -15,12 +15,14 @@ namespace OpenCensus.Stats
 
             this.Boundaries = boundaries;
         }
+
         public static IBucketBoundaries Create(IList<double> bucketBoundaries)
         {
             if (bucketBoundaries == null)
             {
                 throw new ArgumentNullException(nameof(bucketBoundaries));
             }
+
             List<Double> bucketBoundariesCopy = new List<double>(bucketBoundaries);
 
             if (bucketBoundariesCopy.Count > 1)
@@ -37,6 +39,7 @@ namespace OpenCensus.Stats
                     lower = next;
                 }
             }
+
             return new BucketBoundaries(bucketBoundariesCopy.AsReadOnly());
         }
 
@@ -53,11 +56,13 @@ namespace OpenCensus.Stats
             {
                 return true;
             }
+
             if (o is BucketBoundaries)
             {
                 BucketBoundaries that = (BucketBoundaries)o;
                 return (this.Boundaries.SequenceEqual(that.Boundaries));
             }
+
             return false;
         }
 

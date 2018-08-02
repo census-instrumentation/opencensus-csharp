@@ -15,6 +15,7 @@ namespace OpenCensus.Trace
         {
             return CurrentSpanUtils.WithSpan(StartSpan(), true);
         }
+
         //public void StartSpanAndRun(Runnable runnable)
         //{
         //    Span span = startSpan();

@@ -19,7 +19,6 @@ namespace OpenCensus.Stats.Aggregations
             return new SumDataDouble(sum);
         }
 
-
         public override M Match<M>(
             Func<ISumDataDouble, M> p0,
             Func<ISumDataLong, M> p1,
@@ -46,10 +45,12 @@ namespace OpenCensus.Stats.Aggregations
             {
                 return true;
             }
+
             if (o is SumDataDouble) {
                 SumDataDouble that = (SumDataDouble)o;
                 return (DoubleUtil.ToInt64(this.Sum) == DoubleUtil.ToInt64(that.Sum));
             }
+
             return false;
         }
 

@@ -26,6 +26,7 @@ namespace OpenCensus.Trace.Export
             samples = new Dictionary<string, PerSpanNameSamples>();
             this.eventQueue = eventQueue;
         }
+
         public override ISampledSpanStoreSummary Summary
         {
             get
@@ -66,6 +67,7 @@ namespace OpenCensus.Trace.Export
                     {
                         samples[spanName] = new PerSpanNameSamples();
                     }
+
                     samples.TryGetValue(spanName, out PerSpanNameSamples perSpanNameSamples);
                     if (perSpanNameSamples != null)
                     {
@@ -87,11 +89,13 @@ namespace OpenCensus.Trace.Export
                     spans = perSpanNameSamples.GetErrorSamples(filter.CanonicalCode, numSpansToReturn);
                 }
             }
+
             List<ISpanData> ret = new List<ISpanData>(spans.Count);
             foreach (SpanBase span in spans)
             {
                 ret.Add(span.ToSpanData());
             }
+
             return ret.AsReadOnly();
         }
 
@@ -107,11 +111,13 @@ namespace OpenCensus.Trace.Export
                     spans = perSpanNameSamples.GetLatencySamples(filter.LatencyLowerNs, filter.LatencyUpperNs, numSpansToReturn);
                 }
             }
+
             List<ISpanData> ret = new List<ISpanData>(spans.Count);
             foreach (SpanBase span in spans)
             {
                 ret.Add(span.ToSpanData());
             }
+
             return ret.AsReadOnly();
         }
 
@@ -135,6 +141,7 @@ namespace OpenCensus.Trace.Export
                 }
             }
         }
+
         internal void InternaltRegisterSpanNamesForCollection(ICollection<string> spanNames)
         {
             lock (samples)
@@ -207,6 +214,7 @@ namespace OpenCensus.Trace.Export
                     {
                         break;
                     }
+
                     output.Add(span);
                 }
             }
@@ -234,6 +242,7 @@ namespace OpenCensus.Trace.Export
                     {
                         break;
                     }
+
                     long spanLatencyNs = span.LatencyNs;
                     if (spanLatencyNs >= latencyLowerNs && spanLatencyNs < latencyUpperNs)
                     {
@@ -247,6 +256,7 @@ namespace OpenCensus.Trace.Export
                 return sampledSpansQueue.Count + notSampledSpansQueue.Count;
             }
         }
+
         private sealed class PerSpanNameSamples
         {
 
@@ -260,13 +270,13 @@ namespace OpenCensus.Trace.Export
                 {
                     latencyBuckets[i] = new Bucket(NUM_SAMPLES_PER_LATENCY_BUCKET);
                 }
+
                 errorBuckets = new Bucket[NUM_ERROR_BUCKETS];
                 for (int i = 0; i < NUM_ERROR_BUCKETS; i++)
                 {
                     errorBuckets[i] = new Bucket(NUM_SAMPLES_PER_ERROR_BUCKET);
                 }
             }
-
 
             public Bucket GetLatencyBucket(long latencyNs)
             {
@@ -279,6 +289,7 @@ namespace OpenCensus.Trace.Export
                         return latencyBuckets[i];
                     }
                 }
+
                 // latencyNs is negative or Long.MAX_VALUE, so this Span can be ignored. This cannot happen
                 // in real production because System#nanoTime is monotonic.
                 return null;
@@ -315,6 +326,7 @@ namespace OpenCensus.Trace.Export
                 {
                     latencyBucketSummaries[LatencyBucketBoundaries.Values[i]] = latencyBuckets[i].GetNumSamples();
                 }
+
                 return latencyBucketSummaries;
             }
 
@@ -325,6 +337,7 @@ namespace OpenCensus.Trace.Export
                 {
                     errorBucketSummaries[(CanonicalCode)i + 1] = errorBuckets[i].GetNumSamples();
                 }
+
                 return errorBucketSummaries;
             }
 
@@ -342,6 +355,7 @@ namespace OpenCensus.Trace.Export
                         errorBuckets[i].GetSamples(maxSpansToReturn, output);
                     }
                 }
+
                 return output;
             }
 
@@ -357,9 +371,11 @@ namespace OpenCensus.Trace.Export
                         latencyBuckets[i].GetSamplesFilteredByLatency(latencyLowerNs, latencyUpperNs, maxSpansToReturn, output);
                     }
                 }
+
                 return output;
             }
         }
+
         private sealed class RegisterSpanNameEvent : IEventQueueEntry
         {
             private readonly InProcessSampledSpanStore sampledSpanStore;
@@ -371,12 +387,12 @@ namespace OpenCensus.Trace.Export
                 this.spanNames = new List<string>(spanNames);
             }
 
-
             public void Process()
             {
                 sampledSpanStore.InternaltRegisterSpanNamesForCollection(spanNames);
             }
         }
+
         private sealed class UnregisterSpanNameEvent : IEventQueueEntry
         {
             private readonly InProcessSampledSpanStore sampledSpanStore;

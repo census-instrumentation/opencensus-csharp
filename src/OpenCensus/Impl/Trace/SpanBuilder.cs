@@ -74,6 +74,7 @@ namespace OpenCensus.Trace
                 parentSpanId = parent.SpanId;
                 traceOptionsBuilder = TraceOptions.Builder(parent.TraceOptions);
             }
+
             traceOptionsBuilder.SetIsSampled(
                  MakeSamplingDecision(
                     parent,
@@ -132,6 +133,7 @@ namespace OpenCensus.Trace
                     hasRemoteParent = false;
                 }
             }
+
             return StartSpanInternal(
                 parentContext,
                 hasRemoteParent,
@@ -159,6 +161,7 @@ namespace OpenCensus.Trace
             {
                 throw new ArgumentNullException(nameof(parentLinks));
             }
+
             this.ParentLinks = parentLinks;
             return this;
         }
@@ -178,6 +181,7 @@ namespace OpenCensus.Trace
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -193,6 +197,7 @@ namespace OpenCensus.Trace
                 }
             }
         }
+
         private static bool MakeSamplingDecision(
             ISpanContext parent,
             bool hasRemoteParent,
@@ -208,6 +213,7 @@ namespace OpenCensus.Trace
             {
                 return sampler.ShouldSample(parent, hasRemoteParent, traceId, spanId, name, parentLinks);
             }
+
             // Use the default sampler if this is a root Span or this is an entry point Span (has remote
             // parent).
             if (hasRemoteParent || parent == null || !parent.IsValid)
@@ -216,6 +222,7 @@ namespace OpenCensus.Trace
                     .Sampler
                     .ShouldSample(parent, hasRemoteParent, traceId, spanId, name, parentLinks);
             }
+
             // Parent is always different than null because otherwise we use the default sampler.
             return parent.TraceOptions.IsSampled || IsAnyParentLinkSampled(parentLinks);
         }

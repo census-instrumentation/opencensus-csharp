@@ -24,6 +24,7 @@ namespace OpenCensus.Utils
             {
                 throw new ArgumentOutOfRangeException("maxSize must be >= 0");
             }
+
             _maxSize = maxSize;
             _delegate = new Queue<T>(maxSize);
         }
@@ -49,10 +50,12 @@ namespace OpenCensus.Utils
             {
                 return true;
             }
+
             if (_delegate.Count == _maxSize)
             {
                 _delegate.Dequeue();
             }
+
             _delegate.Enqueue(e);
             return true;
         }
@@ -63,6 +66,7 @@ namespace OpenCensus.Utils
             {
                 Add(e);
             }
+
             return true;
         }
 
@@ -72,6 +76,7 @@ namespace OpenCensus.Utils
             {
                 throw new ArgumentNullException();
             }
+
             return _delegate.Contains(e);
            
         }

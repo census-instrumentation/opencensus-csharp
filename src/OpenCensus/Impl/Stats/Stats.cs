@@ -13,6 +13,7 @@ namespace OpenCensus.Stats
         {
 
         }
+
         internal Stats(bool enabled)
         {
             if (enabled)
@@ -25,7 +26,6 @@ namespace OpenCensus.Stats
             }
         }
 
-
         private  IStatsComponent statsComponent = new StatsComponent();
 
         public static IStatsRecorder StatsRecorder
@@ -35,6 +35,7 @@ namespace OpenCensus.Stats
                 return _stats.statsComponent.StatsRecorder;
             }
         }
+
         public static IViewManager ViewManager
         {
             get
@@ -42,6 +43,7 @@ namespace OpenCensus.Stats
                 return _stats.statsComponent.ViewManager;
             }
         }
+
         public static StatsCollectionState State
         {
             get

@@ -15,6 +15,7 @@ namespace OpenCensus.Tags
             {
                 throw new ArgumentNullException(nameof(tags));
             }
+
             return EMPTY_BYTE_ARRAY;
         }
 
@@ -24,6 +25,7 @@ namespace OpenCensus.Tags
             {
                 throw new ArgumentNullException(nameof(bytes));
             }
+
             return NoopTags.NoopTagContext;
         }
     }

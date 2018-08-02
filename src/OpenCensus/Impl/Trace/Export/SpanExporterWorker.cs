@@ -85,6 +85,7 @@ namespace OpenCensus.Trace.Export
                 {
                     toExport.Add(span.ToSpanData());
                 }
+
                 if (toExport.Count >= _bufferSize)
                 {
                     break;
@@ -125,6 +126,7 @@ namespace OpenCensus.Trace.Export
             {
                 throw new InvalidOperationException("ISpan not a Span");
             }
+
             return spanImpl.ToSpanData();
 
         }

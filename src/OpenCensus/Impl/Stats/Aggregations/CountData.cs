@@ -30,6 +30,7 @@ namespace OpenCensus.Stats.Aggregations
         {
             return p2.Invoke(this);
         }
+
         public override string ToString()
         {
             return "CountData{"
@@ -43,11 +44,13 @@ namespace OpenCensus.Stats.Aggregations
             {
                 return true;
             }
+
             if (o is CountData)
             {
                 CountData that = (CountData)o;
                 return (this.Count == that.Count);
             }
+
             return false;
         }
 

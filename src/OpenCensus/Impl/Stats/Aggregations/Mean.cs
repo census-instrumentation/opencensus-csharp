@@ -10,7 +10,6 @@ namespace OpenCensus.Stats.Aggregations
 
         private static readonly Mean INSTANCE = new Mean();
 
-
         public static IMean Create()
         {
             return INSTANCE;
@@ -33,10 +32,12 @@ namespace OpenCensus.Stats.Aggregations
             {
                 return true;
             }
+
             if (o is Mean)
             {
                 return true;
             }
+
             return false;
         }
 

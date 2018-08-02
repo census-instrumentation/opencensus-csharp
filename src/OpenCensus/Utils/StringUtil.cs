@@ -15,6 +15,7 @@ namespace OpenCensus.Utils
                     return false;
                 }
             }
+
             return true;
         }
 

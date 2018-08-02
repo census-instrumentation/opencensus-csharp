@@ -11,16 +11,19 @@ namespace OpenCensus.Trace
         internal EndSpanOptionsBuilder()
         {
         }
+
         public EndSpanOptionsBuilder SetSampleToLocalSpanStore(bool sampleToLocalSpanStore)
         {
             this.sampleToLocalSpanStore = sampleToLocalSpanStore;
             return this;
         }
+
         public EndSpanOptionsBuilder SetStatus(Status status)
         {
             this.status = status;
             return this;
         }
+
         public EndSpanOptions Build()
         {
             String missing = "";
@@ -28,10 +31,12 @@ namespace OpenCensus.Trace
             {
                 missing += " sampleToLocalSpanStore";
             }
+
             if (!string.IsNullOrEmpty(missing))
             {
                 throw new ArgumentOutOfRangeException("Missing required properties:" + missing);
             }
+
             return new EndSpanOptions(
                 this.sampleToLocalSpanStore.Value,
                 this.status);

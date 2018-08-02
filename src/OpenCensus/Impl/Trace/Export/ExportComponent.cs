@@ -13,6 +13,7 @@ namespace OpenCensus.Trace.Export
         {
             return new ExportComponent(false, eventQueue);
         }
+
         public static IExportComponent CreateWithInProcessStores(IEventQueue eventQueue)
         {
             return new ExportComponent(true, eventQueue);
@@ -30,6 +31,7 @@ namespace OpenCensus.Trace.Export
                     ? new InProcessSampledSpanStore(eventQueue)
                     : Export.SampledSpanStoreBase.NoopSampledSpanStore;
         }
+
         public override ISpanExporter SpanExporter { get; }
 
         public override IRunningSpanStore RunningSpanStore { get; }

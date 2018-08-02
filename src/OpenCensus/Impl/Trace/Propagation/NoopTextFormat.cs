@@ -20,10 +20,12 @@ namespace OpenCensus.Trace.Propagation
             {
                 throw new ArgumentNullException(nameof(spanContext));
             }
+
             if (carrier == null)
             {
                 throw new ArgumentNullException(nameof(carrier));
             }
+
             if (setter == null)
             {
                 throw new ArgumentNullException(nameof(setter));
@@ -38,10 +40,12 @@ namespace OpenCensus.Trace.Propagation
             {
                 throw new ArgumentNullException(nameof(carrier));
             }
+
             if (getter == null)
             {
                 throw new ArgumentNullException(nameof(getter));
             }
+
             return SpanContext.INVALID;
         }
     }

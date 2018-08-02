@@ -26,6 +26,7 @@ namespace OpenCensus.Trace
             } else {
                 ExportComponent = Export.ExportComponent.CreateWithInProcessStores(eventQueue);
             }
+
             PropagationComponent = new PropagationComponent();
             IStartEndHandler startEndHandler =
                 new StartEndHandler(

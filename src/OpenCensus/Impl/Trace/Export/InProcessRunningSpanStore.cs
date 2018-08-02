@@ -24,12 +24,14 @@ namespace OpenCensus.Trace.Export
                     numSpansPerName.TryGetValue(span.Name, out int prevValue);
                     numSpansPerName[span.Name] = prevValue + 1;
                 }
+
                 Dictionary<string, IRunningPerSpanNameSummary> perSpanNameSummary = new Dictionary<string, IRunningPerSpanNameSummary>();
                 foreach (var it in numSpansPerName) {
                     int numRunningSpans = it.Value;
                     var runningPerSpanNameSummary = RunningPerSpanNameSummary.Create(numRunningSpans);
                     perSpanNameSummary[it.Key] = runningPerSpanNameSummary;
                 }
+
                 IRunningSpanStoreSummary summary = RunningSpanStoreSummary.Create(perSpanNameSummary);
                 return summary;
             }
@@ -46,11 +48,13 @@ namespace OpenCensus.Trace.Export
                 {
                     break;
                 }
+
                 if (span.Name.Equals(filter.SpanName))
                 {
                     ret.Add(span.ToSpanData());
                 }
             }
+
             return ret;
         }
 

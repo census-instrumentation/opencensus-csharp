@@ -42,6 +42,7 @@ namespace OpenCensus.Trace.Export
                 return (this.Timestamp.Equals(that.Timestamp))
                      && (this.Event.Equals(that.Event));
             }
+
             return false;
         }
 

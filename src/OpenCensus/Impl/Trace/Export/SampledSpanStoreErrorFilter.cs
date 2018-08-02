@@ -12,10 +12,12 @@ namespace OpenCensus.Trace.Export
             {
                 throw new ArgumentOutOfRangeException("Invalid canonical code.");
             }
+
             if (maxSpansToReturn < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(maxSpansToReturn));
             }
+
             return new SampledSpanStoreErrorFilter(spanName, canonicalCode, maxSpansToReturn);
         }
 
@@ -52,6 +54,7 @@ namespace OpenCensus.Trace.Export
             {
                 return true;
             }
+
             if (o is SampledSpanStoreErrorFilter)
             {
                 SampledSpanStoreErrorFilter that = (SampledSpanStoreErrorFilter)o;
@@ -59,6 +62,7 @@ namespace OpenCensus.Trace.Export
                      && (this.CanonicalCode == that.CanonicalCode)
                      && (this.MaxSpansToReturn == that.MaxSpansToReturn);
             }
+
             return false;
         }
 

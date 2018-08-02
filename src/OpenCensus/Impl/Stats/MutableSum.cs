@@ -10,7 +10,6 @@ namespace OpenCensus.Stats
 
         internal MutableSum() { }
 
- 
         internal static MutableSum Create()
         {
             return new MutableSum();
@@ -31,6 +30,7 @@ namespace OpenCensus.Stats
 
             this.Sum += fraction * mutable.Sum;
         }
+
         internal override T Match<T>(Func<MutableSum, T> p0, Func<MutableCount, T> p1, Func<MutableMean, T> p2, Func<MutableDistribution, T> p3, Func<MutableLastValue, T> p4)
         {
             return p0.Invoke(this);

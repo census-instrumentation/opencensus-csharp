@@ -27,6 +27,7 @@ namespace OpenCensus.Stats
             measurements.Add(MeasurementLong.Create(measure, value));
             return this;
         }
+
         internal IList<IMeasurement> Build()
         {
             // Note: this makes adding measurements quadratic but is fastest for the sizes of
@@ -43,6 +44,7 @@ namespace OpenCensus.Stats
                     }
                 }
             }
+
             return new List<IMeasurement>(measurements);
         }
     }

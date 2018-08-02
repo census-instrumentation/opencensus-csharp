@@ -30,6 +30,5 @@ namespace OpenCensus.Trace
         public const string ErrorKey = "error";
         public const string ErrorStackTrace = "error.stack.trace";
 
-
     }
 }

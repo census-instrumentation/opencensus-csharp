@@ -13,7 +13,6 @@ namespace OpenCensus.Common
         const long NANOS_PER_MILLI = 1000 * 1000;
         const long NANOS_PER_SECOND = NANOS_PER_MILLI * MILLIS_PER_SECOND;
 
-
         public static ITimestamp Create(long seconds, int nanos)
         {
             // TODO:
@@ -21,10 +20,12 @@ namespace OpenCensus.Common
             {
                 return new Timestamp(0, 0);
             }
+
             if (nanos < 0 || nanos > MAX_NANOS)
             {
                 return new Timestamp(0, 0);
             }
+
             return new Timestamp(seconds, nanos);
         }
 
@@ -42,10 +43,8 @@ namespace OpenCensus.Common
         }
 
         public long Seconds { get; }
- 
 
         public int Nanos { get; }
-
 
         public ITimestamp AddDuration(IDuration duration)
         {
@@ -56,7 +55,6 @@ namespace OpenCensus.Common
         {
             return Plus(0, nanosToAdd);
         }
-
 
         public IDuration SubtractTimestamp(ITimestamp timestamp)
         {
@@ -73,6 +71,7 @@ namespace OpenCensus.Common
                 durationSeconds -= 1;
                 durationNanos = (int)(durationNanos + NANOS_PER_SECOND);
             }
+
             return Duration.Create(durationSeconds, durationNanos);
         }
 
@@ -83,6 +82,7 @@ namespace OpenCensus.Common
             {
                 return cmp;
             }
+
             return (Nanos < other.Nanos) ? -1 : ((Nanos > other.Nanos) ? 1 : 0);
         }
 
@@ -123,11 +123,13 @@ namespace OpenCensus.Common
             {
                 return true;
             }
+
             if (o is Timestamp) {
                 Timestamp that = (Timestamp)o;
                 return (this.Seconds == that.Seconds)
                      && (this.Nanos == that.Nanos);
             }
+
             return false;
         }
 

@@ -53,12 +53,14 @@ namespace OpenCensus.Trace.Propagation
                         // This is an 8-byte traceID.
                         traceIdStr = UPPER_TRACE_ID + traceIdStr;
                     }
+
                     traceId = TraceId.FromLowerBase16(traceIdStr);
                 }
                 else
                 {
                     throw new SpanContextParseException("Missing X_B3_TRACE_ID.");
                 }
+
                 ISpanId spanId;
                 string spanIdStr = getter.Get(carrier, X_B3_SPAN_ID);
                 if (spanIdStr != null)
@@ -69,12 +71,14 @@ namespace OpenCensus.Trace.Propagation
                 {
                     throw new SpanContextParseException("Missing X_B3_SPAN_ID.");
                 }
+
                 TraceOptions traceOptions = TraceOptions.DEFAULT;
                 if (SAMPLED_VALUE.Equals(getter.Get(carrier, X_B3_SAMPLED))
                     || FLAGS_VALUE.Equals(getter.Get(carrier, X_B3_FLAGS)))
                 {
                     traceOptions = TraceOptions.Builder().SetIsSampled(true).Build();
                 }
+
                 return SpanContext.Create(traceId, spanId, traceOptions);
             }
             catch (Exception e)
@@ -89,10 +93,12 @@ namespace OpenCensus.Trace.Propagation
             {
                 throw new ArgumentNullException(nameof(spanContext));
             }
+
             if (carrier == null)
             {
                 throw new ArgumentNullException(nameof(carrier));
             }
+
             if (setter == null)
             {
                 throw new ArgumentNullException(nameof(setter));

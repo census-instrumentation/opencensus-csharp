@@ -15,6 +15,7 @@ namespace OpenCensus.Trace.Export
                 return NOOP_RUNNING_SPAN_STORE;
             }
         }
+
         protected RunningSpanStoreBase() { }
 
         public abstract IRunningSpanStoreSummary Summary { get; }

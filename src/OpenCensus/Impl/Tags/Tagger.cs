@@ -77,6 +77,7 @@ namespace OpenCensus.Tags
                         builder.Put(tag.Key, tag.Value);
                     }
                 }
+
                 return builder.Build();
             }
         }
@@ -95,6 +96,7 @@ namespace OpenCensus.Tags
                         builder.Put(tag.Key, tag.Value);
                     }
                 }
+
                 return builder;
             }
         }

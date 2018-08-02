@@ -16,6 +16,7 @@ namespace OpenCensus.Tags
             {
                 throw new ArgumentNullException(nameof(asString));
             }
+
             this.AsString = asString;
         }
 
@@ -25,6 +26,7 @@ namespace OpenCensus.Tags
             {
                 throw new ArgumentOutOfRangeException(nameof(value));
             }
+
             return new TagValue(value);
         }
 
@@ -41,11 +43,13 @@ namespace OpenCensus.Tags
             {
                 return true;
             }
+
             if (o is TagValue)
             {
                 TagValue that = (TagValue)o;
                 return (this.AsString.Equals(that.AsString));
             }
+
             return false;
         }
 
@@ -56,6 +60,7 @@ namespace OpenCensus.Tags
             h ^= this.AsString.GetHashCode();
             return h;
         }
+
         private static bool IsValid(String value)
         {
             return value.Length <= MAX_LENGTH && StringUtil.IsPrintableString(value);

@@ -26,6 +26,7 @@ namespace OpenCensus.Trace.Export
             LatencyLowerNs = latencyLowerNs;
             LatencyUpperNs = latencyUpperNs;
         }
+
         public long LatencyLowerNs { get; }
 
         public long LatencyUpperNs { get; }

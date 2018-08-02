@@ -23,6 +23,7 @@ namespace OpenCensus.Stats
             {
                 throw new ArgumentNullException(nameof(newView));
             }
+
             lock (registeredViews)
             {
                 exportedViews = null;
@@ -39,7 +40,6 @@ namespace OpenCensus.Stats
             }
         }
 
-
         public override IViewData GetView(IViewName name)
         {
             if (name == null)
@@ -47,6 +47,7 @@ namespace OpenCensus.Stats
                 throw new ArgumentNullException(nameof(name));
 
             }
+
             lock (registeredViews)
             {
                 registeredViews.TryGetValue(name, out IView view);
@@ -65,7 +66,6 @@ namespace OpenCensus.Stats
             }
         }
 
-
         public override ISet<IView> AllExportedViews
         {
             get
@@ -79,6 +79,7 @@ namespace OpenCensus.Stats
                         return ImmutableHashSet.CreateRange(exportedViews);
                     }
                 }
+
                 return views;
             }
         }
@@ -95,6 +96,7 @@ namespace OpenCensus.Stats
                 //}
                 views.Add(view);
             }
+
             return views;
         }
     }

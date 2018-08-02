@@ -17,6 +17,7 @@ namespace OpenCensus.Trace
                 return events;
             }
         }
+
         public int NumberOfDroppedEvents
         {
             get { return totalRecordedEvents - events.Count; }

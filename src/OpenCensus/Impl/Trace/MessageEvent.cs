@@ -47,6 +47,7 @@ namespace OpenCensus.Trace
             {
                 return true;
             }
+
             if (o is MessageEvent)
             {
                 MessageEvent that = (MessageEvent)o;
@@ -55,6 +56,7 @@ namespace OpenCensus.Trace
                      && (this.UncompressedMessageSize == that.UncompressedMessageSize)
                      && (this.CompressedMessageSize == that.CompressedMessageSize);
             }
+
             return false;
         }
 

@@ -43,6 +43,7 @@ namespace OpenCensus.Trace
 
             return new Status(CanonicalCode, description);
         }
+
         public override bool Equals(object obj)
         {
             if (obj == this)

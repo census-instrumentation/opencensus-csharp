@@ -39,7 +39,6 @@ namespace OpenCensus.Stats
             Record(CurrentTagContextUtils.CurrentTagContext);
         }
 
-
         public override void Record(ITagContext tags)
         {
             statsManager.Record(tags, builder.Build());

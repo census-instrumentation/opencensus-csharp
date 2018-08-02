@@ -39,6 +39,5 @@ namespace OpenCensus.Common
             }
         }
 
-
     }
 }

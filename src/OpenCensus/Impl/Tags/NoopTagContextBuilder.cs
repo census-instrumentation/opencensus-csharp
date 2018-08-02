@@ -18,10 +18,12 @@ namespace OpenCensus.Tags
             {
                 throw new ArgumentNullException(nameof(key));
             }
+
             if (value == null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
+
             return this;
         }
 
@@ -31,6 +33,7 @@ namespace OpenCensus.Tags
             {
                 throw new ArgumentNullException(nameof(key));
             }
+
             return this;
         }
 

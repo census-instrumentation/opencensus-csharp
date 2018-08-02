@@ -25,11 +25,13 @@ namespace OpenCensus.Trace.Export
             {
                 throw new ArgumentNullException(nameof(messageOrNetworkEvents));
             }
+
             IList<ITimedEvent<IMessageEvent>> messageEventsList = new List<ITimedEvent<IMessageEvent>>();
             foreach (ITimedEvent<IMessageEvent> timedEvent in messageOrNetworkEvents.Events)
             {
                 messageEventsList.Add(timedEvent);
             }
+
             ITimedEvents<IMessageEvent> messageEvents = TimedEvents<IMessageEvent>.Create(messageEventsList, messageOrNetworkEvents.DroppedEventsCount);
             return new SpanData(
                 context,
@@ -45,6 +47,7 @@ namespace OpenCensus.Trace.Export
                 status,
                 endTimestamp);
         }
+
         internal SpanData(
             ISpanContext context,
             ISpanId parentSpanId,
@@ -63,6 +66,7 @@ namespace OpenCensus.Trace.Export
             {
                 throw new ArgumentNullException(nameof(context));
             }
+
             this.Context = context;
             this.ParentSpanId = parentSpanId;
             this.HasRemoteParent = hasRemoteParent;
@@ -70,36 +74,43 @@ namespace OpenCensus.Trace.Export
             {
                 throw new ArgumentNullException(nameof(name));
             }
+
             this.Name = name;
             if (startTimestamp == null)
             {
                 throw new ArgumentNullException(nameof(startTimestamp));
             }
+
             this.StartTimestamp = startTimestamp;
             if (attributes == null)
             {
                 throw new ArgumentNullException(nameof(attributes));
             }
+
             this.Attributes = attributes;
             if (annotations == null)
             {
                 throw new ArgumentNullException(nameof(annotations));
             }
+
             this.Annotations = annotations;
             if (messageEvents == null)
             {
                 throw new ArgumentNullException(nameof(messageEvents));
             }
+
             this.MessageEvents = messageEvents;
             if (links == null)
             {
                 throw new ArgumentNullException(nameof(links));
             }
+
             this.Links = links;
             this.ChildSpanCount = childSpanCount;
             this.Status = status;
             this.EndTimestamp = endTimestamp;
         }
+
         public ISpanContext Context { get; }
 
         public ISpanId ParentSpanId { get; }
@@ -126,7 +137,6 @@ namespace OpenCensus.Trace.Export
 
         public ITimestamp StartTimestamp { get; }
 
-
         public override string ToString()
         {
             return "SpanData{"
@@ -151,6 +161,7 @@ namespace OpenCensus.Trace.Export
             {
                 return true;
             }
+
             if (o is SpanData)
             {
                 SpanData that = (SpanData)o;
@@ -167,6 +178,7 @@ namespace OpenCensus.Trace.Export
                      && ((this.Status == null) ? (that.Status == null) : this.Status.Equals(that.Status))
                      && ((this.EndTimestamp == null) ? (that.EndTimestamp == null) : this.EndTimestamp.Equals(that.EndTimestamp));
             }
+
             return false;
         }
 

@@ -16,6 +16,7 @@ namespace OpenCensus.Stats.Measurements
             {
                 throw new ArgumentNullException(nameof(measure));
             }
+
             this.Measure = measure;
             this.Value = value;
         }
@@ -44,12 +45,14 @@ namespace OpenCensus.Stats.Measurements
             {
                 return true;
             }
+
             if (o is MeasurementLong)
             {
                 MeasurementLong that = (MeasurementLong)o;
                 return (this.Measure.Equals(that.Measure))
                      && (this.Value == that.Value);
             }
+
             return false;
         }
 
@@ -63,6 +66,5 @@ namespace OpenCensus.Stats.Measurements
             return (int)h;
         }
 
-  
     }
 }

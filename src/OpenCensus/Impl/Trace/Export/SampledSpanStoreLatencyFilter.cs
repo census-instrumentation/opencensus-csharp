@@ -12,10 +12,12 @@ namespace OpenCensus.Trace.Export
             {
                 throw new ArgumentOutOfRangeException(nameof(maxSpansToReturn));
             }
+
             if (latencyLowerNs < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(latencyLowerNs));
             }
+
             if (latencyUpperNs < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(latencyUpperNs));
@@ -38,6 +40,7 @@ namespace OpenCensus.Trace.Export
             {
                 throw new ArgumentNullException(nameof(spanName));
             }
+
             SpanName = spanName;
             LatencyLowerNs = latencyLowerNs;
             LatencyUpperNs = latencyUpperNs;
@@ -60,6 +63,7 @@ namespace OpenCensus.Trace.Export
             {
                 return true;
             }
+
             if (o is SampledSpanStoreLatencyFilter) {
                 SampledSpanStoreLatencyFilter that = (SampledSpanStoreLatencyFilter)o;
                 return (this.SpanName.Equals(that.SpanName))
@@ -67,6 +71,7 @@ namespace OpenCensus.Trace.Export
                      && (this.LatencyUpperNs == that.LatencyUpperNs)
                      && (this.MaxSpansToReturn == that.MaxSpansToReturn);
             }
+
             return false;
         }
 

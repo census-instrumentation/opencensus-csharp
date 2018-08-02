@@ -19,8 +19,10 @@ namespace OpenCensus.Trace.Export
             {
                 throw new ArgumentOutOfRangeException("Negative numRunningSpans.");
             }
+
             return new RunningPerSpanNameSummary(numRunningSpans);
         }
+
         public override string ToString()
         {
             return "RunningPerSpanNameSummary{"
@@ -34,11 +36,13 @@ namespace OpenCensus.Trace.Export
             {
                 return true;
             }
+
             if (o is RunningPerSpanNameSummary)
             {
                 RunningPerSpanNameSummary that = (RunningPerSpanNameSummary)o;
                 return (this.NumRunningSpans == that.NumRunningSpans);
             }
+
             return false;
         }
 

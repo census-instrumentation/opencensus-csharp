@@ -58,6 +58,7 @@ namespace OpenCensus.Trace
             {
                 throw new ArgumentOutOfRangeException(string.Format("Invalid size: expected {0}, got {1}", 2 * SIZE, src.Length));
             }
+
             byte[] bytes = Arrays.StringToByteArray(src);
             return new SpanId(bytes);
 
@@ -104,7 +105,6 @@ namespace OpenCensus.Trace
             return Arrays.Equals(bytes, that.bytes);
         }
 
-
         public override int GetHashCode()
         {
             return Arrays.GetHashCode(bytes);
@@ -117,7 +117,6 @@ namespace OpenCensus.Trace
                 + "}";
 
         }
-
 
         public int CompareTo(ISpanId other)
         {
@@ -132,6 +131,7 @@ namespace OpenCensus.Trace
                     return b1 < b2 ? -1 : 1;
                 }
             }
+
             return 0;
         }
     }

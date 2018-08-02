@@ -24,12 +24,14 @@ namespace OpenCensus.Trace
                 return currentSpan != null ? currentSpan : BlankSpan.INSTANCE;
             }
         }
+
         public IScope WithSpan(ISpan span)
         {
             if (span == null)
             {
                 throw new ArgumentNullException(nameof(span));
             }
+
             return CurrentSpanUtils.WithSpan(span, false);
         }
 

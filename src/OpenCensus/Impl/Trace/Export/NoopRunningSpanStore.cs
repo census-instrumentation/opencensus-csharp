@@ -21,6 +21,7 @@ namespace OpenCensus.Trace.Export
             {
                 throw new ArgumentNullException(nameof(filter));
             }
+
             return new List<ISpanData>();
         }
 

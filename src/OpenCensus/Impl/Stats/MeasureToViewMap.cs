@@ -43,6 +43,7 @@ namespace OpenCensus.Stats
                         exportedViews = views = FilterExportedViews(registeredViews.Values);
                     }
                 }
+
                 return views;
             }
         }
@@ -52,8 +53,6 @@ namespace OpenCensus.Stats
         {
             return ImmutableHashSet.CreateRange(allViews);
         }
-
-
 
         /** Enable stats collection for the given {@link View}. */
         internal void RegisterView(IView view, IClock clock)
@@ -74,17 +73,20 @@ namespace OpenCensus.Stats
                         throw new ArgumentException("A different view with the same name is already registered: " + existing);
                     }
                 }
+
                 IMeasure measure = view.Measure;
                 registeredMeasures.TryGetValue(measure.Name, out IMeasure registeredMeasure);
                 if (registeredMeasure != null && !registeredMeasure.Equals(measure))
                 {
                     throw new ArgumentException("A different measure with the same name is already registered: " + registeredMeasure);
                 }
+
                 registeredViews.Add(view.Name, view);
                 if (registeredMeasure == null)
                 {
                     registeredMeasures.Add(measure.Name, measure);
                 }
+
                 AddMutableViewData(view.Measure.Name, MutableViewData.Create(view, clock.Now));
             }
         }
@@ -144,6 +146,7 @@ namespace OpenCensus.Stats
                         // unregistered measures will be ignored.
                         continue;
                     }
+
                     IList<MutableViewData> views = mutableMap[measure.Name];
                     foreach (MutableViewData view in views)
                     {

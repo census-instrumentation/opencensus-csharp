@@ -105,14 +105,12 @@ namespace OpenCensus.Trace
             return options == that.options;
         }
 
-
         public override int GetHashCode()
         {
 
             int result = 31 * 1 + options;
             return result;
         }
-
 
         public override string ToString()
         {

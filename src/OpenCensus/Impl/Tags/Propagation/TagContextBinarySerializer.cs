@@ -15,7 +15,6 @@ namespace OpenCensus.Tags.Propagation
             this.state = state;
         }
 
-
         public override byte[] ToByteArray(ITagContext tags)
         {
             return state.Internal == TaggingState.DISABLED

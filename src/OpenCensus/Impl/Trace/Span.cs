@@ -53,6 +53,7 @@ namespace OpenCensus.Trace
                 {
                     return;
                 }
+
                 lock (_lock)
                 {
                     if (hasBeenEnded)
@@ -60,10 +61,12 @@ namespace OpenCensus.Trace
                         //logger.log(Level.FINE, "Calling setStatus() on an ended Span.");
                         return;
                     }
+
                     this.status = value;
                 }
             }
         }
+
         public override long EndNanoTime
         {
             get
@@ -75,6 +78,7 @@ namespace OpenCensus.Trace
 
             }
         }
+
         public override long LatencyNs
         {
             get
@@ -85,6 +89,7 @@ namespace OpenCensus.Trace
                 }
             }
         }
+
         public override bool IsSampleToLocalSpanStore
         {
             get
@@ -95,11 +100,11 @@ namespace OpenCensus.Trace
                     {
                         throw new InvalidOperationException("Running span does not have the SampleToLocalSpanStore set.");
                     }
+
                     return sampleToLocalSpanStore;
                 }
             }
         }
-
 
         public override void PutAttribute(string key, IAttributeValue value)
         {
@@ -115,15 +120,18 @@ namespace OpenCensus.Trace
                     //logger.log(Level.FINE, "Calling putAttributes() on an ended Span.");
                     return;
                 }
+
                 InitializedAttributes.PutAttribute(key, value);
             }
         }
+
         public override void PutAttributes(IDictionary<string, IAttributeValue> attributes)
         {
             if (!Options.HasFlag(SpanOptions.RECORD_EVENTS))
             {
                 return;
             }
+
             lock (_lock)
             {
                 if (hasBeenEnded)
@@ -131,15 +139,18 @@ namespace OpenCensus.Trace
                     //logger.log(Level.FINE, "Calling putAttributes() on an ended Span.");
                     return;
                 }
+
                 InitializedAttributes.PutAttributes(attributes);
             }
         }
+
         public override void AddAnnotation(string description, IDictionary<string, IAttributeValue> attributes)
         {
             if (!Options.HasFlag(SpanOptions.RECORD_EVENTS))
             {
                 return;
             }
+
             lock (_lock)
             {
                 if (hasBeenEnded)
@@ -147,15 +158,18 @@ namespace OpenCensus.Trace
                     //logger.log(Level.FINE, "Calling addAnnotation() on an ended Span.");
                     return;
                 }
+
                 InitializedAnnotations.AddEvent(new EventWithNanoTime<IAnnotation>(clock.NowNanos, Annotation.FromDescriptionAndAttributes(description, attributes)));
             }
         }
+
         public override void AddAnnotation(IAnnotation annotation)
         {
             if (!Options.HasFlag(SpanOptions.RECORD_EVENTS))
             {
                 return;
             }
+
             lock (_lock)
             {
                 if (hasBeenEnded)
@@ -163,10 +177,12 @@ namespace OpenCensus.Trace
                     //logger.log(Level.FINE, "Calling addAnnotation() on an ended Span.");
                     return;
                 }
+
                 if (annotation == null)
                 {
                     throw new ArgumentNullException(nameof(annotation));
                 }
+
                 InitializedAnnotations.AddEvent(new EventWithNanoTime<IAnnotation>(clock.NowNanos, annotation));
             }
         }
@@ -177,6 +193,7 @@ namespace OpenCensus.Trace
             {
                 return;
             }
+
             lock (_lock)
             {
                 if (hasBeenEnded)
@@ -184,19 +201,23 @@ namespace OpenCensus.Trace
                     //logger.log(Level.FINE, "Calling addLink() on an ended Span.");
                     return;
                 }
+
                 if (link == null)
                 {
                     throw new ArgumentNullException(nameof(link));
                 }
+
                 InitializedLinks.AddEvent(link);
             }
         }
+
         public override void AddMessageEvent(IMessageEvent messageEvent)
         {
             if (!Options.HasFlag(SpanOptions.RECORD_EVENTS))
             {
                 return;
             }
+
             lock (_lock)
             {
                 if (hasBeenEnded)
@@ -204,10 +225,12 @@ namespace OpenCensus.Trace
                     //logger.log(Level.FINE, "Calling addNetworkEvent() on an ended Span.");
                     return;
                 }
+
                 if (messageEvent == null)
                 {
                     throw new ArgumentNullException(nameof(messageEvent));
                 }
+
                 InitializedMessageEvents.AddEvent(new EventWithNanoTime<IMessageEvent>(clock.NowNanos, messageEvent));
             }
         }
@@ -218,6 +241,7 @@ namespace OpenCensus.Trace
             {
                 return;
             }
+
             lock (_lock)
             {
                 if (hasBeenEnded)
@@ -225,14 +249,17 @@ namespace OpenCensus.Trace
                     //logger.log(Level.FINE, "Calling end() on an ended Span.");
                     return;
                 }
+
                 if (options.Status != null)
                 {
                     status = options.Status;
                 }
+
                 sampleToLocalSpanStore = options.SampleToLocalSpanStore;
                 endNanoTime = clock.NowNanos;
                 hasBeenEnded = true;
             }
+
             startEndHandler.OnEnd(this);
         }
 
@@ -244,6 +271,7 @@ namespace OpenCensus.Trace
                 {
                     attributes = new AttributesWithCapacity(traceParams.MaxNumberOfAttributes);
                 }
+
                 return attributes;
             }
         }
@@ -257,9 +285,11 @@ namespace OpenCensus.Trace
                     annotations =
                         new TraceEvents<EventWithNanoTime<IAnnotation>>(traceParams.MaxNumberOfAnnotations);
                 }
+
                 return annotations;
             }
         }
+
         private TraceEvents<EventWithNanoTime<IMessageEvent>> InitializedMessageEvents
         {
             get
@@ -269,6 +299,7 @@ namespace OpenCensus.Trace
                     messageEvents =
                         new TraceEvents<EventWithNanoTime<IMessageEvent>>(traceParams.MaxNumberOfMessageEvents);
                 }
+
                 return messageEvents;
             }
         }
@@ -281,6 +312,7 @@ namespace OpenCensus.Trace
                 {
                     links = new TraceEvents<ILink>(traceParams.MaxNumberOfLinks);
                 }
+
                 return links;
             }
         }
@@ -375,10 +407,9 @@ namespace OpenCensus.Trace
             {
                 startEndHandler.OnStart(span);
             }
+
             return span;
         }
-
-
 
         //public virtual void AddMessageEvent(MessageEventBase messageEvent)
         //{
@@ -420,6 +451,7 @@ namespace OpenCensus.Trace
                 this.timestampConverter = timestampConverter;
             }
         }
+
         private static ITimedEvents<T> CreateTimedEvents<T>(TraceEvents<EventWithNanoTime<T>> events, ITimestampConverter timestampConverter)
         {
             if (events == null)
@@ -427,6 +459,7 @@ namespace OpenCensus.Trace
                 IList<ITimedEvent<T>> empty = new List<ITimedEvent<T>>();
                 return TimedEvents<T>.Create(empty, 0);
             }
+
             IList<ITimedEvent<T>> eventsList = new List<ITimedEvent<T>>(events.Events.Count);
             foreach (EventWithNanoTime<T> networkEvent in events.Events)
             {

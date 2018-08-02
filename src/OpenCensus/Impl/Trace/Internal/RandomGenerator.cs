@@ -33,6 +33,7 @@ namespace OpenCensus.Trace.Internal
             {                
                 _local = new Random(_sameSeed ? _seed : _global.Next());                
             }
+
             _local.NextBytes(bytes);
         }
     }

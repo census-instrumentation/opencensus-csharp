@@ -16,6 +16,7 @@ namespace OpenCensus.Trace.Sampler
                 return ALWAYS_SAMPLE;
             }
         }
+
         public static ISampler NeverSample
         {
             get
@@ -23,6 +24,7 @@ namespace OpenCensus.Trace.Sampler
                 return NEVER_SAMPLE;
             }
         }
+
         public static ISampler GetProbabilitySampler(double probability)
         {
             return ProbabilitySampler.Create(probability);

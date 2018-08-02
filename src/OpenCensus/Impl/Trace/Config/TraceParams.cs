@@ -23,22 +23,27 @@ namespace OpenCensus.Trace.Config
             {
                 throw new ArgumentNullException(nameof(sampler));
             }
+
             if (maxNumberOfAttributes <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(maxNumberOfAttributes));
             }
+
             if (maxNumberOfAnnotations <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(maxNumberOfAnnotations));
             }
+
             if (maxNumberOfMessageEvents <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(maxNumberOfMessageEvents));
             }
+
             if (maxNumberOfLinks <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(maxNumberOfLinks));
             }
+
             this.Sampler = sampler;
             this.MaxNumberOfAttributes = maxNumberOfAttributes;
             this.MaxNumberOfAnnotations = maxNumberOfAnnotations;
@@ -67,13 +72,13 @@ namespace OpenCensus.Trace.Config
                 + "}";
         }
 
-
         public override bool Equals(object o)
         {
             if (o == this)
             {
                 return true;
             }
+
             if (o is TraceParams)
             {
                 TraceParams that = (TraceParams)o;
@@ -83,6 +88,7 @@ namespace OpenCensus.Trace.Config
                      && (this.MaxNumberOfMessageEvents == that.MaxNumberOfMessageEvents)
                      && (this.MaxNumberOfLinks == that.MaxNumberOfLinks);
             }
+
             return false;
         }
 

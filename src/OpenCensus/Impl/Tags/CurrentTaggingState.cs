@@ -7,7 +7,6 @@ namespace OpenCensus.Tags
     public sealed class CurrentTaggingState
     {
 
-
         private TaggingState currentState = TaggingState.ENABLED;
         private object _lck = new object();
         private bool isRead;
@@ -45,6 +44,7 @@ namespace OpenCensus.Tags
                 {
                     throw new InvalidOperationException("State was already read, cannot set state.");
                 }
+
                 currentState = state;
             }
         }

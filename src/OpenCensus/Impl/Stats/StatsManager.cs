@@ -23,10 +23,12 @@ namespace OpenCensus.Stats
             {
                 throw new ArgumentNullException(nameof(queue));
             }
+
             if (clock == null)
             {
                 throw new ArgumentNullException(nameof(clock));
             }
+
             if (state == null)
             {
                 throw new ArgumentNullException(nameof(state));

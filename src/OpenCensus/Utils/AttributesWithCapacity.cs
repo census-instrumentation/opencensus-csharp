@@ -29,7 +29,6 @@ namespace OpenCensus.Utils
                 return (ICollection<string>)_delegate.Keys;
             }
         }
-    
 
         public ICollection<IAttributeValue> Values
         {
@@ -144,6 +143,7 @@ namespace OpenCensus.Utils
             {
                 return value.Equals(item.Value);
             }
+
             return false;
         }
 

@@ -17,9 +17,11 @@ namespace OpenCensus.Stats.Measurements
             {
                 throw new ArgumentNullException(nameof(measure));
             }
+
             this.Measure = measure;
             this.Value = value;
         }
+
         public static IMeasurementDouble Create(IMeasureDouble measure, double value)
         {
             return new MeasurementDouble(measure, value);
@@ -44,12 +46,14 @@ namespace OpenCensus.Stats.Measurements
             {
                 return true;
             }
+
             if (o is MeasurementDouble)
             {
                 MeasurementDouble that = (MeasurementDouble)o;
                 return (this.Measure.Equals(that.Measure))
                      && (DoubleUtil.ToInt64(this.Value) == DoubleUtil.ToInt64(that.Value));
             }
+
             return false;
         }
 

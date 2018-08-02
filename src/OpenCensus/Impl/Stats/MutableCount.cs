@@ -10,7 +10,6 @@ namespace OpenCensus.Stats
 
         internal MutableCount() { }
 
- 
         internal static MutableCount Create()
         {
             return new MutableCount();
@@ -28,6 +27,7 @@ namespace OpenCensus.Stats
             {
                 throw new ArgumentException("MutableCount expected.");
             }
+
             var result = fraction * mutable.Count;
             long rounded = (long)Math.Round(result);
             Count += rounded;

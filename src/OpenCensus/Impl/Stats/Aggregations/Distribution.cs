@@ -16,6 +16,7 @@ namespace OpenCensus.Stats.Aggregations
             {
                 throw new ArgumentNullException("Null bucketBoundaries");
             }
+
             BucketBoundaries = bucketBoundaries;
         }
 
@@ -25,6 +26,7 @@ namespace OpenCensus.Stats.Aggregations
             {
                 throw new ArgumentNullException(nameof(bucketBoundaries));
             }
+
             return new Distribution(bucketBoundaries);
         }
 
@@ -46,10 +48,12 @@ namespace OpenCensus.Stats.Aggregations
             {
                 return true;
             }
+
             if (o is Distribution) {
                 Distribution that = (Distribution)o;
                 return (this.BucketBoundaries.Equals(that.BucketBoundaries));
             }
+
             return false;
         }
 

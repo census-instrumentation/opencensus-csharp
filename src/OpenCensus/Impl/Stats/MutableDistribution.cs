@@ -25,7 +25,6 @@ namespace OpenCensus.Stats
             this.BucketCounts = new long[bucketBoundaries.Boundaries.Count + 1];
         }
 
-
         internal static MutableDistribution Create(IBucketBoundaries bucketBoundaries)
         {
             if (bucketBoundaries == null)
@@ -58,6 +57,7 @@ namespace OpenCensus.Stats
             {
                 Min = value;
             }
+
             if (value > Max)
             {
                 Max = value;
@@ -71,6 +71,7 @@ namespace OpenCensus.Stats
                     return;
                 }
             }
+
             BucketCounts[BucketCounts.Length - 1]++;
         }
 
@@ -92,7 +93,6 @@ namespace OpenCensus.Stats
             {
                 throw new ArgumentException("Bucket boundaries should match.");
             }
-
 
             // Algorithm for calculating the combination of sum of squared deviations:
             // https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Parallel_algorithm.
@@ -116,6 +116,7 @@ namespace OpenCensus.Stats
             {
                 this.Min = mutableDistribution.Min;
             }
+
             if (mutableDistribution.Max > this.Max)
             {
                 this.Max = mutableDistribution.Max;
@@ -127,6 +128,7 @@ namespace OpenCensus.Stats
                 this.BucketCounts[i] += bucketCounts[i];
             }
         }
+
         internal override T Match<T>(Func<MutableSum, T> p0, Func<MutableCount, T> p1, Func<MutableMean, T> p2, Func<MutableDistribution, T> p3, Func<MutableLastValue, T> p4)
         {
             return p3.Invoke(this);

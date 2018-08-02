@@ -13,6 +13,7 @@ namespace OpenCensus.Trace.Propagation
             {
                 throw new ArgumentNullException(nameof(bytes));
             }
+
             return SpanContext.INVALID;
         }
 
@@ -22,6 +23,7 @@ namespace OpenCensus.Trace.Propagation
             {
                 throw new ArgumentNullException(nameof(spanContext));
             }
+
             return new byte[0];
         }
     }

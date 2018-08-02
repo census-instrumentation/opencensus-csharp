@@ -13,6 +13,7 @@ namespace OpenCensus.Trace
             : base(SpanContext.INVALID, default(SpanOptions))
         {
         }
+
         public override string Name { get; }
         public override Status Status { get; set; }
 

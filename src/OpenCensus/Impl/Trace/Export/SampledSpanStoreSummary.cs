@@ -14,6 +14,7 @@ namespace OpenCensus.Trace.Export
             {
                 throw new ArgumentNullException(nameof(perSpanNameSummary));
             }
+
             IDictionary<string, ISampledPerSpanNameSummary> copy = new Dictionary<string, ISampledPerSpanNameSummary>(perSpanNameSummary);
             return new SampledSpanStoreSummary(new ReadOnlyDictionary<string, ISampledPerSpanNameSummary>(copy));
 
@@ -25,6 +26,7 @@ namespace OpenCensus.Trace.Export
             {
                 throw new ArgumentNullException(nameof(perSpanNameSummary));
             }
+
             PerSpanNameSummary = perSpanNameSummary;
         }
 
@@ -43,11 +45,13 @@ namespace OpenCensus.Trace.Export
             {
                 return true;
             }
+
             if (o is SampledSpanStoreSummary)
             {
                 SampledSpanStoreSummary that = (SampledSpanStoreSummary)o;
                 return (this.PerSpanNameSummary.SequenceEqual(that.PerSpanNameSummary));
             }
+
             return false;
         }
 

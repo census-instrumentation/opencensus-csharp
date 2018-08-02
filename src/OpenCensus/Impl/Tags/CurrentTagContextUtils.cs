@@ -29,7 +29,6 @@ namespace OpenCensus.Tags
                 AsyncLocalContext.CurrentTagContext = tags;
             }
 
-
             public void Dispose()
             {
                 var current = AsyncLocalContext.CurrentTagContext;

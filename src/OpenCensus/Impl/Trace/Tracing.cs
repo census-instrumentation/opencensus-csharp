@@ -19,6 +19,7 @@ namespace OpenCensus.Trace
         {
 
         }
+
         internal Tracing(bool enabled)
         {
             if (enabled)
@@ -31,7 +32,6 @@ namespace OpenCensus.Trace
         }
 
         private ITraceComponent traceComponent = null;
-
 
         public static ITracer Tracer
         {
@@ -64,7 +64,6 @@ namespace OpenCensus.Trace
                 return _tracing.traceComponent.TraceConfig;
             }
         }
-
 
     }
 }

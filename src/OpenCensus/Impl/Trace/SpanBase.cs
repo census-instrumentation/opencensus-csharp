@@ -29,18 +29,22 @@ namespace OpenCensus.Trace
             {
                 throw new ArgumentNullException(nameof(context));
             }
+
             if (context.TraceOptions.IsSampled && !options.HasFlag(SpanOptions.RECORD_EVENTS))
             {
                 throw new ArgumentOutOfRangeException("Span is sampled, but does not have RECORD_EVENTS set.");
             }
+
             Context = context;
             Options = options;
    
         }
+
         public virtual void PutAttribute(String key, IAttributeValue value)
         {
             PutAttributes(new Dictionary<string, IAttributeValue>() { { key, value } });
         }
+
         public abstract void PutAttributes(IDictionary<string, IAttributeValue> attributes);
         public void AddAnnotation(string description)
         {

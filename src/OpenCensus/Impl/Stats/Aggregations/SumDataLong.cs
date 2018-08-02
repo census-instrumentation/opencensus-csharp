@@ -30,6 +30,7 @@ namespace OpenCensus.Stats.Aggregations
         {
             return p1.Invoke(this);
         }
+
         public override String ToString()
         {
             return "SumDataLong{"
@@ -43,11 +44,13 @@ namespace OpenCensus.Stats.Aggregations
             {
                 return true;
             }
+
             if (o is SumDataLong)
             {
                 SumDataLong that = (SumDataLong)o;
                 return (this.Sum == that.Sum);
             }
+
             return false;
         }
 

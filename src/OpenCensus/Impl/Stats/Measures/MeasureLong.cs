@@ -17,18 +17,22 @@ namespace OpenCensus.Stats.Measures
             {
                 throw new ArgumentNullException(nameof(name));
             }
+
             this.Name = name;
             if (description == null)
             {
                 throw new ArgumentNullException(nameof(description));
             }
+
             this.Description = description;
             if (unit == null)
             {
                 throw new ArgumentNullException(nameof(unit));
             }
+
             this.Unit = unit;
         }
+
         public static IMeasureLong Create(String name, String description, String unit)
         {
             if (!(StringUtil.IsPrintableString(name) && name.Length <= NAME_MAX_LENGTH))
@@ -62,6 +66,7 @@ namespace OpenCensus.Stats.Measures
             {
                 return true;
             }
+
             if (o is MeasureLong)
             {
                 MeasureLong that = (MeasureLong)o;
@@ -69,6 +74,7 @@ namespace OpenCensus.Stats.Measures
                      && (this.Description.Equals(that.Description))
                      && (this.Unit.Equals(that.Unit));
             }
+
             return false;
         }
 

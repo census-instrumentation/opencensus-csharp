@@ -15,6 +15,7 @@ namespace OpenCensus.Stats
                 return Count == 0 ? 0 : Sum / Count;
             }
         }
+
         internal double Min { get; set; } = Double.MaxValue;
         internal double Max { get; set; } = Double.MinValue;
 
@@ -33,6 +34,7 @@ namespace OpenCensus.Stats
             {
                 Min = value;
             }
+
             if (value > Max)
             {
                 Max = value;
@@ -46,6 +48,7 @@ namespace OpenCensus.Stats
             {
                 throw new ArgumentException("MutableMean expected.");
             }
+
             var result = fraction * mutable.Count;
             long rounded = (long)Math.Round(result);
             Count += rounded;
@@ -56,12 +59,14 @@ namespace OpenCensus.Stats
             {
                 this.Min = mutable.Min;
             }
+
             if (mutable.Max > this.Max)
             {
                 this.Max = mutable.Max;
             }
 
         }
+
         internal override T Match<T>(Func<MutableSum, T> p0, Func<MutableCount, T> p1, Func<MutableMean, T> p2, Func<MutableDistribution, T> p3, Func<MutableLastValue, T> p4)
         {
             return p2.Invoke(this);

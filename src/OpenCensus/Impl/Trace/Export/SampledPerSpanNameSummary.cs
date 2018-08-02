@@ -18,6 +18,7 @@ namespace OpenCensus.Trace.Export
             {
                 throw new ArgumentNullException(nameof(numbersOfLatencySampledSpans));
             }
+
             if (numbersOfErrorSampledSpans == null)
             {
                 throw new ArgumentNullException(nameof(numbersOfErrorSampledSpans));
@@ -34,14 +35,15 @@ namespace OpenCensus.Trace.Export
             {
                 throw new ArgumentNullException(nameof(numbersOfLatencySampledSpans));
             }
+
             NumbersOfLatencySampledSpans = numbersOfLatencySampledSpans;
             if (numbersOfErrorSampledSpans == null)
             {
                 throw new ArgumentNullException(nameof(numbersOfErrorSampledSpans));
             }
+
             this.NumbersOfErrorSampledSpans = numbersOfErrorSampledSpans;
         }
-
 
         public override string ToString()
         {
@@ -51,22 +53,22 @@ namespace OpenCensus.Trace.Export
                 + "}";
         }
 
-
         public override bool Equals(Object o)
         {
             if (o == this)
             {
                 return true;
             }
+
             if (o is SampledPerSpanNameSummary)
             {
                 SampledPerSpanNameSummary that = (SampledPerSpanNameSummary)o;
                 return (this.NumbersOfLatencySampledSpans.SequenceEqual(that.NumbersOfLatencySampledSpans))
                      && (this.NumbersOfErrorSampledSpans.SequenceEqual(that.NumbersOfErrorSampledSpans));
             }
+
             return false;
         }
-
 
         public override int GetHashCode()
         {

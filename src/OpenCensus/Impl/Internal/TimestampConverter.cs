@@ -1,6 +1,5 @@
 ﻿using OpenCensus.Common;
 
-
 namespace OpenCensus.Internal
 {
     internal class TimestampConverter : ITimestampConverter
@@ -14,7 +13,6 @@ namespace OpenCensus.Internal
             return new TimestampConverter(clock.Now, clock.NowNanos);
         }
 
-  
         public ITimestamp ConvertNanoTime(long nanoTime)
         {
             return timestamp.AddNanos(nanoTime - this.nanoTime);

@@ -32,10 +32,12 @@ namespace OpenCensus.Stats.Aggregations
             {
                 return true;
             }
+
             if (o is LastValue)
             {
                 return true;
             }
+
             return false;
         }
 

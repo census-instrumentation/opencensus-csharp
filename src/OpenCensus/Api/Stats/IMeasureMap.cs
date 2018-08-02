@@ -10,12 +10,9 @@ namespace OpenCensus.Stats
     {
         IMeasureMap Put(IMeasureDouble measure, double value);
 
-
         IMeasureMap Put(IMeasureLong measure, long value);
 
-
         void Record();
-
 
         void Record(ITagContext tags);
     }

@@ -15,6 +15,7 @@ namespace OpenCensus.Trace.Export
                 return new NoopExportComponent();
             }
         }
+
         public abstract ISpanExporter SpanExporter { get; }
 
         public abstract IRunningSpanStore RunningSpanStore { get; }

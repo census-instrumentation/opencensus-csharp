@@ -22,6 +22,7 @@ namespace OpenCensus.Stats
 
             return true;
         }
+
         public static IAggregationData SumWithTags(this IViewData viewData, IList<ITagValue> values = null)
         {
             return viewData.AggregationMap.WithTags(values).Sum(viewData.View);
@@ -50,6 +51,7 @@ namespace OpenCensus.Stats
             {
                 Sum(sum, agData);
             }
+
             return MutableViewData.CreateAggregationData(sum, view.Measure);
 
         }
@@ -82,6 +84,7 @@ namespace OpenCensus.Stats
                     return false;
                 }
             }
+
             return true;
         }
 

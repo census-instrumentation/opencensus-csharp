@@ -17,19 +17,21 @@ namespace OpenCensus.Stats.Measures
             {
                 throw new ArgumentNullException(nameof(name));
             }
+
             this.Name = name;
             if (description == null)
             {
                 throw new ArgumentNullException(nameof(description));
             }
+
             this.Description = description;
             if (unit == null)
             {
                 throw new ArgumentNullException(nameof(unit));
             }
+
             this.Unit = unit;
         }
-
 
         public static IMeasureDouble Create(String name, String description, String unit)
         {
@@ -64,6 +66,7 @@ namespace OpenCensus.Stats.Measures
             {
                 return true;
             }
+
             if (o is MeasureDouble)
             {
                 MeasureDouble that = (MeasureDouble)o;
@@ -71,6 +74,7 @@ namespace OpenCensus.Stats.Measures
                      && (this.Description.Equals(that.Description))
                      && (this.Unit.Equals(that.Unit));
             }
+
             return false;
         }
 

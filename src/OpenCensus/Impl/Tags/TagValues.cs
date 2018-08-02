@@ -31,6 +31,7 @@ namespace OpenCensus.Tags
             {
                 return true;
             }
+
             if (o is TagValues)
             {
                 TagValues that = (TagValues)o;
@@ -59,6 +60,7 @@ namespace OpenCensus.Tags
 
                 return true;
             }
+
             return false;
         }
 
@@ -73,6 +75,7 @@ namespace OpenCensus.Tags
                     h ^= v.GetHashCode();
                 }
             }
+
             return h;
         }
     }

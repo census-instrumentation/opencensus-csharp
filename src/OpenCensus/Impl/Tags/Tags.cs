@@ -26,6 +26,7 @@ namespace OpenCensus.Tags
         {
 
         }
+
         internal Tags(bool enabled)
         {
             if (enabled)
@@ -40,7 +41,6 @@ namespace OpenCensus.Tags
 
         private readonly ITagsComponent tagsComponent = new TagsComponent();
 
-
         public static ITagger Tagger
         {
             get
@@ -49,6 +49,7 @@ namespace OpenCensus.Tags
                 return _tags.tagsComponent.Tagger;
             }
         }
+
         public static ITagPropagationComponent TagPropagationComponent
         {
             get
@@ -57,6 +58,7 @@ namespace OpenCensus.Tags
                 return _tags.tagsComponent.TagPropagationComponent;
             }
         }
+
         public static TaggingState State
         {
             get

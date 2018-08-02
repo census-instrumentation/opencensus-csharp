@@ -19,6 +19,7 @@ namespace OpenCensus.Trace.Config
                 return _activeTraceParams;
             }
         }
+
         public override void UpdateActiveTraceParams(ITraceParams traceParams)
         {
             _activeTraceParams = traceParams;

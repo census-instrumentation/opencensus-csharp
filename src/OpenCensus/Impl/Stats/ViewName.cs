@@ -16,6 +16,7 @@ namespace OpenCensus.Stats
             {
                 throw new ArgumentNullException(nameof(asString));
             }
+
             this.AsString = asString;
         }
 
@@ -50,11 +51,13 @@ namespace OpenCensus.Stats
             {
                 return true;
             }
+
             if (o is ViewName)
             {
                 ViewName that = (ViewName)o;
                 return (this.AsString.Equals(that.AsString));
             }
+
             return false;
         }
 

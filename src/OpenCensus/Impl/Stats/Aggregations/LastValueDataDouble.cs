@@ -34,11 +34,13 @@ namespace OpenCensus.Stats.Aggregations
             {
                 return true;
             }
+
             if (o is LastValueDataDouble)
             {
                 LastValueDataDouble that = (LastValueDataDouble)o;
                 return (DoubleUtil.ToInt64(this.LastValue) == DoubleUtil.ToInt64(that.LastValue));
             }
+
             return false;
         }
 

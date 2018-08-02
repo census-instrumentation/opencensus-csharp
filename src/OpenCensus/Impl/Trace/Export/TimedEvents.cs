@@ -13,6 +13,7 @@ namespace OpenCensus.Trace.Export
             {
                 throw new ArgumentNullException(nameof(events));
             }
+
             List<ITimedEvent<T>> ev = new List<ITimedEvent<T>>();
             ev.AddRange(events);
             return new TimedEvents<T>(ev.AsReadOnly(), droppedEventsCount);
@@ -27,6 +28,7 @@ namespace OpenCensus.Trace.Export
             {
                 throw new ArgumentNullException("Null events");
             }
+
             this.Events = events;
             this.DroppedEventsCount = droppedEventsCount;
         }
@@ -45,12 +47,14 @@ namespace OpenCensus.Trace.Export
             {
                 return true;
             }
+
             if (o is TimedEvents<T>)
             {
                 TimedEvents<T> that = (TimedEvents<T>)o;
                 return (this.Events.SequenceEqual(that.Events))
                      && (this.DroppedEventsCount == that.DroppedEventsCount);
             }
+
             return false;
         }
 

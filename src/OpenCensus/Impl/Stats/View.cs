@@ -19,29 +19,35 @@ namespace OpenCensus.Stats
             {
                 throw new ArgumentNullException(nameof(name));
             }
+
             this.Name = name;
             if (description == null)
             {
                 throw new ArgumentNullException(nameof(description));
             }
+
             this.Description = description;
             if (measure == null)
             {
                 throw new ArgumentNullException(nameof(measure));
             }
+
             this.Measure = measure;
             if (aggregation == null)
             {
                 throw new ArgumentNullException(nameof(aggregation));
             }
+
             this.Aggregation = aggregation;
             if (columns == null)
             {
                 throw new ArgumentNullException(nameof(columns));
             }
+
             this.Columns = columns;
 
         }
+
         public static IView Create(IViewName name, String description, IMeasure measure,IAggregation aggregation,IList<ITagKey> columns)
         {
             var set = new HashSet<ITagKey>(columns);
@@ -75,6 +81,7 @@ namespace OpenCensus.Stats
             {
                 return true;
             }
+
             if (o is View)
             {
                 View that = (View)o;
@@ -84,6 +91,7 @@ namespace OpenCensus.Stats
                      && (this.Aggregation.Equals(that.Aggregation))
                      && (this.Columns.SequenceEqual(that.Columns));
             }
+
             return false;
         }
 

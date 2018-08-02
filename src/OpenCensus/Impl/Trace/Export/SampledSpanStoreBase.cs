@@ -24,6 +24,7 @@ namespace OpenCensus.Trace.Export
 
             }
         }
+
         protected SampledSpanStoreBase() { }
 
         public abstract ISampledSpanStoreSummary Summary { get; }

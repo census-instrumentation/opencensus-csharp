@@ -40,6 +40,7 @@ namespace OpenCensus.Tags
             {
                 throw new ArgumentNullException(nameof(tags));
             }
+
             return NoopTags.NoopTagContextBuilder;
         }
 
@@ -57,6 +58,7 @@ namespace OpenCensus.Tags
             {
                 throw new ArgumentNullException(nameof(tags));
             }
+
             return NoopScope.INSTANCE;
         }
     }

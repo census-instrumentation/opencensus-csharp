@@ -18,12 +18,10 @@ namespace OpenCensus.Stats
             statsManager.RegisterView(view);
         }
 
-
         public override IViewData GetView(IViewName viewName)
         {
             return statsManager.GetView(viewName);
         }
-
 
         public override ISet<IView> AllExportedViews
         {

@@ -27,24 +27,29 @@ namespace OpenCensus.Trace.Config
             {
                 throw new ArgumentNullException("Null sampler");
             }
+
             this.sampler = sampler;
             return this;
         }
+
         public TraceParamsBuilder SetMaxNumberOfAttributes(int maxNumberOfAttributes)
         {
             this.maxNumberOfAttributes = maxNumberOfAttributes;
             return this;
         }
+
         public TraceParamsBuilder SetMaxNumberOfAnnotations(int maxNumberOfAnnotations)
         {
             this.maxNumberOfAnnotations = maxNumberOfAnnotations;
             return this;
         }
+
         public TraceParamsBuilder SetMaxNumberOfMessageEvents(int maxNumberOfMessageEvents)
         {
             this.maxNumberOfMessageEvents = maxNumberOfMessageEvents;
             return this;
         }
+
         public TraceParamsBuilder SetMaxNumberOfLinks(int maxNumberOfLinks)
         {
             this.maxNumberOfLinks = maxNumberOfLinks;
@@ -58,22 +63,27 @@ namespace OpenCensus.Trace.Config
             {
                 missing += " sampler";
             }
+
             if (!this.maxNumberOfAttributes.HasValue)
             {
                 missing += " maxNumberOfAttributes";
             }
+
             if (!this.maxNumberOfAnnotations.HasValue)
             {
                 missing += " maxNumberOfAnnotations";
             }
+
             if (!this.maxNumberOfMessageEvents.HasValue)
             {
                 missing += " maxNumberOfMessageEvents";
             }
+
             if (!this.maxNumberOfLinks.HasValue)
             {
                 missing += " maxNumberOfLinks";
             }
+
             if (!string.IsNullOrEmpty(missing))
             {
                 throw new ArgumentOutOfRangeException("Missing required properties:" + missing);

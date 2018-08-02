@@ -28,6 +28,7 @@ namespace OpenCensus.Trace
             {
                 options = (byte)(options & ~TraceOptions.IS_SAMPLED);
             }
+
             return this;
         }
 

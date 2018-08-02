@@ -13,6 +13,7 @@ namespace OpenCensus.Trace
         {
             return new Link(context.TraceId, context.SpanId, type, EMPTY_ATTRIBUTES);
         }
+
         public static ILink FromSpanContext(ISpanContext context, LinkType type, IDictionary<string, IAttributeValue> attributes)
         {
             IDictionary<string, IAttributeValue> copy = new Dictionary<string, IAttributeValue>(attributes);
@@ -22,6 +23,7 @@ namespace OpenCensus.Trace
                 type,
                 new ReadOnlyDictionary<string, IAttributeValue>(copy));
         }
+
         public ITraceId TraceId { get; }
 
         public ISpanId SpanId { get; }
@@ -36,10 +38,12 @@ namespace OpenCensus.Trace
             {
                 throw new ArgumentNullException(nameof(traceId));
             }
+
             if (spanId == null)
             {
                 throw new ArgumentNullException(nameof(spanId));
             }
+
             if (attributes == null)
             {
                 throw new ArgumentNullException(nameof(attributes));
@@ -50,6 +54,7 @@ namespace OpenCensus.Trace
             Type = type;
             Attributes = attributes;
         }
+
         public override string ToString()
         {
             return "Link{"
@@ -66,6 +71,7 @@ namespace OpenCensus.Trace
             {
                 return true;
             }
+
             if (o is Link)
             {
                 Link that = (Link)o;
@@ -74,6 +80,7 @@ namespace OpenCensus.Trace
                      && (this.Type.Equals(that.Type))
                      && (this.Attributes.SequenceEqual(that.Attributes));
             }
+
             return false;
         }
 

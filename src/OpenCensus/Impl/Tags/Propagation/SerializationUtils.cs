@@ -29,6 +29,7 @@ namespace OpenCensus.Tags.Propagation
                 totalChars += tag.Value.AsString.Length;
                 EncodeTag(tag, byteArrayDataOutput);
             }
+
             //for (Iterator<Tag> i = InternalUtils.getTags(tags); i.hasNext();) {
             //    Tag tag = i.next();
             //    totalChars += tag.getKey().getName().length();
@@ -40,6 +41,7 @@ namespace OpenCensus.Tags.Propagation
                     "Size of TagContext exceeds the maximum serialized size "
                         + TAGCONTEXT_SERIALIZED_SIZE_LIMIT);
             }
+
             return byteArrayDataOutput.ToArray();
         }
 
@@ -53,6 +55,7 @@ namespace OpenCensus.Tags.Propagation
                     // Does not allow empty byte array.
                     throw new TagContextDeserializationException("Input byte[] can not be empty.");
                 }
+
                 MemoryStream buffer = new MemoryStream(bytes);
                 int versionId = buffer.ReadByte();
                 if (versionId > VERSION_ID || versionId < 0)
@@ -60,6 +63,7 @@ namespace OpenCensus.Tags.Propagation
                     throw new TagContextDeserializationException(
                         "Wrong Version ID: " + versionId + ". Currently supports version up to: " + VERSION_ID);
                 }
+
                 return new TagContext(ParseTags(buffer));
             } catch (Exception exn) {
                 throw new TagContextDeserializationException(exn.ToString()); // byte array format error.
@@ -86,11 +90,13 @@ namespace OpenCensus.Tags.Propagation
                     break;
                 }
             }
+
             if (totalChars > TAGCONTEXT_SERIALIZED_SIZE_LIMIT) {
                 throw new TagContextDeserializationException(
                     "Size of TagContext exceeds the maximum serialized size "
                         + TAGCONTEXT_SERIALIZED_SIZE_LIMIT);
             }
+
             return tags;
         }
 
@@ -146,6 +152,7 @@ namespace OpenCensus.Tags.Propagation
             {
                 builder.Append((char)buffer.ReadByte());
             }
+
             return builder.ToString();
         }
     }

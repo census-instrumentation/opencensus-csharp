@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 
-
 namespace OpenCensus.Stats.Aggregations
 {
     public sealed class LastValueDataLong : AggregationData, ILastValueDataLong
@@ -34,11 +33,13 @@ namespace OpenCensus.Stats.Aggregations
             {
                 return true;
             }
+
             if (o is LastValueDataLong)
             {
                 LastValueDataLong that = (LastValueDataLong)o;
                 return (this.LastValue == that.LastValue);
             }
+
             return false;
         }
 

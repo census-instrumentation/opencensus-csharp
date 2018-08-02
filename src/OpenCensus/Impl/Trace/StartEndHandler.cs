@@ -23,6 +23,7 @@ namespace OpenCensus.Trace
             this._enqueueEventForNonSampledSpans = runningSpanStore != null || sampledSpanStore != null;
             this._eventQueue = eventQueue;
         }
+
         public void OnEnd(SpanBase span)
         {
             if ((span.Options.HasFlag(SpanOptions.RECORD_EVENTS) && _enqueueEventForNonSampledSpans)
@@ -85,10 +86,12 @@ namespace OpenCensus.Trace
                 {
                     spanExporter.AddSpan(span);
                 }
+
                 if (runningSpanStore != null)
                 {
                     runningSpanStore.OnEnd(span);
                 }
+
                 if (sampledSpanStore != null)
                 {
                     sampledSpanStore.ConsiderForSampling(span);

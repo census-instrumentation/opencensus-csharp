@@ -12,6 +12,7 @@ namespace OpenCensus.Trace.Export
             {
                 throw new ArgumentOutOfRangeException("Negative maxSpansToReturn.");
             }
+
             return new RunningSpanStoreFilter(spanName, maxSpansToReturn);
         }
 
@@ -21,6 +22,7 @@ namespace OpenCensus.Trace.Export
             {
                 throw new ArgumentNullException("Null spanName");
             }
+
             SpanName = spanName;
             MaxSpansToReturn = maxSpansToReturn;
         }
@@ -43,12 +45,14 @@ namespace OpenCensus.Trace.Export
             {
                 return true;
             }
+
             if (o is RunningSpanStoreFilter)
             {
                 RunningSpanStoreFilter that = (RunningSpanStoreFilter)o;
                 return (this.SpanName.Equals(that.SpanName))
                      && (this.MaxSpansToReturn == that.MaxSpansToReturn);
             }
+
             return false;
         }
 

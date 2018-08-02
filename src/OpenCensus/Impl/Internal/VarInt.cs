@@ -24,7 +24,6 @@ namespace OpenCensus.Internal
             return result;
         }
 
-
         public static int GetVarInt(byte[] src, int offset, int[] dst)
         {
             int result = 0;
@@ -37,6 +36,7 @@ namespace OpenCensus.Internal
                     // Out of range
                     throw new ArgumentOutOfRangeException("varint too long");
                 }
+
                 // Get 7 bits from next byte
                 b = src[offset++];
                 result |= (b & 0x7F) << shift;
@@ -45,7 +45,6 @@ namespace OpenCensus.Internal
             dst[0] = result;
             return offset;
         }
-
 
         public static int PutVarInt(int v, byte[] sink, int offset)
         {
@@ -60,7 +59,6 @@ namespace OpenCensus.Internal
             } while (uv != 0);
             return offset;
         }
-
 
         //public static int getVarInt(ByteBuffer src)
         //{
@@ -105,7 +103,6 @@ namespace OpenCensus.Internal
         //    return result;
         //}
 
-
         //public static void putVarInt(int v, ByteBuffer sink)
         //{
         //    while (true)
@@ -138,6 +135,7 @@ namespace OpenCensus.Internal
                     // Out of range
                     throw new ArgumentOutOfRangeException("varint too long");
                 }
+
                 // Get 7 bits from next byte
                 b = inputStream.ReadByte();
                 result |= (b & 0x7F) << shift;
@@ -146,14 +144,12 @@ namespace OpenCensus.Internal
             return result;
         }
 
-
         public static void PutVarInt(int v, Stream outputStream)
         {
             byte[] bytes = new byte[VarIntSize(v)];
             PutVarInt(v, bytes, 0);
             outputStream.Write(bytes, 0, bytes.Length);
         }
-
 
         public static int VarLongSize(long v)
         {
@@ -166,7 +162,6 @@ namespace OpenCensus.Internal
             } while (uv != 0);
             return result;
         }
-
 
         //public static long GetVarLong(ByteBuffer src)
         //{

@@ -33,6 +33,7 @@ namespace OpenCensus.Utils
                 }
             }
         }
+
         public void RemoveElement(T element)
         {
             lock (_lck)
@@ -41,6 +42,7 @@ namespace OpenCensus.Utils
                 {
                     throw new ArgumentOutOfRangeException("Element not in the list");
                 }
+
                 size--;
                 if (element.Previous == null)
                 {
@@ -69,6 +71,7 @@ namespace OpenCensus.Utils
                 }
             }
         }
+
         public int Count
         {
             get
@@ -86,6 +89,7 @@ namespace OpenCensus.Utils
                 {
                     all.Add(e);
                 }
+
                 return all;
             }
         }

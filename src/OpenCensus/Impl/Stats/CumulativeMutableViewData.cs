@@ -17,7 +17,6 @@ namespace OpenCensus.Stats
             this.start = start;
         }
 
-        
     internal override void Record(ITagContext context, double value, ITimestamp timestamp)
         {
             IList<ITagValue> values = GetTagValues(GetTagMap(context), View.Columns);
@@ -26,10 +25,10 @@ namespace OpenCensus.Stats
             {
                 tagValueAggregationMap.Add(tagValues, CreateMutableAggregation(View.Aggregation));
             }
+
             tagValueAggregationMap[tagValues].Add(value);
         }
 
-        
         internal override IViewData ToViewData(ITimestamp now, StatsCollectionState state)
         {
             if (state == StatsCollectionState.ENABLED)
@@ -54,7 +53,6 @@ namespace OpenCensus.Stats
             tagValueAggregationMap.Clear();
         }
 
-        
         internal override void ResumeStatsCollection(ITimestamp now)
         {
             start = now;

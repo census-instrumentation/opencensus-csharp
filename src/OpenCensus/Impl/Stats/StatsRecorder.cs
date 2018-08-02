@@ -14,6 +14,7 @@ namespace OpenCensus.Stats
             {
                 throw new ArgumentNullException(nameof(statsManager));
             }
+
             this.statsManager = statsManager;
         }
 

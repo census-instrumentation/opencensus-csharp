@@ -13,6 +13,7 @@ namespace OpenCensus.Utils
             {
                 return "null";
             }
+
             StringBuilder sb = new StringBuilder();
             foreach (var kvp in dict)
             {
@@ -21,6 +22,7 @@ namespace OpenCensus.Utils
                 sb.Append(kvp.Value.ToString());
                 sb.Append(" ");
             }
+
             return sb.ToString();
         }
 
@@ -30,6 +32,7 @@ namespace OpenCensus.Utils
             {
                 return "null";
             }
+
             StringBuilder sb = new StringBuilder();
             foreach (var val in list)
             {
@@ -39,6 +42,7 @@ namespace OpenCensus.Utils
                     sb.Append(" ");
                 }
             }
+
             return sb.ToString();
         }
 

@@ -9,7 +9,6 @@ namespace OpenCensus.Tags
     {
         //private volatile bool isRead;
 
-
         public override ITagger Tagger
         {
             get
@@ -18,7 +17,6 @@ namespace OpenCensus.Tags
             }
         }
 
-
         public override ITagPropagationComponent TagPropagationComponent
         {
             get
@@ -26,7 +24,6 @@ namespace OpenCensus.Tags
                 return NoopTags.NoopTagPropagationComponent;
             }
         }
-
 
         public override TaggingState State
         {

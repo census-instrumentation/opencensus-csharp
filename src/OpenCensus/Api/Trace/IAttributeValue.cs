@@ -12,6 +12,7 @@ namespace OpenCensus.Trace
              Func<long, T> longFunction,
              Func<object, T> defaultFunction);
     }
+
     public interface IAttributeValue<T> : IAttributeValue
     {
         T Value { get; }

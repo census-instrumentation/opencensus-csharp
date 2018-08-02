@@ -46,15 +46,18 @@ namespace OpenCensus.Trace.Propagation
                     traceId = TraceId.FromBytes(bytes, pos + ID_SIZE);
                     pos += ID_SIZE + TraceId.SIZE;
                 }
+
                 if (bytes.Length > pos && bytes[pos] == SPAN_ID_FIELD_ID)
                 {
                     spanId = SpanId.FromBytes(bytes, pos + ID_SIZE);
                     pos += ID_SIZE + SpanId.SIZE;
                 }
+
                 if (bytes.Length > pos && bytes[pos] == TRACE_OPTION_FIELD_ID)
                 {
                     traceOptions = TraceOptions.FromBytes(bytes, pos + ID_SIZE);
                 }
+
                 return SpanContext.Create(traceId, spanId, traceOptions);
             }
             catch (Exception e)

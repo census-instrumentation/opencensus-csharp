@@ -25,10 +25,12 @@ namespace OpenCensus.Tags
             {
                 throw new ArgumentNullException(nameof(key));
             }
+
             if (value == null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
+
             Tags[key] = value;
             return this;
         }
@@ -39,10 +41,12 @@ namespace OpenCensus.Tags
             {
                 throw new ArgumentNullException(nameof(key));
             }
+
             if (Tags.ContainsKey(key))
             {
                 Tags.Remove(key);
             }
+
             return this;
         }
 

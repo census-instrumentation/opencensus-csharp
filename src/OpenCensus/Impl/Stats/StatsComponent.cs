@@ -20,6 +20,7 @@ namespace OpenCensus.Stats
         {
 
         }
+
         public StatsComponent(IEventQueue queue, IClock clock)
         {
             StatsManager statsManager = new StatsManager(queue, clock, state);
@@ -47,6 +48,7 @@ namespace OpenCensus.Stats
                 {
                     return;
                 }
+
                 var result = state.Set(value);
                 if (result)
                 {

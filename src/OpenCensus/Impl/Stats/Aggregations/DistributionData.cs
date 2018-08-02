@@ -26,8 +26,10 @@ namespace OpenCensus.Stats.Aggregations
             {
                 throw new ArgumentNullException(nameof(bucketCounts));
             }
+
             this.BucketCounts = bucketCounts;
         }
+
         public static IDistributionData Create(double mean,long count, double min, double max, double sumOfSquaredDeviations, IList<long> bucketCounts)
         {
             if (!double.IsPositiveInfinity(min) ||  !double.IsNegativeInfinity(max))
@@ -37,15 +39,18 @@ namespace OpenCensus.Stats.Aggregations
                     throw new ArgumentOutOfRangeException("max should be greater or equal to min.");
                 }
             }
+
             if (bucketCounts == null)
             {
                 throw new ArgumentNullException(nameof(bucketCounts));
             }
+
             IList<long> bucketCountsCopy = new List<long>(bucketCounts).AsReadOnly();
 
             return new DistributionData(
                 mean, count, min, max, sumOfSquaredDeviations, bucketCountsCopy);
         }
+
         public override M Match<M>(
             Func<ISumDataDouble, M> p0,
             Func<ISumDataLong, M> p1,
@@ -77,6 +82,7 @@ namespace OpenCensus.Stats.Aggregations
             {
                 return true;
             }
+
             if (o is DistributionData)
             {
                 DistributionData that = (DistributionData)o;
@@ -87,6 +93,7 @@ namespace OpenCensus.Stats.Aggregations
                      && (DoubleUtil.ToInt64(this.SumOfSquaredDeviations) == DoubleUtil.ToInt64(that.SumOfSquaredDeviations))
                      && (this.BucketCounts.SequenceEqual(that.BucketCounts));
             }
+
             return false;
         }
 

@@ -27,6 +27,7 @@ namespace OpenCensus.Trace
                 return Propagation.PropagationComponentBase.NoopPropagationComponent;
             }
         }
+
         public IClock Clock
         {
             get
@@ -42,6 +43,7 @@ namespace OpenCensus.Trace
                 return noopExportComponent;
             }
         }
+
         public ITraceConfig TraceConfig
         {
             get
