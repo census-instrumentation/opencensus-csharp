@@ -61,7 +61,7 @@
 
         public bool AddAll(ICollection<T> collection)
         {
-            foreach(var e in collection)
+            foreach (var e in collection)
             {
                 Add(e);
             }

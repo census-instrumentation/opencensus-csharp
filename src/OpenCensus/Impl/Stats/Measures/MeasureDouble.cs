@@ -5,13 +5,13 @@
 
     public class MeasureDouble : Measure, IMeasureDouble
     {
-        public override String Name { get; }
+        public override string Name { get; }
 
-        public override String Description { get; }
+        public override string Description { get; }
 
-        public override String Unit { get; }
+        public override string Unit { get; }
 
-        internal MeasureDouble(String name, String description, String unit)
+        internal MeasureDouble(string name, string description, string unit)
         {
             if (name == null)
             {
@@ -33,7 +33,7 @@
             this.Unit = unit;
         }
 
-        public static IMeasureDouble Create(String name, String description, String unit)
+        public static IMeasureDouble Create(string name, string description, string unit)
         {
             if (!(StringUtil.IsPrintableString(name) && name.Length <= NAME_MAX_LENGTH))
             {
@@ -51,7 +51,7 @@
             return p0.Invoke(this);
         }
 
-        public override String ToString()
+        public override string ToString()
         {
             return "MeasureDouble{"
                 + "name=" + Name + ", "
@@ -60,7 +60,7 @@
                 + "}";
         }
 
-        public override bool Equals(Object o)
+        public override bool Equals(object o)
         {
             if (o == this)
             {

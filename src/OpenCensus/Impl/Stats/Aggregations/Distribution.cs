@@ -47,7 +47,8 @@
                 return true;
             }
 
-            if (o is Distribution) {
+            if (o is Distribution)
+            {
                 Distribution that = (Distribution)o;
                 return this.BucketBoundaries.Equals(that.BucketBoundaries);
             }

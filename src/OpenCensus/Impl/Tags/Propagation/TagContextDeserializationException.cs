@@ -4,12 +4,12 @@
 
     public sealed class TagContextDeserializationException : Exception
     {
-        public TagContextDeserializationException(String message) 
+        public TagContextDeserializationException(string message) 
             : base(message)
         {
         }
 
-        public TagContextDeserializationException(String message, Exception cause)
+        public TagContextDeserializationException(string message, Exception cause)
             : base(message, cause)
         {
         }

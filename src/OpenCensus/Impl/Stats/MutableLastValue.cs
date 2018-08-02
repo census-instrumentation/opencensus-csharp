@@ -4,7 +4,7 @@
 
     internal sealed class MutableLastValue : MutableAggregation
     {
-        internal double LastValue = Double.NaN;
+        internal double LastValue = double.NaN;
 
         // TODO(songya): remove this once interval stats is completely removed.
         internal bool initialized = false;

@@ -8,7 +8,8 @@
         private readonly long nanoTime;
         private readonly T @event;
 
-        public EventWithNanoTime(long nanoTime, T @event) {
+        public EventWithNanoTime(long nanoTime, T @event)
+        {
             this.nanoTime = nanoTime;
             this.@event = @event;
         }

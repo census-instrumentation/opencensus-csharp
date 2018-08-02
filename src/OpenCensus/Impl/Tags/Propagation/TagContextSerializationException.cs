@@ -4,12 +4,12 @@
 
     public sealed class TagContextSerializationException : Exception
     {
-        public TagContextSerializationException(String message)
+        public TagContextSerializationException(string message)
              : base(message)
         {
         }
 
-        public TagContextSerializationException(String message, Exception cause)
+        public TagContextSerializationException(string message, Exception cause)
             : base(message, cause)
         {
         }

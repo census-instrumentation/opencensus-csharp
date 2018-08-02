@@ -102,7 +102,7 @@
         {
             long floor = (long)Math.Floor((double)nanoAdjustment / NANOS_PER_SECOND);
             long secs = seconds + floor;
-            long nos = nanoAdjustment - floor * NANOS_PER_SECOND;
+            long nos = nanoAdjustment - (floor * NANOS_PER_SECOND);
             return Create(secs, (int)nos);
         }
 
@@ -121,7 +121,8 @@
                 return true;
             }
 
-            if (o is Timestamp) {
+            if (o is Timestamp)
+            {
                 Timestamp that = (Timestamp)o;
                 return (this.Seconds == that.Seconds)
                      && (this.Nanos == that.Nanos);

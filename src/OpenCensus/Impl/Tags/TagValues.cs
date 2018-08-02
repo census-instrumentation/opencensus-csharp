@@ -25,7 +25,7 @@
                 + "}";
         }
 
-        public override bool Equals(Object o)
+        public override bool Equals(object o)
         {
             if (o == this)
             {
@@ -40,7 +40,7 @@
                     return false;
                 }
 
-                for(int i = 0; i < Values.Count; i++)
+                for (int i = 0; i < Values.Count; i++)
                 {
                     if (Values[i] == null)
                     {
@@ -68,7 +68,7 @@
         {
             int h = 1;
             h *= 1000003;
-            foreach(var v in Values)
+            foreach (var v in Values)
             {
                 if (v != null)
                 {

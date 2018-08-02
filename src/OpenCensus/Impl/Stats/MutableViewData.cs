@@ -52,7 +52,9 @@
             if (ctx is TagContext)
              {
                 return ((TagContext)ctx).Tags;
-            } else {
+            }
+else
+            {
                 IDictionary<ITagKey, ITagValue> tags = new Dictionary<ITagKey, ITagValue>();
                 foreach (var tag in ctx)
                 {
@@ -88,7 +90,7 @@
         // Returns the milliseconds representation of a Duration.
         internal static long ToMillis(IDuration duration)
         {
-            return duration.Seconds * MILLIS_PER_SECOND + duration.Nanos / NANOS_PER_MILLI;
+            return (duration.Seconds * MILLIS_PER_SECOND) + (duration.Nanos / NANOS_PER_MILLI);
         }
 
         internal static MutableAggregation CreateMutableAggregation(IAggregation aggregation)
@@ -134,7 +136,7 @@
                         },
                         (mlong) =>
                         {
-                            if (Double.IsNaN(mlval.LastValue))
+                            if (double.IsNaN(mlval.LastValue))
                             {
                                 return LastValueDataLong.Create(0);
                             }

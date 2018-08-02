@@ -25,7 +25,8 @@
             events = new EvictingQueue<T>(maxNumEvents);
         }
 
-        internal void AddEvent(T @event) {
+        internal void AddEvent(T @event)
+        {
             totalRecordedEvents++;
             events.Add(@event);
         }

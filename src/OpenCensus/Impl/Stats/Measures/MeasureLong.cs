@@ -5,13 +5,13 @@
 
     public sealed class MeasureLong : Measure, IMeasureLong
     {
-        public override String Name { get; }
+        public override string Name { get; }
 
-        public override String Description { get; }
+        public override string Description { get; }
 
-        public override String Unit { get; }
+        public override string Unit { get; }
 
-        internal MeasureLong(String name, String description, String unit)
+        internal MeasureLong(string name, string description, string unit)
         {
             if (name == null)
             {
@@ -33,7 +33,7 @@
             this.Unit = unit;
         }
 
-        public static IMeasureLong Create(String name, String description, String unit)
+        public static IMeasureLong Create(string name, string description, string unit)
         {
             if (!(StringUtil.IsPrintableString(name) && name.Length <= NAME_MAX_LENGTH))
             {
@@ -51,7 +51,7 @@
             return p1.Invoke(this);
         }
 
-        public override String ToString()
+        public override string ToString()
         {
             return "MeasureLong{"
                 + "name=" + Name + ", "
@@ -60,7 +60,7 @@
                 + "}";
         }
 
-        public override bool Equals(Object o)
+        public override bool Equals(object o)
         {
             if (o == this)
             {

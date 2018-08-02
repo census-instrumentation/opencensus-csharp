@@ -30,7 +30,8 @@
                 return true;
             }
 
-            if (obj is EndSpanOptions) {
+            if (obj is EndSpanOptions)
+            {
                 EndSpanOptions that = (EndSpanOptions)obj;
                 return (this.SampleToLocalSpanStore == that.SampleToLocalSpanStore)
                      && ((this.Status == null) ? (that.Status == null) : this.Status.Equals(that.Status));

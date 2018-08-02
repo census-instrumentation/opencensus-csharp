@@ -28,7 +28,7 @@
 
         public static ISpanId FromBytes(byte[] buffer)
         {
-            if( buffer == null)
+            if ( buffer == null)
             {
                 throw new ArgumentNullException("buffer");
             }
@@ -67,7 +67,8 @@
             do
             {
                 random.NextBytes(bytes);
-            } while (Arrays.Equals(bytes, INVALID.bytes));
+            }
+            while (Arrays.Equals(bytes, INVALID.bytes));
             return new SpanId(bytes);
         }
 
@@ -94,7 +95,8 @@
                 return true;
             }
 
-            if (!(obj is SpanId)) {
+            if (!(obj is SpanId))
+            {
                 return false;
             }
 

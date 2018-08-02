@@ -138,7 +138,7 @@
         public bool Contains(KeyValuePair<string, IAttributeValue> item)
         {
             var result = TryGetValue(item.Key, out IAttributeValue value);
-            if(result)
+            if (result)
             {
                 return value.Equals(item.Value);
             }
@@ -151,7 +151,7 @@
             DictionaryEntry[] entries = new DictionaryEntry[_delegate.Count];
             _delegate.CopyTo(entries, 0);
      
-            for(int i = 0; i < entries.Length; i++)
+            for (int i = 0; i < entries.Length; i++)
             {
                 array[i + arrayIndex] = new KeyValuePair<string, IAttributeValue>((string)entries[i].Key, (IAttributeValue)entries[i].Value);
             }

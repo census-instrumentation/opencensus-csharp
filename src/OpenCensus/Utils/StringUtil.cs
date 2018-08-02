@@ -4,7 +4,7 @@
 
     internal static class StringUtil
     {
-        public static bool IsPrintableString(String str)
+        public static bool IsPrintableString(string str)
         {
             for (int i = 0; i < str.Length; i++)
             {

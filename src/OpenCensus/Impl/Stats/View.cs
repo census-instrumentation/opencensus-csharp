@@ -9,7 +9,7 @@
     {
         public IViewName Name { get; }
 
-        public String Description { get; }
+        public string Description { get; }
 
         public IMeasure Measure { get; }
 
@@ -51,7 +51,7 @@
             this.Columns = columns;
         }
 
-        public static IView Create(IViewName name, String description, IMeasure measure,IAggregation aggregation,IList<ITagKey> columns)
+        public static IView Create(IViewName name, string description, IMeasure measure,IAggregation aggregation,IList<ITagKey> columns)
         {
             var set = new HashSet<ITagKey>(columns);
             if (set.Count != columns.Count)
@@ -78,7 +78,7 @@
                 + "}";
         }
 
-        public override bool Equals(Object o)
+        public override bool Equals(object o)
         {
             if (o == this)
             {

@@ -25,9 +25,9 @@
         public override int GetHashCode()
         {
             int result = 1;
-            result = 31 * result + (TraceId == null ? 0 : TraceId.GetHashCode());
-            result = 31 * result + (SpanId == null ? 0 : SpanId.GetHashCode());
-            result = 31 * result + (TraceOptions == null ? 0 : TraceOptions.GetHashCode());
+            result = (31 * result) + (TraceId == null ? 0 : TraceId.GetHashCode());
+            result = (31 * result) + (SpanId == null ? 0 : SpanId.GetHashCode());
+            result = (31 * result) + (TraceOptions == null ? 0 : TraceOptions.GetHashCode());
             return result;
         }
 
@@ -38,7 +38,8 @@
                 return true;
             }
 
-            if (!(obj is SpanContext)) {
+            if (!(obj is SpanContext))
+            {
                 return false;
             }
 

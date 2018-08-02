@@ -67,7 +67,8 @@
             do
             {
                 random.NextBytes(bytes);
-            } while (Arrays.Equals(bytes, INVALID.bytes));
+            }
+            while (Arrays.Equals(bytes, INVALID.bytes));
             return new TraceId(bytes);
         }
 

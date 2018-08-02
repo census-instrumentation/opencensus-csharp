@@ -49,7 +49,8 @@
                 return true;
             }
 
-            if (!(obj is Status)) {
+            if (!(obj is Status))
+            {
                 return false;
             }
 
@@ -60,8 +61,8 @@
         public override int GetHashCode()
         {
             int result = 1;
-            result = 31 * result + CanonicalCode.GetHashCode();
-            result = 31 * result + Description.GetHashCode();
+            result = (31 * result) + CanonicalCode.GetHashCode();
+            result = (31 * result) + Description.GetHashCode();
             return result;
         }
 

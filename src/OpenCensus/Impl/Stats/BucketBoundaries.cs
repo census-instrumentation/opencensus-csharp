@@ -22,7 +22,7 @@
                 throw new ArgumentNullException(nameof(bucketBoundaries));
             }
 
-            List<Double> bucketBoundariesCopy = new List<double>(bucketBoundaries);
+            List<double> bucketBoundariesCopy = new List<double>(bucketBoundaries);
 
             if (bucketBoundariesCopy.Count > 1)
             {
@@ -49,7 +49,7 @@
                 + "}";
         }
 
-        public override bool Equals(Object o)
+        public override bool Equals(object o)
         {
             if (o == this)
             {

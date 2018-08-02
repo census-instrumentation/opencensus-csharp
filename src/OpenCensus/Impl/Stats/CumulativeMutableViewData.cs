@@ -34,7 +34,8 @@
                 return ViewData.Create(
                     View,
                     CreateAggregationMap(tagValueAggregationMap, View.Measure),
-                    start, now);
+                    start,
+                    now);
             }
             else
             {

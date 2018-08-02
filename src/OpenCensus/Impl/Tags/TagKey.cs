@@ -9,7 +9,7 @@
 
         public string Name { get; }
 
-        internal TagKey(String name)
+        internal TagKey(string name)
         {
             if (name == null)
             {
@@ -19,7 +19,7 @@
             this.Name = name;
         }
 
-        public static ITagKey Create(String name)
+        public static ITagKey Create(string name)
         {
             if (!IsValid(name))
             {
@@ -36,7 +36,7 @@
                 + "}";
         }
   
-        public override bool Equals(Object o)
+        public override bool Equals(object o)
         {
             if (o == this)
             {
@@ -60,7 +60,7 @@
             return h;
         }
 
-        private static bool IsValid(String value)
+        private static bool IsValid(string value)
         {
             return !string.IsNullOrEmpty(value) && value.Length <= MAX_LENGTH && StringUtil.IsPrintableString(value);
         }

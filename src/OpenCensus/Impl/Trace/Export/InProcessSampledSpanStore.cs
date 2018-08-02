@@ -13,8 +13,8 @@
         // The total number of canonical codes - 1 (the OK code).
         private const int NUM_ERROR_BUCKETS = 17 - 1; // CanonicalCode.values().length - 1;
         private readonly int MAX_PER_SPAN_NAME_SAMPLES =
-            NUM_SAMPLES_PER_LATENCY_BUCKET * NUM_LATENCY_BUCKETS
-                + NUM_SAMPLES_PER_ERROR_BUCKET * NUM_ERROR_BUCKETS;
+            (NUM_SAMPLES_PER_LATENCY_BUCKET * NUM_LATENCY_BUCKETS)
+                + (NUM_SAMPLES_PER_ERROR_BUCKET * NUM_ERROR_BUCKETS);
 
         private readonly IEventQueue eventQueue;
         private readonly Dictionary<string, PerSpanNameSamples> samples;
@@ -80,7 +80,8 @@
             int numSpansToReturn = filter.MaxSpansToReturn == 0 ? MAX_PER_SPAN_NAME_SAMPLES : filter.MaxSpansToReturn;
             IList<SpanBase> spans = new List<SpanBase>();
             // Try to not keep the lock to much, do the SpanImpl -> SpanData conversion outside the lock.
-            lock(samples) {
+            lock (samples)
+            {
                 PerSpanNameSamples perSpanNameSamples = samples[filter.SpanName];
                 if (perSpanNameSamples != null)
                 {
@@ -102,7 +103,8 @@
             int numSpansToReturn = filter.MaxSpansToReturn == 0 ? MAX_PER_SPAN_NAME_SAMPLES : filter.MaxSpansToReturn;
             IList<SpanBase> spans = new List<SpanBase>();
             // Try to not keep the lock to much, do the SpanImpl -> SpanData conversion outside the lock.
-            lock(samples) {
+            lock (samples)
+            {
                 PerSpanNameSamples perSpanNameSamples = samples[filter.SpanName];
                 if (perSpanNameSamples != null)
                 {
@@ -133,7 +135,7 @@
         {
             lock (samples)
             {
-                foreach(string spanName in spanNames)
+                foreach (string spanName in spanNames)
                 {
                     samples.Remove(spanName);
                 }

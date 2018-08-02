@@ -95,7 +95,8 @@
                 return true;
             }
 
-            if (!(obj is TraceOptions)) {
+            if (!(obj is TraceOptions))
+            {
                 return false;
             }
 
@@ -106,7 +107,7 @@
         public override int GetHashCode()
         {
 
-            int result = 31 * 1 + options;
+            int result = (31 * 1) + options;
             return result;
         }
 

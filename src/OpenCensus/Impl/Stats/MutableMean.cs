@@ -16,9 +16,9 @@
             }
         }
 
-        internal double Min { get; set; } = Double.MaxValue;
+        internal double Min { get; set; } = double.MaxValue;
 
-        internal double Max { get; set; } = Double.MinValue;
+        internal double Max { get; set; } = double.MinValue;
 
         internal MutableMean() { }
 

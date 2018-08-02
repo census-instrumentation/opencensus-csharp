@@ -19,9 +19,12 @@
             Clock = clock;
             TraceConfig = new Config.TraceConfig();
             // TODO(bdrutu): Add a config/argument for supportInProcessStores.
-            if (eventQueue is SimpleEventQueue) {
+            if (eventQueue is SimpleEventQueue)
+            {
                 ExportComponent = Export.ExportComponent.CreateWithoutInProcessStores(eventQueue);
-            } else {
+            }
+else
+            {
                 ExportComponent = Export.ExportComponent.CreateWithInProcessStores(eventQueue);
             }
 

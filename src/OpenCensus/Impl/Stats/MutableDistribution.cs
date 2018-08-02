@@ -15,9 +15,9 @@
         internal double SumOfSquaredDeviations { get; set; } = 0.0;
 
         // Initial "impossible" values, that will get reset as soon as first value is added.
-        internal double Min { get; set; } = Double.PositiveInfinity;
+        internal double Min { get; set; } = double.PositiveInfinity;
 
-        internal double Max { get; set; } = Double.NegativeInfinity;
+        internal double Max { get; set; } = double.NegativeInfinity;
 
         internal IBucketBoundaries BucketBoundaries { get; }
 
@@ -106,10 +106,10 @@
                 this.SumOfSquaredDeviations =
                     this.SumOfSquaredDeviations
                         + mutableDistribution.SumOfSquaredDeviations
-                        + Math.Pow(delta, 2)
+                        + (Math.Pow(delta, 2)
                             * this.Count
                             * mutableDistribution.Count
-                            / (this.Count + mutableDistribution.Count);
+                            / (this.Count + mutableDistribution.Count));
             }
 
             this.Count += mutableDistribution.Count;

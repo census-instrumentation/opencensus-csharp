@@ -14,7 +14,8 @@
 
         public override IRunningSpanStoreSummary Summary
         {
-            get {
+            get
+            {
                 ICollection<SpanBase> allRunningSpans = runningSpans.Copy();
                 Dictionary<string, int> numSpansPerName = new Dictionary<string, int>();
                 foreach (var span in allRunningSpans)
@@ -24,7 +25,8 @@
                 }
 
                 Dictionary<string, IRunningPerSpanNameSummary> perSpanNameSummary = new Dictionary<string, IRunningPerSpanNameSummary>();
-                foreach (var it in numSpansPerName) {
+                foreach (var it in numSpansPerName)
+                {
                     int numRunningSpans = it.Value;
                     var runningPerSpanNameSummary = RunningPerSpanNameSummary.Create(numRunningSpans);
                     perSpanNameSummary[it.Key] = runningPerSpanNameSummary;

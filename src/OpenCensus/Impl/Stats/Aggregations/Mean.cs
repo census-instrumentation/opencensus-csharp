@@ -18,13 +18,13 @@
             return p2.Invoke(this);
         }
 
-        public override String ToString()
+        public override string ToString()
         {
             return "Mean{"
                 + "}";
         }
 
-        public override bool Equals(Object o)
+        public override bool Equals(object o)
         {
             if (o == this)
             {

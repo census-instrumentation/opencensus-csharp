@@ -46,7 +46,7 @@
 
         private static void CallListeners(AsyncLocalValueChangedArgs<ISpan> args)
         {
-            foreach(var callback in callbacks)
+            foreach (var callback in callbacks)
             {
                 try
                 {

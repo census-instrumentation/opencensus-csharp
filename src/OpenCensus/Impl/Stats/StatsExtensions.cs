@@ -145,10 +145,10 @@
                             dist.SumOfSquaredDeviations =
                                 dist.SumOfSquaredDeviations
                                     + arg.SumOfSquaredDeviations
-                                    + Math.Pow(delta, 2)
+                                    + (Math.Pow(delta, 2)
                                         * dist.Count
                                         * arg.Count
-                                        / (dist.Count + arg.Count);
+                                        / (dist.Count + arg.Count));
                         }
 
                         dist.Count += arg.Count;
@@ -178,7 +178,7 @@
                     if (lastValue != null)
                     {
                         lastValue.initialized = true;
-                        if (Double.IsNaN(lastValue.LastValue))
+                        if (double.IsNaN(lastValue.LastValue))
                         {
                             lastValue.LastValue = arg.LastValue;
                         }
@@ -195,10 +195,11 @@
                     if (lastValue != null)
                     {
                         lastValue.initialized = true;
-                        if (Double.IsNaN(lastValue.LastValue))
+                        if (double.IsNaN(lastValue.LastValue))
                         {
                             lastValue.LastValue = arg.LastValue;
-                        } else
+                        }
+                        else
                         {
                             lastValue.LastValue += arg.LastValue;
                         }

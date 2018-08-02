@@ -43,7 +43,7 @@
             int result = 1;
             foreach (byte b in array)
             {
-                result = 31 * result + b;
+                result = (31 * result) + b;
             }
 
             return result;
@@ -77,7 +77,8 @@
             if (high > 9)
             {
                 result[0] = (char) (high - 10 + 'a');
-            } else
+            }
+            else
             {
                 result[0] = (char)(high + '0');
             }

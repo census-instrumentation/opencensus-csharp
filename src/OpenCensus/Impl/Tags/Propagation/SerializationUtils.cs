@@ -23,7 +23,7 @@
 
             byteArrayDataOutput.WriteByte(VERSION_ID);
             int totalChars = 0; // Here chars are equivalent to bytes, since we're using ascii chars.
-            foreach(var tag in tags)
+            foreach (var tag in tags)
             {
                 totalChars += tag.Key.Name.Length;
                 totalChars += tag.Value.AsString.Length;
@@ -36,7 +36,8 @@
             //    totalChars += tag.getValue().asString().length();
             //    encodeTag(tag, byteArrayDataOutput);
             //}
-            if (totalChars > TAGCONTEXT_SERIALIZED_SIZE_LIMIT) {
+            if (totalChars > TAGCONTEXT_SERIALIZED_SIZE_LIMIT)
+            {
                 throw new TagContextSerializationException(
                     "Size of TagContext exceeds the maximum serialized size "
                         + TAGCONTEXT_SERIALIZED_SIZE_LIMIT);
@@ -49,7 +50,8 @@
         // The encoded tags are of the form: <version_id><encoded_tags>
         internal static ITagContext DeserializeBinary(byte[] bytes)
         {
-            try {
+            try
+            {
                 if (bytes.Length == 0)
                 {
                     // Does not allow empty byte array.
@@ -65,7 +67,9 @@
                 }
 
                 return new TagContext(ParseTags(buffer));
-            } catch (Exception exn) {
+            }
+            catch (Exception exn)
+            {
                 throw new TagContextDeserializationException(exn.ToString()); // byte array format error.
             }
         }
@@ -76,22 +80,27 @@
             IDictionary<ITagKey, ITagValue> tags = new Dictionary<ITagKey, ITagValue>();
             long limit = buffer.Length;
             int totalChars = 0; // Here chars are equivalent to bytes, since we're using ascii chars.
-            while (buffer.Position < limit) {
+            while (buffer.Position < limit)
+            {
                 int type = buffer.ReadByte();
-                if (type == TAG_FIELD_ID) {
+                if (type == TAG_FIELD_ID)
+                {
                     ITagKey key = CreateTagKey(DecodeString(buffer));
                     ITagValue val = CreateTagValue(key, DecodeString(buffer));
                     totalChars += key.Name.Length;
                     totalChars += val.AsString.Length;
                     tags[key] =  val;
-                } else {
+                }
+else
+                {
                     // Stop parsing at the first unknown field ID, since there is no way to know its length.
                     // TODO(sebright): Consider storing the rest of the byte array in the TagContext.
                     break;
                 }
             }
 
-            if (totalChars > TAGCONTEXT_SERIALIZED_SIZE_LIMIT) {
+            if (totalChars > TAGCONTEXT_SERIALIZED_SIZE_LIMIT)
+            {
                 throw new TagContextDeserializationException(
                     "Size of TagContext exceeds the maximum serialized size "
                         + TAGCONTEXT_SERIALIZED_SIZE_LIMIT);
@@ -102,22 +111,28 @@
 
         // TODO(sebright): Consider exposing a TagKey name validation method to avoid needing to catch an
         // IllegalArgumentException here.
-        private static ITagKey CreateTagKey(String name)
+        private static ITagKey CreateTagKey(string name)
         {
-            try {
+            try
+            {
                 return TagKey.Create(name);
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 throw new TagContextDeserializationException("Invalid tag key: " + name, e);
             }
         }
 
         // TODO(sebright): Consider exposing a TagValue validation method to avoid needing to catch
         // an IllegalArgumentException here.
-        private static ITagValue CreateTagValue(ITagKey key, String value)
+        private static ITagValue CreateTagValue(ITagKey key, string value)
         {
-            try {
+            try
+            {
                 return TagValue.Create(value);
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 throw new TagContextDeserializationException(
                     "Invalid tag value for key " + key + ": " + value, e);
             }
@@ -130,7 +145,7 @@
             EncodeString(tag.Value.AsString, byteArrayDataOutput);
         }
 
-        private static void EncodeString(String input, MemoryStream byteArrayDataOutput)
+        private static void EncodeString(string input, MemoryStream byteArrayDataOutput)
         {
             PutVarInt(input.Length, byteArrayDataOutput);
             var bytes = Encoding.UTF8.GetBytes(input);
@@ -144,7 +159,7 @@
             byteArrayDataOutput.Write(output, 0, output.Length);
         }
 
-        private static String DecodeString(MemoryStream buffer)
+        private static string DecodeString(MemoryStream buffer)
         {
             int length = VarInt.GetVarInt(buffer);
             StringBuilder builder = new StringBuilder();

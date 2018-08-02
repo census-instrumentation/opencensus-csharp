@@ -5,9 +5,9 @@
     public class MessageEventBuilder
     {
         private MessageEventType? type;
-        private Int64? messageId;
-        private Int64? uncompressedMessageSize;
-        private Int64? compressedMessageSize;
+        private long? messageId;
+        private long? uncompressedMessageSize;
+        private long? compressedMessageSize;
 
         internal MessageEventBuilder()
         {
@@ -51,7 +51,7 @@
 
         public IMessageEvent Build()
         {
-            string missing = "";
+            string missing = string.Empty;
             if (!type.HasValue)
             {
                 missing += " type";

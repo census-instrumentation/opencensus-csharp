@@ -19,7 +19,8 @@
             {
                 result++;
                 ui = ui >> 7;
-            } while (ui != 0);
+            }
+            while (ui != 0);
             return result;
         }
 
@@ -40,7 +41,8 @@
                 b = src[offset++];
                 result |= (b & 0x7F) << shift;
                 shift += 7;
-            } while ((b & 0x80) != 0);
+            }
+            while ((b & 0x80) != 0);
             dst[0] = result;
             return offset;
         }
@@ -55,7 +57,8 @@
                 uv >>= 7;
                 byte b = (byte)(bits + ((uv != 0) ? 0x80 : 0));
                 sink[offset++] = b;
-            } while (uv != 0);
+            }
+            while (uv != 0);
             return offset;
         }
 
@@ -139,7 +142,8 @@
                 b = inputStream.ReadByte();
                 result |= (b & 0x7F) << shift;
                 shift += 7;
-            } while ((b & 0x80) != 0);
+            }
+            while ((b & 0x80) != 0);
             return result;
         }
 
@@ -158,7 +162,8 @@
             {
                 result++;
                 uv >>= 7;
-            } while (uv != 0);
+            }
+            while (uv != 0);
             return result;
         }
 

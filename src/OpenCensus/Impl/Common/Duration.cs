@@ -63,7 +63,8 @@
                 return true;
             }
 
-            if (o is Duration) {
+            if (o is Duration)
+            {
                 Duration that = (Duration)o;
                 return (this.Seconds == that.Seconds)
                      && (this.Nanos == that.Nanos);

@@ -4,7 +4,8 @@
 
     public sealed class TimedEvent<T> : ITimedEvent<T>
     {
-        public static ITimedEvent<T> Create(ITimestamp timestamp, T @event) {
+        public static ITimedEvent<T> Create(ITimestamp timestamp, T @event)
+        {
             return new TimedEvent<T>(timestamp, @event);
         }
 

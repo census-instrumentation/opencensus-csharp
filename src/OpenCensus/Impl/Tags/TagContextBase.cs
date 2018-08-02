@@ -14,9 +14,10 @@
             return "TagContext";
         }
 
-        public override bool Equals(Object other)
+        public override bool Equals(object other)
         {
-            if (!(other is TagContextBase)) {
+            if (!(other is TagContextBase))
+            {
                 return false;
             }
 
@@ -31,7 +32,8 @@
             if (t1Enumerator == null)
             {
                 tags1 = new List<ITag>();
-            } else
+            }
+            else
             {
                 tags1 = this.ToList();
             }

@@ -64,7 +64,7 @@
                 end);
         }
 
-        public override String ToString()
+        public override string ToString()
         {
             return "ViewData{"
                 + "view=" + View + ", "
@@ -74,7 +74,7 @@
                 + "}";
         }
 
-        public override bool Equals(Object o)
+        public override bool Equals(object o)
         {
             if (o == this)
             {
@@ -191,7 +191,7 @@
                 );
         }
 
-        private static String CreateErrorMessageForAggregation(IAggregation aggregation, IAggregationData aggregationData)
+        private static string CreateErrorMessageForAggregation(IAggregation aggregation, IAggregationData aggregationData)
         {
             return "Aggregation and AggregationData types mismatch. "
                 + "Aggregation: "

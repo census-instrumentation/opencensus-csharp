@@ -22,7 +22,8 @@
             if (enabled)
             {
                 traceComponent = new TraceComponent(DateTimeOffsetClock.INSTANCE, new RandomGenerator(), new SimpleEventQueue());
-            } else
+            }
+            else
             {
                 traceComponent = TraceComponent.NewNoopTraceComponent;
             }

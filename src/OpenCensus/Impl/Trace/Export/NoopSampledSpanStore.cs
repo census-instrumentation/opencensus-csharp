@@ -19,7 +19,8 @@
             get
             {
                 IDictionary<string, ISampledPerSpanNameSummary> result = new Dictionary<string, ISampledPerSpanNameSummary>();
-                lock(registeredSpanNames) {
+                lock (registeredSpanNames)
+                {
                     foreach (string registeredSpanName in registeredSpanNames)
                     {
                         result[registeredSpanName] = EMPTY_PER_SPAN_NAME_SUMMARY;
@@ -59,7 +60,7 @@
                 throw new ArgumentNullException(nameof(spanNames));
             }
 
-            lock(registeredSpanNames)
+            lock (registeredSpanNames)
             {
                 foreach (var name in spanNames)
                 {

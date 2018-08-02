@@ -39,7 +39,7 @@
             return p3.Invoke(this);
         }
 
-        public override String ToString()
+        public override string ToString()
         {
             return "MeanData{"
                 + "mean=" + Mean + ", "
@@ -49,7 +49,7 @@
                 + "}";
         }
 
-        public override bool Equals(Object o)
+        public override bool Equals(object o)
         {
             if (o == this)
             {

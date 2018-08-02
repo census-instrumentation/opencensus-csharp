@@ -62,7 +62,8 @@
                 return true;
             }
 
-            if (o is SampledSpanStoreLatencyFilter) {
+            if (o is SampledSpanStoreLatencyFilter)
+            {
                 SampledSpanStoreLatencyFilter that = (SampledSpanStoreLatencyFilter)o;
                 return this.SpanName.Equals(that.SpanName)
                      && (this.LatencyLowerNs == that.LatencyLowerNs)

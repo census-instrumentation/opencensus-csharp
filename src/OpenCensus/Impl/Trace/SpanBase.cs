@@ -47,7 +47,7 @@
             Options = options;
         }
 
-        public virtual void PutAttribute(String key, IAttributeValue value)
+        public virtual void PutAttribute(string key, IAttributeValue value)
         {
             PutAttributes(new Dictionary<string, IAttributeValue>() { { key, value } });
         }

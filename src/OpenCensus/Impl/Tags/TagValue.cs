@@ -9,7 +9,7 @@
 
         public string AsString { get; }
 
-        internal TagValue(String asString)
+        internal TagValue(string asString)
         {
             if (asString == null)
             {
@@ -19,7 +19,7 @@
             this.AsString = asString;
         }
 
-        public static ITagValue Create(String value)
+        public static ITagValue Create(string value)
         {
             if (!IsValid(value))
             {
@@ -36,7 +36,7 @@
                 + "}";
         }
 
-        public override bool Equals(Object o)
+        public override bool Equals(object o)
         {
             if (o == this)
             {
@@ -60,7 +60,7 @@
             return h;
         }
 
-        private static bool IsValid(String value)
+        private static bool IsValid(string value)
         {
             return value.Length <= MAX_LENGTH && StringUtil.IsPrintableString(value);
         }

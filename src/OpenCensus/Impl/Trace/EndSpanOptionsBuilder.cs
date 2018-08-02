@@ -25,7 +25,7 @@
 
         public EndSpanOptions Build()
         {
-            String missing = "";
+            string missing = string.Empty;
             if (!this.sampleToLocalSpanStore.HasValue)
             {
                 missing += " sampleToLocalSpanStore";

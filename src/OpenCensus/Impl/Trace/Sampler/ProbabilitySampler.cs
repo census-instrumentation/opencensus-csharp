@@ -26,15 +26,15 @@
             // Math.Abs(Long.MIN_VALUE) == Long.MIN_VALUE.
             if (probability == 0.0)
             {
-                idUpperBound = Int64.MinValue;
+                idUpperBound = long.MinValue;
             }
             else if (probability == 1.0)
             {
-                idUpperBound = Int64.MaxValue;
+                idUpperBound = long.MaxValue;
             }
             else
             {
-                idUpperBound = (long)(probability * Int64.MaxValue);
+                idUpperBound = (long)(probability * long.MaxValue);
             }
 
             return new ProbabilitySampler(probability, idUpperBound);
@@ -97,7 +97,8 @@
                 return true;
             }
 
-            if (o is ProbabilitySampler) {
+            if (o is ProbabilitySampler)
+            {
                 ProbabilitySampler that = (ProbabilitySampler)o;
                 return DoubleUtil.ToInt64(Probability) == DoubleUtil.ToInt64(that.Probability)
                      && (this.IdUpperBound == that.IdUpperBound);

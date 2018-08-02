@@ -7,9 +7,9 @@
     {
         internal const int NAME_MAX_LENGTH = 255;
 
-        public String AsString { get; }
+        public string AsString { get; }
 
-        internal ViewName(String asString)
+        internal ViewName(string asString)
         {
             if (asString == null)
             {
@@ -19,7 +19,7 @@
             this.AsString = asString;
         }
 
-        public static IViewName Create(String name)
+        public static IViewName Create(string name)
         {
             if (name == null)
             {
@@ -37,14 +37,14 @@
             return new ViewName(name);
         }
 
-        public override String ToString()
+        public override string ToString()
         {
             return "Name{"
                 + "asString=" + AsString
                 + "}";
         }
 
-        public override bool Equals(Object o)
+        public override bool Equals(object o)
         {
             if (o == this)
             {

@@ -7,12 +7,12 @@
         public static long ToInt64(double arg)
         {
 
-            if (Double.IsPositiveInfinity(arg))
+            if (double.IsPositiveInfinity(arg))
             {
                 return 0x7ff0000000000000L;
             }
 
-            if (Double.IsNegativeInfinity(arg))
+            if (double.IsNegativeInfinity(arg))
             {
                 unchecked
                 {
@@ -20,19 +20,19 @@
                 }
             }
 
-            if (Double.IsNaN(arg))
+            if (double.IsNaN(arg))
             {
                 return 0x7ff8000000000000L;
             }
 
-            if (arg == Double.MaxValue)
+            if (arg == double.MaxValue)
             {
-                return Int64.MaxValue;
+                return long.MaxValue;
             }
 
-            if (arg == Double.MinValue)
+            if (arg == double.MinValue)
             {
-                return Int64.MinValue;
+                return long.MinValue;
             }
 
             return Convert.ToInt64(arg);

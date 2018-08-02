@@ -31,7 +31,8 @@
                 return true;
             }
 
-            if (o is Sum) {
+            if (o is Sum)
+            {
                 return true;
             }
 

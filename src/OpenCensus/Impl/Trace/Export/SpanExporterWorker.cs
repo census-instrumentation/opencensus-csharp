@@ -40,7 +40,7 @@
         internal void Run(object obj)
         {
             List<ISpanData> toExport = new List<ISpanData>();
-            while(!_shutdown)
+            while (!_shutdown)
             {
                 try
                 {
@@ -60,7 +60,8 @@
                     {
                         break;
                     }
-                } catch(Exception)
+                }
+                catch (Exception)
                 {
                     // Log
                     return;

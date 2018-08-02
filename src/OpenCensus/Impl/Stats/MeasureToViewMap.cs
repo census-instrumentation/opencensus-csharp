@@ -9,7 +9,7 @@
     internal sealed class MeasureToViewMap
     {
         private object _lck = new object();
-        private readonly IDictionary<String, IList<MutableViewData>> mutableMap = new Dictionary<String, IList<MutableViewData>>();
+        private readonly IDictionary<string, IList<MutableViewData>> mutableMap = new Dictionary<string, IList<MutableViewData>>();
 
         private IDictionary<IViewName, IView> registeredViews = new Dictionary<IViewName, IView>();
 
@@ -32,11 +32,13 @@
 
         internal ISet<IView> ExportedViews
         {
-            get {
+            get
+            {
                 ISet<IView> views = exportedViews;
                 if (views == null)
                 {
-                    lock (_lck) {
+                    lock (_lck)
+                    {
                         exportedViews = views = FilterExportedViews(registeredViews.Values);
                     }
                 }
@@ -93,7 +95,8 @@
             if (mutableMap.ContainsKey(name))
             {
                 mutableMap[name].Add(mutableViewData);
-            } else
+            }
+            else
             {
                 mutableMap.Add(name, new List<MutableViewData>() { mutableViewData });
             }
@@ -134,8 +137,10 @@
         // Records stats with a set of tags.
         internal void Record(ITagContext tags, IList<IMeasurement> stats, ITimestamp timestamp)
         {
-            lock (_lck) {
-                foreach (var measurement in stats) {
+            lock (_lck)
+            {
+                foreach (var measurement in stats)
+                {
                     IMeasure measure = measurement.Measure;
                     registeredMeasures.TryGetValue(measure.Name, out IMeasure value);
                     if (!measure.Equals(value))

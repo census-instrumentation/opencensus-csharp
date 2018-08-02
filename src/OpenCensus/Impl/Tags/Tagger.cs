@@ -63,11 +63,14 @@
 
         private static ITagContext ToTagContext(ITagContext tags)
         {
-            if (tags is TagContext) {
+            if (tags is TagContext)
+            {
                 return tags;
-            } else {
+            }
+else
+            {
                 TagContextBuilder builder = new TagContextBuilder();
-                foreach(var tag in tags)
+                foreach (var tag in tags)
                 {
                     if (tag != null)
                     {
@@ -82,9 +85,12 @@
         private static ITagContextBuilder ToTagContextBuilder(ITagContext tags)
         {
             // Copy the tags more efficiently in the expected case, when the TagContext is a TagContextImpl.
-            if (tags is TagContext) {
+            if (tags is TagContext)
+            {
                 return new TagContextBuilder(((TagContext)tags).Tags);
-            } else {
+            }
+else
+            {
                 TagContextBuilder builder = new TagContextBuilder();
                 foreach (var tag in tags)
                 {
