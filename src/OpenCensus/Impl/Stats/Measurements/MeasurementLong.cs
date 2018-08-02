@@ -49,7 +49,7 @@ namespace OpenCensus.Stats.Measurements
             if (o is MeasurementLong)
             {
                 MeasurementLong that = (MeasurementLong)o;
-                return (this.Measure.Equals(that.Measure))
+                return this.Measure.Equals(that.Measure)
                      && (this.Value == that.Value);
             }
 
@@ -65,6 +65,5 @@ namespace OpenCensus.Stats.Measurements
             h ^= (this.Value >> 32) ^ this.Value;
             return (int)h;
         }
-
     }
 }

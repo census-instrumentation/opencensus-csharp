@@ -11,7 +11,6 @@ namespace OpenCensus.Stats
         internal Stats()
             : this(false)
         {
-
         }
 
         internal Stats(bool enabled)

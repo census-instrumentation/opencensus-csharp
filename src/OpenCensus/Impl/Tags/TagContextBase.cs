@@ -65,6 +65,5 @@ namespace OpenCensus.Tags
         {
             return GetEnumerator();
         }
-
     }
 }

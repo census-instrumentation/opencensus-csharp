@@ -49,7 +49,7 @@ namespace OpenCensus.Trace.Export
             if (o is RunningSpanStoreFilter)
             {
                 RunningSpanStoreFilter that = (RunningSpanStoreFilter)o;
-                return (this.SpanName.Equals(that.SpanName))
+                return this.SpanName.Equals(that.SpanName)
                      && (this.MaxSpansToReturn == that.MaxSpansToReturn);
             }
 

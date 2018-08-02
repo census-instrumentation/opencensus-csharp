@@ -75,10 +75,10 @@ namespace OpenCensus.Trace
             if (o is Link)
             {
                 Link that = (Link)o;
-                return (this.TraceId.Equals(that.TraceId))
-                     && (this.SpanId.Equals(that.SpanId))
-                     && (this.Type.Equals(that.Type))
-                     && (this.Attributes.SequenceEqual(that.Attributes));
+                return this.TraceId.Equals(that.TraceId)
+                     && this.SpanId.Equals(that.SpanId)
+                     && this.Type.Equals(that.Type)
+                     && this.Attributes.SequenceEqual(that.Attributes);
             }
 
             return false;

@@ -20,6 +20,5 @@ namespace OpenCensus.Tags
             var result = Tags.Select((kvp) => Tag.Create(kvp.Key, kvp.Value));
             return result.ToList().GetEnumerator();
         }
-
     }
 }

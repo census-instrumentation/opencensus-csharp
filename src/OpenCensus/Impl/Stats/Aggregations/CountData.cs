@@ -48,7 +48,7 @@ namespace OpenCensus.Stats.Aggregations
             if (o is CountData)
             {
                 CountData that = (CountData)o;
-                return (this.Count == that.Count);
+                return this.Count == that.Count;
             }
 
             return false;
@@ -61,6 +61,5 @@ namespace OpenCensus.Stats.Aggregations
             h ^= (this.Count >> 32) ^ this.Count;
             return (int)h;
         }
-
     }
 }

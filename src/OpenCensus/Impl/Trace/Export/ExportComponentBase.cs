@@ -21,6 +21,5 @@ namespace OpenCensus.Trace.Export
         public abstract IRunningSpanStore RunningSpanStore { get; }
 
         public abstract ISampledSpanStore SampledSpanStore { get; }
-
     }
 }

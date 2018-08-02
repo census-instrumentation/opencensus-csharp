@@ -75,7 +75,6 @@ namespace OpenCensus.Trace
                 {
                     return hasBeenEnded ? endNanoTime : clock.NowNanos;
                 }
-
             }
         }
 

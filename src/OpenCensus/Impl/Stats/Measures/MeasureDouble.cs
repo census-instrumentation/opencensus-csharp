@@ -70,9 +70,9 @@ namespace OpenCensus.Stats.Measures
             if (o is MeasureDouble)
             {
                 MeasureDouble that = (MeasureDouble)o;
-                return (this.Name.Equals(that.Name))
-                     && (this.Description.Equals(that.Description))
-                     && (this.Unit.Equals(that.Unit));
+                return this.Name.Equals(that.Name)
+                     && this.Description.Equals(that.Description)
+                     && this.Unit.Equals(that.Unit);
             }
 
             return false;

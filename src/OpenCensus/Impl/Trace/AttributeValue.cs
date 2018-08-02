@@ -35,7 +35,6 @@ namespace OpenCensus.Trace
             Func<bool, T> booleanFunction,
             Func<long, T> longFunction,
             Func<object, T> defaultFunction);
-        
     }
 
     public sealed class AttributeValue<T> : AttributeValue, IAttributeValue<T>
@@ -127,7 +126,6 @@ namespace OpenCensus.Trace
             }
 
             return defaultFunction(Value);
-
         }
     }
 }

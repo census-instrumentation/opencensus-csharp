@@ -11,6 +11,5 @@ namespace OpenCensus.Common
         ITimestamp AddNanos(long nanosToAdd);
         ITimestamp AddDuration(IDuration duration);
         IDuration SubtractTimestamp(ITimestamp timestamp);
-
     }
 }

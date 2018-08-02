@@ -47,8 +47,8 @@ namespace OpenCensus.Tags
             if (o is Tag)
             {
                 Tag that = (Tag)o;
-                return (this.Key.Equals(that.Key))
-                     && (this.Value.Equals(that.Value));
+                return this.Key.Equals(that.Key)
+                     && this.Value.Equals(that.Value);
             }
 
             return false;

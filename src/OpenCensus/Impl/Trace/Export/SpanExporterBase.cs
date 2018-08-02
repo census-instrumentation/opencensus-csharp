@@ -21,6 +21,5 @@ namespace OpenCensus.Trace.Export
         public abstract void Dispose();
         public abstract void RegisterHandler(string name, IHandler handler);
         public abstract void UnregisterHandler(string name);
-
     }
 }

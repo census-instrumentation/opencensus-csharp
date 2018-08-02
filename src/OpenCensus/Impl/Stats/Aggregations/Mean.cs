@@ -46,6 +46,5 @@ namespace OpenCensus.Stats.Aggregations
             int h = 1;
             return h;
         }
-
     }
 }

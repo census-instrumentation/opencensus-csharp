@@ -52,7 +52,7 @@ namespace OpenCensus.Trace.Export
             if (o is Attributes)
             {
                 Attributes that = (Attributes)o;
-                return (this.AttributeMap.SequenceEqual(that.AttributeMap))
+                return this.AttributeMap.SequenceEqual(that.AttributeMap)
                      && (this.DroppedAttributesCount == that.DroppedAttributesCount);
             }
 

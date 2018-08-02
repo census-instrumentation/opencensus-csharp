@@ -17,7 +17,6 @@ namespace OpenCensus.Trace
         internal Tracing()
             : this(false)
         {
-
         }
 
         internal Tracing(bool enabled)
@@ -64,6 +63,5 @@ namespace OpenCensus.Trace
                 return _tracing.traceComponent.TraceConfig;
             }
         }
-
     }
 }

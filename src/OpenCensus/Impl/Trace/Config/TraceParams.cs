@@ -82,7 +82,7 @@ namespace OpenCensus.Trace.Config
             if (o is TraceParams)
             {
                 TraceParams that = (TraceParams)o;
-                return (this.Sampler.Equals(that.Sampler))
+                return this.Sampler.Equals(that.Sampler)
                      && (this.MaxNumberOfAttributes == that.MaxNumberOfAttributes)
                      && (this.MaxNumberOfAnnotations == that.MaxNumberOfAnnotations)
                      && (this.MaxNumberOfMessageEvents == that.MaxNumberOfMessageEvents)

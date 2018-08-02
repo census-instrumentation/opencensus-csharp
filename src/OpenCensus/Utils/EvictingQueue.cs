@@ -78,7 +78,6 @@ namespace OpenCensus.Utils
             }
 
             return _delegate.Contains(e);
-           
         }
 
         public T[] ToArray()

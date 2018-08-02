@@ -51,7 +51,7 @@ namespace OpenCensus.Stats.Aggregations
 
             if (o is Distribution) {
                 Distribution that = (Distribution)o;
-                return (this.BucketBoundaries.Equals(that.BucketBoundaries));
+                return this.BucketBoundaries.Equals(that.BucketBoundaries);
             }
 
             return false;
@@ -64,6 +64,5 @@ namespace OpenCensus.Stats.Aggregations
             h ^= this.BucketBoundaries.GetHashCode();
             return h;
         }
-
     }
 }

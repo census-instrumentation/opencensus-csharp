@@ -10,6 +10,5 @@ namespace OpenCensus.Trace
         long MessageId { get; }
         long UncompressedMessageSize { get; }
         long CompressedMessageSize { get; }
-  
     }
 }

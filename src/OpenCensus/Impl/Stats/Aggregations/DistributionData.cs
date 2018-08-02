@@ -91,7 +91,7 @@ namespace OpenCensus.Stats.Aggregations
                      && (DoubleUtil.ToInt64(this.Min) == DoubleUtil.ToInt64(that.Min))
                      && (DoubleUtil.ToInt64(this.Max) == DoubleUtil.ToInt64(that.Max))
                      && (DoubleUtil.ToInt64(this.SumOfSquaredDeviations) == DoubleUtil.ToInt64(that.SumOfSquaredDeviations))
-                     && (this.BucketCounts.SequenceEqual(that.BucketCounts));
+                     && this.BucketCounts.SequenceEqual(that.BucketCounts);
             }
 
             return false;

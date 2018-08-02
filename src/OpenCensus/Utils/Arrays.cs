@@ -32,7 +32,6 @@ namespace OpenCensus.Utils
             }
 
             return true;
-
         }
 
         internal static int GetHashCode(byte[] array)
@@ -46,7 +45,6 @@ namespace OpenCensus.Utils
             foreach (byte b in array)
             {
                 result = 31 * result + b;
-
             }
 
             return result;
@@ -56,17 +54,17 @@ namespace OpenCensus.Utils
         {
             if ((c >= '0') && (c <= '9'))
             {
-                return (c - '0');
+                return c - '0';
             }
 
             if ((c >= 'a') && (c <= 'f'))
             {
-                return ((c - 'a') + 10);
+                return c - 'a' + 10;
             }
 
             if ((c >= 'A') && (c <= 'F'))
             {
-                return ((c - 'A') + 10);
+                return c - 'A' + 10;
             }
 
             throw new ArgumentOutOfRangeException("Invalid character: " + c);

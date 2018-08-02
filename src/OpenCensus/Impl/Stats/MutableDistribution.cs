@@ -89,7 +89,7 @@ namespace OpenCensus.Stats
                 return;
             }
 
-            if (!(this.BucketBoundaries.Equals(mutableDistribution.BucketBoundaries)))
+            if (!this.BucketBoundaries.Equals(mutableDistribution.BucketBoundaries))
             {
                 throw new ArgumentException("Bucket boundaries should match.");
             }

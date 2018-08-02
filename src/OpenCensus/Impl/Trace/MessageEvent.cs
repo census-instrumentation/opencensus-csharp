@@ -51,7 +51,7 @@ namespace OpenCensus.Trace
             if (o is MessageEvent)
             {
                 MessageEvent that = (MessageEvent)o;
-                return (this.Type.Equals(that.Type))
+                return this.Type.Equals(that.Type)
                      && (this.MessageId == that.MessageId)
                      && (this.UncompressedMessageSize == that.UncompressedMessageSize)
                      && (this.CompressedMessageSize == that.CompressedMessageSize);

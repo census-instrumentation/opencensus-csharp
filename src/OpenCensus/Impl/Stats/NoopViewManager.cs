@@ -45,7 +45,6 @@ namespace OpenCensus.Stats
             if (name == null)
             {
                 throw new ArgumentNullException(nameof(name));
-
             }
 
             lock (registeredViews)

@@ -52,7 +52,7 @@ namespace OpenCensus.Trace.Export
             if (o is LinkList)
             {
                 LinkList that = (LinkList)o;
-                return (this.Links.SequenceEqual(that.Links))
+                return this.Links.SequenceEqual(that.Links)
                      && (this.DroppedLinksCount == that.DroppedLinksCount);
             }
 

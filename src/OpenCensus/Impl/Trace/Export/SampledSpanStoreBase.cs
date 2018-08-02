@@ -21,7 +21,6 @@ namespace OpenCensus.Trace.Export
             get
             {
                 return new NoopSampledSpanStore();
-
             }
         }
 

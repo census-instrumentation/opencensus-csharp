@@ -51,7 +51,7 @@ namespace OpenCensus.Trace.Export
             if (o is TimedEvents<T>)
             {
                 TimedEvents<T> that = (TimedEvents<T>)o;
-                return (this.Events.SequenceEqual(that.Events))
+                return this.Events.SequenceEqual(that.Events)
                      && (this.DroppedEventsCount == that.DroppedEventsCount);
             }
 

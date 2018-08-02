@@ -53,7 +53,6 @@ namespace OpenCensus.Stats
             }
 
             return MutableViewData.CreateAggregationData(sum, view.Measure);
-
         }
 
         private static bool TagValuesMatch(IList<ITagValue> aggValues, IList<ITagValue> values)
@@ -156,7 +155,7 @@ namespace OpenCensus.Stats
                         }
 
                         dist.Count += arg.Count;
-                        dist.Sum += (arg.Mean * arg.Count);
+                        dist.Sum += arg.Mean * arg.Count;
                         dist.Mean = dist.Sum / dist.Count;
 
                         if (arg.Min < dist.Min)
@@ -202,7 +201,6 @@ namespace OpenCensus.Stats
                         if (Double.IsNaN(lastValue.LastValue))
                         {
                             lastValue.LastValue = arg.LastValue;
-     
                         } else
                         {
                             lastValue.LastValue += arg.LastValue;
@@ -215,6 +213,5 @@ namespace OpenCensus.Stats
                     throw new ArgumentException();
                 });
         }
-
     }
 }

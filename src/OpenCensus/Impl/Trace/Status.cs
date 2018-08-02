@@ -73,7 +73,6 @@ namespace OpenCensus.Trace
                     + "canonicalCode=" + CanonicalCode + ", "
                     + "description=" + Description 
                     + "}";
-
         }
 
         internal Status(CanonicalCode canonicalCode, string description = null)

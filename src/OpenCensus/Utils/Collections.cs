@@ -53,7 +53,6 @@ namespace OpenCensus.Utils
             return c1.Count == c2.Count && c1Dist.Count() == c2Dist.Count() && c1Dist.Intersect(c2Dist).Count() == c1Dist.Count();
         }
     }
-    
 }
 
   

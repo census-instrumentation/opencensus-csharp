@@ -85,6 +85,5 @@ namespace OpenCensus.Common
             h ^= this.Nanos;
             return (int)h;
         }
-
     }
 }

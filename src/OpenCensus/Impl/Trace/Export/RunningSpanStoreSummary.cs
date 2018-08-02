@@ -43,7 +43,7 @@ namespace OpenCensus.Trace.Export
             if (o is RunningSpanStoreSummary)
             {
                 RunningSpanStoreSummary that = (RunningSpanStoreSummary)o;
-                return (this.PerSpanNameSummary.SequenceEqual(that.PerSpanNameSummary));
+                return this.PerSpanNameSummary.SequenceEqual(that.PerSpanNameSummary);
             }
 
             return false;

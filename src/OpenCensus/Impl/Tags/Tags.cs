@@ -24,7 +24,6 @@ namespace OpenCensus.Tags
         internal Tags()
             : this(false)
         {
-
         }
 
         internal Tags(bool enabled)

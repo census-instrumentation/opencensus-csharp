@@ -99,8 +99,8 @@ namespace OpenCensus.Trace.Sampler
 
             if (o is ProbabilitySampler) {
                 ProbabilitySampler that = (ProbabilitySampler)o;
-                return (DoubleUtil.ToInt64(Probability) == DoubleUtil.ToInt64(that.Probability)
-                     && (this.IdUpperBound == that.IdUpperBound));
+                return DoubleUtil.ToInt64(Probability) == DoubleUtil.ToInt64(that.Probability)
+                     && (this.IdUpperBound == that.IdUpperBound);
             }
 
             return false;

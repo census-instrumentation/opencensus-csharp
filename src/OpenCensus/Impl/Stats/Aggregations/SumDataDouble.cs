@@ -48,7 +48,7 @@ namespace OpenCensus.Stats.Aggregations
 
             if (o is SumDataDouble) {
                 SumDataDouble that = (SumDataDouble)o;
-                return (DoubleUtil.ToInt64(this.Sum) == DoubleUtil.ToInt64(that.Sum));
+                return DoubleUtil.ToInt64(this.Sum) == DoubleUtil.ToInt64(that.Sum);
             }
 
             return false;
@@ -61,6 +61,5 @@ namespace OpenCensus.Stats.Aggregations
             h ^= (DoubleUtil.ToInt64(this.Sum) >> 32) ^ DoubleUtil.ToInt64(this.Sum);
             return (int)h;
         }
-
     }
 }

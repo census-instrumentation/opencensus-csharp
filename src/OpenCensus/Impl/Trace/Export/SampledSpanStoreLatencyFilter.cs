@@ -66,7 +66,7 @@ namespace OpenCensus.Trace.Export
 
             if (o is SampledSpanStoreLatencyFilter) {
                 SampledSpanStoreLatencyFilter that = (SampledSpanStoreLatencyFilter)o;
-                return (this.SpanName.Equals(that.SpanName))
+                return this.SpanName.Equals(that.SpanName)
                      && (this.LatencyLowerNs == that.LatencyLowerNs)
                      && (this.LatencyUpperNs == that.LatencyUpperNs)
                      && (this.MaxSpansToReturn == that.MaxSpansToReturn);

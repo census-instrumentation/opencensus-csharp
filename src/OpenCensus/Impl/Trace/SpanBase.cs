@@ -37,7 +37,6 @@ namespace OpenCensus.Trace
 
             Context = context;
             Options = options;
-   
         }
 
         public virtual void PutAttribute(String key, IAttributeValue value)

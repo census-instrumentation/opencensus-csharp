@@ -11,6 +11,5 @@ namespace OpenCensus.Trace
         long LowerLong { get; }
         void CopyBytesTo(byte[] dest, int destOffset);
         string ToLowerBase16();
-
     }
 }

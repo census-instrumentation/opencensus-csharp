@@ -25,9 +25,7 @@ namespace OpenCensus.Common
                 var nowSecTicks = nowNanoTicks / NANOS_PER_SECOND;
                 var excessNanos = nowNanoTicks - (nowSecTicks * NANOS_PER_SECOND);
                 return new Timestamp(nowSecTicks, (int)excessNanos);
-
             }
-
         }
 
         public long NowNanos
@@ -38,6 +36,5 @@ namespace OpenCensus.Common
                 return millis * NANOS_PER_MILLI;
             }
         }
-
     }
 }

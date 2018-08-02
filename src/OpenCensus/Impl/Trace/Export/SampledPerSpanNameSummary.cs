@@ -63,8 +63,8 @@ namespace OpenCensus.Trace.Export
             if (o is SampledPerSpanNameSummary)
             {
                 SampledPerSpanNameSummary that = (SampledPerSpanNameSummary)o;
-                return (this.NumbersOfLatencySampledSpans.SequenceEqual(that.NumbersOfLatencySampledSpans))
-                     && (this.NumbersOfErrorSampledSpans.SequenceEqual(that.NumbersOfErrorSampledSpans));
+                return this.NumbersOfLatencySampledSpans.SequenceEqual(that.NumbersOfLatencySampledSpans)
+                     && this.NumbersOfErrorSampledSpans.SequenceEqual(that.NumbersOfErrorSampledSpans);
             }
 
             return false;

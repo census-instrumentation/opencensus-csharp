@@ -47,7 +47,7 @@ namespace OpenCensus.Tags
             if (o is TagValue)
             {
                 TagValue that = (TagValue)o;
-                return (this.AsString.Equals(that.AsString));
+                return this.AsString.Equals(that.AsString);
             }
 
             return false;

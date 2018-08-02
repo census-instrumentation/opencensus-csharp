@@ -19,6 +19,5 @@ namespace OpenCensus.Trace.Propagation
         public abstract ISpanContext FromByteArray(byte[] bytes);
 
         public abstract byte[] ToByteArray(ISpanContext spanContext);
-
     }
 }

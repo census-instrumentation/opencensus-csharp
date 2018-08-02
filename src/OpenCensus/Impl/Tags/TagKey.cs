@@ -48,7 +48,7 @@ namespace OpenCensus.Tags
             if (o is TagKey)
             {
                 TagKey that = (TagKey)o;
-                return (this.Name.Equals(that.Name));
+                return this.Name.Equals(that.Name);
             }
 
             return false;

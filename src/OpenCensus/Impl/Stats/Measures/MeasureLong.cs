@@ -70,9 +70,9 @@ namespace OpenCensus.Stats.Measures
             if (o is MeasureLong)
             {
                 MeasureLong that = (MeasureLong)o;
-                return (this.Name.Equals(that.Name))
-                     && (this.Description.Equals(that.Description))
-                     && (this.Unit.Equals(that.Unit));
+                return this.Name.Equals(that.Name)
+                     && this.Description.Equals(that.Description)
+                     && this.Unit.Equals(that.Unit);
             }
 
             return false;
@@ -89,6 +89,5 @@ namespace OpenCensus.Stats.Measures
             h ^= this.Unit.GetHashCode();
             return h;
         }
-
     }
 }

@@ -9,13 +9,11 @@ namespace OpenCensus.Tags.Propagation
         public TagContextDeserializationException(String message) 
             : base(message)
         {
-
         }
 
         public TagContextDeserializationException(String message, Exception cause)
             : base(message, cause)
         {
-
         }
     }
 }

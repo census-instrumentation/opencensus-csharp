@@ -18,7 +18,6 @@ namespace OpenCensus.Stats
         public StatsComponent()
             :this(new SimpleEventQueue(), DateTimeOffsetClock.INSTANCE)
         {
-
         }
 
         public StatsComponent(IEventQueue queue, IClock clock)
@@ -63,6 +62,5 @@ namespace OpenCensus.Stats
                 }
             }
         }
-
     }
 }

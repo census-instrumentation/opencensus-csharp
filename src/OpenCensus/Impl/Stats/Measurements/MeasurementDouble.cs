@@ -50,7 +50,7 @@ namespace OpenCensus.Stats.Measurements
             if (o is MeasurementDouble)
             {
                 MeasurementDouble that = (MeasurementDouble)o;
-                return (this.Measure.Equals(that.Measure))
+                return this.Measure.Equals(that.Measure)
                      && (DoubleUtil.ToInt64(this.Value) == DoubleUtil.ToInt64(that.Value));
             }
 
@@ -66,6 +66,5 @@ namespace OpenCensus.Stats.Measurements
             h ^= (DoubleUtil.ToInt64(this.Value) >> 32) ^ DoubleUtil.ToInt64(this.Value);
             return (int)h;
         }
-
     }
 }

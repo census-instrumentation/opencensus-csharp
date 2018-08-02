@@ -50,7 +50,6 @@ namespace OpenCensus.Trace
             byte[] bytes = new byte[SIZE];
             Buffer.BlockCopy(src, srcOffset, bytes, 0, SIZE);
             return new TraceId(bytes);
-
         }
 
         public static ITraceId FromLowerBase16(string src)
@@ -62,7 +61,6 @@ namespace OpenCensus.Trace
 
             byte[] bytes = Arrays.StringToByteArray(src);
             return new TraceId(bytes);
-
         }
 
         public static ITraceId GenerateRandomId(IRandomGenerator random)
@@ -104,7 +102,7 @@ namespace OpenCensus.Trace
                 {
                     result <<= 8;
 #pragma warning disable CS0675 // Bitwise-or operator used on a sign-extended operand
-                    result |= (bytes[i] & 0xff);
+                    result |= bytes[i] & 0xff;
 #pragma warning restore CS0675 // Bitwise-or operator used on a sign-extended operand
                 }
  

@@ -128,7 +128,6 @@ namespace OpenCensus.Trace.Export
             }
 
             return spanImpl.ToSpanData();
-
         }
     }
 }

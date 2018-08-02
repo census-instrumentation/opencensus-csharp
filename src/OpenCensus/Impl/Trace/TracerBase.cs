@@ -46,7 +46,5 @@ namespace OpenCensus.Trace
         public abstract ISpanBuilder SpanBuilderWithExplicitParent(string spanName, ISpan parent = null);
 
         public abstract ISpanBuilder SpanBuilderWithRemoteParent(string spanName, ISpanContext remoteParentSpanContext = null);
-
     }
-
 }

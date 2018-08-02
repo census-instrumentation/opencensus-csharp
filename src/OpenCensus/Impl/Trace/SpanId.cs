@@ -61,7 +61,6 @@ namespace OpenCensus.Trace
 
             byte[] bytes = Arrays.StringToByteArray(src);
             return new SpanId(bytes);
-
         }
 
         public static ISpanId GenerateRandomId(IRandomGenerator random)
@@ -115,7 +114,6 @@ namespace OpenCensus.Trace
             return "SpanId{"
                 + "bytes=" + ToLowerBase16()
                 + "}";
-
         }
 
         public int CompareTo(ISpanId other)

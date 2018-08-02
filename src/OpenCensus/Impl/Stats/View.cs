@@ -45,7 +45,6 @@ namespace OpenCensus.Stats
             }
 
             this.Columns = columns;
-
         }
 
         public static IView Create(IViewName name, String description, IMeasure measure,IAggregation aggregation,IList<ITagKey> columns)
@@ -85,11 +84,11 @@ namespace OpenCensus.Stats
             if (o is View)
             {
                 View that = (View)o;
-                return (this.Name.Equals(that.Name))
-                     && (this.Description.Equals(that.Description))
-                     && (this.Measure.Equals(that.Measure))
-                     && (this.Aggregation.Equals(that.Aggregation))
-                     && (this.Columns.SequenceEqual(that.Columns));
+                return this.Name.Equals(that.Name)
+                     && this.Description.Equals(that.Description)
+                     && this.Measure.Equals(that.Measure)
+                     && this.Aggregation.Equals(that.Aggregation)
+                     && this.Columns.SequenceEqual(that.Columns);
             }
 
             return false;
@@ -111,6 +110,5 @@ namespace OpenCensus.Stats
             h *= 1000003;
             return h;
         }
-
     }
 }

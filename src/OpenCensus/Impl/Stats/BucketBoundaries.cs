@@ -60,7 +60,7 @@ namespace OpenCensus.Stats
             if (o is BucketBoundaries)
             {
                 BucketBoundaries that = (BucketBoundaries)o;
-                return (this.Boundaries.SequenceEqual(that.Boundaries));
+                return this.Boundaries.SequenceEqual(that.Boundaries);
             }
 
             return false;

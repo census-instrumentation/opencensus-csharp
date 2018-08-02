@@ -165,15 +165,15 @@ namespace OpenCensus.Trace.Export
             if (o is SpanData)
             {
                 SpanData that = (SpanData)o;
-                return (this.Context.Equals(that.Context))
+                return this.Context.Equals(that.Context)
                      && ((this.ParentSpanId == null) ? (that.ParentSpanId == null) : this.ParentSpanId.Equals(that.ParentSpanId))
-                     && (this.HasRemoteParent.Equals(that.HasRemoteParent))
-                     && (this.Name.Equals(that.Name))
-                     && (this.StartTimestamp.Equals(that.StartTimestamp))
-                     && (this.Attributes.Equals(that.Attributes))
-                     && (this.Annotations.Equals(that.Annotations))
-                     && (this.MessageEvents.Equals(that.MessageEvents))
-                     && (this.Links.Equals(that.Links))
+                     && this.HasRemoteParent.Equals(that.HasRemoteParent)
+                     && this.Name.Equals(that.Name)
+                     && this.StartTimestamp.Equals(that.StartTimestamp)
+                     && this.Attributes.Equals(that.Attributes)
+                     && this.Annotations.Equals(that.Annotations)
+                     && this.MessageEvents.Equals(that.MessageEvents)
+                     && this.Links.Equals(that.Links)
                      && ((this.ChildSpanCount == null) ? (that.ChildSpanCount == null) : this.ChildSpanCount.Equals(that.ChildSpanCount))
                      && ((this.Status == null) ? (that.Status == null) : this.Status.Equals(that.Status))
                      && ((this.EndTimestamp == null) ? (that.EndTimestamp == null) : this.EndTimestamp.Equals(that.EndTimestamp));
@@ -211,6 +211,5 @@ namespace OpenCensus.Trace.Export
             h ^= (EndTimestamp == null) ? 0 : this.EndTimestamp.GetHashCode();
             return h;
         }
-
     }
 }

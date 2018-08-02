@@ -32,7 +32,6 @@ namespace OpenCensus.Tags
                     return currentState;
                 }
             }
-
         }
 
         // Sets current state to the given state.
@@ -49,5 +48,4 @@ namespace OpenCensus.Tags
             }
         }
     }
-
 }

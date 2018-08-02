@@ -48,7 +48,7 @@ namespace OpenCensus.Stats.Aggregations
             if (o is SumDataLong)
             {
                 SumDataLong that = (SumDataLong)o;
-                return (this.Sum == that.Sum);
+                return this.Sum == that.Sum;
             }
 
             return false;
@@ -61,6 +61,5 @@ namespace OpenCensus.Stats.Aggregations
             h ^= (this.Sum >> 32) ^ this.Sum;
             return (int)h;
         }
-
     }
 }

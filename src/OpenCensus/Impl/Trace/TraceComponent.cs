@@ -13,7 +13,6 @@ namespace OpenCensus.Trace
         public TraceComponent()
             : this(DateTimeOffsetClock.INSTANCE, new RandomGenerator(), new SimpleEventQueue())
         {
-
         }
 
         public TraceComponent(IClock clock, IRandomGenerator randomHandler, IEventQueue eventQueue)

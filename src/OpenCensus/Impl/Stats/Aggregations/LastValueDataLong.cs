@@ -37,7 +37,7 @@ namespace OpenCensus.Stats.Aggregations
             if (o is LastValueDataLong)
             {
                 LastValueDataLong that = (LastValueDataLong)o;
-                return (this.LastValue == that.LastValue);
+                return this.LastValue == that.LastValue;
             }
 
             return false;

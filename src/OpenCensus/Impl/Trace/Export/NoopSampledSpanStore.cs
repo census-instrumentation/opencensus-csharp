@@ -36,7 +36,6 @@ namespace OpenCensus.Trace.Export
             {
                 return new HashSet<string>(registeredSpanNames);
             }
-       
         }
 
         public override void ConsiderForSampling(ISpan span)
@@ -67,7 +66,6 @@ namespace OpenCensus.Trace.Export
                     registeredSpanNames.Add(name);
                 }
             }
-
         }
 
         public override void UnregisterSpanNamesForCollection(IList<string> spanNames)

@@ -30,7 +30,6 @@ namespace OpenCensus.Trace.Propagation
             {
                 throw new ArgumentNullException(nameof(setter));
             }
-    
         }
 
         public override ISpanContext Extract<C>(C carrier, IGetter<C> getter)

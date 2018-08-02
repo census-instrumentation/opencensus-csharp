@@ -55,7 +55,7 @@ namespace OpenCensus.Stats
             if (o is ViewName)
             {
                 ViewName that = (ViewName)o;
-                return (this.AsString.Equals(that.AsString));
+                return this.AsString.Equals(that.AsString);
             }
 
             return false;

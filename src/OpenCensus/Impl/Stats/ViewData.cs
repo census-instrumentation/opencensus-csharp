@@ -83,10 +83,10 @@ namespace OpenCensus.Stats
             if (o is ViewData)
             {
                 ViewData that = (ViewData)o;
-                return (this.View.Equals(that.View))
-                     && (this.AggregationMap.SequenceEqual(that.AggregationMap))
-                     && (this.Start.Equals(that.Start))
-                     && (this.End.Equals(that.End));
+                return this.View.Equals(that.View)
+                     && this.AggregationMap.SequenceEqual(that.AggregationMap)
+                     && this.Start.Equals(that.Start)
+                     && this.End.Equals(that.End);
             }
 
             return false;
@@ -198,6 +198,5 @@ namespace OpenCensus.Stats
                 + " AggregationData: "
                 + aggregationData;
         }
-
     }
 }

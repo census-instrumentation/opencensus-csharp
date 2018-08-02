@@ -21,6 +21,5 @@ namespace OpenCensus.Trace.Propagation
                 return Propagation.TextFormatBase.NoopTextFormat;
             }
         }
-
     }
 }

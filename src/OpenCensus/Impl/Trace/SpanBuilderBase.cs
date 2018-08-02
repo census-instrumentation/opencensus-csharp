@@ -27,5 +27,4 @@ namespace OpenCensus.Trace
         //    return CurrentSpanUtils.withSpan(span, /* endSpan= */ true, callable).call();
         //}
     }
-
 }

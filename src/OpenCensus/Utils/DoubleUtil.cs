@@ -38,7 +38,6 @@ namespace OpenCensus.Utils
             }
 
             return Convert.ToInt64(arg);
-
         }
     }
 }

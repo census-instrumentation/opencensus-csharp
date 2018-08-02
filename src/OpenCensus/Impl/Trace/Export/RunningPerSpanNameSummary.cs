@@ -40,7 +40,7 @@ namespace OpenCensus.Trace.Export
             if (o is RunningPerSpanNameSummary)
             {
                 RunningPerSpanNameSummary that = (RunningPerSpanNameSummary)o;
-                return (this.NumRunningSpans == that.NumRunningSpans);
+                return this.NumRunningSpans == that.NumRunningSpans;
             }
 
             return false;
@@ -53,6 +53,5 @@ namespace OpenCensus.Trace.Export
             h ^= this.NumRunningSpans;
             return h;
         }
-
     }
 }

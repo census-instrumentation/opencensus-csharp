@@ -58,7 +58,7 @@ namespace OpenCensus.Trace.Export
             if (o is SampledSpanStoreErrorFilter)
             {
                 SampledSpanStoreErrorFilter that = (SampledSpanStoreErrorFilter)o;
-                return (this.SpanName.Equals(that.SpanName))
+                return this.SpanName.Equals(that.SpanName)
                      && (this.CanonicalCode == that.CanonicalCode)
                      && (this.MaxSpansToReturn == that.MaxSpansToReturn);
             }

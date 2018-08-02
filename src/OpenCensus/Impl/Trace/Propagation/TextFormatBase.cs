@@ -22,6 +22,5 @@ namespace OpenCensus.Trace.Propagation
         public abstract ISpanContext Extract<C>(C carrier, IGetter<C> getter);
 
         public abstract void Inject<C>(ISpanContext spanContext, C carrier, ISetter<C> setter);
-
     }
 }

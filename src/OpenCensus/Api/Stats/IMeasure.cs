@@ -14,6 +14,5 @@ namespace OpenCensus.Stats
         string Name { get; }
         string Description { get; }
         string Unit { get; }
-
     }
 }

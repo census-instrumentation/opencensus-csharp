@@ -17,6 +17,5 @@ namespace OpenCensus.Trace.Config
 
         public abstract ITraceParams ActiveTraceParams { get; }
         public abstract void UpdateActiveTraceParams(ITraceParams traceParams);
-     
     }
 }

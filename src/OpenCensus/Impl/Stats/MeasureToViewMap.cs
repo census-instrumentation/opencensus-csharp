@@ -160,7 +160,6 @@ namespace OpenCensus.Stats
                             {
                                 view.Record(tags, arg.Value, timestamp);
                                 return null;
-
                             },
                             (arg) =>
                             {
@@ -200,6 +199,5 @@ namespace OpenCensus.Stats
                 }
             }
         }
-
     }
 }

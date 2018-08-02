@@ -96,6 +96,5 @@ namespace OpenCensus.Stats
                 statsManager.measureToViewMap.Record(tags, stats, statsManager.clock.Now);
             }
         }
-
 }
 }

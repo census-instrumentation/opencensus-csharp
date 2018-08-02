@@ -22,7 +22,6 @@ namespace OpenCensus.Stats
             }
             set
             {
-        
             }
         }
 
