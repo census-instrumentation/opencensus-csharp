@@ -46,25 +46,15 @@ namespace OpenCensus.Trace.Export
 
         internal SampledPerSpanNameSummary(IDictionary<ISampledLatencyBucketBoundaries, int> numbersOfLatencySampledSpans, IDictionary<CanonicalCode, int> numbersOfErrorSampledSpans)
         {
-            if (numbersOfLatencySampledSpans == null)
-            {
-                throw new ArgumentNullException(nameof(numbersOfLatencySampledSpans));
-            }
-
-            NumbersOfLatencySampledSpans = numbersOfLatencySampledSpans;
-            if (numbersOfErrorSampledSpans == null)
-            {
-                throw new ArgumentNullException(nameof(numbersOfErrorSampledSpans));
-            }
-
-            this.NumbersOfErrorSampledSpans = numbersOfErrorSampledSpans;
+            this.NumbersOfLatencySampledSpans = numbersOfLatencySampledSpans ?? throw new ArgumentNullException(nameof(numbersOfLatencySampledSpans));
+            this.NumbersOfErrorSampledSpans = numbersOfErrorSampledSpans ?? throw new ArgumentNullException(nameof(numbersOfErrorSampledSpans));
         }
 
         public override string ToString()
         {
             return "SampledPerSpanNameSummary{"
-                + "numbersOfLatencySampledSpans=" + NumbersOfLatencySampledSpans + ", "
-                + "numbersOfErrorSampledSpans=" + NumbersOfErrorSampledSpans
+                + "numbersOfLatencySampledSpans=" + this.NumbersOfLatencySampledSpans + ", "
+                + "numbersOfErrorSampledSpans=" + this.NumbersOfErrorSampledSpans
                 + "}";
         }
 
@@ -75,9 +65,8 @@ namespace OpenCensus.Trace.Export
                 return true;
             }
 
-            if (o is SampledPerSpanNameSummary)
+            if (o is SampledPerSpanNameSummary that)
             {
-                SampledPerSpanNameSummary that = (SampledPerSpanNameSummary)o;
                 return this.NumbersOfLatencySampledSpans.SequenceEqual(that.NumbersOfLatencySampledSpans)
                      && this.NumbersOfErrorSampledSpans.SequenceEqual(that.NumbersOfErrorSampledSpans);
             }

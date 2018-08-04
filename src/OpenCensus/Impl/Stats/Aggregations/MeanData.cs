@@ -58,10 +58,10 @@ namespace OpenCensus.Stats.Aggregations
         public override string ToString()
         {
             return "MeanData{"
-                + "mean=" + Mean + ", "
-                + "min=" + Min + ", "
-                + "max=" + Max + ", "
-                + "count=" + Count
+                + "mean=" + this.Mean + ", "
+                + "min=" + this.Min + ", "
+                + "max=" + this.Max + ", "
+                + "count=" + this.Count
                 + "}";
         }
 
@@ -72,9 +72,8 @@ namespace OpenCensus.Stats.Aggregations
                 return true;
             }
 
-            if (o is MeanData)
+            if (o is MeanData that)
             {
-                MeanData that = (MeanData)o;
                 return (DoubleUtil.ToInt64(this.Mean) == DoubleUtil.ToInt64(that.Mean))
                         && (this.Count == that.Count)
                         && (DoubleUtil.ToInt64(this.Min) == DoubleUtil.ToInt64(that.Min))

@@ -28,10 +28,10 @@ namespace OpenCensus.Stats
         {
             get
             {
-                lock (lck)
+                lock (this.lck)
                 {
-                    isRead = true;
-                    return Internal;
+                    this.isRead = true;
+                    return this.Internal;
                 }
             }
 
@@ -44,7 +44,7 @@ namespace OpenCensus.Stats
         {
             get
             {
-                return currentState;
+                return this.currentState;
             }
         }
 
@@ -52,18 +52,18 @@ namespace OpenCensus.Stats
         // otherwise.
         internal bool Set(StatsCollectionState state)
         {
-            if (isRead)
+            if (this.isRead)
             {
                 throw new ArgumentException("State was already read, cannot set state.");
             }
 
-            if (state == currentState)
+            if (state == this.currentState)
             {
                 return false;
             }
             else
             {
-                currentState = state;
+                this.currentState = state;
                 return true;
             }
         }

@@ -20,8 +20,7 @@ namespace OpenCensus.Tags
 
     public sealed class NoopTagsComponent : TagsComponentBase
     {
-        //private volatile bool isRead;
-
+        // private volatile bool isRead;
         public override ITagger Tagger
         {
             get
@@ -42,7 +41,7 @@ namespace OpenCensus.Tags
         {
             get
             {
-                //isRead = true;
+                // isRead = true;
                 return TaggingState.DISABLED;
             }
         }

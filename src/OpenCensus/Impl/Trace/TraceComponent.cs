@@ -32,36 +32,37 @@ namespace OpenCensus.Trace
 
         public TraceComponent(IClock clock, IRandomGenerator randomHandler, IEventQueue eventQueue)
         {
-            Clock = clock;
-            TraceConfig = new Config.TraceConfig();
+            this.Clock = clock;
+            this.TraceConfig = new Config.TraceConfig();
+
             // TODO(bdrutu): Add a config/argument for supportInProcessStores.
             if (eventQueue is SimpleEventQueue)
             {
-                ExportComponent = Export.ExportComponent.CreateWithoutInProcessStores(eventQueue);
+                this.ExportComponent = Export.ExportComponent.CreateWithoutInProcessStores(eventQueue);
             }
 else
             {
-                ExportComponent = Export.ExportComponent.CreateWithInProcessStores(eventQueue);
+                this.ExportComponent = Export.ExportComponent.CreateWithInProcessStores(eventQueue);
             }
 
-            PropagationComponent = new PropagationComponent();
+            this.PropagationComponent = new PropagationComponent();
             IStartEndHandler startEndHandler =
                 new StartEndHandler(
-                    ExportComponent.SpanExporter,
-                    ExportComponent.RunningSpanStore,
-                    ExportComponent.SampledSpanStore,
+                    this.ExportComponent.SpanExporter,
+                    this.ExportComponent.RunningSpanStore,
+                    this.ExportComponent.SampledSpanStore,
                     eventQueue);
-            Tracer = new Tracer(randomHandler, startEndHandler, clock, TraceConfig);
+            this.Tracer = new Tracer(randomHandler, startEndHandler, clock, this.TraceConfig);
         }
 
         public override ITracer Tracer { get; }
 
         public override IPropagationComponent PropagationComponent { get; }
 
-        public override  IClock Clock { get; }
+        public override IClock Clock { get; }
 
-        public override  IExportComponent ExportComponent { get; }
+        public override IExportComponent ExportComponent { get; }
 
-        public override  ITraceConfig TraceConfig { get; }
+        public override ITraceConfig TraceConfig { get; }
     }
 }

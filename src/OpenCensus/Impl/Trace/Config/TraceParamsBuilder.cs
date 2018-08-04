@@ -37,12 +37,7 @@ namespace OpenCensus.Trace.Config
 
         public TraceParamsBuilder SetSampler(ISampler sampler)
         {
-            if (sampler == null)
-            {
-                throw new ArgumentNullException("Null sampler");
-            }
-
-            this.sampler = sampler;
+            this.sampler = sampler ?? throw new ArgumentNullException("Null sampler");
             return this;
         }
 

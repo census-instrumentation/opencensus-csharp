@@ -24,11 +24,13 @@ namespace OpenCensus.Trace.Internal
 
         private readonly int seed;
         private readonly bool sameSeed;
-        [ThreadStatic] private static Random local;
+
+        [ThreadStatic]
+        private static Random local;
 
         internal RandomGenerator()
         {
-            sameSeed = false;
+            this.sameSeed = false;
         }
 
         /// <summary>
@@ -38,7 +40,7 @@ namespace OpenCensus.Trace.Internal
         /// </summary>
         internal RandomGenerator(int seed)
         {
-            sameSeed = true;
+            this.sameSeed = true;
             this.seed = seed;
         }
 
@@ -46,7 +48,7 @@ namespace OpenCensus.Trace.Internal
         {
             if (local == null)
             {
-                local = new Random(sameSeed ? seed : global.Next());
+                local = new Random(this.sameSeed ? this.seed : global.Next());
             }
 
             local.NextBytes(bytes);

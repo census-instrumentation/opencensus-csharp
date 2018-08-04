@@ -34,11 +34,11 @@ namespace OpenCensus.Trace
         {
             if (isSampled)
             {
-                options = (byte)(options | TraceOptions.IS_SAMPLED);
+                this.options = (byte)(this.options | TraceOptions.IS_SAMPLED);
             }
             else
             {
-                options = (byte)(options & ~TraceOptions.IS_SAMPLED);
+                this.options = (byte)(this.options & ~TraceOptions.IS_SAMPLED);
             }
 
             return this;
@@ -46,7 +46,7 @@ namespace OpenCensus.Trace
 
         public TraceOptions Build()
         {
-            return new TraceOptions(options);
+            return new TraceOptions(this.options);
         }
     }
 }

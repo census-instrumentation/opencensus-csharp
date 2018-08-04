@@ -25,14 +25,9 @@ namespace OpenCensus.Stats.Measurements
 
         public long Value { get; }
 
-        MeasurementLong(IMeasureLong measure, long value)
+        private MeasurementLong(IMeasureLong measure, long value)
         {
-            if (measure == null)
-            {
-                throw new ArgumentNullException(nameof(measure));
-            }
-
-            this.Measure = measure;
+            this.Measure = measure ?? throw new ArgumentNullException(nameof(measure));
             this.Value = value;
         }
 
@@ -49,8 +44,8 @@ namespace OpenCensus.Stats.Measurements
         public override string ToString()
         {
             return "MeasurementLong{"
-                + "measure=" + Measure + ", "
-                + "value=" + Value
+                + "measure=" + this.Measure + ", "
+                + "value=" + this.Value
                 + "}";
         }
 
@@ -61,9 +56,8 @@ namespace OpenCensus.Stats.Measurements
                 return true;
             }
 
-            if (o is MeasurementLong)
+            if (o is MeasurementLong that)
             {
-                MeasurementLong that = (MeasurementLong)o;
                 return this.Measure.Equals(that.Measure)
                      && (this.Value == that.Value);
             }

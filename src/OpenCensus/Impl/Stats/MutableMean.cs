@@ -28,7 +28,7 @@ namespace OpenCensus.Stats
         {
             get
             {
-                return Count == 0 ? 0 : Sum / Count;
+                return this.Count == 0 ? 0 : this.Sum / this.Count;
             }
         }
 
@@ -36,7 +36,9 @@ namespace OpenCensus.Stats
 
         internal double Max { get; set; } = double.MinValue;
 
-        internal MutableMean() { }
+        internal MutableMean()
+        {
+        }
 
         internal static MutableMean Create()
         {
@@ -45,16 +47,16 @@ namespace OpenCensus.Stats
 
         internal override void Add(double value)
         {
-            Count++;
-            Sum += value;
-            if (value < Min)
+            this.Count++;
+            this.Sum += value;
+            if (value < this.Min)
             {
-                Min = value;
+                this.Min = value;
             }
 
-            if (value > Max)
+            if (value > this.Max)
             {
-                Max = value;
+                this.Max = value;
             }
         }
 
@@ -68,7 +70,7 @@ namespace OpenCensus.Stats
 
             var result = fraction * mutable.Count;
             long rounded = (long)Math.Round(result);
-            Count += rounded;
+            this.Count += rounded;
 
             this.Sum += mutable.Sum * fraction;
 

@@ -29,7 +29,7 @@ namespace OpenCensus.Utils
         {
             get
             {
-                return @delegate.Count;
+                return this.@delegate.Count;
             }
         }
 
@@ -41,17 +41,17 @@ namespace OpenCensus.Utils
             }
 
             this.maxSize = maxSize;
-            @delegate = new Queue<T>(maxSize);
+            this.@delegate = new Queue<T>(maxSize);
         }
 
         public int RemainingCapacity()
         {
-            return maxSize - @delegate.Count;
+            return this.maxSize - this.@delegate.Count;
         }
 
         public bool Offer(T e)
         {
-            return Add(e);
+            return this.Add(e);
         }
 
         public bool Add(T e)
@@ -61,17 +61,17 @@ namespace OpenCensus.Utils
                 throw new ArgumentNullException();
             }
 
-            if (maxSize == 0)
+            if (this.maxSize == 0)
             {
                 return true;
             }
 
-            if (@delegate.Count == maxSize)
+            if (this.@delegate.Count == this.maxSize)
             {
-                @delegate.Dequeue();
+                this.@delegate.Dequeue();
             }
 
-            @delegate.Enqueue(e);
+            this.@delegate.Enqueue(e);
             return true;
         }
 
@@ -79,7 +79,7 @@ namespace OpenCensus.Utils
         {
             foreach (var e in collection)
             {
-                Add(e);
+                this.Add(e);
             }
 
             return true;
@@ -92,22 +92,22 @@ namespace OpenCensus.Utils
                 throw new ArgumentNullException();
             }
 
-            return @delegate.Contains(e);
+            return this.@delegate.Contains(e);
         }
 
         public T[] ToArray()
         {
-            return @delegate.ToArray();
+            return this.@delegate.ToArray();
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            return @delegate.GetEnumerator();
+            return this.@delegate.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return @delegate.GetEnumerator();
+            return this.@delegate.GetEnumerator();
         }
     }
 }

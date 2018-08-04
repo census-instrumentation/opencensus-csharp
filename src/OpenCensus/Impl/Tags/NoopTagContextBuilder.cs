@@ -24,7 +24,9 @@ namespace OpenCensus.Tags
     {
         internal static readonly ITagContextBuilder INSTANCE = new NoopTagContextBuilder();
 
-        private NoopTagContextBuilder() { }
+        private NoopTagContextBuilder()
+        {
+        }
 
         public override ITagContextBuilder Put(ITagKey key, ITagValue value)
         {

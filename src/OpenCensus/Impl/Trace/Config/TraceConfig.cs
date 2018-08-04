@@ -20,7 +20,7 @@ namespace OpenCensus.Trace.Config
     {
         public TraceConfig()
         {
-            activeTraceParams = TraceParams.DEFAULT;
+            this.activeTraceParams = TraceParams.DEFAULT;
         }
 
         private ITraceParams activeTraceParams;
@@ -29,13 +29,13 @@ namespace OpenCensus.Trace.Config
         {
             get
             {
-                return activeTraceParams;
+                return this.activeTraceParams;
             }
         }
 
         public override void UpdateActiveTraceParams(ITraceParams traceParams)
         {
-            activeTraceParams = traceParams;
+            this.activeTraceParams = traceParams;
         }
     }
 }

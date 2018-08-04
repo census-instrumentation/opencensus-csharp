@@ -26,15 +26,18 @@ namespace OpenCensus.Trace.Propagation
         public const string X_B3_PARENT_SPAN_ID = "X-B3-ParentSpanId";
         public const string X_B3_SAMPLED = "X-B3-Sampled";
         public const string X_B3_FLAGS = "X-B3-Flags";
-        private static readonly List<string> FIELDS = new List<string>() {X_B3_TRACE_ID, X_B3_SPAN_ID, X_B3_PARENT_SPAN_ID, X_B3_SAMPLED, X_B3_FLAGS};
 
         // Used as the upper TraceId.SIZE hex characters of the traceID. B3-propagation used to send
         // TraceId.SIZE hex characters (8-bytes traceId) in the past.
         internal const string UPPER_TRACE_ID = "0000000000000000";
+
         // Sampled value via the X_B3_SAMPLED header.
         internal const string SAMPLED_VALUE = "1";
+
         // "Debug" sampled value.
         internal const string FLAGS_VALUE = "1";
+
+        private static readonly List<string> FIELDS = new List<string>() { X_B3_TRACE_ID, X_B3_SPAN_ID, X_B3_PARENT_SPAN_ID, X_B3_SAMPLED, X_B3_FLAGS };
 
         public override IList<string> Fields
         {

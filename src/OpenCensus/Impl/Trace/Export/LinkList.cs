@@ -36,12 +36,7 @@ namespace OpenCensus.Trace.Export
 
         internal LinkList(IList<ILink> links, int droppedLinksCount)
         {
-            if (links == null)
-            {
-                throw new ArgumentNullException("Null links");
-            }
-
-            this.Links = links;
+            this.Links = links ?? throw new ArgumentNullException("Null links");
             this.DroppedLinksCount = droppedLinksCount;
         }
 
@@ -52,8 +47,8 @@ namespace OpenCensus.Trace.Export
         public override string ToString()
         {
             return "Links{"
-                + "links=" + Links + ", "
-                + "droppedLinksCount=" + DroppedLinksCount
+                + "links=" + this.Links + ", "
+                + "droppedLinksCount=" + this.DroppedLinksCount
                 + "}";
         }
 
@@ -64,9 +59,8 @@ namespace OpenCensus.Trace.Export
                 return true;
             }
 
-            if (o is LinkList)
+            if (o is LinkList that)
             {
-                LinkList that = (LinkList)o;
                 return this.Links.SequenceEqual(that.Links)
                      && (this.DroppedLinksCount == that.DroppedLinksCount);
             }

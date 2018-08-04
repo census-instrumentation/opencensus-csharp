@@ -20,7 +20,6 @@ namespace OpenCensus.Tags
 
     public interface ITagsComponent
     {
-
         ITagger Tagger { get; }
 
         ITagPropagationComponent TagPropagationComponent { get; }

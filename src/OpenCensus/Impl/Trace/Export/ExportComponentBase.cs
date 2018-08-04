@@ -18,7 +18,7 @@ namespace OpenCensus.Trace.Export
 {
     public abstract class ExportComponentBase : IExportComponent
     {
-        public  static IExportComponent NewNoopExportComponent
+        public static IExportComponent NewNoopExportComponent
         {
             get
             {

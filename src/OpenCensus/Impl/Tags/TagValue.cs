@@ -27,12 +27,7 @@ namespace OpenCensus.Tags
 
         internal TagValue(string asString)
         {
-            if (asString == null)
-            {
-                throw new ArgumentNullException(nameof(asString));
-            }
-
-            this.AsString = asString;
+            this.AsString = asString ?? throw new ArgumentNullException(nameof(asString));
         }
 
         public static ITagValue Create(string value)
@@ -48,7 +43,7 @@ namespace OpenCensus.Tags
         public override string ToString()
         {
             return "TagValue{"
-                + "asString=" + AsString
+                + "asString=" + this.AsString
                 + "}";
         }
 
@@ -59,9 +54,8 @@ namespace OpenCensus.Tags
                 return true;
             }
 
-            if (o is TagValue)
+            if (o is TagValue that)
             {
-                TagValue that = (TagValue)o;
                 return this.AsString.Equals(that.AsString);
             }
 

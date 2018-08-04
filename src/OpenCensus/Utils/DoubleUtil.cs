@@ -22,7 +22,6 @@ namespace OpenCensus.Utils
     {
         public static long ToInt64(double arg)
         {
-
             if (double.IsPositiveInfinity(arg))
             {
                 return 0x7ff0000000000000L;

@@ -20,7 +20,6 @@ namespace OpenCensus.Tags
 
     public sealed class CurrentTaggingState
     {
-
         private TaggingState currentState = TaggingState.ENABLED;
         private readonly object lck = new object();
         private bool isRead;
@@ -29,10 +28,10 @@ namespace OpenCensus.Tags
         {
             get
             {
-                lock (lck)
+                lock (this.lck)
                 {
-                    isRead = true;
-                    return Internal;
+                    this.isRead = true;
+                    return this.Internal;
                 }
             }
         }
@@ -41,9 +40,9 @@ namespace OpenCensus.Tags
         {
             get
             {
-                lock (lck)
+                lock (this.lck)
                 {
-                    return currentState;
+                    return this.currentState;
                 }
             }
         }
@@ -51,14 +50,14 @@ namespace OpenCensus.Tags
         // Sets current state to the given state.
         internal void Set(TaggingState state)
         {
-            lock (lck)
+            lock (this.lck)
             {
-                if (isRead)
+                if (this.isRead)
                 {
                     throw new InvalidOperationException("State was already read, cannot set state.");
                 }
 
-                currentState = state;
+                this.currentState = state;
             }
         }
     }

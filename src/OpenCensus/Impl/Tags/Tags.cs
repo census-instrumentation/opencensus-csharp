@@ -22,6 +22,10 @@ namespace OpenCensus.Tags
     {
         private static readonly object lck = new object();
 
+        private readonly ITagsComponent tagsComponent = new TagsComponent();
+
+        private static Tags tags;
+
         internal static void Initialize(bool enabled)
         {
             if (tags == null)
@@ -33,8 +37,6 @@ namespace OpenCensus.Tags
             }
         }
 
-        private static Tags tags;
-
         internal Tags()
             : this(false)
         {
@@ -44,15 +46,13 @@ namespace OpenCensus.Tags
         {
             if (enabled)
             {
-                tagsComponent = new TagsComponent();
+                this.tagsComponent = new TagsComponent();
             }
             else
             {
-                tagsComponent = NoopTags.NewNoopTagsComponent();
+                this.tagsComponent = NoopTags.NewNoopTagsComponent();
             }
         }
-
-        private readonly ITagsComponent tagsComponent = new TagsComponent();
 
         public static ITagger Tagger
         {

@@ -27,6 +27,39 @@ namespace OpenCensus.Stats
         private const long MILLIS_PER_SECOND = 1000L;
         private const long NANOS_PER_MILLI = 1000 * 1000;
 
+        private static Func<ISum, MutableAggregation> CreateMutableSum { get; } = (s) => { return MutableSum.Create(); };
+
+        private static Func<ICount, MutableAggregation> CreateMutableCount { get; } = (s) => { return MutableCount.Create(); };
+
+        private static Func<IMean, MutableAggregation> CreateMutableMean { get; } = (s) => { return MutableMean.Create(); };
+
+        private static Func<ILastValue, MutableAggregation> CreateMutableLastValue { get; } = (s) => { return MutableLastValue.Create(); };
+
+        private static Func<IDistribution, MutableAggregation> CreateMutableDistribution { get; } = (s) => { return MutableDistribution.Create(s.BucketBoundaries); };
+
+        private static Func<IAggregation, MutableAggregation> ThrowArgumentException { get; } = (s) => { throw new ArgumentException(); };
+
+        private static Func<MutableCount, IAggregationData> CreateCountData { get; } = (s) => { return CountData.Create(s.Count); };
+
+        private static Func<MutableMean, IAggregationData> CreateMeanData { get; } = (s) => { return MeanData.Create(s.Mean, s.Count, s.Min, s.Max); };
+
+        private static Func<MutableDistribution, IAggregationData> CreateDistributionData { get; } = (s) =>
+        {
+            List<long> boxedBucketCounts = new List<long>();
+            foreach (long bucketCount in s.BucketCounts)
+            {
+                boxedBucketCounts.Add(bucketCount);
+            }
+
+            return DistributionData.Create(
+                s.Mean,
+                s.Count,
+                s.Min,
+                s.Max,
+                s.SumOfSquaredDeviations,
+                boxedBucketCounts);
+        };
+
         internal static readonly ITagValue UNKNOWN_TAG_VALUE = null;
 
         internal static readonly ITimestamp ZERO_TIMESTAMP = Timestamp.Create(0, 0);
@@ -50,7 +83,7 @@ namespace OpenCensus.Stats
         internal void Record(ITagContext tags, long value, ITimestamp timestamp)
         {
             // TODO(songya): shall we check for precision loss here?
-            Record(tags, (double)value, timestamp);
+            this.Record(tags, (double)value, timestamp);
         }
 
         /** Convert this {@link MutableViewData} to {@link ViewData}. */
@@ -69,7 +102,7 @@ namespace OpenCensus.Stats
              {
                 return ((TagContext)ctx).Tags;
             }
-else
+            else
             {
                 IDictionary<ITagKey, ITagValue> tags = new Dictionary<ITagKey, ITagValue>();
                 foreach (var tag in ctx)
@@ -84,6 +117,7 @@ else
         internal static IList<ITagValue> GetTagValues(IDictionary<ITagKey, ITagValue> tags, IList<ITagKey> columns)
         {
             IList<ITagValue> tagValues = new List<ITagValue>(columns.Count);
+
             // Record all the measures in a "Greedy" way.
             // Every view aggregates every measure. This is similar to doing a GROUPBY view’s keys.
             for (int i = 0; i < columns.Count; ++i)
@@ -132,7 +166,6 @@ else
                         },
                         (mlong) =>
                         {
-
                             return SumDataLong.Create((long)Math.Round(msum.Sum));
                         },
                         (invalid) =>
@@ -177,38 +210,5 @@ else
 
             return map;
         }
-
-        private static Func<ISum, MutableAggregation> CreateMutableSum { get; } = (s) => { return MutableSum.Create(); };
-
-        private static Func<ICount, MutableAggregation> CreateMutableCount { get; } = (s) => { return MutableCount.Create(); };
-
-        private static Func<IMean, MutableAggregation> CreateMutableMean { get; } = (s) => { return MutableMean.Create(); };
-
-        private static Func<ILastValue, MutableAggregation> CreateMutableLastValue { get; } = (s) => { return MutableLastValue.Create(); };
-
-        private static Func<IDistribution, MutableAggregation> CreateMutableDistribution { get; } = (s) => { return MutableDistribution.Create(s.BucketBoundaries); };
-
-        private static Func<IAggregation, MutableAggregation> ThrowArgumentException { get; } = (s) => { throw new ArgumentException(); };
-
-        private static Func<MutableCount, IAggregationData> CreateCountData { get; } = (s) => { return CountData.Create(s.Count); };
-
-        private static Func<MutableMean, IAggregationData> CreateMeanData { get; } = (s) => { return MeanData.Create(s.Mean, s.Count, s.Min, s.Max); };
-
-        private static Func<MutableDistribution, IAggregationData> CreateDistributionData { get; } = (s) =>
-            {
-                List<long> boxedBucketCounts = new List<long>();
-                foreach (long bucketCount in s.BucketCounts)
-                {
-                    boxedBucketCounts.Add(bucketCount);
-                }
-
-                return DistributionData.Create(
-                    s.Mean,
-                    s.Count,
-                    s.Min,
-                    s.Max,
-                    s.SumOfSquaredDeviations,
-                    boxedBucketCounts);
-            };
     }
 }

@@ -31,18 +31,18 @@ namespace OpenCensus.Trace
 
         public IScope StartScopedSpan()
         {
-            return CurrentSpanUtils.WithSpan(StartSpan(), true);
+            return CurrentSpanUtils.WithSpan(this.StartSpan(), true);
         }
 
-        //public void StartSpanAndRun(Runnable runnable)
-        //{
+        // public void StartSpanAndRun(Runnable runnable)
+        // {
         //    Span span = startSpan();
         //    CurrentSpanUtils.withSpan(span, /* endSpan= */ true, runnable).run();
-        //}
-        //public final<V> V startSpanAndCall(Callable<V> callable) throws Exception
-        //{
+        // }
+        // public final<V> V startSpanAndCall(Callable<V> callable) throws Exception
+        // {
         //    final Span span = startSpan();
         //    return CurrentSpanUtils.withSpan(span, /* endSpan= */ true, callable).call();
-        //}
+        // }
     }
 }

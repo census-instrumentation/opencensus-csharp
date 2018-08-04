@@ -25,7 +25,9 @@ namespace OpenCensus.Stats
         // TODO(songya): remove this once interval stats is completely removed.
         internal bool initialized = false;
 
-        internal MutableLastValue() { }
+        internal MutableLastValue()
+        {
+        }
 
         internal static MutableLastValue Create()
         {
@@ -34,12 +36,12 @@ namespace OpenCensus.Stats
 
         internal override void Add(double value)
         {
-            LastValue = value;
+            this.LastValue = value;
 
             // TODO(songya): remove this once interval stats is completely removed.
-            if (!initialized)
+            if (!this.initialized)
             {
-                initialized = true;
+                this.initialized = true;
             }
         }
 
@@ -52,6 +54,7 @@ namespace OpenCensus.Stats
             }
 
             MutableLastValue otherValue = (MutableLastValue)other;
+
             // Assume other is always newer than this, because we combined interval buckets in time order.
             // If there's a newer value, overwrite current value.
             this.LastValue = otherValue.initialized ? otherValue.LastValue : this.LastValue;

@@ -44,18 +44,24 @@ namespace OpenCensus.Trace
         {
             get
             {
-                return CanonicalCode.OK == CanonicalCode;
+                return CanonicalCode.OK == this.CanonicalCode;
             }
+        }
+
+        internal Status(CanonicalCode canonicalCode, string description = null)
+        {
+            this.CanonicalCode = canonicalCode;
+            this.Description = description;
         }
 
         public Status WithDescription(string description)
         {
-            if (Description == description)
+            if (this.Description == description)
             {
                 return this;
             }
 
-            return new Status(CanonicalCode, description);
+            return new Status(this.CanonicalCode, description);
         }
 
         public override bool Equals(object obj)
@@ -71,29 +77,23 @@ namespace OpenCensus.Trace
             }
 
             Status that = (Status)obj;
-            return CanonicalCode == that.CanonicalCode && Description == that.Description;
+            return this.CanonicalCode == that.CanonicalCode && this.Description == that.Description;
         }
 
         public override int GetHashCode()
         {
             int result = 1;
-            result = (31 * result) + CanonicalCode.GetHashCode();
-            result = (31 * result) + Description.GetHashCode();
+            result = (31 * result) + this.CanonicalCode.GetHashCode();
+            result = (31 * result) + this.Description.GetHashCode();
             return result;
         }
 
         public override string ToString()
         {
             return "Status{"
-                    + "canonicalCode=" + CanonicalCode + ", "
-                    + "description=" + Description
+                    + "canonicalCode=" + this.CanonicalCode + ", "
+                    + "description=" + this.Description
                     + "}";
-        }
-
-        internal Status(CanonicalCode canonicalCode, string description = null)
-        {
-            this.CanonicalCode = canonicalCode;
-            this.Description = description;
         }
     }
 }

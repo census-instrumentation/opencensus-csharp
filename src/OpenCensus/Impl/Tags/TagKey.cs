@@ -27,12 +27,7 @@ namespace OpenCensus.Tags
 
         internal TagKey(string name)
         {
-            if (name == null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
-
-            this.Name = name;
+            this.Name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
         public static ITagKey Create(string name)
@@ -48,7 +43,7 @@ namespace OpenCensus.Tags
         public override string ToString()
         {
             return "TagKey{"
-                + "name=" + Name
+                + "name=" + this.Name
                 + "}";
         }
 
@@ -59,9 +54,8 @@ namespace OpenCensus.Tags
                 return true;
             }
 
-            if (o is TagKey)
+            if (o is TagKey that)
             {
-                TagKey that = (TagKey)o;
                 return this.Name.Equals(that.Name);
             }
 

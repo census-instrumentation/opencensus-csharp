@@ -30,7 +30,9 @@ namespace OpenCensus.Internal
             }
         }
 
-        private NoopScope() { }
+        private NoopScope()
+        {
+        }
 
         public void Dispose()
         {

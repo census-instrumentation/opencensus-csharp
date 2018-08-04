@@ -35,9 +35,9 @@ namespace OpenCensus.Trace.Export
             get
             {
                 IDictionary<string, ISampledPerSpanNameSummary> result = new Dictionary<string, ISampledPerSpanNameSummary>();
-                lock (registeredSpanNames)
+                lock (this.registeredSpanNames)
                 {
-                    foreach (string registeredSpanName in registeredSpanNames)
+                    foreach (string registeredSpanName in this.registeredSpanNames)
                     {
                         result[registeredSpanName] = EMPTY_PER_SPAN_NAME_SUMMARY;
                     }
@@ -51,7 +51,7 @@ namespace OpenCensus.Trace.Export
         {
             get
             {
-                return new HashSet<string>(registeredSpanNames);
+                return new HashSet<string>(this.registeredSpanNames);
             }
         }
 
@@ -76,11 +76,11 @@ namespace OpenCensus.Trace.Export
                 throw new ArgumentNullException(nameof(spanNames));
             }
 
-            lock (registeredSpanNames)
+            lock (this.registeredSpanNames)
             {
                 foreach (var name in spanNames)
                 {
-                    registeredSpanNames.Add(name);
+                    this.registeredSpanNames.Add(name);
                 }
             }
         }
@@ -92,11 +92,11 @@ namespace OpenCensus.Trace.Export
                 throw new ArgumentNullException(nameof(spanNames));
             }
 
-            lock (registeredSpanNames)
+            lock (this.registeredSpanNames)
             {
                 foreach (var name in spanNames)
                 {
-                    registeredSpanNames.Remove(name);
+                    this.registeredSpanNames.Remove(name);
                 }
             }
         }

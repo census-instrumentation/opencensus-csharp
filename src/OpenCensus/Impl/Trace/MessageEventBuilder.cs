@@ -68,7 +68,7 @@ namespace OpenCensus.Trace
         public IMessageEvent Build()
         {
             string missing = string.Empty;
-            if (!type.HasValue)
+            if (!this.type.HasValue)
             {
                 missing += " type";
             }

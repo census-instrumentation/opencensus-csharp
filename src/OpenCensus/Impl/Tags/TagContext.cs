@@ -22,7 +22,7 @@ namespace OpenCensus.Tags
 
     public sealed class TagContext : TagContextBase
     {
-        public static readonly ITagContext EMPTY =  new TagContext(new Dictionary<ITagKey, ITagValue>());
+        public static readonly ITagContext EMPTY = new TagContext(new Dictionary<ITagKey, ITagValue>());
 
         public IDictionary<ITagKey, ITagValue> Tags { get; }
 
@@ -33,7 +33,7 @@ namespace OpenCensus.Tags
 
         public override IEnumerator<ITag> GetEnumerator()
         {
-            var result = Tags.Select((kvp) => Tag.Create(kvp.Key, kvp.Value));
+            var result = this.Tags.Select((kvp) => Tag.Create(kvp.Key, kvp.Value));
             return result.ToList().GetEnumerator();
         }
     }

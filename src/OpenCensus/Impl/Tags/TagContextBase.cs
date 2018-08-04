@@ -24,7 +24,6 @@ namespace OpenCensus.Tags
 
     public abstract class TagContextBase : ITagContext
     {
-
         public override string ToString()
         {
             return "TagContext";
@@ -81,7 +80,7 @@ namespace OpenCensus.Tags
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return GetEnumerator();
+            return this.GetEnumerator();
         }
     }
 }

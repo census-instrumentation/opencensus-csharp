@@ -21,23 +21,19 @@ namespace OpenCensus.Trace.Config
 
     public sealed class TraceParams : ITraceParams
     {
-        private const double DEFAULT_PROBABILITY = 1e-4;
-        private static readonly ISampler DEFAULT_SAMPLER = Samplers.GetProbabilitySampler(DEFAULT_PROBABILITY);
+        public static readonly ITraceParams DEFAULT =
+            new TraceParams(DEFAULT_SAMPLER, DEFAULT_SPAN_MAX_NUM_ATTRIBUTES, DEFAULT_SPAN_MAX_NUM_ANNOTATIONS, DEFAULT_SPAN_MAX_NUM_MESSAGE_EVENTS, DEFAULT_SPAN_MAX_NUM_LINKS);
+
+        private const double DefaultProbability = 1e-4;
         private const int DEFAULT_SPAN_MAX_NUM_ATTRIBUTES = 32;
         private const int DEFAULT_SPAN_MAX_NUM_ANNOTATIONS = 32;
         private const int DEFAULT_SPAN_MAX_NUM_MESSAGE_EVENTS = 128;
         private const int DEFAULT_SPAN_MAX_NUM_LINKS = 128;
 
-        public static readonly ITraceParams DEFAULT =
-            new TraceParams(DEFAULT_SAMPLER, DEFAULT_SPAN_MAX_NUM_ATTRIBUTES, DEFAULT_SPAN_MAX_NUM_ANNOTATIONS, DEFAULT_SPAN_MAX_NUM_MESSAGE_EVENTS, DEFAULT_SPAN_MAX_NUM_LINKS);
+        private static readonly ISampler DEFAULT_SAMPLER = Samplers.GetProbabilitySampler(DefaultProbability);
 
         internal TraceParams(ISampler sampler, int maxNumberOfAttributes, int maxNumberOfAnnotations, int maxNumberOfMessageEvents, int maxNumberOfLinks)
         {
-            if (sampler == null)
-            {
-                throw new ArgumentNullException(nameof(sampler));
-            }
-
             if (maxNumberOfAttributes <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(maxNumberOfAttributes));
@@ -58,7 +54,7 @@ namespace OpenCensus.Trace.Config
                 throw new ArgumentOutOfRangeException(nameof(maxNumberOfLinks));
             }
 
-            this.Sampler = sampler;
+            this.Sampler = sampler ?? throw new ArgumentNullException(nameof(sampler));
             this.MaxNumberOfAttributes = maxNumberOfAttributes;
             this.MaxNumberOfAnnotations = maxNumberOfAnnotations;
             this.MaxNumberOfMessageEvents = maxNumberOfMessageEvents;
@@ -83,11 +79,11 @@ namespace OpenCensus.Trace.Config
         public override string ToString()
         {
             return "TraceParams{"
-                + "sampler=" + Sampler + ", "
-                + "maxNumberOfAttributes=" + MaxNumberOfAttributes + ", "
-                + "maxNumberOfAnnotations=" + MaxNumberOfAnnotations + ", "
-                + "maxNumberOfMessageEvents=" + MaxNumberOfMessageEvents + ", "
-                + "maxNumberOfLinks=" + MaxNumberOfLinks
+                + "sampler=" + this.Sampler + ", "
+                + "maxNumberOfAttributes=" + this.MaxNumberOfAttributes + ", "
+                + "maxNumberOfAnnotations=" + this.MaxNumberOfAnnotations + ", "
+                + "maxNumberOfMessageEvents=" + this.MaxNumberOfMessageEvents + ", "
+                + "maxNumberOfLinks=" + this.MaxNumberOfLinks
                 + "}";
         }
 
@@ -98,9 +94,8 @@ namespace OpenCensus.Trace.Config
                 return true;
             }
 
-            if (o is TraceParams)
+            if (o is TraceParams that)
             {
-                TraceParams that = (TraceParams)o;
                 return this.Sampler.Equals(that.Sampler)
                      && (this.MaxNumberOfAttributes == that.MaxNumberOfAttributes)
                      && (this.MaxNumberOfAnnotations == that.MaxNumberOfAnnotations)

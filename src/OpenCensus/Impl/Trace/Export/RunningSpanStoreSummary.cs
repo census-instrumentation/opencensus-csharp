@@ -36,7 +36,7 @@ namespace OpenCensus.Trace.Export
 
         internal RunningSpanStoreSummary(IDictionary<string, IRunningPerSpanNameSummary> perSpanNameSummary)
         {
-            PerSpanNameSummary = perSpanNameSummary;
+            this.PerSpanNameSummary = perSpanNameSummary;
         }
 
         public IDictionary<string, IRunningPerSpanNameSummary> PerSpanNameSummary { get; }
@@ -44,7 +44,7 @@ namespace OpenCensus.Trace.Export
         public override string ToString()
         {
             return "RunningSummary{"
-                + "perSpanNameSummary=" + PerSpanNameSummary
+                + "perSpanNameSummary=" + this.PerSpanNameSummary
                 + "}";
         }
 
@@ -55,9 +55,8 @@ namespace OpenCensus.Trace.Export
                 return true;
             }
 
-            if (o is RunningSpanStoreSummary)
+            if (o is RunningSpanStoreSummary that)
             {
-                RunningSpanStoreSummary that = (RunningSpanStoreSummary)o;
                 return this.PerSpanNameSummary.SequenceEqual(that.PerSpanNameSummary);
             }
 

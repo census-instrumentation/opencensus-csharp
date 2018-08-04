@@ -20,11 +20,11 @@ namespace OpenCensus.Common
 
     public class Timestamp : ITimestamp
     {
-        const long MAX_SECONDS = 315576000000L;
-        const int MAX_NANOS = 999999999;
-        const long MILLIS_PER_SECOND = 1000L;
-        const long NANOS_PER_MILLI = 1000 * 1000;
-        const long NANOS_PER_SECOND = NANOS_PER_MILLI * MILLIS_PER_SECOND;
+        private const long MAX_SECONDS = 315576000000L;
+        private const int MAX_NANOS = 999999999;
+        private const long MILLIS_PER_SECOND = 1000L;
+        private const long NANOS_PER_MILLI = 1000 * 1000;
+        private const long NANOS_PER_SECOND = NANOS_PER_MILLI * MILLIS_PER_SECOND;
 
         public static ITimestamp Create(long seconds, int nanos)
         {
@@ -51,29 +51,36 @@ namespace OpenCensus.Common
 
         internal Timestamp(long seconds, int nanos)
         {
-            Seconds = seconds;
-            Nanos = nanos;
+            this.Seconds = seconds;
+            this.Nanos = nanos;
         }
 
         public long Seconds { get; }
 
         public int Nanos { get; }
 
+        private static ITimestamp OfSecond(long seconds, long nanoAdjustment)
+        {
+            long floor = (long)Math.Floor((double)nanoAdjustment / NANOS_PER_SECOND);
+            long secs = seconds + floor;
+            long nos = nanoAdjustment - (floor * NANOS_PER_SECOND);
+            return Create(secs, (int)nos);
+        }
+
         public ITimestamp AddDuration(IDuration duration)
         {
-            return Plus(duration.Seconds, duration.Nanos);
+            return this.Plus(duration.Seconds, duration.Nanos);
         }
 
         public ITimestamp AddNanos(long nanosToAdd)
         {
-            return Plus(0, nanosToAdd);
+            return this.Plus(0, nanosToAdd);
         }
 
         public IDuration SubtractTimestamp(ITimestamp timestamp)
         {
-
-            long durationSeconds = Seconds - timestamp.Seconds;
-            int durationNanos = Nanos - timestamp.Nanos;
+            long durationSeconds = this.Seconds - timestamp.Seconds;
+            int durationNanos = this.Nanos - timestamp.Nanos;
             if (durationSeconds < 0 && durationNanos > 0)
             {
                 durationSeconds += 1;
@@ -90,43 +97,20 @@ namespace OpenCensus.Common
 
         public int CompareTo(ITimestamp other)
         {
-            int cmp = (Seconds < other.Seconds) ? -1 : ((Seconds > other.Seconds) ? 1 : 0);
+            int cmp = (this.Seconds < other.Seconds) ? -1 : ((this.Seconds > other.Seconds) ? 1 : 0);
             if (cmp != 0)
             {
                 return cmp;
             }
 
-            return (Nanos < other.Nanos) ? -1 : ((Nanos > other.Nanos) ? 1 : 0);
-        }
-
-        private ITimestamp Plus(long secondsToAdd, long nanosToAdd)
-        {
-
-            if ((secondsToAdd | nanosToAdd) == 0)
-            {
-                return this;
-            }
-
-            long sec = Seconds + secondsToAdd;
-            long nanoSeconds = Math.DivRem(nanosToAdd, NANOS_PER_SECOND, out long nanosSpill);
-            sec = sec + nanoSeconds;
-            long nanoAdjustment = Nanos + nanosSpill;
-            return OfSecond(sec, nanoAdjustment);
-        }
-
-        private static ITimestamp OfSecond(long seconds, long nanoAdjustment)
-        {
-            long floor = (long)Math.Floor((double)nanoAdjustment / NANOS_PER_SECOND);
-            long secs = seconds + floor;
-            long nos = nanoAdjustment - (floor * NANOS_PER_SECOND);
-            return Create(secs, (int)nos);
+            return (this.Nanos < other.Nanos) ? -1 : ((this.Nanos > other.Nanos) ? 1 : 0);
         }
 
         public override string ToString()
         {
             return "Timestamp{"
-                + "seconds=" + Seconds + ", "
-                + "nanos=" + Nanos
+                + "seconds=" + this.Seconds + ", "
+                + "nanos=" + this.Nanos
                 + "}";
         }
 
@@ -137,9 +121,8 @@ namespace OpenCensus.Common
                 return true;
             }
 
-            if (o is Timestamp)
+            if (o is Timestamp that)
             {
-                Timestamp that = (Timestamp)o;
                 return (this.Seconds == that.Seconds)
                      && (this.Nanos == that.Nanos);
             }
@@ -155,6 +138,20 @@ namespace OpenCensus.Common
             h *= 1000003;
             h ^= this.Nanos;
             return (int)h;
+        }
+
+        private ITimestamp Plus(long secondsToAdd, long nanosToAdd)
+        {
+            if ((secondsToAdd | nanosToAdd) == 0)
+            {
+                return this;
+            }
+
+            long sec = this.Seconds + secondsToAdd;
+            long nanoSeconds = Math.DivRem(nanosToAdd, NANOS_PER_SECOND, out long nanosSpill);
+            sec = sec + nanoSeconds;
+            long nanoAdjustment = this.Nanos + nanosSpill;
+            return OfSecond(sec, nanoAdjustment);
         }
     }
 }

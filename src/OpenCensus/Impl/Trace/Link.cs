@@ -51,34 +51,19 @@ namespace OpenCensus.Trace
 
         private Link(ITraceId traceId, ISpanId spanId, LinkType type, IDictionary<string, IAttributeValue> attributes)
         {
-            if (traceId == null)
-            {
-                throw new ArgumentNullException(nameof(traceId));
-            }
-
-            if (spanId == null)
-            {
-                throw new ArgumentNullException(nameof(spanId));
-            }
-
-            if (attributes == null)
-            {
-                throw new ArgumentNullException(nameof(attributes));
-            }
-
-            TraceId = traceId;
-            SpanId = spanId;
-            Type = type;
-            Attributes = attributes;
+            this.TraceId = traceId ?? throw new ArgumentNullException(nameof(traceId));
+            this.SpanId = spanId ?? throw new ArgumentNullException(nameof(spanId));
+            this.Type = type;
+            this.Attributes = attributes ?? throw new ArgumentNullException(nameof(attributes));
         }
 
         public override string ToString()
         {
             return "Link{"
-                + "traceId=" + TraceId + ", "
-                + "spanId=" + SpanId + ", "
-                + "type=" + Type + ", "
-                + "attributes=" + Collections.ToString(Attributes)
+                + "traceId=" + this.TraceId + ", "
+                + "spanId=" + this.SpanId + ", "
+                + "type=" + this.Type + ", "
+                + "attributes=" + Collections.ToString(this.Attributes)
                 + "}";
         }
 
@@ -89,9 +74,8 @@ namespace OpenCensus.Trace
                 return true;
             }
 
-            if (o is Link)
+            if (o is Link that)
             {
-                Link that = (Link)o;
                 return this.TraceId.Equals(that.TraceId)
                      && this.SpanId.Equals(that.SpanId)
                      && this.Type.Equals(that.Type)

@@ -21,7 +21,6 @@ namespace OpenCensus.Stats
 
     public class StatsComponent : StatsComponentBase
     {
-
         // The StatsCollectionState shared between the StatsComponent, StatsRecorder and ViewManager.
         private readonly CurrentStatsState state = new CurrentStatsState();
 
@@ -35,34 +34,37 @@ namespace OpenCensus.Stats
 
         public StatsComponent(IEventQueue queue, IClock clock)
         {
-            StatsManager statsManager = new StatsManager(queue, clock, state);
+            StatsManager statsManager = new StatsManager(queue, clock, this.state);
             this.viewManager = new ViewManager(statsManager);
             this.statsRecorder = new StatsRecorder(statsManager);
         }
 
         public override IViewManager ViewManager
         {
-            get { return viewManager; }
+            get { return this.viewManager; }
         }
 
         public override IStatsRecorder StatsRecorder
         {
-            get { return statsRecorder; }
+            get { return this.statsRecorder; }
         }
 
         public override StatsCollectionState State
         {
-            get { return state.Value; }
+            get
+            {
+                return this.state.Value;
+            }
 
             set
             {
-                ViewManager manager = viewManager as ViewManager;
+                ViewManager manager = this.viewManager as ViewManager;
                 if (manager == null)
                 {
                     return;
                 }
 
-                var result = state.Set(value);
+                var result = this.state.Set(value);
                 if (result)
                 {
                     if (value == StatsCollectionState.DISABLED)

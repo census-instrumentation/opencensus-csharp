@@ -22,6 +22,7 @@ namespace OpenCensus.Trace.Export
     public sealed class ExportComponent : ExportComponentBase
     {
         private const int EXPORTER_BUFFER_SIZE = 32;
+
         // Enforces that trace export exports data at least once every 5 seconds.
         private static readonly IDuration EXPORTER_SCHEDULE_DELAY = Duration.Create(5, 0);
 
@@ -37,7 +38,7 @@ namespace OpenCensus.Trace.Export
 
         private ExportComponent(bool supportInProcessStores, IEventQueue eventQueue)
         {
-            SpanExporter = Export.SpanExporter.Create(EXPORTER_BUFFER_SIZE, EXPORTER_SCHEDULE_DELAY);
+            this.SpanExporter = Export.SpanExporter.Create(EXPORTER_BUFFER_SIZE, EXPORTER_SCHEDULE_DELAY);
             this.RunningSpanStore =
                 supportInProcessStores
                     ? new InProcessRunningSpanStore()

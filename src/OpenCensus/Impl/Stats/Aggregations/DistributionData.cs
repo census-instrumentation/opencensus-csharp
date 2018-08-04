@@ -23,6 +23,16 @@ namespace OpenCensus.Stats.Aggregations
 
     public class DistributionData : AggregationData, IDistributionData
     {
+        internal DistributionData(double mean, long count, double min, double max, double sumOfSquaredDeviations, IList<long> bucketCounts)
+        {
+            this.Mean = mean;
+            this.Count = count;
+            this.Min = min;
+            this.Max = max;
+            this.SumOfSquaredDeviations = sumOfSquaredDeviations;
+            this.BucketCounts = bucketCounts ?? throw new ArgumentNullException(nameof(bucketCounts));
+        }
+
         public double Mean { get; }
 
         public long Count { get; }
@@ -35,24 +45,9 @@ namespace OpenCensus.Stats.Aggregations
 
         public IList<long> BucketCounts { get; }
 
-        internal DistributionData(double mean, long count, double min, double max, double sumOfSquaredDeviations, IList<long> bucketCounts)
-        {
-            this.Mean = mean;
-            this.Count = count;
-            this.Min = min;
-            this.Max = max;
-            this.SumOfSquaredDeviations = sumOfSquaredDeviations;
-            if (bucketCounts == null)
-            {
-                throw new ArgumentNullException(nameof(bucketCounts));
-            }
-
-            this.BucketCounts = bucketCounts;
-        }
-
         public static IDistributionData Create(double mean, long count, double min, double max, double sumOfSquaredDeviations, IList<long> bucketCounts)
         {
-            if (!double.IsPositiveInfinity(min) ||  !double.IsNegativeInfinity(max))
+            if (!double.IsPositiveInfinity(min) || !double.IsNegativeInfinity(max))
             {
                 if (!(min <= max))
                 {
@@ -87,12 +82,12 @@ namespace OpenCensus.Stats.Aggregations
         public override string ToString()
         {
             return "DistributionData{"
-                + "mean=" + Mean + ", "
-                + "count=" + Count + ", "
-                + "min=" + Min + ", "
-                + "max=" + Max + ", "
-                + "sumOfSquaredDeviations=" + SumOfSquaredDeviations + ", "
-                + "bucketCounts=" + Collections.ToString(BucketCounts)
+                + "mean=" + this.Mean + ", "
+                + "count=" + this.Count + ", "
+                + "min=" + this.Min + ", "
+                + "max=" + this.Max + ", "
+                + "sumOfSquaredDeviations=" + this.SumOfSquaredDeviations + ", "
+                + "bucketCounts=" + Collections.ToString(this.BucketCounts)
                 + "}";
         }
 
@@ -103,9 +98,8 @@ namespace OpenCensus.Stats.Aggregations
                 return true;
             }
 
-            if (o is DistributionData)
+            if (o is DistributionData that)
             {
-                DistributionData that = (DistributionData)o;
                 return (DoubleUtil.ToInt64(this.Mean) == DoubleUtil.ToInt64(that.Mean))
                      && (this.Count == that.Count)
                      && (DoubleUtil.ToInt64(this.Min) == DoubleUtil.ToInt64(that.Min))

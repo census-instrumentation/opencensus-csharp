@@ -48,19 +48,16 @@ namespace OpenCensus.Trace
             return new SpanBuilder(spanName, options, remoteParentSpanContext, null);
         }
 
-        internal SpanBuilder() { }
+        internal SpanBuilder()
+        {
+        }
 
         private SpanBuilder(string name, SpanBuilderOptions options, ISpanContext remoteParentSpanContext = null, ISpan parent = null)
         {
-            if (name == null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
-
-            Name = name;
-            Parent = parent;
-            RemoteParentSpanContext = remoteParentSpanContext;
-            Options = options;
+            this.Name = name ?? throw new ArgumentNullException(nameof(name));
+            this.Parent = parent;
+            this.RemoteParentSpanContext = remoteParentSpanContext;
+            this.Options = options;
         }
 
         private ISpan StartSpanInternal(
@@ -72,8 +69,8 @@ namespace OpenCensus.Trace
              bool recordEvents,
              ITimestampConverter timestampConverter)
         {
-            ITraceParams activeTraceParams = Options.TraceConfig.ActiveTraceParams;
-            IRandomGenerator random = Options.RandomHandler;
+            ITraceParams activeTraceParams = this.Options.TraceConfig.ActiveTraceParams;
+            IRandomGenerator random = this.Options.RandomHandler;
             ITraceId traceId;
             ISpanId spanId = SpanId.GenerateRandomId(random);
             ISpanId parentSpanId = null;
@@ -83,8 +80,9 @@ namespace OpenCensus.Trace
                 // New root span.
                 traceId = TraceId.GenerateRandomId(random);
                 traceOptionsBuilder = TraceOptions.Builder();
+
                 // This is a root span so no remote or local parent.
-                //hasRemoteParent = null;
+                // hasRemoteParent = null;
                 hasRemoteParent = false;
             }
             else
@@ -120,19 +118,19 @@ namespace OpenCensus.Trace
                         parentSpanId,
                         hasRemoteParent,
                         activeTraceParams,
-                        Options.StartEndHandler,
+                        this.Options.StartEndHandler,
                         timestampConverter,
-                        Options.Clock);
+                        this.Options.Clock);
             LinkSpans(span, parentLinks);
             return span;
         }
 
         public override ISpan StartSpan()
         {
-            ISpanContext parentContext = RemoteParentSpanContext;
+            ISpanContext parentContext = this.RemoteParentSpanContext;
             bool hasRemoteParent = true;
             ITimestampConverter timestampConverter = null;
-            if (RemoteParentSpanContext == null)
+            if (this.RemoteParentSpanContext == null)
             {
                 // This is not a child of a remote Span. Get the parent SpanContext from the parent Span if
                 // any.
@@ -141,9 +139,9 @@ namespace OpenCensus.Trace
                 if (parent != null)
                 {
                     parentContext = parent.Context;
+
                     // Pass the timestamp converter from the parent to ensure that the recorded events are in
                     // the right order. Implementation uses System.nanoTime() which is monotonically increasing.
-
                     if (parent is Span)
                     {
                         timestampConverter = ((Span)parent).TimestampConverter;
@@ -155,35 +153,25 @@ namespace OpenCensus.Trace
                 }
             }
 
-            return StartSpanInternal(
+            return this.StartSpanInternal(
                 parentContext,
                 hasRemoteParent,
-                Name,
-                Sampler,
-                ParentLinks,
-                RecordEvents,
+                this.Name,
+                this.Sampler,
+                this.ParentLinks,
+                this.RecordEvents,
                 timestampConverter);
         }
 
         public override ISpanBuilder SetSampler(ISampler sampler)
         {
-            if (sampler == null)
-            {
-                throw new ArgumentNullException(nameof(sampler));
-            }
-
-            this.Sampler = sampler;
+            this.Sampler = sampler ?? throw new ArgumentNullException(nameof(sampler));
             return this;
         }
 
         public override ISpanBuilder SetParentLinks(IList<ISpan> parentLinks)
         {
-            if (parentLinks == null)
-            {
-                throw new ArgumentNullException(nameof(parentLinks));
-            }
-
-            this.ParentLinks = parentLinks;
+            this.ParentLinks = parentLinks ?? throw new ArgumentNullException(nameof(parentLinks));
             return this;
         }
 

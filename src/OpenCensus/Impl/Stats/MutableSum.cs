@@ -22,7 +22,9 @@ namespace OpenCensus.Stats
     {
         internal double Sum { get; private set; } = 0.0;
 
-        internal MutableSum() { }
+        internal MutableSum()
+        {
+        }
 
         internal static MutableSum Create()
         {
@@ -31,7 +33,7 @@ namespace OpenCensus.Stats
 
         internal override void Add(double value)
         {
-            Sum += value;
+            this.Sum += value;
         }
 
         internal override void Combine(MutableAggregation other, double fraction)

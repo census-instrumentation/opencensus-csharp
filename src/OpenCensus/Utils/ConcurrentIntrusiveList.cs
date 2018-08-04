@@ -25,49 +25,51 @@ namespace OpenCensus.Utils
         private T head = default(T);
         private readonly object lck = new object();
 
-        public ConcurrentIntrusiveList() { }
+        public ConcurrentIntrusiveList()
+        {
+        }
 
         public void AddElement(T element)
         {
-            lock (lck)
+            lock (this.lck)
             {
-                if (element.Next != null || element.Previous != null || element.Equals(head))
+                if (element.Next != null || element.Previous != null || element.Equals(this.head))
                 {
                     throw new ArgumentOutOfRangeException("Element already in a list");
                 }
 
-                size++;
-                if (head == null)
+                this.size++;
+                if (this.head == null)
                 {
-                    head = element;
+                    this.head = element;
                 }
                 else
                 {
-                    head.Previous = element;
-                    element.Next = head;
-                    head = element;
+                    this.head.Previous = element;
+                    element.Next = this.head;
+                    this.head = element;
                 }
             }
         }
 
         public void RemoveElement(T element)
         {
-            lock (lck)
+            lock (this.lck)
             {
-                if (element.Next == null && element.Previous == null && !element.Equals(head))
+                if (element.Next == null && element.Previous == null && !element.Equals(this.head))
                 {
                     throw new ArgumentOutOfRangeException("Element not in the list");
                 }
 
-                size--;
+                this.size--;
                 if (element.Previous == null)
                 {
                     // This is the first element
-                    head = element.Next;
-                    if (head != null)
+                    this.head = element.Next;
+                    if (this.head != null)
                     {
                         // If more than one element in the list.
-                        head.Previous = default(T);
+                        this.head.Previous = default(T);
                         element.Next = default(T);
                     }
                 }
@@ -92,16 +94,16 @@ namespace OpenCensus.Utils
         {
             get
             {
-                return size;
+                return this.size;
             }
         }
 
         public IList<T> Copy()
         {
-            lock (lck)
+            lock (this.lck)
             {
-                List<T> all = new List<T>(size);
-                for (T e = head; e != null; e = e.Next)
+                List<T> all = new List<T>(this.size);
+                for (T e = this.head; e != null; e = e.Next)
                 {
                     all.Add(e);
                 }
@@ -111,4 +113,3 @@ namespace OpenCensus.Utils
         }
     }
 }
-

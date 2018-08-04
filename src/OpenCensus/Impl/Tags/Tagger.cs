@@ -37,7 +37,7 @@ namespace OpenCensus.Tags
         {
             get
             {
-                return state.Internal == TaggingState.DISABLED
+                return this.state.Internal == TaggingState.DISABLED
                     ? TagContext.EMPTY
                     : ToTagContext(CurrentTagContextUtils.CurrentTagContext);
             }
@@ -47,7 +47,7 @@ namespace OpenCensus.Tags
         {
             get
             {
-                return state.Internal == TaggingState.DISABLED
+                return this.state.Internal == TaggingState.DISABLED
                     ? NoopTagContextBuilder.INSTANCE
                     : new TagContextBuilder();
             }
@@ -57,22 +57,22 @@ namespace OpenCensus.Tags
         {
             get
             {
-                return state.Internal == TaggingState.DISABLED
+                return this.state.Internal == TaggingState.DISABLED
                     ? NoopTagContextBuilder.INSTANCE
-                    : ToBuilder(CurrentTagContextUtils.CurrentTagContext);
+                    : this.ToBuilder(CurrentTagContextUtils.CurrentTagContext);
             }
         }
 
         public override ITagContextBuilder ToBuilder(ITagContext tags)
         {
-            return state.Internal == TaggingState.DISABLED
+            return this.state.Internal == TaggingState.DISABLED
                 ? NoopTagContextBuilder.INSTANCE
                 : ToTagContextBuilder(tags);
         }
 
         public override IScope WithTagContext(ITagContext tags)
         {
-            return state.Internal == TaggingState.DISABLED
+            return this.state.Internal == TaggingState.DISABLED
                 ? NoopScope.INSTANCE
                 : CurrentTagContextUtils.WithTagContext(ToTagContext(tags));
         }

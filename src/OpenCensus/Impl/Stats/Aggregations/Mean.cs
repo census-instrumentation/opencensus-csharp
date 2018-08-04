@@ -20,7 +20,9 @@ namespace OpenCensus.Stats.Aggregations
 
     public sealed class Mean : Aggregation, IMean
     {
-        internal Mean() { }
+        internal Mean()
+        {
+        }
 
         private static readonly Mean INSTANCE = new Mean();
 

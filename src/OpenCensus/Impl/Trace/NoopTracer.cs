@@ -28,6 +28,8 @@ namespace OpenCensus.Trace
             return NoopSpanBuilder.CreateWithRemoteParent(spanName, remoteParentSpanContext);
         }
 
-        internal NoopTracer() { }
+        internal NoopTracer()
+        {
+        }
     }
 }

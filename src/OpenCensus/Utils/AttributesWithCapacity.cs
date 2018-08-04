@@ -32,7 +32,7 @@ namespace OpenCensus.Utils
         {
             get
             {
-                return totalRecordedAttributes - Count;
+                return this.totalRecordedAttributes - this.Count;
             }
         }
 
@@ -40,7 +40,7 @@ namespace OpenCensus.Utils
         {
             get
             {
-                return (ICollection<string>)@delegate.Keys;
+                return (ICollection<string>)this.@delegate.Keys;
             }
         }
 
@@ -48,7 +48,7 @@ namespace OpenCensus.Utils
         {
             get
             {
-                return (ICollection<IAttributeValue>)@delegate.Values;
+                return (ICollection<IAttributeValue>)this.@delegate.Values;
             }
         }
 
@@ -56,7 +56,7 @@ namespace OpenCensus.Utils
         {
             get
             {
-                return @delegate.Count;
+                return this.@delegate.Count;
             }
         }
 
@@ -64,20 +64,7 @@ namespace OpenCensus.Utils
         {
             get
             {
-                return @delegate.IsReadOnly;
-            }
-        }
-
-        public IAttributeValue this[string key]
-        {
-            get
-            {
-                return (IAttributeValue)@delegate[key];
-            }
-
-            set
-            {
-                @delegate[key] = value;
+                return this.@delegate.IsReadOnly;
             }
         }
 
@@ -86,13 +73,26 @@ namespace OpenCensus.Utils
             this.capacity = capacity;
         }
 
+        public IAttributeValue this[string key]
+        {
+            get
+            {
+                return (IAttributeValue)this.@delegate[key];
+            }
+
+            set
+            {
+                this.@delegate[key] = value;
+            }
+        }
+
         public void PutAttribute(string key, IAttributeValue value)
         {
-            totalRecordedAttributes += 1;
+            this.totalRecordedAttributes += 1;
             this[key] = value;
-            if (Count > capacity)
+            if (this.Count > this.capacity)
             {
-                @delegate.RemoveAt(0);
+                this.@delegate.RemoveAt(0);
             }
         }
 
@@ -102,25 +102,25 @@ namespace OpenCensus.Utils
         {
             foreach (var kvp in attributes)
             {
-                PutAttribute(kvp.Key, kvp.Value);
+                this.PutAttribute(kvp.Key, kvp.Value);
             }
         }
 
         public void Add(string key, IAttributeValue value)
         {
-            @delegate.Add(key, value);
+            this.@delegate.Add(key, value);
         }
 
         public bool ContainsKey(string key)
         {
-            return @delegate.Contains(key);
+            return this.@delegate.Contains(key);
         }
 
         public bool Remove(string key)
         {
-            if (@delegate.Contains(key))
+            if (this.@delegate.Contains(key))
             {
-                @delegate.Remove(key);
+                this.@delegate.Remove(key);
                 return true;
             }
             else
@@ -132,9 +132,9 @@ namespace OpenCensus.Utils
         public bool TryGetValue(string key, out IAttributeValue value)
         {
             value = null;
-            if (ContainsKey(key))
+            if (this.ContainsKey(key))
             {
-                value = (IAttributeValue)@delegate[key];
+                value = (IAttributeValue)this.@delegate[key];
                 return true;
             }
 
@@ -143,17 +143,17 @@ namespace OpenCensus.Utils
 
         public void Add(KeyValuePair<string, IAttributeValue> item)
         {
-            @delegate.Add(item.Key, item.Value);
+            this.@delegate.Add(item.Key, item.Value);
         }
 
         public void Clear()
         {
-            @delegate.Clear();
+            this.@delegate.Clear();
         }
 
         public bool Contains(KeyValuePair<string, IAttributeValue> item)
         {
-            var result = TryGetValue(item.Key, out IAttributeValue value);
+            var result = this.TryGetValue(item.Key, out IAttributeValue value);
             if (result)
             {
                 return value.Equals(item.Value);
@@ -164,8 +164,8 @@ namespace OpenCensus.Utils
 
         public void CopyTo(KeyValuePair<string, IAttributeValue>[] array, int arrayIndex)
         {
-            DictionaryEntry[] entries = new DictionaryEntry[@delegate.Count];
-            @delegate.CopyTo(entries, 0);
+            DictionaryEntry[] entries = new DictionaryEntry[this.@delegate.Count];
+            this.@delegate.CopyTo(entries, 0);
 
             for (int i = 0; i < entries.Length; i++)
             {
@@ -175,19 +175,19 @@ namespace OpenCensus.Utils
 
         public bool Remove(KeyValuePair<string, IAttributeValue> item)
         {
-            return Remove(item.Key);
+            return this.Remove(item.Key);
         }
 
         public IEnumerator<KeyValuePair<string, IAttributeValue>> GetEnumerator()
         {
-            var array = new KeyValuePair<string, IAttributeValue>[@delegate.Count];
-            CopyTo(array, 0);
+            var array = new KeyValuePair<string, IAttributeValue>[this.@delegate.Count];
+            this.CopyTo(array, 0);
             return array.ToList().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return @delegate.GetEnumerator();
+            return this.@delegate.GetEnumerator();
         }
     }
 }

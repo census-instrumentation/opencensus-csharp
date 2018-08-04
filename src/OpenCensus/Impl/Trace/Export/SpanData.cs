@@ -22,6 +22,60 @@ namespace OpenCensus.Trace.Export
 
     public sealed class SpanData : ISpanData
     {
+        internal SpanData(
+            ISpanContext context,
+            ISpanId parentSpanId,
+            bool? hasRemoteParent,
+            string name,
+            ITimestamp startTimestamp,
+            IAttributes attributes,
+            ITimedEvents<IAnnotation> annotations,
+            ITimedEvents<IMessageEvent> messageEvents,
+            ILinks links,
+            int? childSpanCount,
+            Status status,
+            ITimestamp endTimestamp)
+        {
+            this.Context = context ?? throw new ArgumentNullException(nameof(context));
+            this.ParentSpanId = parentSpanId;
+            this.HasRemoteParent = hasRemoteParent;
+            this.Name = name ?? throw new ArgumentNullException(nameof(name));
+            this.StartTimestamp = startTimestamp ?? throw new ArgumentNullException(nameof(startTimestamp));
+            this.Attributes = attributes ?? throw new ArgumentNullException(nameof(attributes));
+            this.Annotations = annotations ?? throw new ArgumentNullException(nameof(annotations));
+            this.MessageEvents = messageEvents ?? throw new ArgumentNullException(nameof(messageEvents));
+            this.Links = links ?? throw new ArgumentNullException(nameof(links));
+            this.ChildSpanCount = childSpanCount;
+            this.Status = status;
+            this.EndTimestamp = endTimestamp;
+        }
+
+        public ISpanContext Context { get; }
+
+        public ISpanId ParentSpanId { get; }
+
+        public bool? HasRemoteParent { get; }
+
+        public string Name { get; }
+
+        public ITimestamp Timestamp { get; }
+
+        public IAttributes Attributes { get; }
+
+        public ITimedEvents<IAnnotation> Annotations { get; }
+
+        public ITimedEvents<IMessageEvent> MessageEvents { get; }
+
+        public ILinks Links { get; }
+
+        public int? ChildSpanCount { get; }
+
+        public Status Status { get; }
+
+        public ITimestamp EndTimestamp { get; }
+
+        public ITimestamp StartTimestamp { get; }
+
         public static ISpanData Create(
                         ISpanContext context,
                         ISpanId parentSpanId,
@@ -63,110 +117,21 @@ namespace OpenCensus.Trace.Export
                 endTimestamp);
         }
 
-        internal SpanData(
-            ISpanContext context,
-            ISpanId parentSpanId,
-            bool? hasRemoteParent,
-            string name,
-            ITimestamp startTimestamp,
-            IAttributes attributes,
-            ITimedEvents<IAnnotation> annotations,
-            ITimedEvents<IMessageEvent> messageEvents,
-            ILinks links,
-            int? childSpanCount,
-            Status status,
-            ITimestamp endTimestamp)
-        {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            this.Context = context;
-            this.ParentSpanId = parentSpanId;
-            this.HasRemoteParent = hasRemoteParent;
-            if (name == null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
-
-            this.Name = name;
-            if (startTimestamp == null)
-            {
-                throw new ArgumentNullException(nameof(startTimestamp));
-            }
-
-            this.StartTimestamp = startTimestamp;
-            if (attributes == null)
-            {
-                throw new ArgumentNullException(nameof(attributes));
-            }
-
-            this.Attributes = attributes;
-            if (annotations == null)
-            {
-                throw new ArgumentNullException(nameof(annotations));
-            }
-
-            this.Annotations = annotations;
-            if (messageEvents == null)
-            {
-                throw new ArgumentNullException(nameof(messageEvents));
-            }
-
-            this.MessageEvents = messageEvents;
-            if (links == null)
-            {
-                throw new ArgumentNullException(nameof(links));
-            }
-
-            this.Links = links;
-            this.ChildSpanCount = childSpanCount;
-            this.Status = status;
-            this.EndTimestamp = endTimestamp;
-        }
-
-        public ISpanContext Context { get; }
-
-        public ISpanId ParentSpanId { get; }
-
-        public bool? HasRemoteParent { get; }
-
-        public string Name { get; }
-
-        public ITimestamp Timestamp { get; }
-
-        public IAttributes Attributes { get; }
-
-        public ITimedEvents<IAnnotation> Annotations { get; }
-
-        public ITimedEvents<IMessageEvent> MessageEvents { get; }
-
-        public ILinks Links { get; }
-
-        public int? ChildSpanCount { get; }
-
-        public Status Status { get; }
-
-        public ITimestamp EndTimestamp { get; }
-
-        public ITimestamp StartTimestamp { get; }
-
         public override string ToString()
         {
             return "SpanData{"
-                + "context=" + Context + ", "
-                + "parentSpanId=" + ParentSpanId + ", "
-                + "hasRemoteParent=" + HasRemoteParent + ", "
-                + "name=" + Name + ", "
-                + "startTimestamp=" + StartTimestamp + ", "
-                + "attributes=" + Attributes + ", "
-                + "annotations=" + Annotations + ", "
-                + "messageEvents=" + MessageEvents + ", "
-                + "links=" + Links + ", "
-                + "childSpanCount=" + ChildSpanCount + ", "
-                + "status=" + Status + ", "
-                + "endTimestamp=" + EndTimestamp
+                + "context=" + this.Context + ", "
+                + "parentSpanId=" + this.ParentSpanId + ", "
+                + "hasRemoteParent=" + this.HasRemoteParent + ", "
+                + "name=" + this.Name + ", "
+                + "startTimestamp=" + this.StartTimestamp + ", "
+                + "attributes=" + this.Attributes + ", "
+                + "annotations=" + this.Annotations + ", "
+                + "messageEvents=" + this.MessageEvents + ", "
+                + "links=" + this.Links + ", "
+                + "childSpanCount=" + this.ChildSpanCount + ", "
+                + "status=" + this.Status + ", "
+                + "endTimestamp=" + this.EndTimestamp
                 + "}";
         }
 
@@ -177,9 +142,8 @@ namespace OpenCensus.Trace.Export
                 return true;
             }
 
-            if (o is SpanData)
+            if (o is SpanData that)
             {
-                SpanData that = (SpanData)o;
                 return this.Context.Equals(that.Context)
                      && ((this.ParentSpanId == null) ? (that.ParentSpanId == null) : this.ParentSpanId.Equals(that.ParentSpanId))
                      && this.HasRemoteParent.Equals(that.HasRemoteParent)
@@ -203,9 +167,9 @@ namespace OpenCensus.Trace.Export
             h *= 1000003;
             h ^= this.Context.GetHashCode();
             h *= 1000003;
-            h ^= (ParentSpanId == null) ? 0 : this.ParentSpanId.GetHashCode();
+            h ^= (this.ParentSpanId == null) ? 0 : this.ParentSpanId.GetHashCode();
             h *= 1000003;
-            h ^= (HasRemoteParent == null) ? 0 : this.HasRemoteParent.GetHashCode();
+            h ^= (this.HasRemoteParent == null) ? 0 : this.HasRemoteParent.GetHashCode();
             h *= 1000003;
             h ^= this.Name.GetHashCode();
             h *= 1000003;
@@ -219,11 +183,11 @@ namespace OpenCensus.Trace.Export
             h *= 1000003;
             h ^= this.Links.GetHashCode();
             h *= 1000003;
-            h ^= (ChildSpanCount == null) ? 0 : this.ChildSpanCount.GetHashCode();
+            h ^= (this.ChildSpanCount == null) ? 0 : this.ChildSpanCount.GetHashCode();
             h *= 1000003;
-            h ^= (Status == null) ? 0 : this.Status.GetHashCode();
+            h ^= (this.Status == null) ? 0 : this.Status.GetHashCode();
             h *= 1000003;
-            h ^= (EndTimestamp == null) ? 0 : this.EndTimestamp.GetHashCode();
+            h ^= (this.EndTimestamp == null) ? 0 : this.EndTimestamp.GetHashCode();
             return h;
         }
     }

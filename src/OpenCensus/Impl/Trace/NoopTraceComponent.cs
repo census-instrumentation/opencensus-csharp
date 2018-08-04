@@ -27,7 +27,6 @@ namespace OpenCensus.Trace
 
         public ITracer Tracer
         {
-
             get
             {
                 return Trace.Tracer.NoopTracer;
@@ -54,7 +53,7 @@ namespace OpenCensus.Trace
         {
             get
             {
-                return noopExportComponent;
+                return this.noopExportComponent;
             }
         }
 

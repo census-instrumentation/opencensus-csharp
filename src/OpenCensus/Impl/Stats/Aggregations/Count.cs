@@ -20,7 +20,9 @@ namespace OpenCensus.Stats.Aggregations
 
     public sealed class Count : Aggregation, ICount
     {
-        Count() { }
+        private Count()
+        {
+        }
 
         private static readonly Count INSTANCE = new Count();
 

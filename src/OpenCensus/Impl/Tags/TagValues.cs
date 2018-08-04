@@ -24,7 +24,7 @@ namespace OpenCensus.Tags
     {
         private TagValues(IList<ITagValue> values)
         {
-            Values = values;
+            this.Values = values;
         }
 
         public IList<ITagValue> Values { get; }
@@ -37,7 +37,7 @@ namespace OpenCensus.Tags
         public override string ToString()
         {
             return "TagValues{"
-                + "values=" + Collections.ToString(Values)
+                + "values=" + Collections.ToString(this.Values)
                 + "}";
         }
 
@@ -48,17 +48,16 @@ namespace OpenCensus.Tags
                 return true;
             }
 
-            if (o is TagValues)
+            if (o is TagValues that)
             {
-                TagValues that = (TagValues)o;
-                if (Values.Count != that.Values.Count)
+                if (this.Values.Count != that.Values.Count)
                 {
                     return false;
                 }
 
-                for (int i = 0; i < Values.Count; i++)
+                for (int i = 0; i < this.Values.Count; i++)
                 {
-                    if (Values[i] == null)
+                    if (this.Values[i] == null)
                     {
                         if (that.Values[i] != null)
                         {
@@ -67,7 +66,7 @@ namespace OpenCensus.Tags
                     }
                     else
                     {
-                        if (!Values[i].Equals(that.Values[i]))
+                        if (!this.Values[i].Equals(that.Values[i]))
                         {
                             return false;
                         }
@@ -84,7 +83,7 @@ namespace OpenCensus.Tags
         {
             int h = 1;
             h *= 1000003;
-            foreach (var v in Values)
+            foreach (var v in this.Values)
             {
                 if (v != null)
                 {

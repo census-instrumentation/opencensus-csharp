@@ -20,9 +20,11 @@ namespace OpenCensus.Stats.Aggregations
 
     public sealed class LastValue : Aggregation, ILastValue
     {
-        LastValue() { }
-
         private static readonly LastValue INSTANCE = new LastValue();
+
+        private LastValue()
+        {
+        }
 
         public static ILastValue Create()
         {

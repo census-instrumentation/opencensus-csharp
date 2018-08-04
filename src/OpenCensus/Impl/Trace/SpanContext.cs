@@ -36,14 +36,14 @@ namespace OpenCensus.Trace
 
         public TraceOptions TraceOptions { get; }
 
-        public bool IsValid => TraceId.IsValid && SpanId.IsValid;
+        public bool IsValid => this.TraceId.IsValid && this.SpanId.IsValid;
 
         public override int GetHashCode()
         {
             int result = 1;
-            result = (31 * result) + (TraceId == null ? 0 : TraceId.GetHashCode());
-            result = (31 * result) + (SpanId == null ? 0 : SpanId.GetHashCode());
-            result = (31 * result) + (TraceOptions == null ? 0 : TraceOptions.GetHashCode());
+            result = (31 * result) + (this.TraceId == null ? 0 : this.TraceId.GetHashCode());
+            result = (31 * result) + (this.SpanId == null ? 0 : this.SpanId.GetHashCode());
+            result = (31 * result) + (this.TraceOptions == null ? 0 : this.TraceOptions.GetHashCode());
             return result;
         }
 
@@ -60,25 +60,25 @@ namespace OpenCensus.Trace
             }
 
             SpanContext that = (SpanContext)obj;
-            return TraceId.Equals(that.TraceId)
-                && SpanId.Equals(that.SpanId)
-                && TraceOptions.Equals(that.TraceOptions);
+            return this.TraceId.Equals(that.TraceId)
+                && this.SpanId.Equals(that.SpanId)
+                && this.TraceOptions.Equals(that.TraceOptions);
         }
 
         public override string ToString()
         {
             return "SpanContext{"
-                   + "traceId=" + TraceId + ", "
-                   + "spanId=" + SpanId + ", "
-                   + "traceOptions=" + TraceOptions
+                   + "traceId=" + this.TraceId + ", "
+                   + "spanId=" + this.SpanId + ", "
+                   + "traceOptions=" + this.TraceOptions
                    + "}";
         }
 
         private SpanContext(ITraceId traceId, ISpanId spanId, TraceOptions traceOptions)
         {
-            TraceId = traceId;
-            SpanId = spanId;
-            TraceOptions = traceOptions;
+            this.TraceId = traceId;
+            this.SpanId = spanId;
+            this.TraceOptions = traceOptions;
         }
     }
 }

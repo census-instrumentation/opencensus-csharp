@@ -40,7 +40,7 @@ namespace OpenCensus.Trace.Export
         {
             get
             {
-                return noopSampledSpanStore;
+                return this.noopSampledSpanStore;
             }
         }
     }

@@ -19,13 +19,13 @@ namespace OpenCensus.Stats
     internal sealed class NoopStatsComponent : StatsComponentBase
     {
         private readonly IViewManager viewManager = NoopStats.NewNoopViewManager();
-        //private volatile bool isRead;
 
+        // private volatile bool isRead;
         public override IViewManager ViewManager
         {
             get
             {
-                return viewManager;
+                return this.viewManager;
             }
         }
 
@@ -41,7 +41,7 @@ namespace OpenCensus.Stats
         {
             get
             {
-                //isRead = true;
+                // isRead = true;
                 return StatsCollectionState.DISABLED;
             }
 

@@ -26,6 +26,7 @@ namespace OpenCensus.Tags.Propagation
     {
         internal const int VERSION_ID = 0;
         internal const int TAG_FIELD_ID = 0;
+
         // This size limit only applies to the bytes representing tag keys and values.
         internal const int TAGCONTEXT_SERIALIZED_SIZE_LIMIT = 8192;
 
@@ -34,7 +35,7 @@ namespace OpenCensus.Tags.Propagation
         internal static byte[] SerializeBinary(ITagContext tags)
         {
             // Use a ByteArrayDataOutput to avoid needing to handle IOExceptions.
-            //ByteArrayDataOutput byteArrayDataOutput = ByteStreams.newDataOutput();
+            // ByteArrayDataOutput byteArrayDataOutput = ByteStreams.newDataOutput();
             MemoryStream byteArrayDataOutput = new MemoryStream();
 
             byteArrayDataOutput.WriteByte(VERSION_ID);
@@ -46,12 +47,12 @@ namespace OpenCensus.Tags.Propagation
                 EncodeTag(tag, byteArrayDataOutput);
             }
 
-            //for (Iterator<Tag> i = InternalUtils.getTags(tags); i.hasNext();) {
+            // for (Iterator<Tag> i = InternalUtils.getTags(tags); i.hasNext();) {
             //    Tag tag = i.next();
             //    totalChars += tag.getKey().getName().length();
             //    totalChars += tag.getValue().asString().length();
             //    encodeTag(tag, byteArrayDataOutput);
-            //}
+            // }
             if (totalChars > TAGCONTEXT_SERIALIZED_SIZE_LIMIT)
             {
                 throw new TagContextSerializationException(
@@ -104,7 +105,7 @@ namespace OpenCensus.Tags.Propagation
                     ITagValue val = CreateTagValue(key, DecodeString(buffer));
                     totalChars += key.Name.Length;
                     totalChars += val.AsString.Length;
-                    tags[key] =  val;
+                    tags[key] = val;
                 }
 else
                 {

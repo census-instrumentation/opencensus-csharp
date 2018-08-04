@@ -31,7 +31,6 @@ namespace OpenCensus.Trace.Export
 
         internal TimedEvent(ITimestamp timestamp, T @event)
         {
-
             this.Timestamp = timestamp;
             this.Event = @event;
         }
@@ -39,8 +38,8 @@ namespace OpenCensus.Trace.Export
         public override string ToString()
         {
             return "TimedEvent{"
-                + "timestamp=" + Timestamp + ", "
-                + "event=" + Event
+                + "timestamp=" + this.Timestamp + ", "
+                + "event=" + this.Event
                 + "}";
         }
 
@@ -51,9 +50,8 @@ namespace OpenCensus.Trace.Export
                 return true;
             }
 
-            if (o is TimedEvent<T>)
+            if (o is TimedEvent<T> that)
             {
-                TimedEvent<T> that = (TimedEvent<T>)o;
                 return this.Timestamp.Equals(that.Timestamp)
                      && this.Event.Equals(that.Event);
             }

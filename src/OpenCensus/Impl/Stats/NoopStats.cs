@@ -18,7 +18,9 @@ namespace OpenCensus.Stats
 {
     internal sealed class NoopStats
     {
-        private NoopStats() { }
+        private NoopStats()
+        {
+        }
 
         internal static IStatsComponent NewNoopStatsComponent()
         {

@@ -20,6 +20,10 @@ namespace OpenCensus.Trace
 
     public abstract class AttributeValue : IAttributeValue
     {
+        internal AttributeValue()
+        {
+        }
+
         public static IAttributeValue<string> StringAttributeValue(string stringValue)
         {
             if (stringValue == null)
@@ -38,10 +42,6 @@ namespace OpenCensus.Trace
         public static IAttributeValue<bool> BooleanAttributeValue(bool booleanValue)
         {
             return new AttributeValue<bool>(booleanValue);
-        }
-
-        internal AttributeValue()
-        {
         }
 
         public abstract T Match<T>(
@@ -77,12 +77,12 @@ namespace OpenCensus.Trace
 
         internal AttributeValue(T value)
         {
-            Value = value;
+            this.Value = value;
         }
 
         public M Apply<M>(Func<T, M> function)
         {
-            return function(Value);
+            return function(this.Value);
         }
 
         public override bool Equals(object obj)
@@ -104,14 +104,14 @@ namespace OpenCensus.Trace
         {
             int h = 1;
             h *= 1000003;
-            h ^= Value.GetHashCode();
+            h ^= this.Value.GetHashCode();
             return h;
         }
 
         public override string ToString()
         {
             return "AttributeValue{"
-                + "Value=" + Value.ToString()
+                + "Value=" + this.Value.ToString()
                 + "}";
         }
 
@@ -123,23 +123,23 @@ namespace OpenCensus.Trace
         {
             if (typeof(T) == typeof(string))
             {
-                string value = Value as string;
+                string value = this.Value as string;
                 return stringFunction(value);
             }
 
             if (typeof(T) == typeof(long))
             {
-                long val = (long)(object)Value;
+                long val = (long)(object)this.Value;
                 return longFunction(val);
             }
 
             if (typeof(T) == typeof(bool))
             {
-                bool val = (bool)(object)Value;
+                bool val = (bool)(object)this.Value;
                 return booleanFunction(val);
             }
 
-            return defaultFunction(Value);
+            return defaultFunction(this.Value);
         }
     }
 }

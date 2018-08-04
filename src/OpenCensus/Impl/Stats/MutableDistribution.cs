@@ -57,8 +57,8 @@ namespace OpenCensus.Stats
 
         internal override void Add(double value)
         {
-            Sum += value;
-            Count++;
+            this.Sum += value;
+            this.Count++;
 
             /*
              * Update the sum of squared deviations from the mean with the given value. For values
@@ -68,31 +68,31 @@ namespace OpenCensus.Stats
              * https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance, or Knuth, "The Art of
              * Computer Programming", Vol. 2, page 323, 3rd edition)
              */
-            double deltaFromMean = value - Mean;
-            Mean += deltaFromMean / Count;
-            double deltaFromMean2 = value - Mean;
-            SumOfSquaredDeviations += deltaFromMean * deltaFromMean2;
+            double deltaFromMean = value - this.Mean;
+            this.Mean += deltaFromMean / this.Count;
+            double deltaFromMean2 = value - this.Mean;
+            this.SumOfSquaredDeviations += deltaFromMean * deltaFromMean2;
 
-            if (value < Min)
+            if (value < this.Min)
             {
-                Min = value;
+                this.Min = value;
             }
 
-            if (value > Max)
+            if (value > this.Max)
             {
-                Max = value;
+                this.Max = value;
             }
 
-            for (int i = 0; i < BucketBoundaries.Boundaries.Count; i++)
+            for (int i = 0; i < this.BucketBoundaries.Boundaries.Count; i++)
             {
-                if (value < BucketBoundaries.Boundaries[i])
+                if (value < this.BucketBoundaries.Boundaries[i])
                 {
-                    BucketCounts[i]++;
+                    this.BucketCounts[i]++;
                     return;
                 }
             }
 
-            BucketCounts[BucketCounts.Length - 1]++;
+            this.BucketCounts[this.BucketCounts.Length - 1]++;
         }
 
         // We don't compute fractional MutableDistribution, it's either whole or none.

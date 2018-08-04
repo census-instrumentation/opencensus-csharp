@@ -18,15 +18,19 @@ namespace OpenCensus.Common
 {
     public class Duration : IDuration
     {
-        const long MAX_SECONDS = 315576000000L;
-        const int MAX_NANOS = 999999999;
+        private const long MAX_SECONDS = 315576000000L;
+        private const int MAX_NANOS = 999999999;
         private static readonly IDuration ZERO = new Duration(0, 0);
 
         public Duration(long seconds, int nanos)
         {
-            Seconds = seconds;
-            Nanos = nanos;
+            this.Seconds = seconds;
+            this.Nanos = nanos;
         }
+
+        public long Seconds { get; }
+
+        public int Nanos { get; }
 
         public static IDuration Create(long seconds, int nanos)
         {
@@ -50,25 +54,20 @@ namespace OpenCensus.Common
 
         public int CompareTo(IDuration other)
         {
-
-            int cmp = (Seconds < other.Seconds) ? -1 : ((Seconds > other.Seconds) ? 1 : 0);
+            int cmp = (this.Seconds < other.Seconds) ? -1 : ((this.Seconds > other.Seconds) ? 1 : 0);
             if (cmp != 0)
             {
                 return cmp;
             }
 
-            return (Nanos < other.Nanos) ? -1 : ((Nanos > other.Nanos) ? 1 : 0);
+            return (this.Nanos < other.Nanos) ? -1 : ((this.Nanos > other.Nanos) ? 1 : 0);
         }
-
-        public long Seconds { get; }
-
-        public int Nanos { get; }
 
         public override string ToString()
         {
             return "Duration{"
-                + "seconds=" + Seconds + ", "
-                + "nanos=" + Nanos
+                + "seconds=" + this.Seconds + ", "
+                + "nanos=" + this.Nanos
                 + "}";
         }
 
@@ -79,9 +78,8 @@ namespace OpenCensus.Common
                 return true;
             }
 
-            if (o is Duration)
+            if (o is Duration that)
             {
-                Duration that = (Duration)o;
                 return (this.Seconds == that.Seconds)
                      && (this.Nanos == that.Nanos);
             }

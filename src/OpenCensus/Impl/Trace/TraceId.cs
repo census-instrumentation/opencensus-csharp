@@ -32,7 +32,7 @@ namespace OpenCensus.Trace
             get
             {
                 byte[] copyOf = new byte[SIZE];
-                Buffer.BlockCopy(bytes, 0, copyOf, 0, SIZE);
+                Buffer.BlockCopy(this.bytes, 0, copyOf, 0, SIZE);
                 return copyOf;
             }
         }
@@ -90,20 +90,20 @@ namespace OpenCensus.Trace
 
         public void CopyBytesTo(byte[] dest, int destOffset)
         {
-            Buffer.BlockCopy(bytes, 0, dest, destOffset, SIZE);
+            Buffer.BlockCopy(this.bytes, 0, dest, destOffset, SIZE);
         }
 
         public bool IsValid
         {
             get
             {
-                return !Arrays.Equals(bytes, INVALID.bytes);
+                return !Arrays.Equals(this.bytes, INVALID.bytes);
             }
         }
 
         public string ToLowerBase16()
         {
-            var bytes = Bytes;
+            var bytes = this.Bytes;
             var result = Arrays.ByteArrayToString(bytes);
             return result;
         }
@@ -117,7 +117,7 @@ namespace OpenCensus.Trace
                 {
                     result <<= 8;
 #pragma warning disable CS0675 // Bitwise-or operator used on a sign-extended operand
-                    result |= bytes[i] & 0xff;
+                    result |= this.bytes[i] & 0xff;
 #pragma warning restore CS0675 // Bitwise-or operator used on a sign-extended operand
                 }
 
@@ -143,18 +143,18 @@ namespace OpenCensus.Trace
             }
 
             TraceId that = (TraceId)obj;
-            return Arrays.Equals(bytes, that.bytes);
+            return Arrays.Equals(this.bytes, that.bytes);
         }
 
         public override int GetHashCode()
         {
-            return Arrays.GetHashCode(bytes);
+            return Arrays.GetHashCode(this.bytes);
         }
 
         public override string ToString()
         {
             return "TraceId{"
-               + "bytes=" + ToLowerBase16()
+               + "bytes=" + this.ToLowerBase16()
                + "}";
         }
 
@@ -163,9 +163,9 @@ namespace OpenCensus.Trace
             TraceId that = other as TraceId;
             for (int i = 0; i < SIZE; i++)
             {
-                if (bytes[i] != that.bytes[i])
+                if (this.bytes[i] != that.bytes[i])
                 {
-                    sbyte b1 = (sbyte)bytes[i];
+                    sbyte b1 = (sbyte)this.bytes[i];
                     sbyte b2 = (sbyte)that.bytes[i];
 
                     return b1 < b2 ? -1 : 1;

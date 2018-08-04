@@ -22,7 +22,7 @@ namespace OpenCensus.Trace.Export
     {
         internal RunningPerSpanNameSummary(int numRunningSpans)
         {
-            NumRunningSpans = numRunningSpans;
+            this.NumRunningSpans = numRunningSpans;
         }
 
         public int NumRunningSpans { get; }
@@ -40,7 +40,7 @@ namespace OpenCensus.Trace.Export
         public override string ToString()
         {
             return "RunningPerSpanNameSummary{"
-                + "numRunningSpans=" + NumRunningSpans
+                + "numRunningSpans=" + this.NumRunningSpans
                 + "}";
         }
 
@@ -51,9 +51,8 @@ namespace OpenCensus.Trace.Export
                 return true;
             }
 
-            if (o is RunningPerSpanNameSummary)
+            if (o is RunningPerSpanNameSummary that)
             {
-                RunningPerSpanNameSummary that = (RunningPerSpanNameSummary)o;
                 return this.NumRunningSpans == that.NumRunningSpans;
             }
 

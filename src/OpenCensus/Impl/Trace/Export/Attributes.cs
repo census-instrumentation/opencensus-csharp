@@ -27,6 +27,12 @@ namespace OpenCensus.Trace.Export
 
         public int DroppedAttributesCount { get; }
 
+        internal Attributes(IDictionary<string, IAttributeValue> attributeMap, int droppedAttributesCount)
+        {
+            this.AttributeMap = attributeMap ?? throw new ArgumentNullException("Null attributeMap");
+            this.DroppedAttributesCount = droppedAttributesCount;
+        }
+
         public static Attributes Create(IDictionary<string, IAttributeValue> attributeMap, int droppedAttributesCount)
         {
             if (attributeMap == null)
@@ -38,22 +44,11 @@ namespace OpenCensus.Trace.Export
             return new Attributes(new ReadOnlyDictionary<string, IAttributeValue>(copy), droppedAttributesCount);
         }
 
-        internal Attributes(IDictionary<string, IAttributeValue> attributeMap, int droppedAttributesCount)
-        {
-            if (attributeMap == null)
-            {
-                throw new ArgumentNullException("Null attributeMap");
-            }
-
-            AttributeMap = attributeMap;
-            DroppedAttributesCount = droppedAttributesCount;
-        }
-
         public override string ToString()
         {
             return "Attributes{"
-                + "attributeMap=" + AttributeMap + ", "
-                + "droppedAttributesCount=" + DroppedAttributesCount
+                + "attributeMap=" + this.AttributeMap + ", "
+                + "droppedAttributesCount=" + this.DroppedAttributesCount
                 + "}";
         }
 
@@ -64,9 +59,8 @@ namespace OpenCensus.Trace.Export
                 return true;
             }
 
-            if (o is Attributes)
+            if (o is Attributes that)
             {
-                Attributes that = (Attributes)o;
                 return this.AttributeMap.SequenceEqual(that.AttributeMap)
                      && (this.DroppedAttributesCount == that.DroppedAttributesCount);
             }

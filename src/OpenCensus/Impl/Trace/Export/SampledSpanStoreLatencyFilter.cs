@@ -50,24 +50,19 @@ namespace OpenCensus.Trace.Export
 
         internal SampledSpanStoreLatencyFilter(string spanName, long latencyLowerNs, long latencyUpperNs, int maxSpansToReturn)
         {
-            if (spanName == null)
-            {
-                throw new ArgumentNullException(nameof(spanName));
-            }
-
-            SpanName = spanName;
-            LatencyLowerNs = latencyLowerNs;
-            LatencyUpperNs = latencyUpperNs;
-            MaxSpansToReturn = maxSpansToReturn;
+            this.SpanName = spanName ?? throw new ArgumentNullException(nameof(spanName));
+            this.LatencyLowerNs = latencyLowerNs;
+            this.LatencyUpperNs = latencyUpperNs;
+            this.MaxSpansToReturn = maxSpansToReturn;
         }
 
         public override string ToString()
         {
             return "LatencyFilter{"
-                + "spanName=" + SpanName + ", "
-                + "latencyLowerNs=" + LatencyLowerNs + ", "
-                + "latencyUpperNs=" + LatencyUpperNs + ", "
-                + "maxSpansToReturn=" + MaxSpansToReturn
+                + "spanName=" + this.SpanName + ", "
+                + "latencyLowerNs=" + this.LatencyLowerNs + ", "
+                + "latencyUpperNs=" + this.LatencyUpperNs + ", "
+                + "maxSpansToReturn=" + this.MaxSpansToReturn
                 + "}";
         }
 
@@ -78,9 +73,8 @@ namespace OpenCensus.Trace.Export
                 return true;
             }
 
-            if (o is SampledSpanStoreLatencyFilter)
+            if (o is SampledSpanStoreLatencyFilter that)
             {
-                SampledSpanStoreLatencyFilter that = (SampledSpanStoreLatencyFilter)o;
                 return this.SpanName.Equals(that.SpanName)
                      && (this.LatencyLowerNs == that.LatencyLowerNs)
                      && (this.LatencyUpperNs == that.LatencyUpperNs)

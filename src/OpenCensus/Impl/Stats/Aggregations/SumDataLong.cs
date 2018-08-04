@@ -48,7 +48,7 @@ namespace OpenCensus.Stats.Aggregations
         public override string ToString()
         {
             return "SumDataLong{"
-                + "sum=" + Sum
+                + "sum=" + this.Sum
                 + "}";
         }
 
@@ -59,9 +59,8 @@ namespace OpenCensus.Stats.Aggregations
                 return true;
             }
 
-            if (o is SumDataLong)
+            if (o is SumDataLong that)
             {
-                SumDataLong that = (SumDataLong)o;
                 return this.Sum == that.Sum;
             }
 

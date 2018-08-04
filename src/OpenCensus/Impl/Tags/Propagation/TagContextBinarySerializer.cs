@@ -29,14 +29,14 @@ namespace OpenCensus.Tags.Propagation
 
         public override byte[] ToByteArray(ITagContext tags)
         {
-            return state.Internal == TaggingState.DISABLED
+            return this.state.Internal == TaggingState.DISABLED
                 ? EMPTY_BYTE_ARRAY
                 : SerializationUtils.SerializeBinary(tags);
         }
 
         public override ITagContext FromByteArray(byte[] bytes)
         {
-            return state.Internal == TaggingState.DISABLED
+            return this.state.Internal == TaggingState.DISABLED
                 ? TagContext.EMPTY
                 : SerializationUtils.DeserializeBinary(bytes);
         }

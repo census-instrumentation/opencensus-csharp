@@ -20,13 +20,15 @@ namespace OpenCensus.Trace.Sampler
 
     internal class AlwaysSampleSampler : ISampler
     {
-        internal AlwaysSampleSampler() { }
+        internal AlwaysSampleSampler()
+        {
+        }
 
         public string Description
         {
             get
             {
-                return ToString();
+                return this.ToString();
             }
         }
 

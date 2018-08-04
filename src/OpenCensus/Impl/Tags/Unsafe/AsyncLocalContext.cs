@@ -52,7 +52,6 @@ namespace OpenCensus.Tags.Unsafe
 
         internal sealed class EmptyTagContext : TagContextBase
         {
-
             public override IEnumerator<ITag> GetEnumerator()
             {
                 return new List<ITag>().GetEnumerator();

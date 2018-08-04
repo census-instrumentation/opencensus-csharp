@@ -41,12 +41,7 @@ namespace OpenCensus.Tags
                 throw new ArgumentNullException(nameof(key));
             }
 
-            if (value == null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
-
-            Tags[key] = value;
+            this.Tags[key] = value ?? throw new ArgumentNullException(nameof(value));
             return this;
         }
 
@@ -57,9 +52,9 @@ namespace OpenCensus.Tags
                 throw new ArgumentNullException(nameof(key));
             }
 
-            if (Tags.ContainsKey(key))
+            if (this.Tags.ContainsKey(key))
             {
-                Tags.Remove(key);
+                this.Tags.Remove(key);
             }
 
             return this;
@@ -67,12 +62,12 @@ namespace OpenCensus.Tags
 
         public override ITagContext Build()
         {
-            return new TagContext(Tags);
+            return new TagContext(this.Tags);
         }
 
         public override IScope BuildScoped()
         {
-            return CurrentTagContextUtils.WithTagContext(Build());
+            return CurrentTagContextUtils.WithTagContext(this.Build());
         }
     }
 }

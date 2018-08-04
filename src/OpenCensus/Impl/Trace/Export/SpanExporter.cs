@@ -21,19 +21,19 @@ namespace OpenCensus.Trace.Export
 
     public sealed class SpanExporter : SpanExporterBase
     {
-        private SpanExporterWorker _worker { get; }
-
         private readonly Thread workerThread;
+
+        private readonly SpanExporterWorker worker;
 
         internal SpanExporter(SpanExporterWorker worker)
         {
-            _worker = worker;
-            workerThread = new Thread(worker.Run)
+            this.worker = worker;
+            this.workerThread = new Thread(worker.Run)
             {
                 IsBackground = true,
                 Name = "SpanExporter"
             };
-            workerThread.Start();
+            this.workerThread.Start();
         }
 
         internal static ISpanExporter Create(int bufferSize, IDuration scheduleDelay)
@@ -44,29 +44,29 @@ namespace OpenCensus.Trace.Export
 
         public override void AddSpan(ISpan span)
         {
-            _worker.AddSpan(span);
+            this.worker.AddSpan(span);
         }
 
         public override void RegisterHandler(string name, IHandler handler)
         {
-            _worker.RegisterHandler(name, handler);
+            this.worker.RegisterHandler(name, handler);
         }
 
         public override void UnregisterHandler(string name)
         {
-            _worker.UnregisterHandler(name);
+            this.worker.UnregisterHandler(name);
         }
 
         public override void Dispose()
         {
-            _worker.Dispose();
+            this.worker.Dispose();
         }
 
         internal Thread ServiceExporterThread
         {
             get
             {
-                return workerThread;
+                return this.workerThread;
             }
         }
     }

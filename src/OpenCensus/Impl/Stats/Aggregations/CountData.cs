@@ -48,7 +48,7 @@ namespace OpenCensus.Stats.Aggregations
         public override string ToString()
         {
             return "CountData{"
-                + "count=" + Count
+                + "count=" + this.Count
                 + "}";
         }
 
@@ -59,9 +59,8 @@ namespace OpenCensus.Stats.Aggregations
                 return true;
             }
 
-            if (o is CountData)
+            if (o is CountData that)
             {
-                CountData that = (CountData)o;
                 return this.Count == that.Count;
             }
 

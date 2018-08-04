@@ -49,18 +49,8 @@ namespace OpenCensus.Trace
 
         internal Annotation(string description, IDictionary<string, IAttributeValue> attributes)
         {
-            if (description == null)
-            {
-                throw new ArgumentNullException("Null description");
-            }
-
-            if (attributes == null)
-            {
-                throw new ArgumentNullException("Null attributes");
-            }
-
-            Description = description;
-            Attributes = attributes;
+            this.Description = description ?? throw new ArgumentNullException("Null description");
+            this.Attributes = attributes ?? throw new ArgumentNullException("Null attributes");
         }
 
         public override bool Equals(object obj)
@@ -92,8 +82,8 @@ namespace OpenCensus.Trace
         public override string ToString()
         {
             return "Annotation{"
-                + "description=" + Description + ", "
-                + "attributes=" + Collections.ToString(Attributes)
+                + "description=" + this.Description + ", "
+                + "attributes=" + Collections.ToString(this.Attributes)
                 + "}";
         }
     }

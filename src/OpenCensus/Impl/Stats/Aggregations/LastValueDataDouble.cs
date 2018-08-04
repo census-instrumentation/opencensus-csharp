@@ -21,11 +21,13 @@ namespace OpenCensus.Stats.Aggregations
 
     public sealed class LastValueDataDouble : AggregationData, ILastValueDataDouble
     {
-        LastValueDataDouble() { }
+        private LastValueDataDouble()
+        {
+        }
 
         public double LastValue { get; }
 
-        LastValueDataDouble(double lastValue)
+        private LastValueDataDouble(double lastValue)
         {
             this.LastValue = lastValue;
         }
@@ -38,7 +40,7 @@ namespace OpenCensus.Stats.Aggregations
         public override string ToString()
         {
             return "LastValueDataDouble{"
-                + "lastValue=" + LastValue
+                + "lastValue=" + this.LastValue
                 + "}";
         }
 
@@ -49,9 +51,8 @@ namespace OpenCensus.Stats.Aggregations
                 return true;
             }
 
-            if (o is LastValueDataDouble)
+            if (o is LastValueDataDouble that)
             {
-                LastValueDataDouble that = (LastValueDataDouble)o;
                 return DoubleUtil.ToInt64(this.LastValue) == DoubleUtil.ToInt64(that.LastValue);
             }
 

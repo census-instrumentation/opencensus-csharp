@@ -25,9 +25,8 @@ namespace OpenCensus.Stats
     {
         public IList<double> Boundaries { get; }
 
-        BucketBoundaries(IList<double> boundaries)
+        private BucketBoundaries(IList<double> boundaries)
         {
-
             this.Boundaries = boundaries;
         }
 
@@ -61,7 +60,7 @@ namespace OpenCensus.Stats
         public override string ToString()
         {
             return "BucketBoundaries{"
-                + "boundaries=" + Collections.ToString(Boundaries)
+                + "boundaries=" + Collections.ToString(this.Boundaries)
                 + "}";
         }
 
@@ -72,9 +71,8 @@ namespace OpenCensus.Stats
                 return true;
             }
 
-            if (o is BucketBoundaries)
+            if (o is BucketBoundaries that)
             {
-                BucketBoundaries that = (BucketBoundaries)o;
                 return this.Boundaries.SequenceEqual(that.Boundaries);
             }
 

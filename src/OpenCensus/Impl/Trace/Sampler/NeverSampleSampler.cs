@@ -20,13 +20,15 @@ namespace OpenCensus.Trace.Sampler
 
     internal sealed class NeverSampleSampler : ISampler
     {
-        internal NeverSampleSampler() { }
+        internal NeverSampleSampler()
+        {
+        }
 
         public string Description
         {
             get
             {
-                return ToString();
+                return this.ToString();
             }
         }
 

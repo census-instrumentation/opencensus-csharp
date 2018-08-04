@@ -20,8 +20,9 @@ namespace OpenCensus.Stats
 
     internal abstract class MutableAggregation
     {
-
-        protected MutableAggregation() { }
+        protected MutableAggregation()
+        {
+        }
 
         // Tolerance for double comparison.
         private const double TOLERANCE = 1e-6;

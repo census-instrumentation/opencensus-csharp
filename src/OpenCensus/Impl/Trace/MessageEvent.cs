@@ -22,10 +22,10 @@ namespace OpenCensus.Trace
     {
         internal MessageEvent(MessageEventType type, long messageId, long uncompressedMessageSize, long compressedMessageSize)
         {
-            Type = type;
-            MessageId = messageId;
-            UncompressedMessageSize = uncompressedMessageSize;
-            CompressedMessageSize = compressedMessageSize;
+            this.Type = type;
+            this.MessageId = messageId;
+            this.UncompressedMessageSize = uncompressedMessageSize;
+            this.CompressedMessageSize = compressedMessageSize;
         }
 
         public MessageEventType Type { get; }
@@ -41,6 +41,7 @@ namespace OpenCensus.Trace
             return new MessageEventBuilder()
                     .SetType(type)
                     .SetMessageId(messageId)
+
                     // We need to set a value for the message size because the autovalue requires all
                     // primitives to be initialized.
                     .SetUncompressedMessageSize(0)
@@ -50,10 +51,10 @@ namespace OpenCensus.Trace
         public override string ToString()
         {
             return "MessageEvent{"
-                + "type=" + Type + ", "
-                + "messageId=" + MessageId + ", "
-                + "uncompressedMessageSize=" + UncompressedMessageSize + ", "
-                + "compressedMessageSize=" + CompressedMessageSize
+                + "type=" + this.Type + ", "
+                + "messageId=" + this.MessageId + ", "
+                + "uncompressedMessageSize=" + this.UncompressedMessageSize + ", "
+                + "compressedMessageSize=" + this.CompressedMessageSize
                 + "}";
         }
 
@@ -64,9 +65,8 @@ namespace OpenCensus.Trace
                 return true;
             }
 
-            if (o is MessageEvent)
+            if (o is MessageEvent that)
             {
-                MessageEvent that = (MessageEvent)o;
                 return this.Type.Equals(that.Type)
                      && (this.MessageId == that.MessageId)
                      && (this.UncompressedMessageSize == that.UncompressedMessageSize)

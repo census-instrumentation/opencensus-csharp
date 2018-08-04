@@ -45,7 +45,9 @@ namespace OpenCensus.Trace
 
         public abstract ISpanId ParentSpanId { get; }
 
-        internal SpanBase() { }
+        internal SpanBase()
+        {
+        }
 
         protected SpanBase(ISpanContext context, SpanOptions options = SpanOptions.NONE)
         {
@@ -59,20 +61,20 @@ namespace OpenCensus.Trace
                 throw new ArgumentOutOfRangeException("Span is sampled, but does not have RECORD_EVENTS set.");
             }
 
-            Context = context;
-            Options = options;
+            this.Context = context;
+            this.Options = options;
         }
 
         public virtual void PutAttribute(string key, IAttributeValue value)
         {
-            PutAttributes(new Dictionary<string, IAttributeValue>() { { key, value } });
+            this.PutAttributes(new Dictionary<string, IAttributeValue>() { { key, value } });
         }
 
         public abstract void PutAttributes(IDictionary<string, IAttributeValue> attributes);
 
         public void AddAnnotation(string description)
         {
-            AddAnnotation(description, EMPTY_ATTRIBUTES);
+            this.AddAnnotation(description, EMPTY_ATTRIBUTES);
         }
 
         public abstract void AddAnnotation(string description, IDictionary<string, IAttributeValue> attributes);
@@ -89,7 +91,7 @@ namespace OpenCensus.Trace
 
         public void End()
         {
-            End(EndSpanOptions.DEFAULT);
+            this.End(EndSpanOptions.DEFAULT);
         }
 
         public abstract bool HasEnded { get; }
@@ -97,7 +99,7 @@ namespace OpenCensus.Trace
         public override string ToString()
         {
             return "Span[" +
-                Name +
+                this.Name +
                 "]";
         }
     }

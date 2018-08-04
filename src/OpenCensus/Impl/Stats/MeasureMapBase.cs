@@ -21,7 +21,6 @@ namespace OpenCensus.Stats
 
     public abstract class MeasureMapBase : IMeasureMap
     {
-
         public abstract IMeasureMap Put(IMeasureDouble measure, double value);
 
         public abstract IMeasureMap Put(IMeasureLong measure, long value);

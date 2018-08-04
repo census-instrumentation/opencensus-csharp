@@ -49,7 +49,7 @@ namespace OpenCensus.Trace
         {
             get
             {
-                return name;
+                return this.name;
             }
         }
 
@@ -57,24 +57,24 @@ namespace OpenCensus.Trace
         {
             get
             {
-                lock (@lock)
+                lock (this.@lock)
                 {
-                    return StatusWithDefault;
+                    return this.StatusWithDefault;
                 }
             }
 
             set
             {
-                if (!Options.HasFlag(SpanOptions.RECORD_EVENTS))
+                if (!this.Options.HasFlag(SpanOptions.RECORD_EVENTS))
                 {
                     return;
                 }
 
-                lock (@lock)
+                lock (this.@lock)
                 {
-                    if (hasBeenEnded)
+                    if (this.hasBeenEnded)
                     {
-                        //logger.log(Level.FINE, "Calling setStatus() on an ended Span.");
+                        // logger.log(Level.FINE, "Calling setStatus() on an ended Span.");
                         return;
                     }
 
@@ -87,9 +87,9 @@ namespace OpenCensus.Trace
         {
             get
             {
-                lock (@lock)
+                lock (this.@lock)
                 {
-                    return hasBeenEnded ? endNanoTime : clock.NowNanos;
+                    return this.hasBeenEnded ? this.endNanoTime : this.clock.NowNanos;
                 }
             }
         }
@@ -98,9 +98,9 @@ namespace OpenCensus.Trace
         {
             get
             {
-                lock (@lock)
+                lock (this.@lock)
                 {
-                    return hasBeenEnded ? endNanoTime - startNanoTime : clock.NowNanos - startNanoTime;
+                    return this.hasBeenEnded ? this.endNanoTime - this.startNanoTime : this.clock.NowNanos - this.startNanoTime;
                 }
             }
         }
@@ -109,87 +109,87 @@ namespace OpenCensus.Trace
         {
             get
             {
-                lock (@lock)
+                lock (this.@lock)
                 {
-                    if (!hasBeenEnded)
+                    if (!this.hasBeenEnded)
                     {
                         throw new InvalidOperationException("Running span does not have the SampleToLocalSpanStore set.");
                     }
 
-                    return sampleToLocalSpanStore;
+                    return this.sampleToLocalSpanStore;
                 }
             }
         }
 
         public override void PutAttribute(string key, IAttributeValue value)
         {
-            if (!Options.HasFlag(SpanOptions.RECORD_EVENTS))
+            if (!this.Options.HasFlag(SpanOptions.RECORD_EVENTS))
             {
                 return;
             }
 
-            lock (@lock)
+            lock (this.@lock)
             {
-                if (hasBeenEnded)
+                if (this.hasBeenEnded)
                 {
-                    //logger.log(Level.FINE, "Calling putAttributes() on an ended Span.");
+                    // logger.log(Level.FINE, "Calling putAttributes() on an ended Span.");
                     return;
                 }
 
-                InitializedAttributes.PutAttribute(key, value);
+                this.InitializedAttributes.PutAttribute(key, value);
             }
         }
 
         public override void PutAttributes(IDictionary<string, IAttributeValue> attributes)
         {
-            if (!Options.HasFlag(SpanOptions.RECORD_EVENTS))
+            if (!this.Options.HasFlag(SpanOptions.RECORD_EVENTS))
             {
                 return;
             }
 
-            lock (@lock)
+            lock (this.@lock)
             {
-                if (hasBeenEnded)
+                if (this.hasBeenEnded)
                 {
-                    //logger.log(Level.FINE, "Calling putAttributes() on an ended Span.");
+                    // logger.log(Level.FINE, "Calling putAttributes() on an ended Span.");
                     return;
                 }
 
-                InitializedAttributes.PutAttributes(attributes);
+                this.InitializedAttributes.PutAttributes(attributes);
             }
         }
 
         public override void AddAnnotation(string description, IDictionary<string, IAttributeValue> attributes)
         {
-            if (!Options.HasFlag(SpanOptions.RECORD_EVENTS))
+            if (!this.Options.HasFlag(SpanOptions.RECORD_EVENTS))
             {
                 return;
             }
 
-            lock (@lock)
+            lock (this.@lock)
             {
-                if (hasBeenEnded)
+                if (this.hasBeenEnded)
                 {
-                    //logger.log(Level.FINE, "Calling addAnnotation() on an ended Span.");
+                    // logger.log(Level.FINE, "Calling addAnnotation() on an ended Span.");
                     return;
                 }
 
-                InitializedAnnotations.AddEvent(new EventWithNanoTime<IAnnotation>(clock.NowNanos, Annotation.FromDescriptionAndAttributes(description, attributes)));
+                this.InitializedAnnotations.AddEvent(new EventWithNanoTime<IAnnotation>(this.clock.NowNanos, Annotation.FromDescriptionAndAttributes(description, attributes)));
             }
         }
 
         public override void AddAnnotation(IAnnotation annotation)
         {
-            if (!Options.HasFlag(SpanOptions.RECORD_EVENTS))
+            if (!this.Options.HasFlag(SpanOptions.RECORD_EVENTS))
             {
                 return;
             }
 
-            lock (@lock)
+            lock (this.@lock)
             {
-                if (hasBeenEnded)
+                if (this.hasBeenEnded)
                 {
-                    //logger.log(Level.FINE, "Calling addAnnotation() on an ended Span.");
+                    // logger.log(Level.FINE, "Calling addAnnotation() on an ended Span.");
                     return;
                 }
 
@@ -198,22 +198,22 @@ namespace OpenCensus.Trace
                     throw new ArgumentNullException(nameof(annotation));
                 }
 
-                InitializedAnnotations.AddEvent(new EventWithNanoTime<IAnnotation>(clock.NowNanos, annotation));
+                this.InitializedAnnotations.AddEvent(new EventWithNanoTime<IAnnotation>(this.clock.NowNanos, annotation));
             }
         }
 
         public override void AddLink(ILink link)
         {
-            if (!Options.HasFlag(SpanOptions.RECORD_EVENTS))
+            if (!this.Options.HasFlag(SpanOptions.RECORD_EVENTS))
             {
                 return;
             }
 
-            lock (@lock)
+            lock (this.@lock)
             {
-                if (hasBeenEnded)
+                if (this.hasBeenEnded)
                 {
-                    //logger.log(Level.FINE, "Calling addLink() on an ended Span.");
+                    // logger.log(Level.FINE, "Calling addLink() on an ended Span.");
                     return;
                 }
 
@@ -222,22 +222,22 @@ namespace OpenCensus.Trace
                     throw new ArgumentNullException(nameof(link));
                 }
 
-                InitializedLinks.AddEvent(link);
+                this.InitializedLinks.AddEvent(link);
             }
         }
 
         public override void AddMessageEvent(IMessageEvent messageEvent)
         {
-            if (!Options.HasFlag(SpanOptions.RECORD_EVENTS))
+            if (!this.Options.HasFlag(SpanOptions.RECORD_EVENTS))
             {
                 return;
             }
 
-            lock (@lock)
+            lock (this.@lock)
             {
-                if (hasBeenEnded)
+                if (this.hasBeenEnded)
                 {
-                    //logger.log(Level.FINE, "Calling addNetworkEvent() on an ended Span.");
+                    // logger.log(Level.FINE, "Calling addNetworkEvent() on an ended Span.");
                     return;
                 }
 
@@ -246,48 +246,48 @@ namespace OpenCensus.Trace
                     throw new ArgumentNullException(nameof(messageEvent));
                 }
 
-                InitializedMessageEvents.AddEvent(new EventWithNanoTime<IMessageEvent>(clock.NowNanos, messageEvent));
+                this.InitializedMessageEvents.AddEvent(new EventWithNanoTime<IMessageEvent>(this.clock.NowNanos, messageEvent));
             }
         }
 
         public override void End(EndSpanOptions options)
         {
-            if (!Options.HasFlag(SpanOptions.RECORD_EVENTS))
+            if (!this.Options.HasFlag(SpanOptions.RECORD_EVENTS))
             {
                 return;
             }
 
-            lock (@lock)
+            lock (this.@lock)
             {
-                if (hasBeenEnded)
+                if (this.hasBeenEnded)
                 {
-                    //logger.log(Level.FINE, "Calling end() on an ended Span.");
+                    // logger.log(Level.FINE, "Calling end() on an ended Span.");
                     return;
                 }
 
                 if (options.Status != null)
                 {
-                    status = options.Status;
+                    this.status = options.Status;
                 }
 
-                sampleToLocalSpanStore = options.SampleToLocalSpanStore;
-                endNanoTime = clock.NowNanos;
-                hasBeenEnded = true;
+                this.sampleToLocalSpanStore = options.SampleToLocalSpanStore;
+                this.endNanoTime = this.clock.NowNanos;
+                this.hasBeenEnded = true;
             }
 
-            startEndHandler.OnEnd(this);
+            this.startEndHandler.OnEnd(this);
         }
 
         private AttributesWithCapacity InitializedAttributes
         {
             get
             {
-                if (attributes == null)
+                if (this.attributes == null)
                 {
-                    attributes = new AttributesWithCapacity(traceParams.MaxNumberOfAttributes);
+                    this.attributes = new AttributesWithCapacity(this.traceParams.MaxNumberOfAttributes);
                 }
 
-                return attributes;
+                return this.attributes;
             }
         }
 
@@ -295,13 +295,13 @@ namespace OpenCensus.Trace
         {
             get
             {
-                if (annotations == null)
+                if (this.annotations == null)
                 {
-                    annotations =
-                        new TraceEvents<EventWithNanoTime<IAnnotation>>(traceParams.MaxNumberOfAnnotations);
+                    this.annotations =
+                        new TraceEvents<EventWithNanoTime<IAnnotation>>(this.traceParams.MaxNumberOfAnnotations);
                 }
 
-                return annotations;
+                return this.annotations;
             }
         }
 
@@ -309,13 +309,13 @@ namespace OpenCensus.Trace
         {
             get
             {
-                if (messageEvents == null)
+                if (this.messageEvents == null)
                 {
-                    messageEvents =
-                        new TraceEvents<EventWithNanoTime<IMessageEvent>>(traceParams.MaxNumberOfMessageEvents);
+                    this.messageEvents =
+                        new TraceEvents<EventWithNanoTime<IMessageEvent>>(this.traceParams.MaxNumberOfMessageEvents);
                 }
 
-                return messageEvents;
+                return this.messageEvents;
             }
         }
 
@@ -323,12 +323,12 @@ namespace OpenCensus.Trace
         {
             get
             {
-                if (links == null)
+                if (this.links == null)
                 {
-                    links = new TraceEvents<ILink>(traceParams.MaxNumberOfLinks);
+                    this.links = new TraceEvents<ILink>(this.traceParams.MaxNumberOfLinks);
                 }
 
-                return links;
+                return this.links;
             }
         }
 
@@ -336,7 +336,7 @@ namespace OpenCensus.Trace
         {
             get
             {
-                return status ?? Trace.Status.OK;
+                return this.status ?? Trace.Status.OK;
             }
         }
 
@@ -344,7 +344,7 @@ namespace OpenCensus.Trace
         {
             get
             {
-                return timestampConverter;
+                return this.timestampConverter;
             }
         }
 
@@ -352,7 +352,7 @@ namespace OpenCensus.Trace
         {
             get
             {
-                return parentSpanId;
+                return this.parentSpanId;
             }
         }
 
@@ -360,79 +360,9 @@ namespace OpenCensus.Trace
         {
             get
             {
-                return hasBeenEnded;
+                return this.hasBeenEnded;
             }
         }
-
-        internal override ISpanData ToSpanData()
-        {
-
-            if (!Options.HasFlag(SpanOptions.RECORD_EVENTS))
-            {
-                throw new InvalidOperationException("Getting SpanData for a Span without RECORD_EVENTS option.");
-            }
-
-            Attributes attributesSpanData = attributes == null  ? Attributes.Create(new Dictionary<string, IAttributeValue>(), 0)
-                        : Attributes.Create(attributes, attributes.NumberOfDroppedAttributes);
-
-            ITimedEvents<IAnnotation> annotationsSpanData = CreateTimedEvents(InitializedAnnotations, timestampConverter);
-            ITimedEvents<IMessageEvent> messageEventsSpanData = CreateTimedEvents(InitializedMessageEvents, timestampConverter);
-            LinkList linksSpanData = links == null ? LinkList.Create(new List<ILink>(), 0) : LinkList.Create(links.Events.ToList(), links.NumberOfDroppedEvents);
-
-            return SpanData.Create(
-                Context,
-                parentSpanId,
-                hasRemoteParent,
-                name,
-                timestampConverter.ConvertNanoTime(startNanoTime),
-                attributesSpanData,
-                annotationsSpanData,
-                messageEventsSpanData,
-                linksSpanData,
-                null, // Not supported yet.
-                hasBeenEnded ? StatusWithDefault : null,
-                hasBeenEnded ? timestampConverter.ConvertNanoTime(endNanoTime) : null);
-        }
-
-        internal static ISpan StartSpan(
-                ISpanContext context,
-                SpanOptions options,
-                string name,
-                ISpanId parentSpanId,
-                bool? hasRemoteParent,
-                ITraceParams traceParams,
-                IStartEndHandler startEndHandler,
-                ITimestampConverter timestampConverter,
-                IClock clock)
-        {
-            var span = new Span(
-               context,
-               options,
-               name,
-               parentSpanId,
-               hasRemoteParent,
-               traceParams,
-               startEndHandler,
-               timestampConverter,
-               clock);
-            // Call onStart here instead of calling in the constructor to make sure the span is completely
-            // initialized.
-            if (span.Options.HasFlag(SpanOptions.RECORD_EVENTS))
-            {
-                startEndHandler.OnStart(span);
-            }
-
-            return span;
-        }
-
-        //public virtual void AddMessageEvent(MessageEventBase messageEvent)
-        //{
-        // Default implementation by invoking addNetworkEvent() so that any existing derived classes,
-        // including implementation and the mocked ones, do not need to override this method explicitly.
-        //addNetworkEvent(BaseMessageEventUtil.asNetworkEvent(messageEvent));
-        //}
-
-        //public abstract void AddLink(LinkBase link);
 
         private Span(
                 ISpanContext context,
@@ -456,8 +386,8 @@ namespace OpenCensus.Trace
             this.sampleToLocalSpanStore = false;
             if (options.HasFlag(SpanOptions.RECORD_EVENTS))
             {
-                this.timestampConverter =  timestampConverter != null ? timestampConverter : OpenCensus.Internal.TimestampConverter.Now(clock);
-                startNanoTime = clock.NowNanos;
+                this.timestampConverter = timestampConverter != null ? timestampConverter : OpenCensus.Internal.TimestampConverter.Now(clock);
+                this.startNanoTime = clock.NowNanos;
             }
             else
             {
@@ -466,6 +396,75 @@ namespace OpenCensus.Trace
             }
         }
 
+        internal override ISpanData ToSpanData()
+        {
+            if (!this.Options.HasFlag(SpanOptions.RECORD_EVENTS))
+            {
+                throw new InvalidOperationException("Getting SpanData for a Span without RECORD_EVENTS option.");
+            }
+
+            Attributes attributesSpanData = this.attributes == null ? Attributes.Create(new Dictionary<string, IAttributeValue>(), 0)
+                        : Attributes.Create(this.attributes, this.attributes.NumberOfDroppedAttributes);
+
+            ITimedEvents<IAnnotation> annotationsSpanData = CreateTimedEvents(this.InitializedAnnotations, this.timestampConverter);
+            ITimedEvents<IMessageEvent> messageEventsSpanData = CreateTimedEvents(this.InitializedMessageEvents, this.timestampConverter);
+            LinkList linksSpanData = this.links == null ? LinkList.Create(new List<ILink>(), 0) : LinkList.Create(this.links.Events.ToList(), this.links.NumberOfDroppedEvents);
+
+            return SpanData.Create(
+                this.Context,
+                this.parentSpanId,
+                this.hasRemoteParent,
+                this.name,
+                this.timestampConverter.ConvertNanoTime(this.startNanoTime),
+                attributesSpanData,
+                annotationsSpanData,
+                messageEventsSpanData,
+                linksSpanData,
+                null, // Not supported yet.
+                this.hasBeenEnded ? this.StatusWithDefault : null,
+                this.hasBeenEnded ? this.timestampConverter.ConvertNanoTime(this.endNanoTime) : null);
+        }
+
+        internal static ISpan StartSpan(
+                ISpanContext context,
+                SpanOptions options,
+                string name,
+                ISpanId parentSpanId,
+                bool? hasRemoteParent,
+                ITraceParams traceParams,
+                IStartEndHandler startEndHandler,
+                ITimestampConverter timestampConverter,
+                IClock clock)
+        {
+            var span = new Span(
+               context,
+               options,
+               name,
+               parentSpanId,
+               hasRemoteParent,
+               traceParams,
+               startEndHandler,
+               timestampConverter,
+               clock);
+
+            // Call onStart here instead of calling in the constructor to make sure the span is completely
+            // initialized.
+            if (span.Options.HasFlag(SpanOptions.RECORD_EVENTS))
+            {
+                startEndHandler.OnStart(span);
+            }
+
+            return span;
+        }
+
+        // public virtual void AddMessageEvent(MessageEventBase messageEvent)
+        // {
+        // Default implementation by invoking addNetworkEvent() so that any existing derived classes,
+        // including implementation and the mocked ones, do not need to override this method explicitly.
+        // addNetworkEvent(BaseMessageEventUtil.asNetworkEvent(messageEvent));
+        // }
+
+        // public abstract void AddLink(LinkBase link);
         private static ITimedEvents<T> CreateTimedEvents<T>(TraceEvents<EventWithNanoTime<T>> events, ITimestampConverter timestampConverter)
         {
             if (events == null)

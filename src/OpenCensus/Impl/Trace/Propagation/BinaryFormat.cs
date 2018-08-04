@@ -20,9 +20,9 @@ namespace OpenCensus.Trace.Propagation
 
     internal class BinaryFormat : BinaryFormatBase
     {
-
         private const byte VERSION_ID = 0;
         private const int VERSION_ID_OFFSET = 0;
+
         // The version_id/field_id size in bytes.
         private const byte ID_SIZE = 1;
         private const byte TRACE_ID_FIELD_ID = 0;

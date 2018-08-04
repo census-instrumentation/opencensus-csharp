@@ -20,7 +20,6 @@ namespace OpenCensus.Tags
 
     internal sealed class NoopTags
     {
-
         internal static ITagsComponent NewNoopTagsComponent()
         {
             return new NoopTagsComponent();

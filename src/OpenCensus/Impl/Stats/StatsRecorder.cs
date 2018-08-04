@@ -24,17 +24,12 @@ namespace OpenCensus.Stats
 
         internal StatsRecorder(StatsManager statsManager)
         {
-            if (statsManager == null)
-            {
-                throw new ArgumentNullException(nameof(statsManager));
-            }
-
-            this.statsManager = statsManager;
+            this.statsManager = statsManager ?? throw new ArgumentNullException(nameof(statsManager));
         }
 
         public override IMeasureMap NewMeasureMap()
         {
-            return MeasureMap.Create(statsManager);
+            return MeasureMap.Create(this.statsManager);
         }
     }
 }

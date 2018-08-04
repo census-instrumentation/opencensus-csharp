@@ -23,6 +23,12 @@ namespace OpenCensus.Internal
         private readonly ITimestamp timestamp;
         private readonly long nanoTime;
 
+        private TimestampConverter(ITimestamp timestamp, long nanoTime)
+        {
+            this.timestamp = timestamp;
+            this.nanoTime = nanoTime;
+        }
+
         // Returns a WallTimeConverter initialized to now.
         public static ITimestampConverter Now(IClock clock)
         {
@@ -31,13 +37,7 @@ namespace OpenCensus.Internal
 
         public ITimestamp ConvertNanoTime(long nanoTime)
         {
-            return timestamp.AddNanos(nanoTime - this.nanoTime);
-        }
-
-        private TimestampConverter(ITimestamp timestamp, long nanoTime)
-        {
-            this.timestamp = timestamp;
-            this.nanoTime = nanoTime;
+            return this.timestamp.AddNanos(nanoTime - this.nanoTime);
         }
     }
 }

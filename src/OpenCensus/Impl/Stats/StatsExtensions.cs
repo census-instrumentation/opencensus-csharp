@@ -47,7 +47,6 @@ namespace OpenCensus.Stats
 
             foreach (var kvp in aggMap)
             {
-
                 if (TagValuesMatch(kvp.Key.Values, values))
                 {
                     results.Add(kvp.Key, kvp.Value);

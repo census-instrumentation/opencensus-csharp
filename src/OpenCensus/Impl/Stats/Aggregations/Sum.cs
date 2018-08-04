@@ -20,7 +20,9 @@ namespace OpenCensus.Stats.Aggregations
 
     public sealed class Sum : Aggregation, ISum
     {
-        internal Sum() { }
+        internal Sum()
+        {
+        }
 
         private static readonly Sum INSTANCE = new Sum();
 

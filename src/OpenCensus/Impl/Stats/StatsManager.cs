@@ -34,41 +34,26 @@ namespace OpenCensus.Stats
 
         internal StatsManager(IEventQueue queue, IClock clock, CurrentStatsState state)
         {
-            if (queue == null)
-            {
-                throw new ArgumentNullException(nameof(queue));
-            }
-
-            if (clock == null)
-            {
-                throw new ArgumentNullException(nameof(clock));
-            }
-
-            if (state == null)
-            {
-                throw new ArgumentNullException(nameof(state));
-            }
-
-            this.queue = queue;
-            this.clock = clock;
-            this.state = state;
+            this.queue = queue ?? throw new ArgumentNullException(nameof(queue));
+            this.clock = clock ?? throw new ArgumentNullException(nameof(clock));
+            this.state = state ?? throw new ArgumentNullException(nameof(state));
         }
 
         internal void RegisterView(IView view)
         {
-            measureToViewMap.RegisterView(view, clock);
+            this.measureToViewMap.RegisterView(view, this.clock);
         }
 
         internal IViewData GetView(IViewName viewName)
         {
-            return measureToViewMap.GetView(viewName, clock, state.Internal);
+            return this.measureToViewMap.GetView(viewName, this.clock, this.state.Internal);
         }
 
         internal ISet<IView> ExportedViews
         {
             get
             {
-                return measureToViewMap.ExportedViews;
+                return this.measureToViewMap.ExportedViews;
             }
         }
 
@@ -76,20 +61,20 @@ namespace OpenCensus.Stats
         {
             // TODO(songya): consider exposing No-op MeasureMap and use it when stats state is DISABLED, so
             // that we don't need to create actual MeasureMapImpl.
-            if (state.Internal == StatsCollectionState.ENABLED)
+            if (this.state.Internal == StatsCollectionState.ENABLED)
             {
-                queue.Enqueue(new StatsEvent(this, tags, measurementValues));
+                this.queue.Enqueue(new StatsEvent(this, tags, measurementValues));
             }
         }
 
         internal void ClearStats()
         {
-            measureToViewMap.ClearStats();
+            this.measureToViewMap.ClearStats();
         }
 
         internal void ResumeStatsCollection()
         {
-            measureToViewMap.ResumeStatsCollection(clock.Now);
+            this.measureToViewMap.ResumeStatsCollection(this.clock.Now);
         }
 
         private class StatsEvent : IEventQueueEntry
@@ -108,7 +93,7 @@ namespace OpenCensus.Stats
             public void Process()
             {
                 // Add Timestamp to value after it went through the DisruptorQueue.
-                statsManager.measureToViewMap.Record(tags, stats, statsManager.clock.Now);
+                this.statsManager.measureToViewMap.Record(this.tags, this.stats, this.statsManager.clock.Now);
             }
         }
 }

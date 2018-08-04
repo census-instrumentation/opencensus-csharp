@@ -20,6 +20,8 @@ namespace OpenCensus.Stats
     {
         private static Stats stats = new Stats();
 
+        private IStatsComponent statsComponent = new StatsComponent();
+
         internal Stats()
             : this(false)
         {
@@ -29,15 +31,13 @@ namespace OpenCensus.Stats
         {
             if (enabled)
             {
-                statsComponent = new StatsComponent();
+                this.statsComponent = new StatsComponent();
             }
             else
             {
-                statsComponent = NoopStats.NewNoopStatsComponent();
+                this.statsComponent = NoopStats.NewNoopStatsComponent();
             }
         }
-
-        private  IStatsComponent statsComponent = new StatsComponent();
 
         public static IStatsRecorder StatsRecorder
         {

@@ -37,8 +37,8 @@ namespace OpenCensus.Trace.Export
 
         internal LatencyBucketBoundaries(long latencyLowerNs, long latencyUpperNs)
         {
-            LatencyLowerNs = latencyLowerNs;
-            LatencyUpperNs = latencyUpperNs;
+            this.LatencyLowerNs = latencyLowerNs;
+            this.LatencyUpperNs = latencyUpperNs;
         }
 
         public long LatencyLowerNs { get; }

@@ -25,14 +25,14 @@ namespace OpenCensus.Trace.Export
 
         public InProcessRunningSpanStore()
         {
-            runningSpans = new ConcurrentIntrusiveList<SpanBase>();
+            this.runningSpans = new ConcurrentIntrusiveList<SpanBase>();
         }
 
         public override IRunningSpanStoreSummary Summary
         {
             get
             {
-                ICollection<SpanBase> allRunningSpans = runningSpans.Copy();
+                ICollection<SpanBase> allRunningSpans = this.runningSpans.Copy();
                 Dictionary<string, int> numSpansPerName = new Dictionary<string, int>();
                 foreach (var span in allRunningSpans)
                 {
@@ -55,7 +55,7 @@ namespace OpenCensus.Trace.Export
 
         public override IList<ISpanData> GetRunningSpans(IRunningSpanStoreFilter filter)
         {
-            ICollection<SpanBase> allRunningSpans = runningSpans.Copy();
+            ICollection<SpanBase> allRunningSpans = this.runningSpans.Copy();
             int maxSpansToReturn = filter.MaxSpansToReturn == 0 ? allRunningSpans.Count : filter.MaxSpansToReturn;
             List<ISpanData> ret = new List<ISpanData>(maxSpansToReturn);
             foreach (var span in allRunningSpans)
@@ -79,7 +79,7 @@ namespace OpenCensus.Trace.Export
             SpanBase spanBase = span as SpanBase;
             if (spanBase != null)
             {
-                runningSpans.RemoveElement(spanBase);
+                this.runningSpans.RemoveElement(spanBase);
             }
         }
 
@@ -88,7 +88,7 @@ namespace OpenCensus.Trace.Export
             SpanBase spanBase = span as SpanBase;
             if (spanBase != null)
             {
-                runningSpans.AddElement(spanBase);
+                this.runningSpans.AddElement(spanBase);
             }
         }
     }

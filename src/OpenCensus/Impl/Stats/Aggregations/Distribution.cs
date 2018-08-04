@@ -20,18 +20,15 @@ namespace OpenCensus.Stats.Aggregations
 
     public sealed class Distribution : Aggregation, IDistribution
     {
-        Distribution() { }
+        private Distribution()
+        {
+        }
 
         public IBucketBoundaries BucketBoundaries { get; }
 
-        Distribution(IBucketBoundaries bucketBoundaries)
+        private Distribution(IBucketBoundaries bucketBoundaries)
         {
-            if (bucketBoundaries == null)
-            {
-                throw new ArgumentNullException("Null bucketBoundaries");
-            }
-
-            BucketBoundaries = bucketBoundaries;
+            this.BucketBoundaries = bucketBoundaries ?? throw new ArgumentNullException("Null bucketBoundaries");
         }
 
         public static IDistribution Create(IBucketBoundaries bucketBoundaries)
@@ -52,7 +49,7 @@ namespace OpenCensus.Stats.Aggregations
         public override string ToString()
         {
             return "Distribution{"
-                + "bucketBoundaries=" + BucketBoundaries
+                + "bucketBoundaries=" + this.BucketBoundaries
                 + "}";
         }
 
@@ -63,9 +60,8 @@ namespace OpenCensus.Stats.Aggregations
                 return true;
             }
 
-            if (o is Distribution)
+            if (o is Distribution that)
             {
-                Distribution that = (Distribution)o;
                 return this.BucketBoundaries.Equals(that.BucketBoundaries);
             }
 

@@ -40,20 +40,15 @@ namespace OpenCensus.Trace.Export
 
         internal TimedEvents(IList<ITimedEvent<T>> events, int droppedEventsCount)
         {
-            if (events == null)
-            {
-                throw new ArgumentNullException("Null events");
-            }
-
-            this.Events = events;
+            this.Events = events ?? throw new ArgumentNullException("Null events");
             this.DroppedEventsCount = droppedEventsCount;
         }
 
         public override string ToString()
         {
             return "TimedEvents{"
-                + "events=" + Events + ", "
-                + "droppedEventsCount=" + DroppedEventsCount
+                + "events=" + this.Events + ", "
+                + "droppedEventsCount=" + this.DroppedEventsCount
                 + "}";
         }
 
@@ -64,9 +59,8 @@ namespace OpenCensus.Trace.Export
                 return true;
             }
 
-            if (o is TimedEvents<T>)
+            if (o is TimedEvents<T> that)
             {
-                TimedEvents<T> that = (TimedEvents<T>)o;
                 return this.Events.SequenceEqual(that.Events)
                      && (this.DroppedEventsCount == that.DroppedEventsCount);
             }

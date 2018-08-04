@@ -49,7 +49,7 @@ namespace OpenCensus.Stats.Aggregations
         public override string ToString()
         {
             return "SumDataDouble{"
-                + "sum=" + Sum
+                + "sum=" + this.Sum
                 + "}";
         }
 
@@ -60,9 +60,8 @@ namespace OpenCensus.Stats.Aggregations
                 return true;
             }
 
-            if (o is SumDataDouble)
+            if (o is SumDataDouble that)
             {
-                SumDataDouble that = (SumDataDouble)o;
                 return DoubleUtil.ToInt64(this.Sum) == DoubleUtil.ToInt64(that.Sum);
             }
 

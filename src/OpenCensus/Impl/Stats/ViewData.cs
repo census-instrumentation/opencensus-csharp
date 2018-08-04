@@ -27,6 +27,13 @@ namespace OpenCensus.Stats
 
     public sealed class ViewData : IViewData
     {
+        internal ViewData(IView view, IDictionary<TagValues, IAggregationData> aggregationMap, ITimestamp start, ITimestamp end)
+        {
+            this.View = view ?? throw new ArgumentNullException(nameof(view));
+            this.AggregationMap = aggregationMap ?? throw new ArgumentNullException(nameof(aggregationMap));
+            this.Start = start ?? throw new ArgumentNullException(nameof(start));
+            this.End = end ?? throw new ArgumentNullException(nameof(end));
+        }
         public IView View { get; }
 
         public IDictionary<TagValues, IAggregationData> AggregationMap { get; }
@@ -34,35 +41,6 @@ namespace OpenCensus.Stats
         public ITimestamp Start { get; }
 
         public ITimestamp End { get; }
-
-        internal ViewData(IView view, IDictionary<TagValues, IAggregationData> aggregationMap, ITimestamp start, ITimestamp end)
-        {
-            if (view == null)
-            {
-                throw new ArgumentNullException(nameof(view));
-            }
-
-            this.View = view;
-            if (aggregationMap == null)
-            {
-                throw new ArgumentNullException(nameof(aggregationMap));
-            }
-
-            this.AggregationMap = aggregationMap;
-
-            if (start == null)
-            {
-                throw new ArgumentNullException(nameof(start));
-            }
-
-            this.Start = start;
-            if (end == null)
-            {
-                throw new ArgumentNullException(nameof(end));
-            }
-
-            this.End = end;
-        }
 
         public static IViewData Create(IView view, IDictionary<TagValues, IAggregationData> map, ITimestamp start, ITimestamp end)
         {
@@ -83,10 +61,10 @@ namespace OpenCensus.Stats
         public override string ToString()
         {
             return "ViewData{"
-                + "view=" + View + ", "
-                + "aggregationMap=" + Collections.ToString(AggregationMap) + ", "
-                + "start=" + Start + ", "
-                + "end=" + End
+                + "view=" + this.View + ", "
+                + "aggregationMap=" + Collections.ToString(this.AggregationMap) + ", "
+                + "start=" + this.Start + ", "
+                + "end=" + this.End
                 + "}";
         }
 
@@ -97,9 +75,8 @@ namespace OpenCensus.Stats
                 return true;
             }
 
-            if (o is ViewData)
+            if (o is ViewData that)
             {
-                ViewData that = (ViewData)o;
                 return this.View.Equals(that.View)
                      && this.AggregationMap.SequenceEqual(that.AggregationMap)
                      && this.Start.Equals(that.Start)

@@ -31,13 +31,13 @@ namespace OpenCensus.Stats
 
         internal MeasureMapBuilder Put(IMeasureDouble measure, double value)
         {
-            measurements.Add(MeasurementDouble.Create(measure, value));
+            this.measurements.Add(MeasurementDouble.Create(measure, value));
             return this;
         }
 
         internal MeasureMapBuilder Put(IMeasureLong measure, long value)
         {
-            measurements.Add(MeasurementLong.Create(measure, value));
+            this.measurements.Add(MeasurementLong.Create(measure, value));
             return this;
         }
 
@@ -46,19 +46,19 @@ namespace OpenCensus.Stats
             // Note: this makes adding measurements quadratic but is fastest for the sizes of
             // MeasureMapInternals that we should see. We may want to go to a strategy of sort/eliminate
             // for larger MeasureMapInternals.
-            for (int i = measurements.Count - 1; i >= 0; i--)
+            for (int i = this.measurements.Count - 1; i >= 0; i--)
             {
                 for (int j = i - 1; j >= 0; j--)
                 {
-                    if (measurements[i].Measure == measurements[j].Measure)
+                    if (this.measurements[i].Measure == this.measurements[j].Measure)
                     {
-                        measurements.RemoveAt(j);
+                        this.measurements.RemoveAt(j);
                         j--;
                     }
                 }
             }
 
-            return new List<IMeasurement>(measurements);
+            return new List<IMeasurement>(this.measurements);
         }
     }
 }

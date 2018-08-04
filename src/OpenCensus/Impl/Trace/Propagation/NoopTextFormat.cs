@@ -21,7 +21,9 @@ namespace OpenCensus.Trace.Propagation
 
     internal class NoopTextFormat : TextFormatBase
     {
-        internal NoopTextFormat() { }
+        internal NoopTextFormat()
+        {
+        }
 
         public override IList<string> Fields
         {
@@ -48,7 +50,6 @@ namespace OpenCensus.Trace.Propagation
 
         public override ISpanContext Extract<C>(C carrier, IGetter<C> getter)
         {
-
             if (carrier == null)
             {
                 throw new ArgumentNullException(nameof(carrier));

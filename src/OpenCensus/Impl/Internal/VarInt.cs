@@ -78,8 +78,8 @@ namespace OpenCensus.Internal
             return offset;
         }
 
-        //public static int getVarInt(ByteBuffer src)
-        //{
+        // public static int getVarInt(ByteBuffer src)
+        // {
         //    int tmp;
         //    if ((tmp = src.get()) >= 0)
         //    {
@@ -119,10 +119,10 @@ namespace OpenCensus.Internal
         //        }
         //    }
         //    return result;
-        //}
+        // }
 
-        //public static void putVarInt(int v, ByteBuffer sink)
-        //{
+        // public static void putVarInt(int v, ByteBuffer sink)
+        // {
         //    while (true)
         //    {
         //        int bits = v & 0x7f;
@@ -134,7 +134,7 @@ namespace OpenCensus.Internal
         //        }
         //        sink.put((byte)(bits | 0x80));
         //    }
-        //}
+        // }
 
         /**
          * Reads a varint from the given InputStream and returns the decoded value as an int.
@@ -183,8 +183,8 @@ namespace OpenCensus.Internal
             return result;
         }
 
-        //public static long GetVarLong(ByteBuffer src)
-        //{
+        // public static long GetVarLong(ByteBuffer src)
+        // {
         //    long tmp;
         //    if ((tmp = src.get()) >= 0)
         //    {
@@ -257,10 +257,10 @@ namespace OpenCensus.Internal
         //        }
         //    }
         //    return result;
-        //}
+        // }
 
-        //public static void PutVarLong(long v, ByteBuffer sink)
-        //{
+        // public static void PutVarLong(long v, ByteBuffer sink)
+        // {
         //    while (true)
         //    {
         //        int bits = ((int)v) & 0x7f;
@@ -272,6 +272,6 @@ namespace OpenCensus.Internal
         //        }
         //        sink.put((byte)(bits | 0x80));
         //    }
-        //}
+        // }
     }
 }

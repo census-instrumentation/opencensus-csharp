@@ -43,22 +43,17 @@ namespace OpenCensus.Trace.Export
 
         internal SampledSpanStoreErrorFilter(string spanName, CanonicalCode? canonicalCode, int maxSpansToReturn)
         {
-            if (spanName == null)
-            {
-                throw new ArgumentNullException(nameof(spanName));
-            }
-
-            SpanName = spanName;
-            CanonicalCode = canonicalCode;
-            MaxSpansToReturn = maxSpansToReturn;
+            this.SpanName = spanName ?? throw new ArgumentNullException(nameof(spanName));
+            this.CanonicalCode = canonicalCode;
+            this.MaxSpansToReturn = maxSpansToReturn;
         }
 
         public override string ToString()
         {
             return "ErrorFilter{"
-                + "spanName=" + SpanName + ", "
-                + "canonicalCode=" + CanonicalCode + ", "
-                + "maxSpansToReturn=" + MaxSpansToReturn
+                + "spanName=" + this.SpanName + ", "
+                + "canonicalCode=" + this.CanonicalCode + ", "
+                + "maxSpansToReturn=" + this.MaxSpansToReturn
                 + "}";
         }
 
@@ -69,9 +64,8 @@ namespace OpenCensus.Trace.Export
                 return true;
             }
 
-            if (o is SampledSpanStoreErrorFilter)
+            if (o is SampledSpanStoreErrorFilter that)
             {
-                SampledSpanStoreErrorFilter that = (SampledSpanStoreErrorFilter)o;
                 return this.SpanName.Equals(that.SpanName)
                      && (this.CanonicalCode == that.CanonicalCode)
                      && (this.MaxSpansToReturn == that.MaxSpansToReturn);

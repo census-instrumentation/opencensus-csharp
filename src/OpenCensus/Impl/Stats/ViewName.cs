@@ -27,12 +27,7 @@ namespace OpenCensus.Stats
 
         internal ViewName(string asString)
         {
-            if (asString == null)
-            {
-                throw new ArgumentNullException(nameof(asString));
-            }
-
-            this.AsString = asString;
+            this.AsString = asString ?? throw new ArgumentNullException(nameof(asString));
         }
 
         public static IViewName Create(string name)
@@ -56,7 +51,7 @@ namespace OpenCensus.Stats
         public override string ToString()
         {
             return "Name{"
-                + "asString=" + AsString
+                + "asString=" + this.AsString
                 + "}";
         }
 
@@ -67,9 +62,8 @@ namespace OpenCensus.Stats
                 return true;
             }
 
-            if (o is ViewName)
+            if (o is ViewName that)
             {
-                ViewName that = (ViewName)o;
                 return this.AsString.Equals(that.AsString);
             }
 

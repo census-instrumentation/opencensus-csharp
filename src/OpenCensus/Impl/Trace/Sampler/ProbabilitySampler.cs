@@ -24,8 +24,8 @@ namespace OpenCensus.Trace.Sampler
     {
         internal ProbabilitySampler(double probability, long idUpperBound)
         {
-            Probability = probability;
-            IdUpperBound = idUpperBound;
+            this.Probability = probability;
+            this.IdUpperBound = idUpperBound;
         }
 
         internal static ProbabilitySampler Create(double probability)
@@ -36,6 +36,7 @@ namespace OpenCensus.Trace.Sampler
             }
 
             long idUpperBound;
+
             // Special case the limits, to avoid any possible issues with lack of precision across
             // double/long boundaries. For probability == 0.0, we use Long.MIN_VALUE as this guarantees
             // that we will never sample a trace, even in the case where the id == Long.MIN_VALUE, since
@@ -60,7 +61,7 @@ namespace OpenCensus.Trace.Sampler
         {
             get
             {
-                return string.Format("ProbabilitySampler({0:F6})", Probability);
+                return string.Format("ProbabilitySampler({0:F6})", this.Probability);
             }
         }
 
@@ -91,7 +92,7 @@ namespace OpenCensus.Trace.Sampler
             // while allowing for a (very) small chance of *not* sampling if the id == Long.MAX_VALUE.
             // This is considered a reasonable tradeoff for the simplicity/performance requirements (this
             // code is executed in-line for every Span creation).
-            return Math.Abs(traceId.LowerLong) < IdUpperBound;
+            return Math.Abs(traceId.LowerLong) < this.IdUpperBound;
         }
 
         public double Probability { get; }
@@ -101,8 +102,8 @@ namespace OpenCensus.Trace.Sampler
         public override string ToString()
         {
             return "ProbabilitySampler{"
-                + "probability=" + Probability + ", "
-                + "idUpperBound=" + IdUpperBound
+                + "probability=" + this.Probability + ", "
+                + "idUpperBound=" + this.IdUpperBound
                 + "}";
         }
 
@@ -113,10 +114,9 @@ namespace OpenCensus.Trace.Sampler
                 return true;
             }
 
-            if (o is ProbabilitySampler)
+            if (o is ProbabilitySampler that)
             {
-                ProbabilitySampler that = (ProbabilitySampler)o;
-                return DoubleUtil.ToInt64(Probability) == DoubleUtil.ToInt64(that.Probability)
+                return DoubleUtil.ToInt64(this.Probability) == DoubleUtil.ToInt64(that.Probability)
                      && (this.IdUpperBound == that.IdUpperBound);
             }
 

@@ -34,7 +34,9 @@ namespace OpenCensus.Stats
             return this;
         }
 
-        public override void Record() { }
+        public override void Record()
+        {
+        }
 
         public override void Record(ITagContext tags)
         {

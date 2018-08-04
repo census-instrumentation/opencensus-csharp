@@ -27,24 +27,24 @@ namespace OpenCensus.Trace
         {
             get
             {
-                return events;
+                return this.events;
             }
         }
 
         public int NumberOfDroppedEvents
         {
-            get { return totalRecordedEvents - events.Count; }
+            get { return this.totalRecordedEvents - this.events.Count; }
         }
 
         public TraceEvents(int maxNumEvents)
         {
-            events = new EvictingQueue<T>(maxNumEvents);
+            this.events = new EvictingQueue<T>(maxNumEvents);
         }
 
         internal void AddEvent(T @event)
         {
-            totalRecordedEvents++;
-            events.Add(@event);
+            this.totalRecordedEvents++;
+            this.events.Add(@event);
         }
     }
 }

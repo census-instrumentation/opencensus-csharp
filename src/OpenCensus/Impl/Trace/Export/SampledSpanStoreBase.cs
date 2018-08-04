@@ -38,7 +38,9 @@ namespace OpenCensus.Trace.Export
             }
         }
 
-        protected SampledSpanStoreBase() { }
+        protected SampledSpanStoreBase()
+        {
+        }
 
         public abstract ISampledSpanStoreSummary Summary { get; }
 

@@ -25,7 +25,6 @@ namespace OpenCensus.Trace
 
     public sealed class Tracing
     {
-
         private static Tracing tracing = new Tracing();
 
         internal Tracing()
@@ -37,11 +36,11 @@ namespace OpenCensus.Trace
         {
             if (enabled)
             {
-                traceComponent = new TraceComponent(DateTimeOffsetClock.INSTANCE, new RandomGenerator(), new SimpleEventQueue());
+                this.traceComponent = new TraceComponent(DateTimeOffsetClock.INSTANCE, new RandomGenerator(), new SimpleEventQueue());
             }
             else
             {
-                traceComponent = TraceComponent.NewNoopTraceComponent;
+                this.traceComponent = TraceComponent.NewNoopTraceComponent;
             }
         }
 

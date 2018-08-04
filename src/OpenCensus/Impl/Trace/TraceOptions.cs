@@ -22,6 +22,7 @@ namespace OpenCensus.Trace
     {
         // Default options. Nothing set.
         internal const byte DEFAULT_OPTIONS = 0;
+
         // Bit to represent whether trace is sampled or not.
         internal const byte IS_SAMPLED = 0x1;
 
@@ -81,7 +82,7 @@ namespace OpenCensus.Trace
             get
             {
                 byte[] bytes = new byte[SIZE];
-                bytes[0] = options;
+                bytes[0] = this.options;
                 return bytes;
             }
         }
@@ -93,14 +94,14 @@ namespace OpenCensus.Trace
                 throw new IndexOutOfRangeException("destOffset");
             }
 
-            dest[destOffset] = options;
+            dest[destOffset] = this.options;
         }
 
         public bool IsSampled
         {
             get
             {
-                return HasOption(IS_SAMPLED);
+                return this.HasOption(IS_SAMPLED);
             }
         }
 
@@ -117,41 +118,40 @@ namespace OpenCensus.Trace
             }
 
             TraceOptions that = (TraceOptions)obj;
-            return options == that.options;
+            return this.options == that.options;
         }
 
         public override int GetHashCode()
         {
-
-            int result = (31 * 1) + options;
+            int result = (31 * 1) + this.options;
             return result;
         }
 
         public override string ToString()
         {
             return "TraceOptions{"
-                + "sampled=" + IsSampled
+                + "sampled=" + this.IsSampled
                 + "}";
         }
 
         internal sbyte Options
         {
-            get { return (sbyte)options; }
+            get { return (sbyte)this.options; }
         }
 
         private bool HasOption(int mask)
         {
-            return (options & mask) != 0;
+            return (this.options & mask) != 0;
         }
 
         private void ClearOption(int mask)
         {
-            options = (byte)(options & ~mask);
+            this.options = (byte)(this.options & ~mask);
         }
 
         private void SetOption(int mask)
         {
-            options = (byte)(options | mask);
+            this.options = (byte)(this.options | mask);
         }
     }
 }

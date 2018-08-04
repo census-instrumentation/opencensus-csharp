@@ -26,18 +26,8 @@ namespace OpenCensus.Tags
 
         internal Tag(ITagKey key, ITagValue value)
         {
-            if (key == null)
-            {
-                throw new ArgumentNullException(nameof(key));
-            }
-
-            this.Key = key;
-            if (value == null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
-
-            this.Value = value;
+            this.Key = key ?? throw new ArgumentNullException(nameof(key));
+            this.Value = value ?? throw new ArgumentNullException(nameof(value));
         }
 
         public static ITag Create(ITagKey key, ITagValue value)
@@ -48,8 +38,8 @@ namespace OpenCensus.Tags
         public override string ToString()
         {
             return "Tag{"
-                + "key=" + Key + ", "
-                + "value=" + Value
+                + "key=" + this.Key + ", "
+                + "value=" + this.Value
                 + "}";
         }
 
@@ -60,9 +50,8 @@ namespace OpenCensus.Tags
                 return true;
             }
 
-            if (o is Tag)
+            if (o is Tag that)
             {
-                Tag that = (Tag)o;
                 return this.Key.Equals(that.Key)
                      && this.Value.Equals(that.Value);
             }

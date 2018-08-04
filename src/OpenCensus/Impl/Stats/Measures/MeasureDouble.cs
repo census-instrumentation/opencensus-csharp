@@ -29,24 +29,9 @@ namespace OpenCensus.Stats.Measures
 
         internal MeasureDouble(string name, string description, string unit)
         {
-            if (name == null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
-
-            this.Name = name;
-            if (description == null)
-            {
-                throw new ArgumentNullException(nameof(description));
-            }
-
-            this.Description = description;
-            if (unit == null)
-            {
-                throw new ArgumentNullException(nameof(unit));
-            }
-
-            this.Unit = unit;
+            this.Name = name ?? throw new ArgumentNullException(nameof(name));
+            this.Description = description ?? throw new ArgumentNullException(nameof(description));
+            this.Unit = unit ?? throw new ArgumentNullException(nameof(unit));
         }
 
         public static IMeasureDouble Create(string name, string description, string unit)
@@ -70,9 +55,9 @@ namespace OpenCensus.Stats.Measures
         public override string ToString()
         {
             return "MeasureDouble{"
-                + "name=" + Name + ", "
-                + "description=" + Description + ", "
-                + "unit=" + Unit
+                + "name=" + this.Name + ", "
+                + "description=" + this.Description + ", "
+                + "unit=" + this.Unit
                 + "}";
         }
 
@@ -83,9 +68,8 @@ namespace OpenCensus.Stats.Measures
                 return true;
             }
 
-            if (o is MeasureDouble)
+            if (o is MeasureDouble that)
             {
-                MeasureDouble that = (MeasureDouble)o;
                 return this.Name.Equals(that.Name)
                      && this.Description.Equals(that.Description)
                      && this.Unit.Equals(that.Unit);
