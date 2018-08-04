@@ -1,19 +1,32 @@
-﻿using Moq;
-using OpenCensus.Common;
-using OpenCensus.Internal;
-using OpenCensus.Testing.Common;
-using OpenCensus.Trace.Config;
-using OpenCensus.Trace.Export;
-using OpenCensus.Trace.Internal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
+﻿// <copyright file="SpanTest.cs" company="OpenCensus Authors">
+// Copyright 2018, OpenCensus Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of theLicense at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </copyright>
 
 namespace OpenCensus.Trace.Test
 {
+    using System;
+    using System.Collections.Generic;
+    using Moq;
+    using OpenCensus.Common;
+    using OpenCensus.Internal;
+    using OpenCensus.Testing.Common;
+    using OpenCensus.Trace.Config;
+    using OpenCensus.Trace.Export;
+    using OpenCensus.Trace.Internal;
+    using Xunit;
+
     public class SpanTest
     {
         private static readonly String SPAN_NAME = "MySpanName";
@@ -29,7 +42,7 @@ namespace OpenCensus.Trace.Test
         private readonly IDictionary<String, IAttributeValue> attributes = new Dictionary<String, IAttributeValue>();
         private readonly IDictionary<String, IAttributeValue> expectedAttributes;
         private IStartEndHandler startEndHandler = Mock.Of<IStartEndHandler>();
-        //@Rule public readonly ExpectedException exception = ExpectedException.none();
+        // @Rule public readonly ExpectedException exception = ExpectedException.none();
 
 
         public SpanTest()
@@ -70,8 +83,8 @@ namespace OpenCensus.Trace.Test
                 MessageEvent.Builder(MessageEventType.RECEIVED, 1).SetUncompressedMessageSize(3).Build());
             span.AddLink(Link.FromSpanContext(spanContext, LinkType.CHILD_LINKED_SPAN));
             span.End();
-            //exception.expect(IllegalStateException);
-            Assert.Throws<InvalidOperationException>(() =>((Span)span).ToSpanData());
+            // exception.expect(IllegalStateException);
+            Assert.Throws<InvalidOperationException>(() => ((Span)span).ToSpanData());
         }
 
         [Fact]
@@ -110,8 +123,8 @@ namespace OpenCensus.Trace.Test
             Assert.Equal(timestamp, spanData.EndTimestamp);
         }
 
-        //  [Fact]
-        //public void DeprecatedAddAttributesStillWorks()
+        // [Fact]
+        // public void DeprecatedAddAttributesStillWorks()
         //  {
         //      ISpan span =
         //          Span.StartSpan(
@@ -234,7 +247,7 @@ namespace OpenCensus.Trace.Test
             Assert.Equal(Annotation.FromDescription(ANNOTATION_DESCRIPTION), spanData.Annotations.Events[0].Event);
             Assert.Equal(timestamp.AddNanos(200), spanData.Annotations.Events[1].Timestamp);
             Assert.Equal(Annotation.FromDescriptionAndAttributes(ANNOTATION_DESCRIPTION, attributes), spanData.Annotations.Events[1].Event);
-            Assert.Equal(0,spanData.MessageEvents.DroppedEventsCount);
+            Assert.Equal(0, spanData.MessageEvents.DroppedEventsCount);
             Assert.Equal(1, spanData.MessageEvents.Events.Count);
             Assert.Equal(timestamp.AddNanos(300), spanData.MessageEvents.Events[0].Timestamp);
             Assert.Equal(networkEvent, spanData.MessageEvents.Events[0].Event);
@@ -443,7 +456,7 @@ namespace OpenCensus.Trace.Test
             }
             span.End();
             spanData = ((Span)span).ToSpanData();
-            Assert.Equal(maxNumberOfAnnotations,spanData.Annotations.DroppedEventsCount);
+            Assert.Equal(maxNumberOfAnnotations, spanData.Annotations.DroppedEventsCount);
             Assert.Equal(maxNumberOfAnnotations, spanData.Annotations.Events.Count);
             for (int i = 0; i < maxNumberOfAnnotations; i++)
             {

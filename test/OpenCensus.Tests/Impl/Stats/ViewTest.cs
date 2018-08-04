@@ -1,22 +1,36 @@
-﻿using OpenCensus.Common;
-using OpenCensus.Stats.Aggregations;
-using OpenCensus.Stats.Measures;
-using OpenCensus.Tags;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
+﻿// <copyright file="ViewTest.cs" company="OpenCensus Authors">
+// Copyright 2018, OpenCensus Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of theLicense at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </copyright>
 
 namespace OpenCensus.Stats.Test
 {
+    using System;
+    using System.Collections.Generic;
+    using OpenCensus.Common;
+    using OpenCensus.Stats.Aggregations;
+    using OpenCensus.Stats.Measures;
+    using OpenCensus.Tags;
+    using Xunit;
+
     public class ViewTest
     {
         private static readonly IViewName NAME = ViewName.Create("test-view-name");
         private static readonly String DESCRIPTION = "test-view-name description";
         private static readonly IMeasure MEASURE =
             MeasureDouble.Create("measure", "measure description", "1");
+
         private static readonly ITagKey FOO = TagKey.Create("foo");
         private static readonly ITagKey BAR = TagKey.Create("bar");
         private static readonly List<ITagKey> keys = new List<ITagKey>() { FOO, BAR };
@@ -79,7 +93,11 @@ namespace OpenCensus.Stats.Test
         public void PreventTooLongViewName()
         {
             char[] chars = new char[ViewName.NAME_MAX_LENGTH + 1];
-            for (int i = 0; i < chars.Length; i++) chars[i] = 'a';
+            for (int i = 0; i < chars.Length; i++)
+            {
+                chars[i] = 'a';
+            }
+
             String longName = new String(chars);
             Assert.Throws<ArgumentOutOfRangeException>(() => ViewName.Create(longName));
         }

@@ -1,14 +1,26 @@
-﻿using OpenCensus.Common;
-using OpenCensus.Tags.Unsafe;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
+﻿// <copyright file="CurrentTagContextUtilsTest.cs" company="OpenCensus Authors">
+// Copyright 2018, OpenCensus Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of theLicense at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </copyright>
 
 namespace OpenCensus.Tags.Test
 {
+    using System.Collections.Generic;
+    using OpenCensus.Common;
+    using OpenCensus.Tags.Unsafe;
+    using Xunit;
+
     public class CurrentTagContextUtilsTest
     {
         private static readonly ITag TAG = Tag.Create(TagKey.Create("key"), TagValue.Create("value"));
@@ -60,7 +72,7 @@ namespace OpenCensus.Tags.Test
         [Fact]
         public void TestWithTagContextUsingWrap()
         {
-            //        Runnable runnable;
+            // Runnable runnable;
             //        Scope scopedTags = CurrentTagContextUtils.withTagContext(tagContext);
             //        try
             //        {
@@ -78,10 +90,10 @@ namespace OpenCensus.Tags.Test
             //        });
             //    } finally {
             //  scopedTags.close();
-            //}
-            //assertThat(tagContextToList(CurrentTagContextUtils.getCurrentTagContext())).isEmpty();
+            // }
+            // assertThat(tagContextToList(CurrentTagContextUtils.getCurrentTagContext())).isEmpty();
             //// When we run the runnable we will have the TagContext in the current Context.
-            //runnable.run();
+            // runnable.run();
         }
 
         class TestTagContext : TagContextBase

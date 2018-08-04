@@ -1,14 +1,26 @@
-﻿using OpenCensus.Common;
-using OpenCensus.Tags.Unsafe;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
+﻿// <copyright file="TaggerTest.cs" company="OpenCensus Authors">
+// Copyright 2018, OpenCensus Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of theLicense at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </copyright>
 
 namespace OpenCensus.Tags.Test
 {
+    using System.Collections.Generic;
+    using OpenCensus.Common;
+    using OpenCensus.Tags.Unsafe;
+    using Xunit;
+
     public class TaggerTest
     {
         private readonly TagsComponent tagsComponent = new TagsComponent();
@@ -25,6 +37,7 @@ namespace OpenCensus.Tags.Test
         private static readonly ITag TAG1 = Tag.Create(K1, V1);
         private static readonly ITag TAG2 = Tag.Create(K2, V2);
         private static readonly ITag TAG3 = Tag.Create(K3, V3);
+
         public TaggerTest()
         {
             tagger = tagsComponent.Tagger;
@@ -37,13 +50,13 @@ namespace OpenCensus.Tags.Test
             Assert.IsType<TagContext>(tagger.Empty);
         }
 
-        //[Fact]
-        //public void Empty_TaggingDisabled()
-        //{
+        // [Fact]
+        // public void Empty_TaggingDisabled()
+        // {
         //    tagsComponent.State =TaggingState.DISABLED);
         //    Assert.Empty(TagsTestUtil.TagContextToList(tagger.Empty)).isEmpty();
         //    Assert.IsType<TagContext>(tagger.Empty);
-        //}
+        // }
 
         [Fact]
         public void EmptyBuilder()
@@ -53,23 +66,23 @@ namespace OpenCensus.Tags.Test
             Assert.Empty(TagsTestUtil.TagContextToList(builder.Build()));
         }
 
-        //[Fact]
-        //public void EmptyBuilder_TaggingDisabled()
-        //{
+        // [Fact]
+        // public void EmptyBuilder_TaggingDisabled()
+        // {
         //    tagsComponent.setState(TaggingState.DISABLED);
         //    Assert.Equal(tagger.EmptyBuilder).isSameAs(NoopTagContextBuilder.INSTANCE);
-        //}
+        // }
 
-        //[Fact]
-        //public void EmptyBuilder_TaggingReenabled()
-        //{
+        // [Fact]
+        // public void EmptyBuilder_TaggingReenabled()
+        // {
         //    tagsComponent.setState(TaggingState.DISABLED);
         //    Assert.Equal(tagger.EmptyBuilder).isSameAs(NoopTagContextBuilder.INSTANCE);
         //    tagsComponent.setState(TaggingState.ENABLED);
         //    TagContextBuilder builder = tagger.EmptyBuilder;
         //    Assert.Equal(builder).isInstanceOf(TagContextBuilder);
         //    Assert.Equal(TagsTestUtil.TagContextToList(builder.put(K1, V1).Build())).containsExactly(Tag.Create(K1, V1));
-        //}
+        // }
 
         [Fact]
         public void CurrentBuilder()
@@ -106,17 +119,17 @@ namespace OpenCensus.Tags.Test
             Assert.Equal(new List<ITag>() { TAG1, TAG2 }, TagsTestUtil.TagContextToList(result.Build()));
         }
 
-        //[Fact]
-        //public void CurrentBuilder_TaggingDisabled()
-        //{
+        // [Fact]
+        // public void CurrentBuilder_TaggingDisabled()
+        // {
         //    tagsComponent.setState(TaggingState.DISABLED);
         //    Assert.Equal(getResultOfCurrentBuilder(new SimpleTagContext(TAG1)))
         //        .isSameAs(NoopTagContextBuilder.INSTANCE);
-        //}
+        // }
 
-        //[Fact]
-        //public void currentBuilder_TaggingReenabled()
-        //{
+        // [Fact]
+        // public void currentBuilder_TaggingReenabled()
+        // {
         //    TagContext tags = new SimpleTagContext(TAG1);
         //    tagsComponent.setState(TaggingState.DISABLED);
         //    Assert.Equal(getResultOfCurrentBuilder(tags)).isSameAs(NoopTagContextBuilder.INSTANCE);
@@ -124,11 +137,11 @@ namespace OpenCensus.Tags.Test
         //    TagContextBuilder builder = getResultOfCurrentBuilder(tags);
         //    Assert.Equal(builder).isInstanceOf(TagContextBuilder);
         //    Assert.Equal(TagsTestUtil.TagContextToList(builder.Build())).containsExactly(TAG1);
-        //}
+        // }
 
         private ITagContextBuilder GetResultOfCurrentBuilder(ITagContext tagsToSet)
         {
-            ITagContext orig = AsyncLocalContext.CurrentTagContext;  //Context.current().withValue(ContextUtils.TAG_CONTEXT_KEY, tagsToSet).attach();
+            ITagContext orig = AsyncLocalContext.CurrentTagContext;  // Context.current().withValue(ContextUtils.TAG_CONTEXT_KEY, tagsToSet).attach();
             AsyncLocalContext.CurrentTagContext = tagsToSet;
             try
             {
@@ -167,17 +180,17 @@ namespace OpenCensus.Tags.Test
             Assert.Equal(new List<ITag>() { TAG1, TAG2 }, TagsTestUtil.TagContextToList(newTagContext));
         }
 
-        //[Fact]
-        //public void ToBuilder_TaggingDisabled()
-        //{
+        // [Fact]
+        // public void ToBuilder_TaggingDisabled()
+        // {
         //    tagsComponent.setState(TaggingState.DISABLED);
         //    Assert.Equal(tagger.ToBuilder(new SimpleTagContext(TAG1)))
         //        .isSameAs(NoopTagContextBuilder.INSTANCE);
-        //}
+        // }
 
-        //[Fact]
-        //public void ToBuilder_TaggingReenabled()
-        //{
+        // [Fact]
+        // public void ToBuilder_TaggingReenabled()
+        // {
         //    TagContext tags = new SimpleTagContext(TAG1);
         //    tagsComponent.setState(TaggingState.DISABLED);
         //    Assert.Equal(tagger.ToBuilder(tags)).isSameAs(NoopTagContextBuilder.INSTANCE);
@@ -185,7 +198,7 @@ namespace OpenCensus.Tags.Test
         //    TagContextBuilder builder = tagger.ToBuilder(tags);
         //    Assert.Equal(builder).isInstanceOf(TagContextBuilder);
         //    Assert.Equal(TagsTestUtil.TagContextToList(builder.Build())).containsExactly(TAG1);
-        //}
+        // }
 
         [Fact]
         public void GetCurrentTagContext_DefaultIsEmptyTagContext()
@@ -222,23 +235,23 @@ namespace OpenCensus.Tags.Test
             Assert.Equal(new List<ITag>() { TAG1, TAG2 }, TagsTestUtil.TagContextToList(result));
         }
 
-        //[Fact]
-        //public void GetCurrentTagContext_TaggingDisabled()
-        //{
+        // [Fact]
+        // public void GetCurrentTagContext_TaggingDisabled()
+        // {
         //    tagsComponent.setState(TaggingState.DISABLED);
         //    Assert.Equal(TagsTestUtil.TagContextToList(getResultOfGetCurrentTagContext(new SimpleTagContext(TAG1))))
         //        .isEmpty();
-        //}
+        // }
 
-        //[Fact]
-        //public void getCurrentTagContext_TaggingReenabled()
-        //{
+        // [Fact]
+        // public void getCurrentTagContext_TaggingReenabled()
+        // {
         //    TagContext tags = new SimpleTagContext(TAG1);
         //    tagsComponent.setState(TaggingState.DISABLED);
         //    Assert.Equal(TagsTestUtil.TagContextToList(getResultOfGetCurrentTagContext(tags))).isEmpty();
         //    tagsComponent.setState(TaggingState.ENABLED);
         //    Assert.Equal(TagsTestUtil.TagContextToList(getResultOfGetCurrentTagContext(tags))).containsExactly(TAG1);
-        //}
+        // }
 
         private ITagContext GetResultOfGetCurrentTagContext(ITagContext tagsToSet)
         {
@@ -282,29 +295,29 @@ namespace OpenCensus.Tags.Test
             Assert.Equal(new List<ITag>() { TAG1, TAG2 }, TagsTestUtil.TagContextToList(result));
         }
 
-        //[Fact]
-        //public void WithTagContext_ReturnsNoopScopeWhenTaggingIsDisabled()
-        //{
+        // [Fact]
+        // public void WithTagContext_ReturnsNoopScopeWhenTaggingIsDisabled()
+        // {
         //    tagsComponent.setState(TaggingState.DISABLED);
         //    Assert.Equal(tagger.withTagContext(new SimpleTagContext(TAG1))).isSameAs(NoopScope.getInstance());
-        //}
+        // }
 
-        //[Fact]
-        //public void withTagContext_TaggingDisabled()
-        //{
+        // [Fact]
+        // public void withTagContext_TaggingDisabled()
+        // {
         //    tagsComponent.setState(TaggingState.DISABLED);
         //    Assert.Equal(TagsTestUtil.TagContextToList(getResultOfWithTagContext(new SimpleTagContext(TAG1)))).isEmpty();
-        //}
+        // }
 
-        //[Fact]
-        //public void WithTagContext_TaggingReenabled()
-        //{
+        // [Fact]
+        // public void WithTagContext_TaggingReenabled()
+        // {
         //    ITagContext tags = new SimpleTagContext(TAG1);
         //    tagsComponent.setState(TaggingState.DISABLED);
         //    Assert.Equal(TagsTestUtil.TagContextToList(getResultOfWithTagContext(tags))).isEmpty();
         //    tagsComponent.setState(TaggingState.ENABLED);
         //    Assert.Equal(TagsTestUtil.TagContextToList(getResultOfWithTagContext(tags))).containsExactly(TAG1);
-        //}
+        // }
 
         private ITagContext GetResultOfWithTagContext(ITagContext tagsToSet)
         {

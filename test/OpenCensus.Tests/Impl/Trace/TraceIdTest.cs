@@ -1,18 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
+﻿// <copyright file="TraceIdTest.cs" company="OpenCensus Authors">
+// Copyright 2018, OpenCensus Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of theLicense at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </copyright>
 
 namespace OpenCensus.Trace.Test
 {
+    using Xunit;
+
     public class TraceIdTest
     {
         private static readonly byte[] firstBytes =
             new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, (byte)'a' };
+
         private static readonly byte[] secondBytes =
-            new byte[] { (byte)0xFF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, (byte)'A' };
+            new byte[] { 0xFF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, (byte)'A' };
+
         private static readonly ITraceId first = TraceId.FromBytes(firstBytes);
         private static readonly ITraceId second = TraceId.FromBytes(secondBytes);
 
@@ -64,12 +77,12 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void TraceId_EqualsAndHashCode()
         {
-            //EqualsTester tester = new EqualsTester();
-            //tester.addEqualityGroup(TraceId.INVALID, TraceId.INVALID);
-            //tester.addEqualityGroup(first, TraceId.fromBytes(Arrays.copyOf(firstBytes, firstBytes.length)));
-            //tester.addEqualityGroup(
+            // EqualsTester tester = new EqualsTester();
+            // tester.addEqualityGroup(TraceId.INVALID, TraceId.INVALID);
+            // tester.addEqualityGroup(first, TraceId.fromBytes(Arrays.copyOf(firstBytes, firstBytes.length)));
+            // tester.addEqualityGroup(
             //    second, TraceId.fromBytes(Arrays.copyOf(secondBytes, secondBytes.length)));
-            //tester.testEquals();
+            // tester.testEquals();
         }
 
         [Fact]

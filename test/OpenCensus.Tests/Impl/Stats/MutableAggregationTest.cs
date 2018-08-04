@@ -1,12 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
+﻿// <copyright file="MutableAggregationTest.cs" company="OpenCensus Authors">
+// Copyright 2018, OpenCensus Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of theLicense at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </copyright>
 
 namespace OpenCensus.Stats.Test
 {
+    using System;
+    using System.Collections.Generic;
+    using Xunit;
+
     public class MutableAggregationTest
     {
         private const double TOLERANCE = 1e-6;
@@ -15,9 +28,9 @@ namespace OpenCensus.Stats.Test
         [Fact]
         public void TestCreateEmpty()
         {
-            Assert.InRange(MutableSum.Create().Sum, 0-TOLERANCE, 0+TOLERANCE);
+            Assert.InRange(MutableSum.Create().Sum, 0 - TOLERANCE, 0 + TOLERANCE);
             Assert.Equal(0, MutableCount.Create().Count);
-            Assert.InRange(MutableMean.Create().Mean, 0-TOLERANCE, 0+TOLERANCE);
+            Assert.InRange(MutableMean.Create().Mean, 0 - TOLERANCE, 0 + TOLERANCE);
             Assert.True(Double.IsNaN(MutableLastValue.Create().LastValue));
 
             IBucketBoundaries bucketBoundaries = BucketBoundaries.Create(new List<double>() { 0.1, 2.2, 33.3 });
@@ -26,7 +39,7 @@ namespace OpenCensus.Stats.Test
             Assert.Equal(0, mutableDistribution.Count);
             Assert.Equal(double.PositiveInfinity, mutableDistribution.Min);
             Assert.Equal(double.NegativeInfinity, mutableDistribution.Max);
-            Assert.InRange(mutableDistribution.SumOfSquaredDeviations, 0-TOLERANCE, 0+TOLERANCE);
+            Assert.InRange(mutableDistribution.SumOfSquaredDeviations, 0 - TOLERANCE, 0 + TOLERANCE);
             Assert.Equal(new long[4], mutableDistribution.BucketCounts);
         }
 
@@ -72,7 +85,7 @@ namespace OpenCensus.Stats.Test
                 aggregation.Match<object>(
                     (arg) =>
                     {
-                        Assert.InRange(arg.Sum, 20.0-TOLERANCE, 20.0+TOLERANCE);
+                        Assert.InRange(arg.Sum, 20.0 - TOLERANCE, 20.0 + TOLERANCE);
                         return null;
                     },
                     (arg) =>
@@ -85,7 +98,7 @@ namespace OpenCensus.Stats.Test
                     (arg) =>
 
                     {
-                        Assert.InRange(arg.Mean, 4.0-TOLERANCE, 4.0+TOLERANCE);
+                        Assert.InRange(arg.Mean, 4.0 - TOLERANCE, 4.0 + TOLERANCE);
                         Assert.InRange(arg.Max, 20.0 - TOLERANCE, 20 + TOLERANCE);
                         Assert.InRange(arg.Min, -5.0 - TOLERANCE, -5.0 + TOLERANCE);
                         return null;
@@ -184,9 +197,9 @@ namespace OpenCensus.Stats.Test
                 combined[i].Combine(aggregations2[i], fraction2);
             }
 
-            Assert.InRange(((MutableSum)combined[0]).Sum, 30-TOLERANCE, 30+TOLERANCE);
+            Assert.InRange(((MutableSum)combined[0]).Sum, 30 - TOLERANCE, 30 + TOLERANCE);
             Assert.Equal(3, ((MutableCount)combined[1]).Count);
-            Assert.InRange(((MutableMean)combined[2]).Mean, 10-TOLERANCE, 10+TOLERANCE);
+            Assert.InRange(((MutableMean)combined[2]).Mean, 10 - TOLERANCE, 10 + TOLERANCE);
         }
 
         [Fact]
@@ -232,11 +245,11 @@ namespace OpenCensus.Stats.Test
             long[] bucketCounts,
             double tolerance)
         {
-            Assert.InRange(mutableDistribution.Mean, mean-tolerance, mean+tolerance);
+            Assert.InRange(mutableDistribution.Mean, mean - tolerance, mean + tolerance);
             Assert.Equal(count, mutableDistribution.Count);
-            Assert.InRange(mutableDistribution.Min, min-tolerance, min+tolerance);
-            Assert.InRange(mutableDistribution.Max, max-tolerance, max+tolerance);
-            Assert.InRange(mutableDistribution.SumOfSquaredDeviations, sumOfSquaredDeviations-tolerance, sumOfSquaredDeviations+tolerance);
+            Assert.InRange(mutableDistribution.Min, min - tolerance, min + tolerance);
+            Assert.InRange(mutableDistribution.Max, max - tolerance, max + tolerance);
+            Assert.InRange(mutableDistribution.SumOfSquaredDeviations, sumOfSquaredDeviations - tolerance, sumOfSquaredDeviations + tolerance);
             Assert.Equal(bucketCounts, mutableDistribution.BucketCounts);
         }
     }

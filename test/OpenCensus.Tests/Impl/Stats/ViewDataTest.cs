@@ -1,16 +1,29 @@
-﻿using OpenCensus.Common;
-using OpenCensus.Stats.Aggregations;
-using OpenCensus.Stats.Measures;
-using OpenCensus.Tags;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
+﻿// <copyright file="ViewDataTest.cs" company="OpenCensus Authors">
+// Copyright 2018, OpenCensus Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of theLicense at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </copyright>
 
 namespace OpenCensus.Stats.Test
 {
+    using System;
+    using System.Collections.Generic;
+    using OpenCensus.Common;
+    using OpenCensus.Stats.Aggregations;
+    using OpenCensus.Stats.Measures;
+    using OpenCensus.Tags;
+    using Xunit;
+
     public class ViewDataTest
     {
         // tag keys
@@ -24,8 +37,8 @@ namespace OpenCensus.Stats.Test
         private static readonly ITagValue V10 = TagValue.Create("v10");
         private static readonly ITagValue V20 = TagValue.Create("v20");
 
-        //private static readonly AggregationWindow CUMULATIVE = Cumulative.Create();
-        //private static readonly AggregationWindow INTERVAL_HOUR = Interval.Create(Duration.Create(3600, 0));
+        // private static readonly AggregationWindow CUMULATIVE = Cumulative.Create();
+        // private static readonly AggregationWindow INTERVAL_HOUR = Interval.Create(Duration.Create(3600, 0));
 
         private static readonly IBucketBoundaries BUCKET_BOUNDARIES =
             BucketBoundaries.Create(new List<double>() { 10.0, 20.0, 30.0, 40.0 });
@@ -37,6 +50,7 @@ namespace OpenCensus.Stats.Test
           { TagValues.Create(new List<ITagValue>(){ V1, V2 }), DistributionData.Create(1, 1, 1, 1, 0, new List<long>() {0L, 1L, 0L }) },
           { TagValues.Create(new List<ITagValue>(){ V10, V20 }), DistributionData.Create(-5, 6, -20, 5, 100.1,  new List<long>() {5L, 0L, 1L }) }
             };
+
         // name
         private static readonly IViewName NAME = ViewName.Create("test-view");
         // description
@@ -44,6 +58,7 @@ namespace OpenCensus.Stats.Test
         // measure
         private static readonly IMeasure MEASURE_DOUBLE =
             MeasureDouble.Create("measure1", "measure description", "1");
+
         private static readonly IMeasure MEASURE_LONG =
             MeasureLong.Create("measure2", "measure description", "1");
 
@@ -58,9 +73,9 @@ namespace OpenCensus.Stats.Test
             Assert.Equal(ENTRIES, viewData.AggregationMap);
         }
 
-        //[Fact]
-        //public void TestIntervalViewData()
-        //{
+        // [Fact]
+        // public void TestIntervalViewData()
+        // {
         //    View view =
         //        View.Create(NAME, DESCRIPTION, MEASURE_DOUBLE, DISTRIBUTION, TAG_KEYS, INTERVAL_HOUR);
         //    Timestamp end = Timestamp.fromMillis(2000);
@@ -69,17 +84,17 @@ namespace OpenCensus.Stats.Test
         //    assertThat(viewData.getView()).isEqualTo(view);
         //    assertThat(viewData.getAggregationMap()).isEqualTo(ENTRIES);
         //    assertThat(viewData.getWindowData()).isEqualTo(windowData);
-        //}
+        // }
 
         [Fact]
         public void TestViewDataEquals()
         {
             IView cumulativeView =
                 View.Create(NAME, DESCRIPTION, MEASURE_DOUBLE, DISTRIBUTION, TAG_KEYS);
-            //View intervalView =
+            // View intervalView =
             //    View.Create(NAME, DESCRIPTION, MEASURE_DOUBLE, DISTRIBUTION, TAG_KEYS, INTERVAL_HOUR);
 
-            //new EqualsTester()
+            // new EqualsTester()
             //    .addEqualityGroup(
             IViewData data1 = ViewData.Create(
                         cumulativeView,
@@ -91,7 +106,7 @@ namespace OpenCensus.Stats.Test
                         Timestamp.FromMillis(1000), Timestamp.FromMillis(2000));
             Assert.Equal(data1, data2);
 
-            //.addEqualityGroup(
+            // .addEqualityGroup(
             IViewData data3 = ViewData.Create(
                         cumulativeView,
                         ENTRIES,
@@ -99,18 +114,18 @@ namespace OpenCensus.Stats.Test
             Assert.NotEqual(data1, data3);
             Assert.NotEqual(data2, data3);
 
-            //.addEqualityGroup(
-            //IViewData data4 = ViewData.Create(intervalView, ENTRIES, IntervalData.Create(Timestamp.fromMillis(2000))),
-            //IViewData data5 = ViewData.Create(intervalView, ENTRIES, IntervalData.Create(Timestamp.fromMillis(2000))))
-            //.addEqualityGroup(
+            // .addEqualityGroup(
+            // IViewData data4 = ViewData.Create(intervalView, ENTRIES, IntervalData.Create(Timestamp.fromMillis(2000))),
+            // IViewData data5 = ViewData.Create(intervalView, ENTRIES, IntervalData.Create(Timestamp.fromMillis(2000))))
+            // .addEqualityGroup(
             //    ViewData.Create(
             //        intervalView,
             //        Collections.< List<TagValue>, AggregationData > emptyMap(),
             //        IntervalData.Create(Timestamp.fromMillis(2000))))
-            //.testEquals();
+            // .testEquals();
         }
 
-        //        [Fact]
+        // [Fact]
         //  public void testAggregationWindowDataMatch()
         //        {
         //            final Timestamp start = Timestamp.fromMillis(1000);
@@ -144,21 +159,21 @@ namespace OpenCensus.Stats.Test
         //        fail("IntervalData expected.");
         //        return null;
         //    }
-        //},
+        // },
         //        new Function<IntervalData, Void>() {
         //          @Override
         //          public Void apply(IntervalData windowData)
-        //{
+        // {
         //    assertThat(windowData.getEnd()).isEqualTo(end);
         //    return null;
-        //}
+        // }
         //        },
         //        Functions.<Void>throwIllegalArgumentException());
         //  }
 
-        //  [Fact]
+        // [Fact]
         //  public void preventWindowAndAggregationWindowDataMismatch()
-        //{
+        // {
         //    thrown.expect(IllegalArgumentException);
         //    thrown.expectMessage("AggregationWindow and AggregationWindowData types mismatch. ");
         //    ViewData.Create(
@@ -167,9 +182,9 @@ namespace OpenCensus.Stats.Test
         //        CumulativeData.Create(Timestamp.fromMillis(1000), Timestamp.fromMillis(2000)));
         //  }
 
-        //  [Fact]
+        // [Fact]
         //  public void preventWindowAndAggregationWindowDataMismatch2()
-        //{
+        // {
         //    thrown.expect(IllegalArgumentException.class);
         //    thrown.expectMessage("AggregationWindow and AggregationWindowData types mismatch. ");
         //    ViewData.Create(
@@ -178,9 +193,9 @@ namespace OpenCensus.Stats.Test
         //        IntervalData.Create(Timestamp.fromMillis(1000)));
         //  }
 
-        //[Fact]
-        //public void PreventStartTimeLaterThanEndTime()
-        //{
+        // [Fact]
+        // public void PreventStartTimeLaterThanEndTime()
+        // {
         //   // thrown.expect(IllegalArgumentException.class);
         //    CumulativeData.Create(Timestamp.fromMillis(3000), Timestamp.fromMillis(2000));
         //  }
@@ -271,10 +286,10 @@ namespace OpenCensus.Stats.Test
 
         private void AggregationAndAggregationDataMismatch(IView view, IDictionary<TagValues, IAggregationData> entries)
         {
-            //CumulativeData cumulativeData =
+            // CumulativeData cumulativeData =
             //    CumulativeData.Create(Timestamp.fromMillis(1000), Timestamp.fromMillis(2000));
-            //thrown.expect(IllegalArgumentException);
-            //thrown.expectMessage("Aggregation and AggregationData types mismatch. ");
+            // thrown.expect(IllegalArgumentException);
+            // thrown.expectMessage("Aggregation and AggregationData types mismatch. ");
             Assert.Throws<ArgumentException>(() => ViewData.Create(view, entries, Timestamp.FromMillis(1000), Timestamp.FromMillis(2000)));
         }
     }

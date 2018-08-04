@@ -24,11 +24,16 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <CodeAnalysisRuleSet></CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), 'OpenCensus.sln'))\build\OpenCensus.prod.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <PropertyGroup>
-    <DocumentationFile>$(OutDir)\OpenCensus.xml</DocumentationFile>
+    <DocumentationFile>$(OutputPath)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>

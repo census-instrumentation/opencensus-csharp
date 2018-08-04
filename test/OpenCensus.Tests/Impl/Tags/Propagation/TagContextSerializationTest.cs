@@ -1,15 +1,30 @@
-﻿using OpenCensus.Internal;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
+﻿// <copyright file="TagContextSerializationTest.cs" company="OpenCensus Authors">
+// Copyright 2018, OpenCensus Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of theLicense at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </copyright>
 
 namespace OpenCensus.Tags.Propagation.Test
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using OpenCensus.Internal;
+    using Xunit;
+
     public class TagContextSerializationTest
     {
         private static readonly ITagKey K1 = TagKey.Create("k1");
@@ -30,6 +45,7 @@ namespace OpenCensus.Tags.Propagation.Test
         private readonly TagsComponent tagsComponent = new TagsComponent();
         private readonly ITagContextBinarySerializer serializer;
         private readonly ITagger tagger;
+
         public TagContextSerializationTest()
         {
             serializer = tagsComponent.TagPropagationComponent.BinarySerializer;
@@ -131,13 +147,19 @@ namespace OpenCensus.Tags.Propagation.Test
 
         internal static IEnumerable<IList> Permutate(IList sequence, int count)
         {
-            if (count == 0) yield return sequence;
+            if (count == 0)
+            {
+                yield return sequence;
+            }
             else
             {
                 for (int i = 0; i < count; i++)
                 {
                     foreach (var perm in Permutate(sequence, count - 1))
+                    {
                         yield return perm;
+                    }
+
                     RotateRight(sequence, count);
                 }
             }

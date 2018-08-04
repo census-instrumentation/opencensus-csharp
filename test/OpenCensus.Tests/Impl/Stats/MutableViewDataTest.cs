@@ -1,16 +1,29 @@
-﻿using OpenCensus.Common;
-using OpenCensus.Stats.Aggregations;
-using OpenCensus.Stats.Measures;
-using OpenCensus.Tags;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
+﻿// <copyright file="MutableViewDataTest.cs" company="OpenCensus Authors">
+// Copyright 2018, OpenCensus Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of theLicense at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </copyright>
 
 namespace OpenCensus.Stats.Test
 {
+    using System;
+    using System.Collections.Generic;
+    using OpenCensus.Common;
+    using OpenCensus.Stats.Aggregations;
+    using OpenCensus.Stats.Measures;
+    using OpenCensus.Tags;
+    using Xunit;
+
     public class MutableViewDataTest
     {
 
@@ -53,8 +66,7 @@ namespace OpenCensus.Stats.Test
             Assert.True(Double.IsNaN( ((MutableLastValue)MutableViewData.CreateMutableAggregation(LastValue.Create())).LastValue));
 
             MutableDistribution mutableDistribution =
-                (MutableDistribution)
-                    MutableViewData.CreateMutableAggregation(Distribution.Create(bucketBoundaries));
+                (MutableDistribution)MutableViewData.CreateMutableAggregation(Distribution.Create(bucketBoundaries));
             Assert.Equal(double.PositiveInfinity, mutableDistribution.Min);
             Assert.Equal(double.NegativeInfinity, mutableDistribution.Max);
             Assert.InRange(mutableDistribution.SumOfSquaredDeviations, 0.0 - EPSILON, 0.0 + EPSILON);

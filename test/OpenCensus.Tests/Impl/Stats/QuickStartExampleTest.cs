@@ -1,19 +1,33 @@
-﻿using OpenCensus.Stats.Aggregations;
-using OpenCensus.Stats.Measures;
-using OpenCensus.Tags;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
-using Xunit.Abstractions;
+﻿// <copyright file="QuickStartExampleTest.cs" company="OpenCensus Authors">
+// Copyright 2018, OpenCensus Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of theLicense at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </copyright>
 
 namespace OpenCensus.Stats.Test
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using OpenCensus.Stats.Aggregations;
+    using OpenCensus.Stats.Measures;
+    using OpenCensus.Tags;
+    using Xunit;
+    using Xunit.Abstractions;
+
     public class QuickStartExampleTest
     {
         ITestOutputHelper output;
+
         public QuickStartExampleTest(ITestOutputHelper output)
         {
             this.output = output;
@@ -168,7 +182,7 @@ namespace OpenCensus.Stats.Test
             IViewData videoSizeView = viewManager.GetView(VIDEO_SIZE_VIEW_NAME);
             var viewDataAggMap = videoSizeView.AggregationMap.ToList();
             var view = viewManager.AllExportedViews.ToList()[0];
-            for(int i = 0; i < view.Columns.Count; i++)
+            for (int i = 0; i < view.Columns.Count; i++)
             {
                 output.WriteLine(view.Columns[i] + "=" + GetTagValues(i, viewDataAggMap));
             }

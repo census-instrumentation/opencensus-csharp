@@ -1,12 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
+﻿// <copyright file="TagKeyTest.cs" company="OpenCensus Authors">
+// Copyright 2018, OpenCensus Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of theLicense at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </copyright>
 
 namespace OpenCensus.Tags.Test
 {
+    using System;
+    using Xunit;
+
     public class TagKeyTest
     {
         [Fact]
@@ -25,7 +37,11 @@ namespace OpenCensus.Tags.Test
         public void Create_AllowTagKeyNameWithMaxLength()
         {
             char[] chars = new char[TagKey.MAX_LENGTH];
-            for (int i = 0; i < chars.Length; i++) chars[i] = 'k';
+            for (int i = 0; i < chars.Length; i++)
+            {
+                chars[i] = 'k';
+            }
+
             String key = new String(chars);
             Assert.Equal(key, TagKey.Create(key).Name);
         }
@@ -34,7 +50,11 @@ namespace OpenCensus.Tags.Test
         public void Create_DisallowTagKeyNameOverMaxLength()
         {
             char[] chars = new char[TagKey.MAX_LENGTH + 1];
-            for (int i = 0; i < chars.Length; i++) chars[i] = 'k';
+            for (int i = 0; i < chars.Length; i++)
+            {
+                chars[i] = 'k';
+            }
+
             String key = new String(chars);
             Assert.Throws<ArgumentOutOfRangeException>(() => TagKey.Create(key));
         }

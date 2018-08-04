@@ -1,11 +1,26 @@
-﻿using OpenCensus.Common;
-using OpenCensus.Trace.Internal;
-using System;
-using System.Collections.Generic;
-using Xunit;
+﻿// <copyright file="SpanDataTest.cs" company="OpenCensus Authors">
+// Copyright 2018, OpenCensus Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of theLicense at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </copyright>
 
 namespace OpenCensus.Trace.Export.Test
 {
+    using System.Collections.Generic;
+    using OpenCensus.Common;
+    using OpenCensus.Trace.Internal;
+    using Xunit;
+
     public class SpanDataTest
     {
         private static readonly ITimestamp startTimestamp = Timestamp.Create(123, 456);
@@ -16,7 +31,7 @@ namespace OpenCensus.Trace.Export.Test
         private static readonly string SPAN_NAME = "MySpanName";
         private static readonly string ANNOTATION_TEXT = "MyAnnotationText";
         private static readonly IAnnotation annotation = Annotation.FromDescription(ANNOTATION_TEXT);
-        //private static readonly NetworkEvent recvNetworkEvent =
+        // private static readonly NetworkEvent recvNetworkEvent =
         //    NetworkEvent.Builder(NetworkEvent.Type.RECV, 1).build();
         //      private static readonly NetworkEvent sentNetworkEvent =
         //    NetworkEvent.Builder(NetworkEvent.Type.SENT, 1).build();
@@ -29,14 +44,14 @@ namespace OpenCensus.Trace.Export.Test
         private readonly ISpanId parentSpanId; 
         private readonly IDictionary<string, IAttributeValue> attributesMap = new Dictionary<string, IAttributeValue>();
         private readonly IList<ITimedEvent<IAnnotation>> annotationsList = new List<ITimedEvent<IAnnotation>>();
-        //private readonly List<TimedEvent<NetworkEvent>> networkEventsList =
+        // private readonly List<TimedEvent<NetworkEvent>> networkEventsList =
         //    new List<SpanData.TimedEvent<NetworkEvent>>();
         private readonly IList<ITimedEvent<IMessageEvent>> messageEventsList = new List<ITimedEvent<IMessageEvent>>();
         private readonly IList<ILink> linksList = new List<ILink>();
 
         private IAttributes attributes;
         private ITimedEvents<IAnnotation> annotations;
-        //private TimedEvents<NetworkEvent> networkEvents;
+        // private TimedEvents<NetworkEvent> networkEvents;
         private ITimedEvents<IMessageEvent> messageEvents;
         private LinkList links;
 
@@ -53,9 +68,9 @@ namespace OpenCensus.Trace.Export.Test
             annotationsList.Add(TimedEvent<IAnnotation>.Create(eventTimestamp3, annotation));
             annotations = TimedEvents<IAnnotation>.Create(annotationsList, 2);
 
-            //networkEventsList.add(SpanData.TimedEvent.Create(eventTimestamp1, recvNetworkEvent));
-            //networkEventsList.add(SpanData.TimedEvent.Create(eventTimestamp2, sentNetworkEvent));
-            //networkEvents = TimedEvents.Create(networkEventsList, 3);
+            // networkEventsList.add(SpanData.TimedEvent.Create(eventTimestamp1, recvNetworkEvent));
+            // networkEventsList.add(SpanData.TimedEvent.Create(eventTimestamp2, sentNetworkEvent));
+            // networkEvents = TimedEvents.Create(networkEventsList, 3);
 
             messageEventsList.Add(TimedEvent<IMessageEvent>.Create(eventTimestamp1, recvMessageEvent));
             messageEventsList.Add(TimedEvent<IMessageEvent>.Create(eventTimestamp2, sentMessageEvent));
@@ -96,9 +111,9 @@ namespace OpenCensus.Trace.Export.Test
             Assert.Equal(endTimestamp, spanData.EndTimestamp);
         }
 
-        //[Fact]
-        //public void SpanData_Create_Compatibility()
-        //{
+        // [Fact]
+        // public void SpanData_Create_Compatibility()
+        // {
         //    SpanData spanData =
         //        SpanData.Create(
         //            spanContext,
@@ -126,7 +141,7 @@ namespace OpenCensus.Trace.Export.Test
         //    Assert.Equal(spanData.getChildSpanCount()).isEqualTo(CHILD_SPAN_COUNT);
         //    Assert.Equal(spanData.getStatus()).isEqualTo(status);
         //    Assert.Equal(spanData.getEndTimestamp()).isEqualTo(endTimestamp);
-        //}
+        // }
 
         [Fact]
         public void SpanData_RootActiveSpan()

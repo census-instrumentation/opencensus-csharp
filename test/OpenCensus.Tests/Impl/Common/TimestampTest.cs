@@ -1,24 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
+﻿// <copyright file="TimestampTest.cs" company="OpenCensus Authors">
+// Copyright 2018, OpenCensus Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of theLicense at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </copyright>
 
 namespace OpenCensus.Common.Test
 {
+    using System;
+    using Xunit;
+
     public class TimestampTest
     {
         [Fact]
         public void TimestampCreate()
         {
             Assert.Equal(24, Timestamp.Create(24, 42).Seconds);
-            Assert.Equal(42,Timestamp.Create(24, 42).Nanos);
-            Assert.Equal(-24,Timestamp.Create(-24, 42).Seconds);
+            Assert.Equal(42, Timestamp.Create(24, 42).Nanos);
+            Assert.Equal(-24, Timestamp.Create(-24, 42).Seconds);
             Assert.Equal(42, Timestamp.Create(-24, 42).Nanos);
-            Assert.Equal(315576000000L,Timestamp.Create(315576000000L, 999999999).Seconds);
-            Assert.Equal(999999999,Timestamp.Create(315576000000L, 999999999).Nanos);
-            Assert.Equal(-315576000000L,Timestamp.Create(-315576000000L, 999999999).Seconds);
+            Assert.Equal(315576000000L, Timestamp.Create(315576000000L, 999999999).Seconds);
+            Assert.Equal(999999999, Timestamp.Create(315576000000L, 999999999).Nanos);
+            Assert.Equal(-315576000000L, Timestamp.Create(-315576000000L, 999999999).Seconds);
             Assert.Equal(999999999, Timestamp.Create(-315576000000L, 999999999).Nanos);
         }
 

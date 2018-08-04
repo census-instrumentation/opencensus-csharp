@@ -1,18 +1,31 @@
-﻿using Moq;
-using OpenCensus.Testing.Common;
-using OpenCensus.Trace.Config;
-using OpenCensus.Trace.Export;
-using OpenCensus.Trace.Internal;
-using OpenCensus.Trace.Sampler;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
+﻿// <copyright file="SpanBuilderTest.cs" company="OpenCensus Authors">
+// Copyright 2018, OpenCensus Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of theLicense at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </copyright>
 
 namespace OpenCensus.Trace.Test
 {
+    using System;
+    using System.Collections.Generic;
+    using Moq;
+    using OpenCensus.Testing.Common;
+    using OpenCensus.Trace.Config;
+    using OpenCensus.Trace.Export;
+    using OpenCensus.Trace.Internal;
+    using OpenCensus.Trace.Sampler;
+    using Xunit;
+
     public class SpanBuilderTest
     {
         private static readonly String SPAN_NAME = "MySpanName";
@@ -25,12 +38,12 @@ namespace OpenCensus.Trace.Test
 
         public SpanBuilderTest()
         {
-            //MockitoAnnotations.initMocks(this);
+            // MockitoAnnotations.initMocks(this);
             spanBuilderOptions =
                 new SpanBuilderOptions(randomHandler, startEndHandler, testClock, traceConfig);
             var configMock = Mock.Get<ITraceConfig>(traceConfig);
             configMock.Setup((c) => c.ActiveTraceParams).Returns(alwaysSampleTraceParams);
-            //when(traceConfig.getActiveTraceParams()).thenReturn(alwaysSampleTraceParams);
+            // when(traceConfig.getActiveTraceParams()).thenReturn(alwaysSampleTraceParams);
         }
 
         [Fact]
@@ -268,14 +281,14 @@ namespace OpenCensus.Trace.Test
             ITraceId traceId =
                 TraceId.FromBytes(
                     new byte[] {
-              (byte) 0x8F,
-              (byte) 0xFF,
-              (byte) 0xFF,
-              (byte) 0xFF,
-              (byte) 0xFF,
-              (byte) 0xFF,
-              (byte) 0xFF,
-              (byte) 0xFF,
+              0x8F,
+              0xFF,
+              0xFF,
+              0xFF,
+              0xFF,
+              0xFF,
+              0xFF,
+              0xFF,
               0,
               0,
               0,

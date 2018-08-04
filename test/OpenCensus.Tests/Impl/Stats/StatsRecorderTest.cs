@@ -1,19 +1,31 @@
-﻿using OpenCensus.Common;
-using OpenCensus.Internal;
-using OpenCensus.Stats.Aggregations;
-using OpenCensus.Stats.Measures;
-using OpenCensus.Tags;
-using OpenCensus.Tags.Unsafe;
-using OpenCensus.Testing.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
+﻿// <copyright file="StatsRecorderTest.cs" company="OpenCensus Authors">
+// Copyright 2018, OpenCensus Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of theLicense at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </copyright>
 
 namespace OpenCensus.Stats.Test
 {
+    using System.Collections.Generic;
+    using OpenCensus.Common;
+    using OpenCensus.Internal;
+    using OpenCensus.Stats.Aggregations;
+    using OpenCensus.Stats.Measures;
+    using OpenCensus.Tags;
+    using OpenCensus.Tags.Unsafe;
+    using OpenCensus.Testing.Common;
+    using Xunit;
+
     public class StatsRecorderTest
     {
         private static readonly ITagKey KEY = TagKey.Create("KEY");
@@ -188,7 +200,7 @@ namespace OpenCensus.Stats.Test
 
             statsComponent.State = StatsCollectionState.ENABLED;
             Assert.Empty(viewManager.GetView(VIEW_NAME).AggregationMap);
-            //assertThat(viewManager.getView(VIEW_NAME).getWindowData())
+            // assertThat(viewManager.getView(VIEW_NAME).getWindowData())
             //    .isNotEqualTo(CumulativeData.Create(ZERO_TIMESTAMP, ZERO_TIMESTAMP));
             statsRecorder
                 .NewMeasureMap()
@@ -213,6 +225,7 @@ namespace OpenCensus.Stats.Test
                 ZERO_TIMESTAMP, ZERO_TIMESTAMP);
 
         }
+
         class SimpleTagContext : TagContextBase
         {
             private readonly IList<ITag> tags;

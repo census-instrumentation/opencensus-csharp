@@ -1,19 +1,32 @@
-﻿using Moq;
-using OpenCensus.Common;
-using OpenCensus.Internal;
-using OpenCensus.Testing.Export;
-using OpenCensus.Trace.Config;
-using OpenCensus.Trace.Internal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Xunit;
+﻿// <copyright file="SpanExporterTest.cs" company="OpenCensus Authors">
+// Copyright 2018, OpenCensus Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of theLicense at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </copyright>
 
 namespace OpenCensus.Trace.Export.Test
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading;
+    using Moq;
+    using OpenCensus.Common;
+    using OpenCensus.Internal;
+    using OpenCensus.Testing.Export;
+    using OpenCensus.Trace.Config;
+    using OpenCensus.Trace.Internal;
+    using Xunit;
+
     public class SpanExporterTest
     {
         private static readonly String SPAN_NAME_1 = "MySpanName/1";
@@ -108,7 +121,7 @@ namespace OpenCensus.Trace.Export.Test
   
             Thread serviceExporterThread = ((SpanExporter)spanExporter).ServiceExporterThread;
             spanExporter.Dispose();
-            //serviceExporterThread.Interrupt();
+            // serviceExporterThread.Interrupt();
             // Test that the worker thread will stop.
             serviceExporterThread.Join();
         }
@@ -118,7 +131,7 @@ namespace OpenCensus.Trace.Export.Test
         {
             var mockHandler = Mock.Get<IHandler>(mockServiceHandler);
             mockHandler.Setup((h) => h.Export(It.IsAny<IList<ISpanData>>())).Throws(new ArgumentException("No export for you."));
-            //doThrow(new IllegalArgumentException("No export for you."))
+            // doThrow(new IllegalArgumentException("No export for you."))
             //    .when(mockServiceHandler)
             //    .export(anyListOf(SpanData));
             spanExporter.RegisterHandler("mock.service", mockServiceHandler);
@@ -126,13 +139,13 @@ namespace OpenCensus.Trace.Export.Test
             IList<ISpanData> exported = serviceHandler.WaitForExport(1);
             Assert.Equal(1, exported.Count);
             Assert.Contains(span1.ToSpanData(), exported);
-            //assertThat(exported).containsExactly(span1.toSpanData());
+            // assertThat(exported).containsExactly(span1.toSpanData());
             // Continue to export after the exception was received.
             Span span2 = CreateSampledEndedSpan(SPAN_NAME_1);
             exported = serviceHandler.WaitForExport(1);
             Assert.Equal(1, exported.Count);
             Assert.Contains(span2.ToSpanData(), exported);
-            //assertThat(exported).containsExactly(span2.toSpanData());
+            // assertThat(exported).containsExactly(span2.toSpanData());
         }
 
         [Fact]

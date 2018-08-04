@@ -1,13 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
-using Xunit.Abstractions;
+﻿// <copyright file="B3FormatTest.cs" company="OpenCensus Authors">
+// Copyright 2018, OpenCensus Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of theLicense at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </copyright>
 
 namespace OpenCensus.Trace.Propagation.Test
 {
+    using System;
+    using System.Collections.Generic;
+    using Xunit;
+    using Xunit.Abstractions;
+
     public class B3FormatTest
     {
         private static readonly string TRACE_ID_BASE16 = "ff000000000000000000000000000041";
@@ -24,11 +37,13 @@ namespace OpenCensus.Trace.Propagation.Test
         private static readonly ISetter<IDictionary<string, string>> setter = new TestSetter();
         private static readonly IGetter<IDictionary<string, string>> getter = new TestGetter();
         ITestOutputHelper _output;
+
         public B3FormatTest(ITestOutputHelper output)
         {
             _output = output;
 
         }
+
         [Fact]
         public void Serialize_SampledContext()
         {
@@ -174,6 +189,7 @@ namespace OpenCensus.Trace.Propagation.Test
             ContainsExactly(b3Format.Fields,
                 new List<string>() { B3Format.X_B3_TRACE_ID, B3Format.X_B3_SPAN_ID, B3Format.X_B3_PARENT_SPAN_ID, B3Format.X_B3_SAMPLED, B3Format.X_B3_FLAGS });
         }
+
         private void ContainsExactly(IList<string> list, List<string> items)
         {
             Assert.Equal(items.Count, list.Count);
@@ -183,19 +199,20 @@ namespace OpenCensus.Trace.Propagation.Test
             }
         }
 
-        private void ContainsExactly(IDictionary<string,string> dict, IDictionary<string,string> items)
+        private void ContainsExactly(IDictionary<string, string> dict, IDictionary<string, string> items)
         {
-            foreach(var d in dict)
+            foreach (var d in dict)
             {
                 _output.WriteLine(d.Key + "=" + d.Value);
             }
 
             Assert.Equal(items.Count, dict.Count);
-            foreach(var item in items)
+            foreach (var item in items)
             {
                 Assert.Contains(item, dict);
             }
         }
+
         class TestSetter : ISetter<IDictionary<string, string>>
         {
             public void Put(IDictionary<string, string> carrier, string key, string value)

@@ -1,18 +1,31 @@
-﻿using OpenCensus.Common;
-using OpenCensus.Internal;
-using OpenCensus.Stats.Aggregations;
-using OpenCensus.Stats.Measures;
-using OpenCensus.Tags;
-using OpenCensus.Testing.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
+﻿// <copyright file="ViewManagerTest.cs" company="OpenCensus Authors">
+// Copyright 2018, OpenCensus Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of theLicense at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </copyright>
 
 namespace OpenCensus.Stats.Test
 {
+    using System;
+    using System.Collections.Generic;
+    using OpenCensus.Common;
+    using OpenCensus.Internal;
+    using OpenCensus.Stats.Aggregations;
+    using OpenCensus.Stats.Measures;
+    using OpenCensus.Tags;
+    using OpenCensus.Testing.Common;
+    using Xunit;
+
     public class ViewManagerTest
     {
         private static readonly ITagKey KEY = TagKey.Create("KEY");
@@ -30,11 +43,11 @@ namespace OpenCensus.Stats.Test
 
         private static readonly String VIEW_DESCRIPTION = "view description";
 
-        //private static readonly Cumulative CUMULATIVE = Cumulative.Create();
+        // private static readonly Cumulative CUMULATIVE = Cumulative.Create();
 
         private static readonly double EPSILON = 1e-7;
         private static readonly IDuration TEN_SECONDS = Duration.Create(10, 0);
-        //private static readonly Interval INTERVAL = Interval.Create(TEN_SECONDS);
+        // private static readonly Interval INTERVAL = Interval.Create(TEN_SECONDS);
 
         private static readonly IBucketBoundaries BUCKET_BOUNDARIES =
             BucketBoundaries.Create(
@@ -54,6 +67,7 @@ namespace OpenCensus.Stats.Test
         private readonly ITagger tagger;
         private readonly IViewManager viewManager;
         private readonly IStatsRecorder statsRecorder;
+
         public ViewManagerTest()
         {
             clock = TestClock.Create();
@@ -65,6 +79,7 @@ namespace OpenCensus.Stats.Test
             viewManager = statsComponent.ViewManager;
             statsRecorder = statsComponent.StatsRecorder;
         }
+
         private static IView CreateCumulativeView()
         {
             return CreateCumulativeView(VIEW_NAME, MEASURE_DOUBLE, DISTRIBUTION, new List<ITagKey>() { KEY });
@@ -83,7 +98,7 @@ namespace OpenCensus.Stats.Test
             viewManager.RegisterView(view);
             Assert.Equal(view, viewManager.GetView(VIEW_NAME).View);
             Assert.Empty(viewManager.GetView(VIEW_NAME).AggregationMap);
-            //Assert.Equal(viewManager.GetView(VIEW_NAME).getWindowData()).isInstanceOf(CumulativeData);
+            // Assert.Equal(viewManager.GetView(VIEW_NAME).getWindowData()).isInstanceOf(CumulativeData);
         }
 
         [Fact]
@@ -96,7 +111,7 @@ namespace OpenCensus.Stats.Test
             IView cumulativeView2 =
                 CreateCumulativeView(
                     ViewName.Create("View 2"), MEASURE_DOUBLE, DISTRIBUTION, new List<ITagKey>() { KEY });
-            //View intervalView =
+            // View intervalView =
             //    View.Create(
             //        View.Name.Create("View 3"),
             //        VIEW_DESCRIPTION,
@@ -137,9 +152,9 @@ namespace OpenCensus.Stats.Test
 
         }
 
-        //[Fact]
+        // [Fact]
         //  public void TestRegisterAndGetIntervalView()
-        //{
+        // {
         //    View intervalView =
         //        View.Create(
         //            VIEW_NAME,
@@ -237,6 +252,7 @@ namespace OpenCensus.Stats.Test
         {
             TestRecordCumulative(MEASURE_LONG, SUM, 1000, 2000, 3000, 4000);
         }
+
         [Fact]
         public void TestRecordDouble_Lastvalue_Cumulative()
         {
@@ -481,7 +497,7 @@ namespace OpenCensus.Stats.Test
                 viewData.AggregationMap,
                  new Dictionary<TagValues, IAggregationData>()
                 {
-                    { tv1,  StatsTestUtil.CreateAggregationData(DISTRIBUTION, MEASURE_DOUBLE, 1.1, 4.4) } ,
+                    { tv1,  StatsTestUtil.CreateAggregationData(DISTRIBUTION, MEASURE_DOUBLE, 1.1, 4.4) },
                     { tv2,  StatsTestUtil.CreateAggregationData(DISTRIBUTION, MEASURE_DOUBLE, 2.2) },
                     { tv3,  StatsTestUtil.CreateAggregationData(DISTRIBUTION, MEASURE_DOUBLE, 3.3)}
                  },
@@ -664,11 +680,11 @@ namespace OpenCensus.Stats.Test
         [Fact]
         public void RegisterViewWithStatsDisabled_RecordAndGetViewWithStatsEnabled()
         {
-            statsComponent.State =StatsCollectionState.DISABLED;
+            statsComponent.State = StatsCollectionState.DISABLED;
             IView view = CreateCumulativeView(VIEW_NAME, MEASURE_DOUBLE, MEAN, new List<ITagKey>() { KEY });
             viewManager.RegisterView(view); // view will still be registered.
 
-            statsComponent.State =StatsCollectionState.ENABLED;
+            statsComponent.State = StatsCollectionState.ENABLED;
             statsRecorder
                 .NewMeasureMap()
                 .Put(MEASURE_DOUBLE, 1.1)
@@ -713,9 +729,9 @@ namespace OpenCensus.Stats.Test
             SettingStateToDisabledWillClearStats(cumulativeView);
         }
 
-        //[Fact]
-        //public void SettingStateToDisabledWillClearStats_Interval()
-        //{
+        // [Fact]
+        // public void SettingStateToDisabledWillClearStats_Interval()
+        // {
         //    View intervalView =
         //        View.Create(
         //            VIEW_NAME_2,
@@ -725,7 +741,7 @@ namespace OpenCensus.Stats.Test
         //            Arrays.asList(KEY),
         //            Interval.Create(Duration.Create(60, 0)));
         //    settingStateToDisabledWillClearStats(intervalView);
-        //}
+        // }
 
         private void SettingStateToDisabledWillClearStats(IView view)
         {
@@ -762,11 +778,11 @@ namespace OpenCensus.Stats.Test
             Assert.Empty(viewData.AggregationMap);
             Assert.Equal(timestamp3, viewData.Start);
             Assert.Equal(timestamp4, viewData.End);
-            //if (windowData instanceof CumulativeData) {
+            // if (windowData instanceof CumulativeData) {
             //    Assert.Equal(windowData).isEqualTo(CumulativeData.Create(timestamp3, timestamp4));
-            //} else {
+            // } else {
             //    Assert.Equal(windowData).isEqualTo(IntervalData.Create(timestamp4));
-            //}
+            // }
         }
 
         private static IMeasureMap PutToMeasureMap(IMeasureMap measureMap, IMeasure measure, double value)

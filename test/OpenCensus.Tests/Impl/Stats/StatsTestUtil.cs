@@ -1,13 +1,28 @@
-﻿using OpenCensus.Common;
-using OpenCensus.Stats.Aggregations;
-using OpenCensus.Tags;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Xunit;
+﻿// <copyright file="StatsTestUtil.cs" company="OpenCensus Authors">
+// Copyright 2018, OpenCensus Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of theLicense at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </copyright>
 
 namespace OpenCensus.Stats.Test
 {
+    using System;
+    using System.Collections.Generic;
+    using OpenCensus.Common;
+    using OpenCensus.Stats.Aggregations;
+    using OpenCensus.Tags;
+    using Xunit;
+
     internal static class StatsTestUtil
     {
         static readonly ITimestamp ZERO_TIMESTAMP = Timestamp.Create(0, 0);
@@ -45,6 +60,7 @@ namespace OpenCensus.Stats.Test
                 AssertAggregationDataEquals(exp, act, tolerance);
             }
         }
+
         internal static void AssertAggregationDataEquals(
             IAggregationData expected,
             IAggregationData actual,
@@ -100,6 +116,7 @@ namespace OpenCensus.Stats.Test
                      throw new ArgumentException();
                  });
         }
+
         private static void AssertDistributionDataEquals(
             IDistributionData expected,
             IDistributionData actual,
@@ -124,6 +141,7 @@ namespace OpenCensus.Stats.Test
 
             Assert.Equal(RemoveTrailingZeros(expected.BucketCounts), RemoveTrailingZeros((actual).BucketCounts));
         }
+
         private static IList<long> RemoveTrailingZeros(IList<long> longs)
         {
             if (longs == null || longs.Count == 0)
@@ -133,7 +151,7 @@ namespace OpenCensus.Stats.Test
    
             List<long> truncated = new List<long>();
             int lastIndex = longs.Count - 1;
-            while(longs[lastIndex] == 0)
+            while (longs[lastIndex] == 0)
             {
                 lastIndex--;
                 if (lastIndex <= 0)
@@ -141,7 +159,10 @@ namespace OpenCensus.Stats.Test
                     break;
                 }
             }
-            for (int i = 0; i < lastIndex; i++) truncated.Add(longs[i]);
+            for (int i = 0; i < lastIndex; i++)
+            {
+                truncated.Add(longs[i]);
+            }
 
             return truncated;
        
