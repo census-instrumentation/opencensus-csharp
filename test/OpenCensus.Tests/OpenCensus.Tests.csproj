@@ -17,7 +17,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="xunit.runner.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <AdditionalFiles Include="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), 'OpenCensus.sln'))\build\stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="xunit.runner.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
