@@ -20,12 +20,12 @@ namespace OpenCensus.Stats.Aggregations
 
     public class CountData : AggregationData, ICountData
     {
-        public long Count { get; }
-
         internal CountData(long count)
         {
             this.Count = count;
         }
+
+        public long Count { get; }
 
         public static ICountData Create(long count)
         {

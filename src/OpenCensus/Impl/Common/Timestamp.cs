@@ -26,6 +26,16 @@ namespace OpenCensus.Common
         private const long NANOS_PER_MILLI = 1000 * 1000;
         private const long NANOS_PER_SECOND = NANOS_PER_MILLI * MILLIS_PER_SECOND;
 
+        internal Timestamp(long seconds, int nanos)
+        {
+            this.Seconds = seconds;
+            this.Nanos = nanos;
+        }
+
+        public long Seconds { get; }
+
+        public int Nanos { get; }
+
         public static ITimestamp Create(long seconds, int nanos)
         {
             // TODO:
@@ -47,24 +57,6 @@ namespace OpenCensus.Common
             Timestamp zero = new Timestamp(0, 0);
             long nanos = millis * NANOS_PER_MILLI;
             return zero.Plus(0, nanos);
-        }
-
-        internal Timestamp(long seconds, int nanos)
-        {
-            this.Seconds = seconds;
-            this.Nanos = nanos;
-        }
-
-        public long Seconds { get; }
-
-        public int Nanos { get; }
-
-        private static ITimestamp OfSecond(long seconds, long nanoAdjustment)
-        {
-            long floor = (long)Math.Floor((double)nanoAdjustment / NANOS_PER_SECOND);
-            long secs = seconds + floor;
-            long nos = nanoAdjustment - (floor * NANOS_PER_SECOND);
-            return Create(secs, (int)nos);
         }
 
         public ITimestamp AddDuration(IDuration duration)
@@ -138,6 +130,14 @@ namespace OpenCensus.Common
             h *= 1000003;
             h ^= this.Nanos;
             return (int)h;
+        }
+
+        private static ITimestamp OfSecond(long seconds, long nanoAdjustment)
+        {
+            long floor = (long)Math.Floor((double)nanoAdjustment / NANOS_PER_SECOND);
+            long secs = seconds + floor;
+            long nos = nanoAdjustment - (floor * NANOS_PER_SECOND);
+            return Create(secs, (int)nos);
         }
 
         private ITimestamp Plus(long secondsToAdd, long nanosToAdd)

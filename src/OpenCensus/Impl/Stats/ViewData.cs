@@ -34,6 +34,7 @@ namespace OpenCensus.Stats
             this.Start = start ?? throw new ArgumentNullException(nameof(start));
             this.End = end ?? throw new ArgumentNullException(nameof(end));
         }
+
         public IView View { get; }
 
         public IDictionary<TagValues, IAggregationData> AggregationMap { get; }

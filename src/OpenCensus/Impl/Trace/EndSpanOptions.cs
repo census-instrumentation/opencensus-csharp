@@ -24,15 +24,15 @@ namespace OpenCensus.Trace
         {
         }
 
-        public bool SampleToLocalSpanStore { get; }
-
-        public Status Status { get; }
-
         internal EndSpanOptions(bool sampleToLocalSpanStore, Status status = null)
         {
             this.SampleToLocalSpanStore = sampleToLocalSpanStore;
             this.Status = status;
         }
+
+        public bool SampleToLocalSpanStore { get; }
+
+        public Status Status { get; }
 
         public static EndSpanOptionsBuilder Builder()
         {

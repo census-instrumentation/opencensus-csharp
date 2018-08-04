@@ -24,12 +24,12 @@ namespace OpenCensus.Stats.Aggregations
         {
         }
 
-        public IBucketBoundaries BucketBoundaries { get; }
-
         private Distribution(IBucketBoundaries bucketBoundaries)
         {
             this.BucketBoundaries = bucketBoundaries ?? throw new ArgumentNullException("Null bucketBoundaries");
         }
+
+        public IBucketBoundaries BucketBoundaries { get; }
 
         public static IDistribution Create(IBucketBoundaries bucketBoundaries)
         {

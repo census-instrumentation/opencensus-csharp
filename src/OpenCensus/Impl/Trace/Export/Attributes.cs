@@ -23,15 +23,15 @@ namespace OpenCensus.Trace.Export
 
     public sealed class Attributes : IAttributes
     {
-        public IDictionary<string, IAttributeValue> AttributeMap { get; }
-
-        public int DroppedAttributesCount { get; }
-
         internal Attributes(IDictionary<string, IAttributeValue> attributeMap, int droppedAttributesCount)
         {
             this.AttributeMap = attributeMap ?? throw new ArgumentNullException("Null attributeMap");
             this.DroppedAttributesCount = droppedAttributesCount;
         }
+
+        public IDictionary<string, IAttributeValue> AttributeMap { get; }
+
+        public int DroppedAttributesCount { get; }
 
         public static Attributes Create(IDictionary<string, IAttributeValue> attributeMap, int droppedAttributesCount)
         {
