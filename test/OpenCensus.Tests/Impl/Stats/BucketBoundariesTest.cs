@@ -74,10 +74,16 @@ namespace OpenCensus.Stats.Test
             var b2 = BucketBoundaries.Create(new List<double>() { -1.0, 2.0 });
             var b3 = BucketBoundaries.Create(new List<double>() { -1.0 });
             Assert.Equal(b1, b2);
+            Assert.Equal(b2, b1);
             Assert.Equal(b3, b3);
             Assert.NotEqual(b1, b3);
             Assert.NotEqual(b2, b3);
 
+            Assert.True(b1 == b2);
+            Assert.True(b2 == b1);
+            Assert.True(b3 == b3);
+            Assert.False(b1 == b3);
+            Assert.False(b2 == b3);
         }
     }
 }
