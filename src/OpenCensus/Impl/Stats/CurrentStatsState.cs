@@ -52,19 +52,22 @@ namespace OpenCensus.Stats
         // otherwise.
         internal bool Set(StatsCollectionState state)
         {
-            if (this.isRead)
+            lock (this.lck)
             {
-                throw new ArgumentException("State was already read, cannot set state.");
-            }
+                if (this.isRead)
+                {
+                    throw new ArgumentException("State was already read, cannot set state.");
+                }
 
-            if (state == this.currentState)
-            {
-                return false;
-            }
-            else
-            {
-                this.currentState = state;
-                return true;
+                if (state == this.currentState)
+                {
+                    return false;
+                }
+                else
+                {
+                    this.currentState = state;
+                    return true;
+                }
             }
         }
     }

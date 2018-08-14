@@ -17,6 +17,9 @@
 namespace OpenCensus.Stats.Test
 {
     using System;
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Xunit;
 
     public class CurrentStatsStateTest
@@ -46,6 +49,57 @@ namespace OpenCensus.Stats.Test
             CurrentStatsState state = new CurrentStatsState();
             var st = state.Value;
             Assert.Throws<ArgumentException>(() => state.Set(StatsCollectionState.DISABLED));
+        }
+
+        /// <summary>
+        /// This test relies on timing, and as such may not FAIL reliably under some conditions
+        /// (e.g. more/less machine load, faster/slower processors).
+        /// It will not incorrectly fail transiently though.
+        /// </summary>
+        [Fact]
+
+        public async Task PreventSettingStateAfterReadingState_IsThreadSafe()
+        {
+            for (int i = 0; i < 10; i ++)
+            {
+                var state = new CurrentStatsState();
+
+                using (var cts = new CancellationTokenSource())
+                {
+                    var _ = Task.Run(
+                        async () =>
+                        {
+                            while (!cts.IsCancellationRequested)
+                            {
+                                try
+                                {
+                                    state.Set(StatsCollectionState.DISABLED);
+                                    state.Set(StatsCollectionState.ENABLED);
+                                }
+                                catch
+                                {
+                                    // Throw is expected after the read is performed
+                                }
+                            }
+                        },
+                        cts.Token);
+
+                    await Task.Delay(10);
+
+                    // Read the value a bunch of times
+                    var values = Enumerable.Range(0, 20)
+                        .Select(__ => state.Value)
+                        .ToList();
+
+                    // They should all be the same
+                    foreach (var item in values)
+                    {
+                        Assert.Equal(item, values[0]);
+                    }
+
+                    cts.Cancel();
+                }
+            }
         }
     }
 }
