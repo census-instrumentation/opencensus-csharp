@@ -139,7 +139,7 @@ namespace OpenCensus.Trace.Export.Test
         public void GetErrorSampledSpans()
         {
             Span span = CreateSampledSpan(REGISTERED_SPAN_NAME) as Span;
-            testClock.AdvanceTime(Duration.Create(0, 1000));
+            testClock.AdvanceTime(TimeSpan.FromSeconds(0, 1000));
             span.End(EndSpanOptions.Builder().SetStatus(Status.CANCELLED).Build());
             IList<ISpanData> samples =
                 sampleStore.GetErrorSampledSpans(
@@ -152,12 +152,12 @@ namespace OpenCensus.Trace.Export.Test
         public void GetErrorSampledSpans_MaxSpansToReturn()
         {
             Span span1 = CreateSampledSpan(REGISTERED_SPAN_NAME) as Span;
-            testClock.AdvanceTime(Duration.Create(0, 1000));
+            testClock.AdvanceTime(TimeSpan.FromSeconds(0, 1000));
             span1.End(EndSpanOptions.Builder().SetStatus(Status.CANCELLED).Build());
             // Advance time to allow other spans to be sampled.
-            testClock.AdvanceTime(Duration.Create(5, 0));
+            testClock.AdvanceTime(TimeSpan.FromSeconds(5, 0));
             Span span2 = CreateSampledSpan(REGISTERED_SPAN_NAME) as Span;
-            testClock.AdvanceTime(Duration.Create(0, 1000));
+            testClock.AdvanceTime(TimeSpan.FromSeconds(0, 1000));
             span2.End(EndSpanOptions.Builder().SetStatus(Status.CANCELLED).Build());
             IList<ISpanData> samples =
                 sampleStore.GetErrorSampledSpans(
@@ -171,10 +171,10 @@ namespace OpenCensus.Trace.Export.Test
         public void GetErrorSampledSpans_NullCode()
         {
             Span span1 = CreateSampledSpan(REGISTERED_SPAN_NAME) as Span;
-            testClock.AdvanceTime(Duration.Create(0, 1000));
+            testClock.AdvanceTime(TimeSpan.FromSeconds(0, 1000));
             span1.End(EndSpanOptions.Builder().SetStatus(Status.CANCELLED).Build());
             Span span2 = CreateSampledSpan(REGISTERED_SPAN_NAME) as Span;
-            testClock.AdvanceTime(Duration.Create(0, 1000));
+            testClock.AdvanceTime(TimeSpan.FromSeconds(0, 1000));
             span2.End(EndSpanOptions.Builder().SetStatus(Status.UNKNOWN).Build());
             IList<ISpanData> samples =
                 sampleStore.GetErrorSampledSpans(SampledSpanStoreErrorFilter.Create(REGISTERED_SPAN_NAME, null, 0));
@@ -187,10 +187,10 @@ namespace OpenCensus.Trace.Export.Test
         public void GetErrorSampledSpans_NullCode_MaxSpansToReturn()
         {
             Span span1 = CreateSampledSpan(REGISTERED_SPAN_NAME) as Span;
-            testClock.AdvanceTime(Duration.Create(0, 1000));
+            testClock.AdvanceTime(TimeSpan.FromSeconds(0, 1000));
             span1.End(EndSpanOptions.Builder().SetStatus(Status.CANCELLED).Build());
             Span span2 = CreateSampledSpan(REGISTERED_SPAN_NAME) as Span;
-            testClock.AdvanceTime(Duration.Create(0, 1000));
+            testClock.AdvanceTime(TimeSpan.FromSeconds(0, 1000));
             span2.End(EndSpanOptions.Builder().SetStatus(Status.UNKNOWN).Build());
             IList<ISpanData> samples =
                 sampleStore.GetErrorSampledSpans(SampledSpanStoreErrorFilter.Create(REGISTERED_SPAN_NAME, null, 1));
@@ -202,7 +202,7 @@ namespace OpenCensus.Trace.Export.Test
         public void GetLatencySampledSpans()
         {
             Span span = CreateSampledSpan(REGISTERED_SPAN_NAME) as Span;
-            testClock.AdvanceTime(Duration.Create(0, 20000)); // 20 microseconds
+            testClock.AdvanceTime(TimeSpan.FromSeconds(0, 20000)); // 20 microseconds
             span.End();
             IList<ISpanData> samples =
                 sampleStore.GetLatencySampledSpans(
@@ -219,7 +219,7 @@ namespace OpenCensus.Trace.Export.Test
         public void GetLatencySampledSpans_ExclusiveUpperBound()
         {
             Span span = CreateSampledSpan(REGISTERED_SPAN_NAME) as Span;
-            testClock.AdvanceTime(Duration.Create(0, 20000)); // 20 microseconds
+            testClock.AdvanceTime(TimeSpan.FromSeconds(0, 20000)); // 20 microseconds
             span.End();
             IList<ISpanData> samples =
                 sampleStore.GetLatencySampledSpans(
@@ -235,7 +235,7 @@ namespace OpenCensus.Trace.Export.Test
         public void GetLatencySampledSpans_InclusiveLowerBound()
         {
             Span span = CreateSampledSpan(REGISTERED_SPAN_NAME) as Span;
-            testClock.AdvanceTime(Duration.Create(0, 20000)); // 20 microseconds
+            testClock.AdvanceTime(TimeSpan.FromSeconds(0, 20000)); // 20 microseconds
             span.End();
             IList<ISpanData> samples =
                 sampleStore.GetLatencySampledSpans(
@@ -252,12 +252,12 @@ namespace OpenCensus.Trace.Export.Test
         public void GetLatencySampledSpans_QueryBetweenMultipleBuckets()
         {
             Span span1 = CreateSampledSpan(REGISTERED_SPAN_NAME) as Span;
-            testClock.AdvanceTime(Duration.Create(0, 20000)); // 20 microseconds
+            testClock.AdvanceTime(TimeSpan.FromSeconds(0, 20000)); // 20 microseconds
             span1.End();
             // Advance time to allow other spans to be sampled.
-            testClock.AdvanceTime(Duration.Create(5, 0));
+            testClock.AdvanceTime(TimeSpan.FromSeconds(5, 0));
             Span span2 = CreateSampledSpan(REGISTERED_SPAN_NAME) as Span;
-            testClock.AdvanceTime(Duration.Create(0, 200000)); // 200 microseconds
+            testClock.AdvanceTime(TimeSpan.FromSeconds(0, 200000)); // 200 microseconds
             span2.End();
             IList<ISpanData> samples =
                 sampleStore.GetLatencySampledSpans(
@@ -275,12 +275,12 @@ namespace OpenCensus.Trace.Export.Test
         public void GetLatencySampledSpans_MaxSpansToReturn()
         {
             Span span1 = CreateSampledSpan(REGISTERED_SPAN_NAME) as Span;
-            testClock.AdvanceTime(Duration.Create(0, 20000)); // 20 microseconds
+            testClock.AdvanceTime(TimeSpan.FromSeconds(0, 20000)); // 20 microseconds
             span1.End();
             // Advance time to allow other spans to be sampled.
-            testClock.AdvanceTime(Duration.Create(5, 0));
+            testClock.AdvanceTime(TimeSpan.FromSeconds(5, 0));
             Span span2 = CreateSampledSpan(REGISTERED_SPAN_NAME) as Span;
-            testClock.AdvanceTime(Duration.Create(0, 200000)); // 200 microseconds
+            testClock.AdvanceTime(TimeSpan.FromSeconds(0, 200000)); // 200 microseconds
             span2.End();
             IList<ISpanData> samples =
                 sampleStore.GetLatencySampledSpans(
@@ -297,7 +297,7 @@ namespace OpenCensus.Trace.Export.Test
         public void IgnoreNegativeSpanLatency()
         {
             Span span = CreateSampledSpan(REGISTERED_SPAN_NAME) as Span;
-            testClock.AdvanceTime(Duration.Create(0, -20000));
+            testClock.AdvanceTime(TimeSpan.FromSeconds(0, -20000));
             span.End();
             IList<ISpanData> samples =
                 sampleStore.GetLatencySampledSpans(
@@ -341,12 +341,12 @@ namespace OpenCensus.Trace.Export.Test
                 ISpan notSampledSpan = CreateNotSampledSpan(spanName);
                 if (boundaries.LatencyLowerNs < NUM_NANOS_PER_SECOND)
                 {
-                    testClock.AdvanceTime(Duration.Create(0, (int)boundaries.LatencyLowerNs));
+                    testClock.AdvanceTime(TimeSpan.FromSeconds(0, (int)boundaries.LatencyLowerNs));
                 }
                 else
                 {
                     testClock.AdvanceTime(
-                        Duration.Create(
+                        TimeSpan.FromSeconds(
                             boundaries.LatencyLowerNs / NUM_NANOS_PER_SECOND,
                             (int)(boundaries.LatencyLowerNs % NUM_NANOS_PER_SECOND)));
                 }
@@ -363,7 +363,7 @@ namespace OpenCensus.Trace.Export.Test
                 {
                     ISpan sampledSpan = CreateSampledSpan(spanName);
                     ISpan notSampledSpan = CreateNotSampledSpan(spanName);
-                    testClock.AdvanceTime(Duration.Create(0, 1000));
+                    testClock.AdvanceTime(TimeSpan.FromSeconds(0, 1000));
                     sampledSpan.End(EndSpanOptions.Builder().SetStatus(code.ToStatus()).Build());
                     notSampledSpan.End(EndSpanOptions.Builder().SetStatus(code.ToStatus()).Build());
                 }

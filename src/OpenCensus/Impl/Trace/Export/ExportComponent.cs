@@ -16,6 +16,7 @@
 
 namespace OpenCensus.Trace.Export
 {
+    using System;
     using OpenCensus.Common;
     using OpenCensus.Internal;
 
@@ -24,7 +25,7 @@ namespace OpenCensus.Trace.Export
         private const int EXPORTER_BUFFER_SIZE = 32;
 
         // Enforces that trace export exports data at least once every 5 seconds.
-        private static readonly IDuration EXPORTER_SCHEDULE_DELAY = Duration.Create(5, 0);
+        private static readonly TimeSpan ExporterSchedulerDelay = TimeSpan.FromSeconds(5);
 
         public static IExportComponent CreateWithoutInProcessStores(IEventQueue eventQueue)
         {
@@ -38,7 +39,7 @@ namespace OpenCensus.Trace.Export
 
         private ExportComponent(bool supportInProcessStores, IEventQueue eventQueue)
         {
-            this.SpanExporter = Export.SpanExporter.Create(EXPORTER_BUFFER_SIZE, EXPORTER_SCHEDULE_DELAY);
+            this.SpanExporter = Export.SpanExporter.Create(EXPORTER_BUFFER_SIZE, ExporterSchedulerDelay);
             this.RunningSpanStore =
                 supportInProcessStores
                     ? new InProcessRunningSpanStore()

@@ -151,7 +151,7 @@ namespace OpenCensus.Stats
         }
 
         // Records stats with a set of tags.
-        internal void Record(ITagContext tags, IList<IMeasurement> stats, ITimestamp timestamp)
+        internal void Record(ITagContext tags, IList<IMeasurement> stats, DateTimeOffset timestamp)
         {
             lock (this.lck)
             {
@@ -204,7 +204,7 @@ namespace OpenCensus.Stats
         }
 
         // Resume stats collection for all MutableViewData.
-        internal void ResumeStatsCollection(ITimestamp now)
+        internal void ResumeStatsCollection(DateTimeOffset now)
         {
             lock (this.lck)
             {

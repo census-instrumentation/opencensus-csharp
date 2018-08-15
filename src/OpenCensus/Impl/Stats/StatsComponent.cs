@@ -28,7 +28,7 @@ namespace OpenCensus.Stats
         private readonly IStatsRecorder statsRecorder;
 
         public StatsComponent()
-            : this(new SimpleEventQueue(), DateTimeOffsetClock.INSTANCE)
+            : this(new SimpleEventQueue(), DateTimeOffsetClock.Instance)
         {
         }
 

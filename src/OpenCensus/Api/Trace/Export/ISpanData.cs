@@ -16,6 +16,7 @@
 
 namespace OpenCensus.Trace.Export
 {
+    using System;
     using OpenCensus.Common;
 
     public interface ISpanData
@@ -28,7 +29,7 @@ namespace OpenCensus.Trace.Export
 
         string Name { get; }
 
-        ITimestamp StartTimestamp { get; }
+        DateTimeOffset StartTimestamp { get; }
 
         IAttributes Attributes { get; }
 
@@ -42,6 +43,6 @@ namespace OpenCensus.Trace.Export
 
         Status Status { get; }
 
-        ITimestamp EndTimestamp { get; }
+        DateTimeOffset? EndTimestamp { get; }
     }
 }

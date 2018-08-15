@@ -21,7 +21,7 @@ namespace OpenCensus.Tags
 
     public class NoopTagContextBinarySerializer : TagContextBinarySerializerBase
     {
-        internal static readonly ITagContextBinarySerializer INSTANCE = new NoopTagContextBinarySerializer();
+        internal static readonly ITagContextBinarySerializer Instance = new NoopTagContextBinarySerializer();
         private static readonly byte[] EMPTY_BYTE_ARRAY = { };
 
         public override byte[] ToByteArray(ITagContext tags)

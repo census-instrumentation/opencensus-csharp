@@ -16,22 +16,23 @@
 
 namespace OpenCensus.Stats
 {
+    using System;
     using System.Collections.Generic;
     using OpenCensus.Common;
     using OpenCensus.Tags;
 
     internal class CumulativeMutableViewData : MutableViewData
     {
-        private ITimestamp start;
+        private DateTimeOffset start;
         private IDictionary<TagValues, MutableAggregation> tagValueAggregationMap = new Dictionary<TagValues, MutableAggregation>();
 
-        internal CumulativeMutableViewData(IView view, ITimestamp start)
+        internal CumulativeMutableViewData(IView view, DateTimeOffset start)
             : base(view)
         {
             this.start = start;
         }
 
-    internal override void Record(ITagContext context, double value, ITimestamp timestamp)
+    internal override void Record(ITagContext context, double value, DateTimeOffset timestamp)
         {
             IList<ITagValue> values = GetTagValues(GetTagMap(context), this.View.Columns);
             var tagValues = TagValues.Create(values);
@@ -43,7 +44,7 @@ namespace OpenCensus.Stats
             this.tagValueAggregationMap[tagValues].Add(value);
         }
 
-        internal override IViewData ToViewData(ITimestamp now, StatsCollectionState state)
+        internal override IViewData ToViewData(DateTimeOffset now, StatsCollectionState state)
         {
             if (state == StatsCollectionState.ENABLED)
             {
@@ -59,8 +60,8 @@ namespace OpenCensus.Stats
                 return ViewData.Create(
                     this.View,
                     new Dictionary<TagValues, IAggregationData>(),
-                    ZERO_TIMESTAMP,
-                    ZERO_TIMESTAMP);
+                    ZeroTimestamp,
+                    ZeroTimestamp);
             }
         }
 
@@ -69,7 +70,7 @@ namespace OpenCensus.Stats
             this.tagValueAggregationMap.Clear();
         }
 
-        internal override void ResumeStatsCollection(ITimestamp now)
+        internal override void ResumeStatsCollection(DateTimeOffset now)
         {
             this.start = now;
         }

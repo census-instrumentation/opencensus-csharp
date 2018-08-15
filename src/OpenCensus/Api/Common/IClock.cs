@@ -16,9 +16,11 @@
 
 namespace OpenCensus.Common
 {
+    using System;
+
     public interface IClock
     {
-        ITimestamp Now { get; }
+        DateTimeOffset Now { get; }
 
         long NowNanos { get; }
     }

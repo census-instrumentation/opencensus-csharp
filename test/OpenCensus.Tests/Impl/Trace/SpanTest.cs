@@ -34,7 +34,7 @@ namespace OpenCensus.Trace.Test
         private readonly RandomGenerator random = new RandomGenerator(1234);
         private readonly ISpanContext spanContext;
         private readonly ISpanId parentSpanId;
-        private readonly ITimestamp timestamp = Timestamp.Create(1234, 5678);
+        private readonly DateTimeOffset timestamp = new DateTimeOffset(1234 * TimeSpan.TicksPerSecond + 56, TimeSpan.Zero);
         private readonly TestClock testClock;
         private readonly ITimestampConverter timestampConverter;
         private readonly SpanOptions noRecordSpanOptions = SpanOptions.NONE;
@@ -162,15 +162,15 @@ namespace OpenCensus.Trace.Test
                 "MySingleStringAttributeKey",
                 AttributeValue.StringAttributeValue("MySingleStringAttributeValue"));
             span.PutAttributes(attributes);
-            testClock.AdvanceTime(Duration.Create(0, 100));
+            testClock.AdvanceTime(TimeSpan.FromTicks(1));
             span.AddAnnotation(Annotation.FromDescription(ANNOTATION_DESCRIPTION));
-            testClock.AdvanceTime(Duration.Create(0, 100));
+            testClock.AdvanceTime(TimeSpan.FromTicks(1));
             span.AddAnnotation(ANNOTATION_DESCRIPTION, attributes);
-            testClock.AdvanceTime(Duration.Create(0, 100));
+            testClock.AdvanceTime(TimeSpan.FromTicks(1));
             IMessageEvent networkEvent =
                 MessageEvent.Builder(MessageEventType.RECEIVED, 1).SetUncompressedMessageSize(3).Build();
             span.AddMessageEvent(networkEvent);
-            testClock.AdvanceTime(Duration.Create(0, 100));
+            testClock.AdvanceTime(TimeSpan.FromTicks(1));
             ILink link = Link.FromSpanContext(spanContext, LinkType.CHILD_LINKED_SPAN);
             span.AddLink(link);
             ISpanData spanData = ((Span)span).ToSpanData();
@@ -182,13 +182,13 @@ namespace OpenCensus.Trace.Test
             Assert.Equal(expectedAttributes, spanData.Attributes.AttributeMap); 
             Assert.Equal(0, spanData.Annotations.DroppedEventsCount);
             Assert.Equal(2, spanData.Annotations.Events.Count);
-            Assert.Equal(timestamp.AddNanos(100), spanData.Annotations.Events[0].Timestamp);
+            Assert.Equal(timestamp.AddTicks(1), spanData.Annotations.Events[0].Timestamp);
             Assert.Equal(Annotation.FromDescription(ANNOTATION_DESCRIPTION), spanData.Annotations.Events[0].Event);
-            Assert.Equal(timestamp.AddNanos(200), spanData.Annotations.Events[1].Timestamp);
+            Assert.Equal(timestamp.AddTicks(2), spanData.Annotations.Events[1].Timestamp);
             Assert.Equal(Annotation.FromDescriptionAndAttributes(ANNOTATION_DESCRIPTION, attributes), spanData.Annotations.Events[1].Event);
             Assert.Equal(0, spanData.MessageEvents.DroppedEventsCount);
             Assert.Equal(1, spanData.MessageEvents.Events.Count);
-            Assert.Equal(timestamp.AddNanos(300), spanData.MessageEvents.Events[0].Timestamp);
+            Assert.Equal(timestamp.AddTicks(3), spanData.MessageEvents.Events[0].Timestamp);
             Assert.Equal(networkEvent, spanData.MessageEvents.Events[0].Event);
             Assert.Equal(0, spanData.Links.DroppedLinksCount);
             Assert.Equal(1, spanData.Links.Links.Count);
@@ -221,17 +221,17 @@ namespace OpenCensus.Trace.Test
                 "MySingleStringAttributeKey",
                 AttributeValue.StringAttributeValue("MySingleStringAttributeValue"));
             span.PutAttributes(attributes);
-            testClock.AdvanceTime(Duration.Create(0, 100));
+            testClock.AdvanceTime(TimeSpan.FromTicks(1));
             span.AddAnnotation(Annotation.FromDescription(ANNOTATION_DESCRIPTION));
-            testClock.AdvanceTime(Duration.Create(0, 100));
+            testClock.AdvanceTime(TimeSpan.FromTicks(1));
             span.AddAnnotation(ANNOTATION_DESCRIPTION, attributes);
-            testClock.AdvanceTime(Duration.Create(0, 100));
+            testClock.AdvanceTime(TimeSpan.FromTicks(1));
             IMessageEvent networkEvent =
                 MessageEvent.Builder(MessageEventType.RECEIVED, 1).SetUncompressedMessageSize(3).Build();
             span.AddMessageEvent(networkEvent);
             ILink link = Link.FromSpanContext(spanContext, LinkType.CHILD_LINKED_SPAN);
             span.AddLink(link);
-            testClock.AdvanceTime(Duration.Create(0, 100));
+            testClock.AdvanceTime(TimeSpan.FromTicks(1));
             span.End(EndSpanOptions.Builder().SetStatus(Status.CANCELLED).Build());
           
             ISpanData spanData = ((Span)span).ToSpanData();
@@ -243,20 +243,20 @@ namespace OpenCensus.Trace.Test
             Assert.Equal(expectedAttributes, spanData.Attributes.AttributeMap);
             Assert.Equal(0, spanData.Annotations.DroppedEventsCount);
             Assert.Equal(2, spanData.Annotations.Events.Count);
-            Assert.Equal(timestamp.AddNanos(100), spanData.Annotations.Events[0].Timestamp);
+            Assert.Equal(timestamp.AddTicks(1), spanData.Annotations.Events[0].Timestamp);
             Assert.Equal(Annotation.FromDescription(ANNOTATION_DESCRIPTION), spanData.Annotations.Events[0].Event);
-            Assert.Equal(timestamp.AddNanos(200), spanData.Annotations.Events[1].Timestamp);
+            Assert.Equal(timestamp.AddTicks(2), spanData.Annotations.Events[1].Timestamp);
             Assert.Equal(Annotation.FromDescriptionAndAttributes(ANNOTATION_DESCRIPTION, attributes), spanData.Annotations.Events[1].Event);
             Assert.Equal(0, spanData.MessageEvents.DroppedEventsCount);
             Assert.Equal(1, spanData.MessageEvents.Events.Count);
-            Assert.Equal(timestamp.AddNanos(300), spanData.MessageEvents.Events[0].Timestamp);
+            Assert.Equal(timestamp.AddTicks(3), spanData.MessageEvents.Events[0].Timestamp);
             Assert.Equal(networkEvent, spanData.MessageEvents.Events[0].Event);
             Assert.Equal(0, spanData.Links.DroppedLinksCount);
             Assert.Equal(1, spanData.Links.Links.Count);
             Assert.Equal(link, spanData.Links.Links[0]);
             Assert.Equal(timestamp, spanData.StartTimestamp);
             Assert.Equal(Status.CANCELLED, spanData.Status);
-            Assert.Equal(timestamp.AddNanos(400), spanData.EndTimestamp);
+            Assert.Equal(timestamp.AddTicks(4), spanData.EndTimestamp);
 
             var startEndMock = Mock.Get<IStartEndHandler>(startEndHandler);
             var spanBase = span as SpanBase;
@@ -278,7 +278,7 @@ namespace OpenCensus.Trace.Test
                     startEndHandler,
                     timestampConverter,
                     testClock);
-            testClock.AdvanceTime(Duration.Create(0, 100));
+            testClock.AdvanceTime(TimeSpan.FromTicks(1));
             Assert.Equal(Status.OK, span.Status);
             ((Span)span).Status = Status.CANCELLED;
             Assert.Equal(Status.CANCELLED, span.Status);
@@ -304,7 +304,7 @@ namespace OpenCensus.Trace.Test
                     startEndHandler,
                     timestampConverter,
                     testClock);
-            testClock.AdvanceTime(Duration.Create(0, 100));
+            testClock.AdvanceTime(TimeSpan.FromTicks(1));
             Assert.Equal(Status.OK, span.Status);
             ((Span)span).Status = Status.CANCELLED;
             Assert.Equal(Status.CANCELLED, span.Status);
@@ -444,14 +444,14 @@ namespace OpenCensus.Trace.Test
             for (int i = 0; i < 2 * maxNumberOfAnnotations; i++)
             {
                 span.AddAnnotation(annotation);
-                testClock.AdvanceTime(Duration.Create(0, 100));
+                testClock.AdvanceTime(TimeSpan.FromTicks(1));
             }
             ISpanData spanData = ((Span)span).ToSpanData();
             Assert.Equal(maxNumberOfAnnotations, spanData.Annotations.DroppedEventsCount);
             Assert.Equal(maxNumberOfAnnotations, spanData.Annotations.Events.Count);
             for (int i = 0; i < maxNumberOfAnnotations; i++)
             {
-                Assert.Equal(timestamp.AddNanos(100 * (maxNumberOfAnnotations + i)), spanData.Annotations.Events[i].Timestamp);
+                Assert.Equal(timestamp.AddTicks((maxNumberOfAnnotations + i)), spanData.Annotations.Events[i].Timestamp);
                 Assert.Equal(annotation, spanData.Annotations.Events[i].Event);
             }
             span.End();
@@ -460,7 +460,7 @@ namespace OpenCensus.Trace.Test
             Assert.Equal(maxNumberOfAnnotations, spanData.Annotations.Events.Count);
             for (int i = 0; i < maxNumberOfAnnotations; i++)
             {
-                Assert.Equal(timestamp.AddNanos(100 * (maxNumberOfAnnotations + i)), spanData.Annotations.Events[i].Timestamp);
+                Assert.Equal(timestamp.AddTicks((maxNumberOfAnnotations + i)), spanData.Annotations.Events[i].Timestamp);
                 Assert.Equal(annotation, spanData.Annotations.Events[i].Event);
             }
         }
@@ -490,14 +490,14 @@ namespace OpenCensus.Trace.Test
             for (int i = 0; i < 2 * maxNumberOfNetworkEvents; i++)
             {
                 span.AddMessageEvent(networkEvent);
-                testClock.AdvanceTime(Duration.Create(0, 100));
+                testClock.AdvanceTime(TimeSpan.FromTicks(1));
             }
             ISpanData spanData = ((Span)span).ToSpanData();
             Assert.Equal(maxNumberOfNetworkEvents, spanData.MessageEvents.DroppedEventsCount);
             Assert.Equal(maxNumberOfNetworkEvents, spanData.MessageEvents.Events.Count);
             for (int i = 0; i < maxNumberOfNetworkEvents; i++)
             {
-                Assert.Equal(timestamp.AddNanos(100 * (maxNumberOfNetworkEvents + i)), spanData.MessageEvents.Events[i].Timestamp);
+                Assert.Equal(timestamp.AddTicks((maxNumberOfNetworkEvents + i)), spanData.MessageEvents.Events[i].Timestamp);
                 Assert.Equal(networkEvent, spanData.MessageEvents.Events[i].Event);
             }
             span.End();
@@ -506,7 +506,7 @@ namespace OpenCensus.Trace.Test
             Assert.Equal(maxNumberOfNetworkEvents, spanData.MessageEvents.Events.Count);
             for (int i = 0; i < maxNumberOfNetworkEvents; i++)
             {
-                Assert.Equal(timestamp.AddNanos(100 * (maxNumberOfNetworkEvents + i)), spanData.MessageEvents.Events[i].Timestamp);
+                Assert.Equal(timestamp.AddTicks((maxNumberOfNetworkEvents + i)), spanData.MessageEvents.Events[i].Timestamp);
                 Assert.Equal(networkEvent, spanData.MessageEvents.Events[i].Event);
             }
         }

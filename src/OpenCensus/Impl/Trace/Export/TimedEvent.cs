@@ -16,20 +16,22 @@
 
 namespace OpenCensus.Trace.Export
 {
+
+    using System;
     using OpenCensus.Common;
 
     public sealed class TimedEvent<T> : ITimedEvent<T>
     {
-        public static ITimedEvent<T> Create(ITimestamp timestamp, T @event)
+        public static ITimedEvent<T> Create(DateTimeOffset timestamp, T @event)
         {
             return new TimedEvent<T>(timestamp, @event);
         }
 
-        public ITimestamp Timestamp { get; }
+        public DateTimeOffset Timestamp { get; }
 
         public T Event { get; }
 
-        internal TimedEvent(ITimestamp timestamp, T @event)
+        internal TimedEvent(DateTimeOffset timestamp, T @event)
         {
             this.Timestamp = timestamp;
             this.Event = @event;

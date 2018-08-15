@@ -22,7 +22,7 @@ namespace OpenCensus.Tags
 
     internal sealed class NoopTagContextBuilder : TagContextBuilderBase
     {
-        internal static readonly ITagContextBuilder INSTANCE = new NoopTagContextBuilder();
+        internal static readonly ITagContextBuilder Instance = new NoopTagContextBuilder();
 
         private NoopTagContextBuilder()
         {
@@ -55,12 +55,12 @@ namespace OpenCensus.Tags
 
         public override ITagContext Build()
         {
-            return NoopTagContext.INSTANCE;
+            return NoopTagContext.Instance;
         }
 
         public override IScope BuildScoped()
         {
-            return NoopScope.INSTANCE;
+            return NoopScope.Instance;
         }
     }
 }

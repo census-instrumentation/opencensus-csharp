@@ -16,16 +16,18 @@
 
 namespace OpenCensus.Common
 {
+    using System;
+
     internal sealed class ZeroTimeClock : IClock
     {
-        public static readonly ZeroTimeClock INSTANCE = new ZeroTimeClock();
-        private static readonly ITimestamp ZERO_TIMESTAMP = Timestamp.Create(0, 0);
+        public static readonly ZeroTimeClock Instance = new ZeroTimeClock();
+        private static readonly DateTimeOffset ZeroTimestamp = DateTimeOffset.MinValue;
 
-        public ITimestamp Now
+        public DateTimeOffset Now
         {
             get
             {
-                return ZERO_TIMESTAMP;
+                return ZeroTimestamp;
             }
         }
 

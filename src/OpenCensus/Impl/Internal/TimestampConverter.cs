@@ -16,14 +16,15 @@
 
 namespace OpenCensus.Internal
 {
+    using System;
     using OpenCensus.Common;
 
     internal class TimestampConverter : ITimestampConverter
     {
-        private readonly ITimestamp timestamp;
+        private readonly DateTimeOffset timestamp;
         private readonly long nanoTime;
 
-        private TimestampConverter(ITimestamp timestamp, long nanoTime)
+        private TimestampConverter(DateTimeOffset timestamp, long nanoTime)
         {
             this.timestamp = timestamp;
             this.nanoTime = nanoTime;
@@ -35,9 +36,9 @@ namespace OpenCensus.Internal
             return new TimestampConverter(clock.Now, clock.NowNanos);
         }
 
-        public ITimestamp ConvertNanoTime(long nanoTime)
+        public DateTimeOffset ConvertNanoTime(long nanoTime)
         {
-            return this.timestamp.AddNanos(nanoTime - this.nanoTime);
+            return this.timestamp.AddTicks((nanoTime - this.nanoTime) * 100);
         }
     }
 }

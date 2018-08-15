@@ -27,20 +27,20 @@ namespace OpenCensus.Trace.Export
             ISpanId parentSpanId,
             bool? hasRemoteParent,
             string name,
-            ITimestamp startTimestamp,
+            DateTimeOffset startTimestamp,
             IAttributes attributes,
             ITimedEvents<IAnnotation> annotations,
             ITimedEvents<IMessageEvent> messageEvents,
             ILinks links,
             int? childSpanCount,
             Status status,
-            ITimestamp endTimestamp)
+            DateTimeOffset? endTimestamp)
         {
             this.Context = context ?? throw new ArgumentNullException(nameof(context));
             this.ParentSpanId = parentSpanId;
             this.HasRemoteParent = hasRemoteParent;
             this.Name = name ?? throw new ArgumentNullException(nameof(name));
-            this.StartTimestamp = startTimestamp ?? throw new ArgumentNullException(nameof(startTimestamp));
+            this.StartTimestamp = startTimestamp;
             this.Attributes = attributes ?? throw new ArgumentNullException(nameof(attributes));
             this.Annotations = annotations ?? throw new ArgumentNullException(nameof(annotations));
             this.MessageEvents = messageEvents ?? throw new ArgumentNullException(nameof(messageEvents));
@@ -58,7 +58,7 @@ namespace OpenCensus.Trace.Export
 
         public string Name { get; }
 
-        public ITimestamp Timestamp { get; }
+        public DateTimeOffset Timestamp { get; }
 
         public IAttributes Attributes { get; }
 
@@ -72,23 +72,23 @@ namespace OpenCensus.Trace.Export
 
         public Status Status { get; }
 
-        public ITimestamp EndTimestamp { get; }
+        public DateTimeOffset? EndTimestamp { get; }
 
-        public ITimestamp StartTimestamp { get; }
+        public DateTimeOffset StartTimestamp { get; }
 
         public static ISpanData Create(
                         ISpanContext context,
                         ISpanId parentSpanId,
                         bool? hasRemoteParent,
                         string name,
-                        ITimestamp startTimestamp,
+                        DateTimeOffset startTimestamp,
                         IAttributes attributes,
                         ITimedEvents<IAnnotation> annotations,
                         ITimedEvents<IMessageEvent> messageOrNetworkEvents,
                         ILinks links,
                         int? childSpanCount,
                         Status status,
-                        ITimestamp endTimestamp)
+                        DateTimeOffset? endTimestamp)
         {
             if (messageOrNetworkEvents == null)
             {

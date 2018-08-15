@@ -16,6 +16,7 @@
 
 namespace OpenCensus.Trace.Export
 {
+    using System;
     using System.Threading;
     using OpenCensus.Common;
 
@@ -36,7 +37,7 @@ namespace OpenCensus.Trace.Export
             this.workerThread.Start();
         }
 
-        internal static ISpanExporter Create(int bufferSize, IDuration scheduleDelay)
+        internal static ISpanExporter Create(int bufferSize, TimeSpan scheduleDelay)
         {
             SpanExporterWorker worker = new SpanExporterWorker(bufferSize, scheduleDelay);
             return new SpanExporter(worker);

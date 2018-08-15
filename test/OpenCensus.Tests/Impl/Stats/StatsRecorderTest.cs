@@ -16,6 +16,7 @@
 
 namespace OpenCensus.Stats.Test
 {
+    using System;
     using System.Collections.Generic;
     using OpenCensus.Common;
     using OpenCensus.Internal;
@@ -40,7 +41,7 @@ namespace OpenCensus.Stats.Test
         private IViewManager viewManager;
         private IStatsRecorder statsRecorder;
 
-        static readonly ITimestamp ZERO_TIMESTAMP = Timestamp.Create(0, 0);
+        static readonly DateTimeOffset ZERO_TIMESTAMP = DateTimeOffset.MinValue;
 
         public StatsRecorderTest()
         {

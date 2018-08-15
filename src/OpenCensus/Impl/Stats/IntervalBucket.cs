@@ -20,13 +20,13 @@
 //        private const long MILLIS_PER_SECOND = 1000L;
 //        private const long NANOS_PER_MILLI = 1000 * 1000;
 
-// private static readonly IDuration ZERO = Duration.Create(0, 0);
-//        private readonly ITimestamp start;
-//        private readonly IDuration duration;
+// private static readonly TimeSpan ZERO = Duration.Create(0, 0);
+//        private readonly DateTimeOffset start;
+//        private readonly TimeSpan duration;
 //        private readonly IAggregation aggregation;
 //        private readonly IDictionary<IList<ITagValue>, MutableAggregation> tagValueAggregationMap = new Dictionary<IList<ITagValue>, MutableAggregation>();
 
-// internal IntervalBucket(ITimestamp start, IDuration duration, IAggregation aggregation)
+// internal IntervalBucket(DateTimeOffset start, TimeSpan duration, IAggregation aggregation)
 //        {
 //            if (start == null)
 //            {
@@ -58,7 +58,7 @@
 //            }
 //        }
 
-// internal ITimestamp Start
+// internal DateTimeOffset Start
 //        {
 //            get
 //            {
@@ -76,9 +76,9 @@
 //            tagValueAggregationMap[tagValues].Add(value);
 //        }
 
-// internal double GetFraction(ITimestamp now)
+// internal double GetFraction(DateTimeOffset now)
 //        {
-//            IDuration elapsedTime = now.SubtractTimestamp(start);
+//            TimeSpan elapsedTime = now.SubtractTimestamp(start);
 //            if (!(elapsedTime.CompareTo(ZERO) >= 0 && elapsedTime.CompareTo(duration) < 0))
 //            {
 //                throw new ArgumentOutOfRangeException("This bucket must be current.");
@@ -91,7 +91,7 @@
 //        {
 //            tagValueAggregationMap.Clear();
 //        }
-//        static long ToMillis(IDuration duration)
+//        static long ToMillis(TimeSpan duration)
 //        {
 //            return duration.Seconds * MILLIS_PER_SECOND + duration.Nanos / NANOS_PER_MILLI;
 //        }

@@ -16,6 +16,7 @@
 
 namespace OpenCensus.Stats
 {
+    using System;
     using System.Collections.Generic;
     using OpenCensus.Common;
     using OpenCensus.Tags;
@@ -26,8 +27,8 @@ namespace OpenCensus.Stats
 
         IDictionary<TagValues, IAggregationData> AggregationMap { get; }
 
-        ITimestamp Start { get; }
+        DateTimeOffset Start { get; }
 
-        ITimestamp End { get; }
+        DateTimeOffset End { get; }
     }
 }

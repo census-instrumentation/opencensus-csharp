@@ -422,7 +422,7 @@ namespace OpenCensus.Trace
                 linksSpanData,
                 null, // Not supported yet.
                 this.hasBeenEnded ? this.StatusWithDefault : null,
-                this.hasBeenEnded ? this.timestampConverter.ConvertNanoTime(this.endNanoTime) : null);
+                this.hasBeenEnded ? (DateTimeOffset?)this.timestampConverter.ConvertNanoTime(this.endNanoTime) : null);
         }
 
         internal static ISpan StartSpan(

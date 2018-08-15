@@ -20,7 +20,7 @@ namespace OpenCensus.Tags
 
     public sealed class NoopTagContext : TagContextBase
     {
-        internal static readonly ITagContext INSTANCE = new NoopTagContext();
+        internal static readonly ITagContext Instance = new NoopTagContext();
 
         public override IEnumerator<ITag> GetEnumerator()
         {

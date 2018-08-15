@@ -46,7 +46,7 @@ namespace OpenCensus.Stats.Test
         // private static readonly Cumulative CUMULATIVE = Cumulative.Create();
 
         private static readonly double EPSILON = 1e-7;
-        private static readonly IDuration TEN_SECONDS = Duration.Create(10, 0);
+        private static readonly TimeSpan TEN_SECONDS = TimeSpan.FromSeconds(10, 0);
         // private static readonly Interval INTERVAL = Interval.Create(TEN_SECONDS);
 
         private static readonly IBucketBoundaries BUCKET_BOUNDARIES =
@@ -739,13 +739,13 @@ namespace OpenCensus.Stats.Test
         //            MEASURE_DOUBLE,
         //            MEAN,
         //            Arrays.asList(KEY),
-        //            Interval.Create(Duration.Create(60, 0)));
+        //            Interval.Create(TimeSpan.FromSeconds(60, 0)));
         //    settingStateToDisabledWillClearStats(intervalView);
         // }
 
         private void SettingStateToDisabledWillClearStats(IView view)
         {
-            ITimestamp timestamp1 = Timestamp.Create(1, 0);
+            DateTimeOffset timestamp1 = Timestamp.Create(1, 0);
             clock.Time = timestamp1;
             viewManager.RegisterView(view);
             statsRecorder
@@ -761,16 +761,16 @@ namespace OpenCensus.Stats.Test
                 },
                 EPSILON);
 
-            ITimestamp timestamp2 = Timestamp.Create(2, 0);
+            DateTimeOffset timestamp2 = Timestamp.Create(2, 0);
             clock.Time = timestamp2;
             statsComponent.State = StatsCollectionState.DISABLED; // This will clear stats.
             Assert.Equal(StatsTestUtil.CreateEmptyViewData(view), viewManager.GetView(view.Name));
 
-            ITimestamp timestamp3 = Timestamp.Create(3, 0);
+            DateTimeOffset timestamp3 = Timestamp.Create(3, 0);
             clock.Time = timestamp3;
             statsComponent.State = StatsCollectionState.ENABLED;
 
-            ITimestamp timestamp4 = Timestamp.Create(4, 0);
+            DateTimeOffset timestamp4 = Timestamp.Create(4, 0);
             clock.Time = timestamp4;
             // This ViewData does not have any stats, but it should not be an empty ViewData, since it has
             // non-zero TimeStamps.

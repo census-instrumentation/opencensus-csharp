@@ -16,10 +16,11 @@
 
 namespace OpenCensus.Internal
 {
+    using System;
     using OpenCensus.Common;
 
     public interface ITimestampConverter
     {
-        ITimestamp ConvertNanoTime(long nanoTime);
+        DateTimeOffset ConvertNanoTime(long nanoTime);
     }
 }

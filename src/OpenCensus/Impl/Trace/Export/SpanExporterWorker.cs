@@ -29,7 +29,7 @@ namespace OpenCensus.Trace.Export
         private BlockingCollection<ISpan> spans;
         private ConcurrentDictionary<string, IHandler> serviceHandlers = new ConcurrentDictionary<string, IHandler>();
 
-        public SpanExporterWorker(int bufferSize, IDuration scheduleDelay)
+        public SpanExporterWorker(int bufferSize, TimeSpan scheduleDelay)
         {
             this.bufferSize = bufferSize;
             this.scheduleDelay = TimeSpan.FromSeconds(scheduleDelay.Seconds);

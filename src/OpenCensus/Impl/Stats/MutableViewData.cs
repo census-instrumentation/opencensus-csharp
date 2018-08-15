@@ -62,7 +62,7 @@ namespace OpenCensus.Stats
 
         internal static readonly ITagValue UNKNOWN_TAG_VALUE = null;
 
-        internal static readonly ITimestamp ZERO_TIMESTAMP = Timestamp.Create(0, 0);
+        internal static readonly DateTimeOffset ZeroTimestamp = DateTimeOffset.MinValue;
 
         internal IView View { get; }
 
@@ -71,30 +71,30 @@ namespace OpenCensus.Stats
             this.View = view;
         }
 
-        internal static MutableViewData Create(IView view, ITimestamp start)
+        internal static MutableViewData Create(IView view, DateTimeOffset start)
         {
             return new CumulativeMutableViewData(view, start);
         }
 
         /** Record double stats with the given tags. */
-        internal abstract void Record(ITagContext context, double value, ITimestamp timestamp);
+        internal abstract void Record(ITagContext context, double value, DateTimeOffset timestamp);
 
         /** Record long stats with the given tags. */
-        internal void Record(ITagContext tags, long value, ITimestamp timestamp)
+        internal void Record(ITagContext tags, long value, DateTimeOffset timestamp)
         {
             // TODO(songya): shall we check for precision loss here?
             this.Record(tags, (double)value, timestamp);
         }
 
         /** Convert this {@link MutableViewData} to {@link ViewData}. */
-        internal abstract IViewData ToViewData(ITimestamp now, StatsCollectionState state);
+        internal abstract IViewData ToViewData(DateTimeOffset now, StatsCollectionState state);
 
         // Clear recorded stats.
         internal abstract void ClearStats();
 
         // Resume stats collection, and reset Start Timestamp (for CumulativeMutableViewData), or refresh
         // bucket list (for InternalMutableViewData).
-        internal abstract void ResumeStatsCollection(ITimestamp now);
+        internal abstract void ResumeStatsCollection(DateTimeOffset now);
 
         internal static IDictionary<ITagKey, ITagValue> GetTagMap(ITagContext ctx)
         {
@@ -138,9 +138,9 @@ namespace OpenCensus.Stats
         }
 
         // Returns the milliseconds representation of a Duration.
-        internal static long ToMillis(IDuration duration)
+        internal static long ToMillis(TimeSpan duration)
         {
-            return (duration.Seconds * MILLIS_PER_SECOND) + (duration.Nanos / NANOS_PER_MILLI);
+            return duration.Ticks * TimeSpan.TicksPerMillisecond;
         }
 
         internal static MutableAggregation CreateMutableAggregation(IAggregation aggregation)

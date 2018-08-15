@@ -16,13 +16,14 @@
 
 namespace OpenCensus.Internal.Test
 {
+    using System;
     using Moq;
     using OpenCensus.Common;
     using Xunit;
 
     public class TimestampConverterTest
     {
-        private readonly ITimestamp timestamp = Timestamp.Create(1234, 5678);
+        private readonly DateTimeOffset timestamp = new DateTimeOffset((1234 * TimeSpan.TicksPerSecond) + 56, TimeSpan.Zero);
 
         private Mock<IClock> mockClock;
 
@@ -38,9 +39,9 @@ namespace OpenCensus.Internal.Test
             mockClock.Setup(clock => clock.NowNanos).Returns(1234L);
 
             ITimestampConverter timeConverter = TimestampConverter.Now(mockClock.Object);
-            Assert.Equal(Timestamp.Create(1234, 10678), timeConverter.ConvertNanoTime(6234));
-            Assert.Equal(Timestamp.Create(1234, 5444), timeConverter.ConvertNanoTime(1000));
-            Assert.Equal(Timestamp.Create(1235, 0), timeConverter.ConvertNanoTime(999995556));
+            Assert.Equal(new DateTimeOffset((1234 * TimeSpan.TicksPerSecond) + 106, TimeSpan.Zero), timeConverter.ConvertNanoTime(6234));
+            Assert.Equal(new DateTimeOffset((1234 * TimeSpan.TicksPerSecond) + 54, TimeSpan.Zero), timeConverter.ConvertNanoTime(1000));
+            Assert.Equal(new DateTimeOffset((1235 * TimeSpan.TicksPerSecond), TimeSpan.Zero), timeConverter.ConvertNanoTime(999995556));
         }
     } 
 }

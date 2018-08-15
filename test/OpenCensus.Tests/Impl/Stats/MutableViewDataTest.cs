@@ -41,7 +41,7 @@ namespace OpenCensus.Stats.Test
         public void TestConstants()
         {
             Assert.Null(MutableViewData.UNKNOWN_TAG_VALUE);
-            Assert.Equal(Timestamp.Create(0, 0), MutableViewData.ZERO_TIMESTAMP);
+            Assert.Equal(DateTimeOffset.MinValue, MutableViewData.ZeroTimestamp);
         }
 
         [Fact]
@@ -116,12 +116,12 @@ namespace OpenCensus.Stats.Test
         [Fact]
         public void TestDurationToMillis()
         {
-            Assert.Equal(0, MutableViewData.ToMillis(Duration.Create(0, 0)));
-            Assert.Equal(987, MutableViewData.ToMillis(Duration.Create(0, 987000000)));
-            Assert.Equal(3456, MutableViewData.ToMillis(Duration.Create(3, 456000000)));
-            Assert.Equal(-1, MutableViewData.ToMillis(Duration.Create(0, -1000000)));
-            Assert.Equal(-1000, MutableViewData.ToMillis(Duration.Create(-1, 0)));
-            Assert.Equal(-3456, MutableViewData.ToMillis(Duration.Create(-3, -456000000)));
+            Assert.Equal(0, MutableViewData.ToMillis(TimeSpan.FromSeconds(0)));
+            Assert.Equal(987, MutableViewData.ToMillis(TimeSpan.FromMilliseconds(987)));
+            Assert.Equal(3456, MutableViewData.ToMillis(TimeSpan.FromMilliseconds(3456)));
+            Assert.Equal(-1, MutableViewData.ToMillis(TimeSpan.FromMilliseconds(-1)));
+            Assert.Equal(-1000, MutableViewData.ToMillis(TimeSpan.FromSeconds(-1)));
+            Assert.Equal(-3456, MutableViewData.ToMillis(TimeSpan.FromMilliseconds(-3456)));
         }
     }
 }

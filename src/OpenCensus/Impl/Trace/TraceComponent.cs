@@ -26,7 +26,7 @@ namespace OpenCensus.Trace
     public sealed class TraceComponent : TraceComponentBase
     {
         public TraceComponent()
-            : this(DateTimeOffsetClock.INSTANCE, new RandomGenerator(), new SimpleEventQueue())
+            : this(DateTimeOffsetClock.Instance, new RandomGenerator(), new SimpleEventQueue())
         {
         }
 

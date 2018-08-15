@@ -16,11 +16,12 @@
 
 namespace OpenCensus.Trace.Export
 {
+    using System;
     using OpenCensus.Common;
 
     public interface ITimedEvent<T>
     {
-        ITimestamp Timestamp { get; }
+        DateTimeOffset Timestamp { get; }
 
         T Event { get; }
     }

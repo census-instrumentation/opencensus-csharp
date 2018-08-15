@@ -31,7 +31,7 @@ namespace OpenCensus.Stats
         {
             get
             {
-                return OpenCensus.Stats.NoopStatsRecorder.INSTANCE;
+                return OpenCensus.Stats.NoopStatsRecorder.Instance;
             }
         }
 
@@ -39,7 +39,7 @@ namespace OpenCensus.Stats
         {
             get
             {
-                return OpenCensus.Stats.NoopMeasureMap.INSTANCE;
+                return OpenCensus.Stats.NoopMeasureMap.Instance;
             }
         }
 

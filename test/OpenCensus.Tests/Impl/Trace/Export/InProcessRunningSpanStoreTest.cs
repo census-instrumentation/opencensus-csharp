@@ -16,6 +16,7 @@
 
 namespace OpenCensus.Trace.Export.Test
 {
+    using System;
     using OpenCensus.Common;
     using OpenCensus.Internal;
     using OpenCensus.Trace.Config;
@@ -28,7 +29,7 @@ namespace OpenCensus.Trace.Export.Test
         private static readonly string SPAN_NAME_1 = "MySpanName/1";
         private static readonly string SPAN_NAME_2 = "MySpanName/2";
         private readonly RandomGenerator random = new RandomGenerator(1234);
-        private readonly ISpanExporter sampledSpansServiceExporter = SpanExporter.Create(4, Duration.Create(1, 0));
+        private readonly ISpanExporter sampledSpansServiceExporter = SpanExporter.Create(4, TimeSpan.FromSeconds(1));
         private readonly InProcessRunningSpanStore activeSpansExporter = new InProcessRunningSpanStore();
         private readonly StartEndHandler startEndHandler;
         private SpanOptions recordSpanOptions = SpanOptions.RECORD_EVENTS;

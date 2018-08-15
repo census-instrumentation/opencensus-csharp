@@ -38,7 +38,7 @@ namespace OpenCensus.Stats.Test
         private static readonly ITagValue V20 = TagValue.Create("v20");
 
         // private static readonly AggregationWindow CUMULATIVE = Cumulative.Create();
-        // private static readonly AggregationWindow INTERVAL_HOUR = Interval.Create(Duration.Create(3600, 0));
+        // private static readonly AggregationWindow INTERVAL_HOUR = Interval.Create(TimeSpan.FromSeconds(3600, 0));
 
         private static readonly IBucketBoundaries BUCKET_BOUNDARIES =
             BucketBoundaries.Create(new List<double>() { 10.0, 20.0, 30.0, 40.0 });
@@ -66,8 +66,8 @@ namespace OpenCensus.Stats.Test
         public void TestCumulativeViewData()
         {
             IView view = View.Create(NAME, DESCRIPTION, MEASURE_DOUBLE, DISTRIBUTION, TAG_KEYS);
-            ITimestamp start = Timestamp.FromMillis(1000);
-            ITimestamp end = Timestamp.FromMillis(2000);
+            DateTimeOffset start = Timestamp.FromMillis(1000);
+            DateTimeOffset end = Timestamp.FromMillis(2000);
             IViewData viewData = ViewData.Create(view, ENTRIES, start, end);
             Assert.Equal(view, viewData.View);
             Assert.Equal(ENTRIES, viewData.AggregationMap);

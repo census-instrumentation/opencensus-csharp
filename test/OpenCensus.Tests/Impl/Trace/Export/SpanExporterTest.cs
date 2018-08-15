@@ -34,7 +34,7 @@ namespace OpenCensus.Trace.Export.Test
         private readonly RandomGenerator random = new RandomGenerator(1234);
         private readonly ISpanContext sampledSpanContext;
         private readonly ISpanContext notSampledSpanContext;
-        private readonly ISpanExporter spanExporter = SpanExporter.Create(4, Duration.Create(1, 0));
+        private readonly ISpanExporter spanExporter = SpanExporter.Create(4, TimeSpan.FromSeconds(1, 0));
         private readonly IRunningSpanStore runningSpanStore = new InProcessRunningSpanStore();
         private readonly IStartEndHandler startEndHandler;
         private SpanOptions recordSpanOptions = SpanOptions.RECORD_EVENTS;
@@ -62,7 +62,7 @@ namespace OpenCensus.Trace.Export.Test
                     TraceParams.DEFAULT,
                     startEndHandler,
                     null,
-                    DateTimeOffsetClock.INSTANCE);
+                    DateTimeOffsetClock.Instance);
             span.End();
             return span as Span;
         }
@@ -79,7 +79,7 @@ namespace OpenCensus.Trace.Export.Test
                     TraceParams.DEFAULT,
                     startEndHandler,
                     null,
-                    DateTimeOffsetClock.INSTANCE);
+                    DateTimeOffsetClock.Instance);
             span.End();
             return span as Span;
         }
