@@ -104,8 +104,7 @@ namespace OpenCensus.Stats
             data.Match<object>(
                 (arg) =>
                 {
-                    MutableSum sum = combined as MutableSum;
-                    if (sum != null)
+                    if (combined is MutableSum sum)
                     {
                         sum.Add(arg.Sum);
                     }
@@ -113,8 +112,7 @@ namespace OpenCensus.Stats
                 },
                 (arg) =>
                 {
-                    MutableSum sum = combined as MutableSum;
-                    if (sum != null)
+                    if (combined is MutableSum sum)
                     {
                         sum.Add(arg.Sum);
                     }
@@ -122,8 +120,7 @@ namespace OpenCensus.Stats
                 },
                 (arg) =>
                 {
-                    MutableCount count = combined as MutableCount;
-                    if (count != null)
+                    if (combined is MutableCount count)
                     {
                         count.Add(arg.Count);
                     }
@@ -131,8 +128,7 @@ namespace OpenCensus.Stats
                 },
                 (arg) =>
                 {
-                    MutableMean mean = combined as MutableMean;
-                    if (mean != null)
+                    if (combined is MutableMean mean)
                     {
                         mean.Count = mean.Count + arg.Count;
                         mean.Sum = mean.Sum + (arg.Count * arg.Mean);
@@ -149,8 +145,7 @@ namespace OpenCensus.Stats
                 },
                 (arg) =>
                 {
-                    MutableDistribution dist = combined as MutableDistribution;
-                    if (dist != null)
+                    if (combined is MutableDistribution dist)
                     {
                         // Algorithm for calculating the combination of sum of squared deviations:
                         // https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Parallel_algorithm.
@@ -189,8 +184,7 @@ namespace OpenCensus.Stats
                 },
                 (arg) =>
                 {
-                    MutableLastValue lastValue = combined as MutableLastValue;
-                    if (lastValue != null)
+                    if (combined is MutableLastValue lastValue)
                     {
                         lastValue.initialized = true;
                         if (double.IsNaN(lastValue.LastValue))
@@ -206,8 +200,7 @@ namespace OpenCensus.Stats
                 },
                 (arg) =>
                 {
-                    MutableLastValue lastValue = combined as MutableLastValue;
-                    if (lastValue != null)
+                    if (combined is MutableLastValue lastValue)
                     {
                         lastValue.initialized = true;
                         if (double.IsNaN(lastValue.LastValue))

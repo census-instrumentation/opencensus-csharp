@@ -25,7 +25,7 @@ namespace OpenCensus.Trace
 
     public sealed class Tracing
     {
-        private static Tracing tracing = new Tracing();
+        private static Tracing tracing = new Tracing(true);
 
         internal Tracing()
             : this(false)

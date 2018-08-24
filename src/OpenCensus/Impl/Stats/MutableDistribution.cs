@@ -98,8 +98,7 @@ namespace OpenCensus.Stats
         // We don't compute fractional MutableDistribution, it's either whole or none.
         internal override void Combine(MutableAggregation other, double fraction)
         {
-            MutableDistribution mutableDistribution = other as MutableDistribution;
-            if (mutableDistribution == null)
+            if (!(other is MutableDistribution mutableDistribution))
             {
                 throw new ArgumentException("MutableDistribution expected.");
             }

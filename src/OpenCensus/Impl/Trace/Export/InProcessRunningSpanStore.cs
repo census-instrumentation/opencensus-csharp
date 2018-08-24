@@ -76,8 +76,7 @@ namespace OpenCensus.Trace.Export
 
         public override void OnEnd(ISpan span)
         {
-            SpanBase spanBase = span as SpanBase;
-            if (spanBase != null)
+            if (span is SpanBase spanBase)
             {
                 this.runningSpans.RemoveElement(spanBase);
             }
@@ -85,8 +84,7 @@ namespace OpenCensus.Trace.Export
 
         public override void OnStart(ISpan span)
         {
-            SpanBase spanBase = span as SpanBase;
-            if (spanBase != null)
+            if (span is SpanBase spanBase)
             {
                 this.runningSpans.AddElement(spanBase);
             }

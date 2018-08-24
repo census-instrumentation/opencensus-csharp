@@ -87,8 +87,7 @@ namespace OpenCensus.Trace.Export
 
         private void BuildList(ISpan item, List<ISpanData> toExport)
         {
-            Span span = item as Span;
-            if (span != null)
+            if (item is Span span)
             {
                 toExport.Add(span.ToSpanData());
             }
@@ -137,8 +136,7 @@ namespace OpenCensus.Trace.Export
 
         internal ISpanData ToSpanData(ISpan span)
         {
-            Span spanImpl = span as Span;
-            if (spanImpl == null)
+            if (!(span is Span spanImpl))
             {
                 throw new InvalidOperationException("ISpan not a Span");
             }
