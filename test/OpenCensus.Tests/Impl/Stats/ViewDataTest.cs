@@ -66,8 +66,8 @@ namespace OpenCensus.Stats.Test
         public void TestCumulativeViewData()
         {
             IView view = View.Create(NAME, DESCRIPTION, MEASURE_DOUBLE, DISTRIBUTION, TAG_KEYS);
-            DateTimeOffset start = Timestamp.FromMillis(1000);
-            DateTimeOffset end = Timestamp.FromMillis(2000);
+            DateTimeOffset start = DateTimeOffset.FromUnixTimeMilliseconds(1000);
+            DateTimeOffset end = DateTimeOffset.FromUnixTimeMilliseconds(2000);
             IViewData viewData = ViewData.Create(view, ENTRIES, start, end);
             Assert.Equal(view, viewData.View);
             Assert.Equal(ENTRIES, viewData.AggregationMap);
@@ -78,7 +78,7 @@ namespace OpenCensus.Stats.Test
         // {
         //    View view =
         //        View.Create(NAME, DESCRIPTION, MEASURE_DOUBLE, DISTRIBUTION, TAG_KEYS, INTERVAL_HOUR);
-        //    Timestamp end = Timestamp.fromMillis(2000);
+        //    Timestamp end = TimeSpan.FromMilliseconds(2000);
         //    AggregationWindowData windowData = IntervalData.Create(end);
         //    ViewData viewData = ViewData.Create(view, ENTRIES, windowData);
         //    assertThat(viewData.getView()).isEqualTo(view);
@@ -99,37 +99,37 @@ namespace OpenCensus.Stats.Test
             IViewData data1 = ViewData.Create(
                         cumulativeView,
                         ENTRIES,
-                        Timestamp.FromMillis(1000), Timestamp.FromMillis(2000));
+                        DateTimeOffset.FromUnixTimeMilliseconds(1000), DateTimeOffset.FromUnixTimeMilliseconds(2000));
             IViewData data2 = ViewData.Create(
                         cumulativeView,
                         ENTRIES,
-                        Timestamp.FromMillis(1000), Timestamp.FromMillis(2000));
+                        DateTimeOffset.FromUnixTimeMilliseconds(1000), DateTimeOffset.FromUnixTimeMilliseconds(2000));
             Assert.Equal(data1, data2);
 
             // .addEqualityGroup(
             IViewData data3 = ViewData.Create(
                         cumulativeView,
                         ENTRIES,
-                        Timestamp.FromMillis(1000), Timestamp.FromMillis(3000));
+                        DateTimeOffset.FromUnixTimeMilliseconds(1000), DateTimeOffset.FromUnixTimeMilliseconds(3000));
             Assert.NotEqual(data1, data3);
             Assert.NotEqual(data2, data3);
 
             // .addEqualityGroup(
-            // IViewData data4 = ViewData.Create(intervalView, ENTRIES, IntervalData.Create(Timestamp.fromMillis(2000))),
-            // IViewData data5 = ViewData.Create(intervalView, ENTRIES, IntervalData.Create(Timestamp.fromMillis(2000))))
+            // IViewData data4 = ViewData.Create(intervalView, ENTRIES, IntervalData.Create(TimeSpan.FromMilliseconds(2000))),
+            // IViewData data5 = ViewData.Create(intervalView, ENTRIES, IntervalData.Create(TimeSpan.FromMilliseconds(2000))))
             // .addEqualityGroup(
             //    ViewData.Create(
             //        intervalView,
             //        Collections.< List<TagValue>, AggregationData > emptyMap(),
-            //        IntervalData.Create(Timestamp.fromMillis(2000))))
+            //        IntervalData.Create(TimeSpan.FromMilliseconds(2000))))
             // .testEquals();
         }
 
         // [Fact]
         //  public void testAggregationWindowDataMatch()
         //        {
-        //            final Timestamp start = Timestamp.fromMillis(1000);
-        //            final Timestamp end = Timestamp.fromMillis(2000);
+        //            final Timestamp start = TimeSpan.FromMilliseconds(1000);
+        //            final Timestamp end = TimeSpan.FromMilliseconds(2000);
         //            final AggregationWindowData windowData1 = CumulativeData.Create(start, end);
         //            final AggregationWindowData windowData2 = IntervalData.Create(end);
         //            windowData1.match(
@@ -179,7 +179,7 @@ namespace OpenCensus.Stats.Test
         //    ViewData.Create(
         //        View.Create(NAME, DESCRIPTION, MEASURE_DOUBLE, DISTRIBUTION, TAG_KEYS, INTERVAL_HOUR),
         //        ENTRIES,
-        //        CumulativeData.Create(Timestamp.fromMillis(1000), Timestamp.fromMillis(2000)));
+        //        CumulativeData.Create(TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(2000)));
         //  }
 
         // [Fact]
@@ -190,14 +190,14 @@ namespace OpenCensus.Stats.Test
         //    ViewData.Create(
         //        View.Create(NAME, DESCRIPTION, MEASURE_DOUBLE, DISTRIBUTION, TAG_KEYS, CUMULATIVE),
         //        ENTRIES,
-        //        IntervalData.Create(Timestamp.fromMillis(1000)));
+        //        IntervalData.Create(TimeSpan.FromMilliseconds(1000)));
         //  }
 
         // [Fact]
         // public void PreventStartTimeLaterThanEndTime()
         // {
         //   // thrown.expect(IllegalArgumentException.class);
-        //    CumulativeData.Create(Timestamp.fromMillis(3000), Timestamp.fromMillis(2000));
+        //    CumulativeData.Create(TimeSpan.FromMilliseconds(3000), TimeSpan.FromMilliseconds(2000));
         //  }
 
         [Fact]
@@ -287,10 +287,10 @@ namespace OpenCensus.Stats.Test
         private void AggregationAndAggregationDataMismatch(IView view, IDictionary<TagValues, IAggregationData> entries)
         {
             // CumulativeData cumulativeData =
-            //    CumulativeData.Create(Timestamp.fromMillis(1000), Timestamp.fromMillis(2000));
+            //    CumulativeData.Create(TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(2000));
             // thrown.expect(IllegalArgumentException);
             // thrown.expectMessage("Aggregation and AggregationData types mismatch. ");
-            Assert.Throws<ArgumentException>(() => ViewData.Create(view, entries, Timestamp.FromMillis(1000), Timestamp.FromMillis(2000)));
+            Assert.Throws<ArgumentException>(() => ViewData.Create(view, entries, DateTimeOffset.FromUnixTimeMilliseconds(1000), DateTimeOffset.FromUnixTimeMilliseconds(2000)));
         }
     }
 }

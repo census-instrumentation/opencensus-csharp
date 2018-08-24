@@ -22,7 +22,7 @@ namespace OpenCensus.Testing.Common
     public class TestClock : IClock
     {
         private const int NUM_NANOS_PER_SECOND = 1000 * 1000 * 1000;
-        private DateTimeOffset currentTime = DateTimeOffset.Now; //Timestamp.Create(1493419949, 223123456);
+        private DateTimeOffset currentTime = DateTimeOffset.Now; //DateTimeOffset.FromUnixTimeSeconds(1493419949, 223123456);
         private object _lck = new object();
 
         public static TestClock Create()

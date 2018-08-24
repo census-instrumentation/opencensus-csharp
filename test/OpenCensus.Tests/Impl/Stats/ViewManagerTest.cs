@@ -46,7 +46,7 @@ namespace OpenCensus.Stats.Test
         // private static readonly Cumulative CUMULATIVE = Cumulative.Create();
 
         private static readonly double EPSILON = 1e-7;
-        private static readonly TimeSpan TEN_SECONDS = TimeSpan.FromSeconds(10, 0);
+        private static readonly TimeSpan TEN_SECONDS = TimeSpan.FromSeconds(10);
         // private static readonly Interval INTERVAL = Interval.Create(TEN_SECONDS);
 
         private static readonly IBucketBoundaries BUCKET_BOUNDARIES =
@@ -268,14 +268,14 @@ namespace OpenCensus.Stats.Test
         private void TestRecordCumulative(IMeasure measure, IAggregation aggregation, params double[] values)
         {
             IView view = CreateCumulativeView(VIEW_NAME, measure, aggregation, new List<ITagKey>() { KEY });
-            clock.Time = Timestamp.Create(1, 2);
+            clock.Time = DateTimeOffset.FromUnixTimeSeconds(1);
             viewManager.RegisterView(view);
             ITagContext tags = tagger.EmptyBuilder.Put(KEY, VALUE).Build();
             foreach (double val in values)
             {
                 PutToMeasureMap(statsRecorder.NewMeasureMap(), measure, val).Record(tags);
             }
-            clock.Time = Timestamp.Create(3, 4);
+            clock.Time = DateTimeOffset.FromUnixTimeSeconds(3);
             IViewData viewData = viewManager.GetView(VIEW_NAME);
             Assert.Equal(view, viewData.View);
 
@@ -294,11 +294,11 @@ namespace OpenCensus.Stats.Test
         public void GetViewDoesNotClearStats()
         {
             IView view = CreateCumulativeView(VIEW_NAME, MEASURE_DOUBLE, DISTRIBUTION, new List<ITagKey>() { KEY });
-            clock.Time = Timestamp.Create(10, 0);
+            clock.Time = DateTimeOffset.FromUnixTimeSeconds(10);
             viewManager.RegisterView(view);
             ITagContext tags = tagger.EmptyBuilder.Put(KEY, VALUE).Build();
             statsRecorder.NewMeasureMap().Put(MEASURE_DOUBLE, 0.1).Record(tags);
-            clock.Time = Timestamp.Create(11, 0);
+            clock.Time = DateTimeOffset.FromUnixTimeSeconds(11);
             IViewData viewData1 = viewManager.GetView(VIEW_NAME);
             var tv = TagValues.Create(new List<ITagValue>() { VALUE });
             StatsTestUtil.AssertAggregationMapEquals(
@@ -310,7 +310,7 @@ namespace OpenCensus.Stats.Test
                 EPSILON);
 
             statsRecorder.NewMeasureMap().Put(MEASURE_DOUBLE, 0.2).Record(tags);
-            clock.Time = Timestamp.Create(12, 0);
+            clock.Time = DateTimeOffset.FromUnixTimeSeconds(12);
             IViewData viewData2 = viewManager.GetView(VIEW_NAME);
 
             // The second view should have the same start time as the first view, and it should include both
@@ -511,17 +511,17 @@ namespace OpenCensus.Stats.Test
                 CreateCumulativeView(VIEW_NAME, MEASURE_DOUBLE, DISTRIBUTION, new List<ITagKey>() { KEY });
             IView view2 =
                 CreateCumulativeView(VIEW_NAME_2, MEASURE_DOUBLE, DISTRIBUTION, new List<ITagKey>() { KEY });
-            clock.Time = Timestamp.Create(1, 1);
+            clock.Time = DateTimeOffset.FromUnixTimeSeconds(1);
             viewManager.RegisterView(view1);
-            clock.Time = Timestamp.Create(2, 2);
+            clock.Time = DateTimeOffset.FromUnixTimeSeconds(2);
             viewManager.RegisterView(view2);
             statsRecorder
                 .NewMeasureMap()
                 .Put(MEASURE_DOUBLE, 5.0)
                 .Record(tagger.EmptyBuilder.Put(KEY, VALUE).Build());
-            clock.Time = Timestamp.Create(3, 3);
+            clock.Time = DateTimeOffset.FromUnixTimeSeconds(3);
             IViewData viewData1 = viewManager.GetView(VIEW_NAME);
-            clock.Time = Timestamp.Create(4, 4);
+            clock.Time = DateTimeOffset.FromUnixTimeSeconds(4);
             IViewData viewData2 = viewManager.GetView(VIEW_NAME_2);
             var tv = TagValues.Create(new List<ITagValue>() { VALUE });
             StatsTestUtil.AssertAggregationMapEquals(
@@ -566,18 +566,18 @@ namespace OpenCensus.Stats.Test
             IView view1 = CreateCumulativeView(VIEW_NAME, measure1, DISTRIBUTION, new List<ITagKey>() { KEY });
             IView view2 =
                 CreateCumulativeView(VIEW_NAME_2, measure2, DISTRIBUTION, new List<ITagKey>() { KEY });
-            clock.Time = Timestamp.Create(1, 0);
+            clock.Time = DateTimeOffset.FromUnixTimeSeconds(1);
             viewManager.RegisterView(view1);
-            clock.Time = Timestamp.Create(2, 0);
+            clock.Time = DateTimeOffset.FromUnixTimeSeconds(2);
             viewManager.RegisterView(view2);
             ITagContext tags = tagger.EmptyBuilder.Put(KEY, VALUE).Build();
             IMeasureMap measureMap = statsRecorder.NewMeasureMap();
             PutToMeasureMap(measureMap, measure1, value1);
             PutToMeasureMap(measureMap, measure2, value2);
             measureMap.Record(tags);
-            clock.Time = Timestamp.Create(3, 0);
+            clock.Time = DateTimeOffset.FromUnixTimeSeconds(3);
             IViewData viewData1 = viewManager.GetView(VIEW_NAME);
-            clock.Time = Timestamp.Create(4, 0);
+            clock.Time = DateTimeOffset.FromUnixTimeSeconds(4);
             IViewData viewData2 = viewManager.GetView(VIEW_NAME_2);
             var tv = TagValues.Create(new List<ITagValue>() { VALUE });
             StatsTestUtil.AssertAggregationMapEquals(
@@ -603,13 +603,13 @@ namespace OpenCensus.Stats.Test
             IAggregation noHistogram =
                 Distribution.Create(BucketBoundaries.Create(new List<double>()));
             IView view = CreateCumulativeView(VIEW_NAME, MEASURE_DOUBLE, noHistogram, new List<ITagKey>() { KEY });
-            clock.Time = Timestamp.Create(1, 0);
+            clock.Time = DateTimeOffset.FromUnixTimeSeconds(1);
             viewManager.RegisterView(view);
             statsRecorder
                 .NewMeasureMap()
                 .Put(MEASURE_DOUBLE, 1.1)
                 .Record(tagger.EmptyBuilder.Put(KEY, VALUE).Build());
-            clock.Time = Timestamp.Create(3, 0);
+            clock.Time = DateTimeOffset.FromUnixTimeSeconds(3);
             IViewData viewData = viewManager.GetView(VIEW_NAME);
             var tv = TagValues.Create(new List<ITagValue>() { VALUE });
             StatsTestUtil.AssertAggregationMapEquals(
@@ -625,13 +625,13 @@ namespace OpenCensus.Stats.Test
         public void TestGetCumulativeViewDataWithoutBucketBoundaries()
         {
             IView view = CreateCumulativeView(VIEW_NAME, MEASURE_DOUBLE, MEAN, new List<ITagKey>() { KEY });
-            clock.Time = (Timestamp.Create(1, 0));
+            clock.Time = (DateTimeOffset.FromUnixTimeSeconds(1));
             viewManager.RegisterView(view);
             statsRecorder
                 .NewMeasureMap()
                 .Put(MEASURE_DOUBLE, 1.1)
                 .Record(tagger.EmptyBuilder.Put(KEY, VALUE).Build());
-            clock.Time = Timestamp.Create(3, 0);
+            clock.Time = DateTimeOffset.FromUnixTimeSeconds(3);
             IViewData viewData = viewManager.GetView(VIEW_NAME);
             var tv = TagValues.Create(new List<ITagValue>() { VALUE });
             StatsTestUtil.AssertAggregationMapEquals(
@@ -745,7 +745,7 @@ namespace OpenCensus.Stats.Test
 
         private void SettingStateToDisabledWillClearStats(IView view)
         {
-            DateTimeOffset timestamp1 = Timestamp.Create(1, 0);
+            DateTimeOffset timestamp1 = DateTimeOffset.FromUnixTimeSeconds(1);
             clock.Time = timestamp1;
             viewManager.RegisterView(view);
             statsRecorder
@@ -761,16 +761,16 @@ namespace OpenCensus.Stats.Test
                 },
                 EPSILON);
 
-            DateTimeOffset timestamp2 = Timestamp.Create(2, 0);
+            DateTimeOffset timestamp2 = DateTimeOffset.FromUnixTimeSeconds(2);
             clock.Time = timestamp2;
             statsComponent.State = StatsCollectionState.DISABLED; // This will clear stats.
             Assert.Equal(StatsTestUtil.CreateEmptyViewData(view), viewManager.GetView(view.Name));
 
-            DateTimeOffset timestamp3 = Timestamp.Create(3, 0);
+            DateTimeOffset timestamp3 = DateTimeOffset.FromUnixTimeSeconds(3);
             clock.Time = timestamp3;
             statsComponent.State = StatsCollectionState.ENABLED;
 
-            DateTimeOffset timestamp4 = Timestamp.Create(4, 0);
+            DateTimeOffset timestamp4 = DateTimeOffset.FromUnixTimeSeconds(4);
             clock.Time = timestamp4;
             // This ViewData does not have any stats, but it should not be an empty ViewData, since it has
             // non-zero TimeStamps.

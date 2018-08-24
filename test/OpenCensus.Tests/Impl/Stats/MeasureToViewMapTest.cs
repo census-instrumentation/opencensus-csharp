@@ -16,6 +16,7 @@
 
 namespace OpenCensus.Stats.Test
 {
+    using System;
     using System.Collections.Generic;
     using OpenCensus.Common;
     using OpenCensus.Stats.Aggregations;
@@ -44,9 +45,9 @@ namespace OpenCensus.Stats.Test
         public void TestRegisterAndGetView()
         {
             MeasureToViewMap measureToViewMap = new MeasureToViewMap();
-            TestClock clock = TestClock.Create(Timestamp.Create(10, 20));
+            TestClock clock = TestClock.Create(DateTimeOffset.FromUnixTimeSeconds(10));
             measureToViewMap.RegisterView(VIEW, clock);
-            clock.Time = Timestamp.Create(30, 40);
+            clock.Time = DateTimeOffset.FromUnixTimeSeconds(30);
             IViewData viewData = measureToViewMap.GetView(VIEW_NAME, clock, StatsCollectionState.ENABLED);
             Assert.Equal(VIEW, viewData.View);
             Assert.Empty(viewData.AggregationMap);
