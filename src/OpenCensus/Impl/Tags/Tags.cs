@@ -47,7 +47,7 @@ namespace OpenCensus.Tags
         {
             get
             {
-                Initialize(false);
+                Initialize(true);
                 return tags.tagsComponent.Tagger;
             }
         }
