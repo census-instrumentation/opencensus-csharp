@@ -62,8 +62,7 @@ namespace OpenCensus.Stats
 
         internal override void Combine(MutableAggregation other, double fraction)
         {
-            MutableMean mutable = other as MutableMean;
-            if (mutable == null)
+            if (!(other is MutableMean mutable))
             {
                 throw new ArgumentException("MutableMean expected.");
             }

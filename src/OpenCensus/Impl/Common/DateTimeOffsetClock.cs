@@ -46,7 +46,7 @@ namespace OpenCensus.Common
         {
             get
             {
-                var millis = DateTimeOffset.UtcNow.UtcTicks / TimeSpan.TicksPerMillisecond;
+                var millis = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                 return millis * NANOS_PER_MILLI;
             }
         }

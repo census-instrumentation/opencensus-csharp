@@ -72,8 +72,7 @@ namespace OpenCensus.Trace.Export
 
         public override void ConsiderForSampling(ISpan ispan)
         {
-            SpanBase span = ispan as SpanBase;
-            if (span != null)
+            if (ispan is SpanBase span)
             {
                 lock (this.samples)
                 {

@@ -47,8 +47,7 @@ namespace OpenCensus.Stats
 
         internal override void Combine(MutableAggregation other, double fraction)
         {
-            MutableLastValue mutable = other as MutableLastValue;
-            if (mutable == null)
+            if (!(other is MutableLastValue mutable))
             {
                 throw new ArgumentException("MutableLastValue expected.");
             }

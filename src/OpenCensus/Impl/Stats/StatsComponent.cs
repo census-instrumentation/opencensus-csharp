@@ -58,8 +58,7 @@ namespace OpenCensus.Stats
 
             set
             {
-                ViewManager manager = this.viewManager as ViewManager;
-                if (manager == null)
+                if (!(this.viewManager is ViewManager manager))
                 {
                     return;
                 }
