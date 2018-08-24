@@ -36,7 +36,6 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
         private const long MillisPerSecond = 1000L;
         private const long NanosPerMillisecond = 1000 * 1000;
         private const long NanosPerSecond = NanosPerMillisecond * MillisPerSecond;
-        private const long EpochSeconds = 62135596800;
         private readonly ZipkinTraceExporterOptions options;
         private readonly ZipkinEndpoint localEndpoint;
         private readonly HttpClient httpClient;
@@ -114,7 +113,7 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
 
         private long ToEpochMicroseconds(ITimestamp timestamp)
         {
-            long nanos = ((timestamp.Seconds - EpochSeconds) * NanosPerSecond) + timestamp.Nanos;
+            long nanos = (timestamp.Seconds * NanosPerSecond) + timestamp.Nanos;
             long micros = nanos / 1000L;
             return micros;
         }
