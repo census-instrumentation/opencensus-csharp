@@ -244,10 +244,6 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
             catch (Exception)
             {
             }
-            finally
-            {
-                client.Dispose();
-            }
         }
 
         private HttpRequestMessage GetHttpRequestMessage(HttpMethod method, Uri requestUri)
