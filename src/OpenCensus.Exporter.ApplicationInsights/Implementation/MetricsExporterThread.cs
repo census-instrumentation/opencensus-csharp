@@ -16,22 +16,25 @@
 
 namespace OpenCensus.Exporter.ApplicationInsights.Implementation
 {
-    using Microsoft.ApplicationInsights.Extensibility;
-    using OpenCensus.Stats;
     using System;
     using System.Threading;
+    using Microsoft.ApplicationInsights;
+    using Microsoft.ApplicationInsights.DataContracts;
+    using Microsoft.ApplicationInsights.Extensibility;
+    using OpenCensus.Stats;
+    using OpenCensus.Stats.Aggregations;
 
     internal class MetricsExporterThread
     {
         private readonly IViewManager viewManager;
 
-        private readonly TelemetryConfiguration telemetryConfiguration;
+        private readonly TelemetryClient telemetryClient;
 
         private readonly TimeSpan interval = TimeSpan.FromSeconds(10); // TODO: make configurable
 
         public MetricsExporterThread(TelemetryConfiguration telemetryConfiguration, IViewManager viewManager)
         {
-            this.telemetryConfiguration = telemetryConfiguration;
+            this.telemetryClient = new TelemetryClient(telemetryConfiguration);
             this.viewManager = viewManager;
         }
 
@@ -58,10 +61,86 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
             {
                 var data = this.viewManager.GetView(view.Name);
 
-                foreach(var value in data.AggregationMap)
+                foreach (var value in data.AggregationMap)
                 {
-                    value.Value.Match<DistributionData>
+                    var metricTelemetry = new MetricTelemetry
+                    {
+                        Name = data.View.Name.AsString
+                    };
+
+                    for (int i = 0; i < value.Key.Values.Count; i++)
+                    {
+                        var name = data.View.Columns[i].Name;
+                        var val = value.Key.Values[i].AsString;
+                        metricTelemetry.Properties.Add(name, val);
+                    }
+
+                    value.Value.Match<object>(
+                        (combined) =>
+                        {
+                            if (combined is ISumDataDouble sum)
+                            {
+                            }
+                            return null;
+                        },
+                        (combined) =>
+                        {
+                            if (combined is ISumDataLong sum)
+                            {
+                            }
+                            return null;
+                        },
+                        (combined) =>
+                        {
+                            if (combined is ICountData count)
+                            {
+                            }
+                            return null;
+                        },
+                        (combined) =>
+                        {
+                            if (combined is IMeanData mean)
+                            {
+                            }
+                            return null;
+                        },
+                        (combined) =>
+                        {
+                            if (combined is IDistributionData dist)
+                            {
+#pragma warning disable CS0618 // Type or member is obsolete
+                                metricTelemetry.Value = dist.Mean;
+#pragma warning restore CS0618 // Type or member is obsolete
+                                metricTelemetry.Min = dist.Min;
+                                metricTelemetry.Max = dist.Max;
+                            }
+
+                            return null;
+                        },
+                        (combined) =>
+                        {
+                            if (combined is ILastValueDataDouble lastValue)
+                            {
+                            }
+                            return null;
+                        },
+                        (combined) =>
+                        {
+                            if (combined is ILastValueDataLong lastValue)
+                            {
+                            }
+                            return null;
+                        },
+                        (combined) =>
+                        {
+                            if (combined is IAggregationData aggregationData)
+                            {
+                            }
+                            return null;
+                        });
+                    this.telemetryClient.TrackMetric(metricTelemetry);
                 }
+
                 Console.WriteLine(view);
                 Console.WriteLine(data);
             }

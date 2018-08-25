@@ -21,7 +21,6 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
 
     internal class TraceExporterHandler : IHandler
     {
-
         public TraceExporterHandler()
         {
         }
@@ -31,4 +30,3 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
         }
     }
 }
-

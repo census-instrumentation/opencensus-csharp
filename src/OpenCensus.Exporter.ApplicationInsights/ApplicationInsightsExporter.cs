@@ -16,12 +16,12 @@
 
 namespace OpenCensus.Exporter.ApplicationInsights
 {
+    using System;
+    using System.Threading.Tasks;
     using Microsoft.ApplicationInsights.Extensibility;
     using OpenCensus.Exporter.ApplicationInsights.Implementation;
     using OpenCensus.Stats;
     using OpenCensus.Trace.Export;
-    using System;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// Exporter of Open Census traces and metrics to Azure Application Insights.
@@ -47,6 +47,7 @@ namespace OpenCensus.Exporter.ApplicationInsights
         /// </summary>
         /// <param name="telemetryConfiguration">Telemetry configuration to use to report telemetry.</param>
         /// <param name="exportComponent">Exporter to get traces and metrics from.</param>
+        /// <param name="viewManager">View manager to get stats from.</param>
         public ApplicationInsightsExporter(TelemetryConfiguration telemetryConfiguration, IExportComponent exportComponent, IViewManager viewManager)
         {
             this.exportComponent = exportComponent;
