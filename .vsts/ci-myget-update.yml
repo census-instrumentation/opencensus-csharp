@@ -39,7 +39,7 @@ steps:
     zipAfterPublish: "True"
 
 - task: NuGetCommand@2
-  displayName: 'NuGet push'
+  displayName: 'Publish nugets to MyGet'
   inputs:
     command: push
     nuGetFeedType: external
@@ -50,7 +50,3 @@ steps:
     PathtoPublish: "$(build.artifactstagingdirectory)"
     ArtifactName: "drop"
     ArtifactType: "Container"
-
-
-
-    
