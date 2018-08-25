@@ -3,8 +3,7 @@
 phases:
 
 - phase: Windows
-  queue:
-      name: Hosted VS2017
+  queue: Hosted VS2017
   steps:
   - task: DotNetCoreInstaller@0
     displayName: force use of desired dotnet version
@@ -49,8 +48,7 @@ phases:
       ArtifactType: "Container"
 
 - phase: Linux
-  queue:
-      name: Hosted Ubuntu 1604
+  queue: Hosted Ubuntu 1604
   steps:
   - task: DotNetCoreInstaller@0
     displayName: force use of desired dotnet version
