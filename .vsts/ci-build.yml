@@ -23,13 +23,13 @@ phases:
       projects: "*.sln"
       arguments: "--configuration Release"
 
-  #commented for testing of packaging
-  #- task: DotNetCoreCLI@1
-  #  displayName: test
-  #  inputs:
-  #    command: "test"
-  #    projects: "test/**/*.csproj"
-  #    arguments: "--configuration Release"
+  # consider switch to https://docs.microsoft.com/vsts/pipelines/tasks/test/vstest?view=vsts
+  - task: DotNetCoreCLI@1
+    displayName: test
+    inputs:
+      command: "test"
+      projects: "test/**/*.csproj"
+      arguments: "--configuration Release"
 
   - task: PublishTestResults@2
 
