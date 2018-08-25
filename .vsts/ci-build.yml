@@ -48,7 +48,7 @@ phases:
       ArtifactType: "Container"
 
 - phase: Linux
-  queue: Hosted Ubuntu 1604
+  queue: Hosted Linux Preview
   steps:
   - task: DotNetCoreInstaller@0
     displayName: force use of desired dotnet version
