@@ -50,7 +50,7 @@ phases:
 
 - phase: Linux
   queue:
-      name: Hosted Linux Preview
+      name: Hosted Ubuntu 1604
   steps:
   - task: DotNetCoreInstaller@0
     displayName: force use of desired dotnet version
