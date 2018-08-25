@@ -19,7 +19,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{7CB2F02E
 		build\stylecop.json = build\stylecop.json
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenCensus.Exporter.Zipkin", "src\OpenCensus.Exporter.Zipkin\OpenCensus.Exporter.Zipkin.csproj", "{7EDAE7FA-B44E-42CA-80FA-7DF2FAA2C5DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenCensus.Exporter.Zipkin", "src\OpenCensus.Exporter.Zipkin\OpenCensus.Exporter.Zipkin.csproj", "{7EDAE7FA-B44E-42CA-80FA-7DF2FAA2C5DD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenCensus.Exporter.ApplicationInsights", "src\OpenCensus.Exporter.ApplicationInsights\OpenCensus.Exporter.ApplicationInsights.csproj", "{697A3289-0A73-433D-9060-223D0F6A56DA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".vsts", ".vsts", "{61188153-47FB-4567-AC9B-79B2435853EB}"
+	ProjectSection(SolutionItems) = preProject
+		.vsts\ci-build.yml = .vsts\ci-build.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +46,10 @@ Global
 		{7EDAE7FA-B44E-42CA-80FA-7DF2FAA2C5DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7EDAE7FA-B44E-42CA-80FA-7DF2FAA2C5DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7EDAE7FA-B44E-42CA-80FA-7DF2FAA2C5DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{697A3289-0A73-433D-9060-223D0F6A56DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{697A3289-0A73-433D-9060-223D0F6A56DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{697A3289-0A73-433D-9060-223D0F6A56DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{697A3289-0A73-433D-9060-223D0F6A56DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

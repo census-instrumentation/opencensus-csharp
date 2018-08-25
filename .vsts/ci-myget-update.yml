@@ -1,0 +1,56 @@
+# CI build with the upload to MyGet
+
+queue: Hosted VS2017
+steps:
+- task: DotNetCoreInstaller@0
+  displayName: force use of desired dotnet version
+  inputs:
+    version: "2.0.3"
+
+- task: DotNetCoreCLI@1
+  displayName: restore packages
+  inputs:
+    command: "restore"
+    projects: "*.sln"
+
+- task: DotNetCoreCLI@1
+  displayName: build solution (Release)
+  inputs:
+    command: "build"
+    projects: "*.sln"
+    arguments: "--configuration Release"
+
+# consider switch to https://docs.microsoft.com/vsts/pipelines/tasks/test/vstest?view=vsts
+- task: DotNetCoreCLI@1
+  displayName: test
+  inputs:
+    command: "test"
+    projects: "test/**/*.csproj"
+    arguments: "--configuration Release"
+
+- task: PublishTestResults@2
+
+- task: DotNetCoreCLI@1
+  displayName: publish
+  inputs:
+    command: "publish"
+    publishWebProjects: "True"
+    arguments: "--configuration Release --output $(build.artifactstagingdirectory)"
+    zipAfterPublish: "True"
+
+- task: NuGetCommand@2
+  displayName: 'NuGet push'
+  inputs:
+    command: push
+    nuGetFeedType: external
+    publishFeedCredentials: 'myget-open-census'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: "$(build.artifactstagingdirectory)"
+    ArtifactName: "drop"
+    ArtifactType: "Container"
+
+
+
+    
