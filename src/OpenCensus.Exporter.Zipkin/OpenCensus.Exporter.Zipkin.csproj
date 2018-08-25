@@ -1,8 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <Description>OpenCensus .NET API</Description>
+    <VersionPrefix>0.1.0</VersionPrefix>
+    <VersionSuffix>beta1</VersionSuffix>
     <TargetFrameworks>net46;netstandard2.0</TargetFrameworks>
     <TargetFrameworks Condition="$(OS) != 'Windows_NT'">netstandard2.0</TargetFrameworks>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <IncludeSymbols>True</IncludeSymbols>
+    <PackageId>OpenCensus.Export.Zipkin</PackageId>
+    <PackageTags>Tracing;OpenCensus;Management;Monitoring;Zipkin</PackageTags>
+    <PackageIconUrl>https://opencensus.io/images/opencensus-logo.png</PackageIconUrl>
+    <PackageProjectUrl>https://opencensus.io</PackageProjectUrl>
+    <PackageLicenseUrl>https://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
+    <Authors>OpenCensus authors</Authors>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <PropertyGroup>
