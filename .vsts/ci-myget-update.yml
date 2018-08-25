@@ -7,21 +7,27 @@ steps:
   inputs:
     version: "2.0.3"
 
-- task: DotNetCoreCLI@1
+- task: DotNetCoreCLI@2
   displayName: restore packages
   inputs:
     command: "restore"
     projects: "*.sln"
 
-- task: DotNetCoreCLI@1
+- task: DotNetCoreCLI@2
+  displayName: build solution (Release)
+  inputs:
+    command: "build"
+    projects: "*.sln"
+    arguments: "--configuration Release"
+
+- task: DotNetCoreCLI@2
   displayName: pack solution (Release)
   inputs:
     command: "pack"
     projects: "*.sln"
-    arguments: "--configuration Release"
 
 #commented for testing of packaging
-#- task: DotNetCoreCLI@1
+#- task: DotNetCoreCLI@2
 #  displayName: test
 #  inputs:
 #    command: "test"
