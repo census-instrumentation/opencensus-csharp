@@ -25,7 +25,8 @@ steps:
   inputs:
     command: "pack"
     projects: "*.sln"
-    arguments: "--configuration Release"
+    configuration: 'Release'
+    packDirectory: '$(build.artifactStagingDirectory)'
 
 #commented for testing of packaging
 #- task: DotNetCoreCLI@2
