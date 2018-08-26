@@ -28,13 +28,12 @@ steps:
     configuration: 'Release'
     packDirectory: '$(build.artifactStagingDirectory)'
 
-#commented for testing of packaging
-#- task: DotNetCoreCLI@2
-#  displayName: test
-#  inputs:
-#    command: "test"
-#    projects: "test/**/*.csproj"
-#    arguments: "--configuration Release"
+- task: DotNetCoreCLI@2
+  displayName: test
+  inputs:
+    command: "test"
+    projects: "test/**/*.csproj"
+    arguments: "--configuration Release"
 
 - task: PublishTestResults@2
 
