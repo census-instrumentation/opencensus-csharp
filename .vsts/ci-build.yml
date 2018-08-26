@@ -33,20 +33,6 @@ phases:
 
   - task: PublishTestResults@2
 
-  - task: DotNetCoreCLI@2
-    displayName: publish
-    inputs:
-      command: "publish"
-      publishWebProjects: "True"
-      arguments: "--configuration Release --output $(build.artifactstagingdirectory)"
-      zipAfterPublish: "True"
-
-  - task: PublishBuildArtifacts@1
-    inputs:
-      PathtoPublish: "$(build.artifactstagingdirectory)"
-      ArtifactName: "drop"
-      ArtifactType: "Container"
-
 - phase: Linux
   queue: Hosted Linux Preview
   steps:
@@ -76,17 +62,3 @@ phases:
       arguments: "--configuration Release"
 
   - task: PublishTestResults@2
-
-  - task: DotNetCoreCLI@2
-    displayName: publish
-    inputs:
-      command: "publish"
-      publishWebProjects: "True"
-      arguments: "--configuration Release --output $(build.artifactstagingdirectory)"
-      zipAfterPublish: "True"
-
-  - task: PublishBuildArtifacts@1
-    inputs:
-      PathtoPublish: "$(build.artifactstagingdirectory)"
-      ArtifactName: "drop"
-      ArtifactType: "Container"
