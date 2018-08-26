@@ -4,5 +4,6 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)/debug.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
+    <DefineConstants>$(DefineConstants);SIGNED</DefineConstants>
   </PropertyGroup>
 </Project>
