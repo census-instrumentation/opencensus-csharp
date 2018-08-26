@@ -20,7 +20,7 @@ namespace OpenCensus.Utils
     using System.Linq;
     using System.Text;
 
-    public static class Collections
+    internal static class Collections
     {
         public static string ToString<K, V>(IDictionary<K, V> dict)
         {

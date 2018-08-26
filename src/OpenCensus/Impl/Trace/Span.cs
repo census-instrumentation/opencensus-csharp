@@ -35,6 +35,7 @@ namespace OpenCensus.Trace
         private readonly IClock clock;
         private readonly ITimestampConverter timestampConverter;
         private readonly long startNanoTime;
+        private readonly object @lock = new object();
         private AttributesWithCapacity attributes;
         private TraceEvents<EventWithNanoTime<IAnnotation>> annotations;
         private TraceEvents<EventWithNanoTime<IMessageEvent>> messageEvents;
@@ -43,7 +44,38 @@ namespace OpenCensus.Trace
         private long endNanoTime;
         private bool hasBeenEnded;
         private bool sampleToLocalSpanStore;
-        private readonly object @lock = new object();
+
+        private Span(
+                ISpanContext context,
+                SpanOptions options,
+                string name,
+                ISpanId parentSpanId,
+                bool? hasRemoteParent,
+                ITraceParams traceParams,
+                IStartEndHandler startEndHandler,
+                ITimestampConverter timestampConverter,
+                IClock clock)
+            : base(context, options)
+        {
+            this.parentSpanId = parentSpanId;
+            this.hasRemoteParent = hasRemoteParent;
+            this.name = name;
+            this.traceParams = traceParams;
+            this.startEndHandler = startEndHandler;
+            this.clock = clock;
+            this.hasBeenEnded = false;
+            this.sampleToLocalSpanStore = false;
+            if (options.HasFlag(SpanOptions.RECORD_EVENTS))
+            {
+                this.timestampConverter = timestampConverter ?? OpenCensus.Internal.TimestampConverter.Now(clock);
+                this.startNanoTime = clock.NowNanos;
+            }
+            else
+            {
+                this.startNanoTime = 0;
+                this.timestampConverter = timestampConverter;
+            }
+        }
 
        public override string Name
         {
@@ -118,6 +150,92 @@ namespace OpenCensus.Trace
 
                     return this.sampleToLocalSpanStore;
                 }
+            }
+        }
+
+        public override ISpanId ParentSpanId
+        {
+            get
+            {
+                return this.parentSpanId;
+            }
+        }
+
+        public override bool HasEnded
+        {
+            get
+            {
+                return this.hasBeenEnded;
+            }
+        }
+
+        internal ITimestampConverter TimestampConverter
+        {
+            get
+            {
+                return this.timestampConverter;
+            }
+        }
+
+        private AttributesWithCapacity InitializedAttributes
+        {
+            get
+            {
+                if (this.attributes == null)
+                {
+                    this.attributes = new AttributesWithCapacity(this.traceParams.MaxNumberOfAttributes);
+                }
+
+                return this.attributes;
+            }
+        }
+
+        private TraceEvents<EventWithNanoTime<IAnnotation>> InitializedAnnotations
+        {
+            get
+            {
+                if (this.annotations == null)
+                {
+                    this.annotations =
+                        new TraceEvents<EventWithNanoTime<IAnnotation>>(this.traceParams.MaxNumberOfAnnotations);
+                }
+
+                return this.annotations;
+            }
+        }
+
+        private TraceEvents<EventWithNanoTime<IMessageEvent>> InitializedMessageEvents
+        {
+            get
+            {
+                if (this.messageEvents == null)
+                {
+                    this.messageEvents =
+                        new TraceEvents<EventWithNanoTime<IMessageEvent>>(this.traceParams.MaxNumberOfMessageEvents);
+                }
+
+                return this.messageEvents;
+            }
+        }
+
+        private TraceEvents<ILink> InitializedLinks
+        {
+            get
+            {
+                if (this.links == null)
+                {
+                    this.links = new TraceEvents<ILink>(this.traceParams.MaxNumberOfLinks);
+                }
+
+                return this.links;
+            }
+        }
+
+        private Status StatusWithDefault
+        {
+            get
+            {
+                return this.status ?? Trace.Status.OK;
             }
         }
 
@@ -278,153 +396,6 @@ namespace OpenCensus.Trace
             this.startEndHandler.OnEnd(this);
         }
 
-        private AttributesWithCapacity InitializedAttributes
-        {
-            get
-            {
-                if (this.attributes == null)
-                {
-                    this.attributes = new AttributesWithCapacity(this.traceParams.MaxNumberOfAttributes);
-                }
-
-                return this.attributes;
-            }
-        }
-
-        private TraceEvents<EventWithNanoTime<IAnnotation>> InitializedAnnotations
-        {
-            get
-            {
-                if (this.annotations == null)
-                {
-                    this.annotations =
-                        new TraceEvents<EventWithNanoTime<IAnnotation>>(this.traceParams.MaxNumberOfAnnotations);
-                }
-
-                return this.annotations;
-            }
-        }
-
-        private TraceEvents<EventWithNanoTime<IMessageEvent>> InitializedMessageEvents
-        {
-            get
-            {
-                if (this.messageEvents == null)
-                {
-                    this.messageEvents =
-                        new TraceEvents<EventWithNanoTime<IMessageEvent>>(this.traceParams.MaxNumberOfMessageEvents);
-                }
-
-                return this.messageEvents;
-            }
-        }
-
-        private TraceEvents<ILink> InitializedLinks
-        {
-            get
-            {
-                if (this.links == null)
-                {
-                    this.links = new TraceEvents<ILink>(this.traceParams.MaxNumberOfLinks);
-                }
-
-                return this.links;
-            }
-        }
-
-        private Status StatusWithDefault
-        {
-            get
-            {
-                return this.status ?? Trace.Status.OK;
-            }
-        }
-
-        internal ITimestampConverter TimestampConverter
-        {
-            get
-            {
-                return this.timestampConverter;
-            }
-        }
-
-        public override ISpanId ParentSpanId
-        {
-            get
-            {
-                return this.parentSpanId;
-            }
-        }
-
-        public override bool HasEnded
-        {
-            get
-            {
-                return this.hasBeenEnded;
-            }
-        }
-
-        private Span(
-                ISpanContext context,
-                SpanOptions options,
-                string name,
-                ISpanId parentSpanId,
-                bool? hasRemoteParent,
-                ITraceParams traceParams,
-                IStartEndHandler startEndHandler,
-                ITimestampConverter timestampConverter,
-                IClock clock)
-            : base(context, options)
-        {
-            this.parentSpanId = parentSpanId;
-            this.hasRemoteParent = hasRemoteParent;
-            this.name = name;
-            this.traceParams = traceParams;
-            this.startEndHandler = startEndHandler;
-            this.clock = clock;
-            this.hasBeenEnded = false;
-            this.sampleToLocalSpanStore = false;
-            if (options.HasFlag(SpanOptions.RECORD_EVENTS))
-            {
-                this.timestampConverter = timestampConverter != null ? timestampConverter : OpenCensus.Internal.TimestampConverter.Now(clock);
-                this.startNanoTime = clock.NowNanos;
-            }
-            else
-            {
-                this.startNanoTime = 0;
-                this.timestampConverter = timestampConverter;
-            }
-        }
-
-        internal override ISpanData ToSpanData()
-        {
-            if (!this.Options.HasFlag(SpanOptions.RECORD_EVENTS))
-            {
-                throw new InvalidOperationException("Getting SpanData for a Span without RECORD_EVENTS option.");
-            }
-
-            Attributes attributesSpanData = this.attributes == null ? Attributes.Create(new Dictionary<string, IAttributeValue>(), 0)
-                        : Attributes.Create(this.attributes, this.attributes.NumberOfDroppedAttributes);
-
-            ITimedEvents<IAnnotation> annotationsSpanData = CreateTimedEvents(this.InitializedAnnotations, this.timestampConverter);
-            ITimedEvents<IMessageEvent> messageEventsSpanData = CreateTimedEvents(this.InitializedMessageEvents, this.timestampConverter);
-            LinkList linksSpanData = this.links == null ? LinkList.Create(new List<ILink>(), 0) : LinkList.Create(this.links.Events.ToList(), this.links.NumberOfDroppedEvents);
-
-            return SpanData.Create(
-                this.Context,
-                this.parentSpanId,
-                this.hasRemoteParent,
-                this.name,
-                this.timestampConverter.ConvertNanoTime(this.startNanoTime),
-                attributesSpanData,
-                annotationsSpanData,
-                messageEventsSpanData,
-                linksSpanData,
-                null, // Not supported yet.
-                this.hasBeenEnded ? this.StatusWithDefault : null,
-                this.hasBeenEnded ? this.timestampConverter.ConvertNanoTime(this.endNanoTime) : null);
-        }
-
         internal static ISpan StartSpan(
                 ISpanContext context,
                 SpanOptions options,
@@ -463,6 +434,35 @@ namespace OpenCensus.Trace
         // including implementation and the mocked ones, do not need to override this method explicitly.
         // addNetworkEvent(BaseMessageEventUtil.asNetworkEvent(messageEvent));
         // }
+
+        internal override ISpanData ToSpanData()
+        {
+            if (!this.Options.HasFlag(SpanOptions.RECORD_EVENTS))
+            {
+                throw new InvalidOperationException("Getting SpanData for a Span without RECORD_EVENTS option.");
+            }
+
+            Attributes attributesSpanData = this.attributes == null ? Attributes.Create(new Dictionary<string, IAttributeValue>(), 0)
+                        : Attributes.Create(this.attributes, this.attributes.NumberOfDroppedAttributes);
+
+            ITimedEvents<IAnnotation> annotationsSpanData = CreateTimedEvents(this.InitializedAnnotations, this.timestampConverter);
+            ITimedEvents<IMessageEvent> messageEventsSpanData = CreateTimedEvents(this.InitializedMessageEvents, this.timestampConverter);
+            LinkList linksSpanData = this.links == null ? LinkList.Create(new List<ILink>(), 0) : LinkList.Create(this.links.Events.ToList(), this.links.NumberOfDroppedEvents);
+
+            return SpanData.Create(
+                this.Context,
+                this.parentSpanId,
+                this.hasRemoteParent,
+                this.name,
+                this.timestampConverter.ConvertNanoTime(this.startNanoTime),
+                attributesSpanData,
+                annotationsSpanData,
+                messageEventsSpanData,
+                linksSpanData,
+                null, // Not supported yet.
+                this.hasBeenEnded ? this.StatusWithDefault : null,
+                this.hasBeenEnded ? this.timestampConverter.ConvertNanoTime(this.endNanoTime) : null);
+        }
 
         // public abstract void AddLink(LinkBase link);
         private static ITimedEvents<T> CreateTimedEvents<T>(TraceEvents<EventWithNanoTime<T>> events, ITimestampConverter timestampConverter)

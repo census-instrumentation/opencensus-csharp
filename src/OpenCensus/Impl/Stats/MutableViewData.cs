@@ -24,8 +24,19 @@ namespace OpenCensus.Stats
 
     internal abstract class MutableViewData
     {
-        private const long MILLIS_PER_SECOND = 1000L;
-        private const long NANOS_PER_MILLI = 1000 * 1000;
+        internal static readonly ITagValue UnknownTagValue = null;
+
+        internal static readonly ITimestamp ZeroTimestamp = Timestamp.Create(0, 0);
+
+        private const long MillisPerSecond = 1000L;
+        private const long NanosPerMilli = 1000 * 1000;
+
+        protected MutableViewData(IView view)
+        {
+            this.View = view;
+        }
+
+        internal IView View { get; }
 
         private static Func<ISum, MutableAggregation> CreateMutableSum { get; } = (s) => { return MutableSum.Create(); };
 
@@ -60,46 +71,10 @@ namespace OpenCensus.Stats
                 boxedBucketCounts);
         };
 
-        internal static readonly ITagValue UNKNOWN_TAG_VALUE = null;
-
-        internal static readonly ITimestamp ZERO_TIMESTAMP = Timestamp.Create(0, 0);
-
-        internal IView View { get; }
-
-        protected MutableViewData(IView view)
-        {
-            this.View = view;
-        }
-
-        internal static MutableViewData Create(IView view, ITimestamp start)
-        {
-            return new CumulativeMutableViewData(view, start);
-        }
-
-        /** Record double stats with the given tags. */
-        internal abstract void Record(ITagContext context, double value, ITimestamp timestamp);
-
-        /** Record long stats with the given tags. */
-        internal void Record(ITagContext tags, long value, ITimestamp timestamp)
-        {
-            // TODO(songya): shall we check for precision loss here?
-            this.Record(tags, (double)value, timestamp);
-        }
-
-        /** Convert this {@link MutableViewData} to {@link ViewData}. */
-        internal abstract IViewData ToViewData(ITimestamp now, StatsCollectionState state);
-
-        // Clear recorded stats.
-        internal abstract void ClearStats();
-
-        // Resume stats collection, and reset Start Timestamp (for CumulativeMutableViewData), or refresh
-        // bucket list (for InternalMutableViewData).
-        internal abstract void ResumeStatsCollection(ITimestamp now);
-
         internal static IDictionary<ITagKey, ITagValue> GetTagMap(ITagContext ctx)
         {
             if (ctx is TagContext)
-             {
+            {
                 return ((TagContext)ctx).Tags;
             }
             else
@@ -126,7 +101,7 @@ namespace OpenCensus.Stats
                 if (!tags.ContainsKey(tagKey))
                 {
                     // replace not found key values by null.
-                    tagValues.Add(UNKNOWN_TAG_VALUE);
+                    tagValues.Add(UnknownTagValue);
                 }
                 else
                 {
@@ -140,7 +115,7 @@ namespace OpenCensus.Stats
         // Returns the milliseconds representation of a Duration.
         internal static long ToMillis(IDuration duration)
         {
-            return (duration.Seconds * MILLIS_PER_SECOND) + (duration.Nanos / NANOS_PER_MILLI);
+            return (duration.Seconds * MillisPerSecond) + (duration.Nanos / NanosPerMilli);
         }
 
         internal static MutableAggregation CreateMutableAggregation(IAggregation aggregation)
@@ -172,7 +147,7 @@ namespace OpenCensus.Stats
                         {
                             throw new ArgumentException();
                         });
-                 },
+                },
                 CreateCountData,
                 CreateMeanData,
                 CreateDistributionData,
@@ -210,5 +185,30 @@ namespace OpenCensus.Stats
 
             return map;
         }
+
+        internal static MutableViewData Create(IView view, ITimestamp start)
+        {
+            return new CumulativeMutableViewData(view, start);
+        }
+
+        /** Record double stats with the given tags. */
+        internal abstract void Record(ITagContext context, double value, ITimestamp timestamp);
+
+        /** Record long stats with the given tags. */
+        internal void Record(ITagContext tags, long value, ITimestamp timestamp)
+        {
+            // TODO(songya): shall we check for precision loss here?
+            this.Record(tags, (double)value, timestamp);
+        }
+
+        /** Convert this {@link MutableViewData} to {@link ViewData}. */
+        internal abstract IViewData ToViewData(ITimestamp now, StatsCollectionState state);
+
+        // Clear recorded stats.
+        internal abstract void ClearStats();
+
+        // Resume stats collection, and reset Start Timestamp (for CumulativeMutableViewData), or refresh
+        // bucket list (for InternalMutableViewData).
+        internal abstract void ResumeStatsCollection(ITimestamp now);
     }
 }

@@ -20,8 +20,8 @@ namespace OpenCensus.Stats
 
     public sealed class CurrentStatsState
     {
-        private StatsCollectionState currentState = StatsCollectionState.ENABLED;
         private readonly object lck = new object();
+        private StatsCollectionState currentState = StatsCollectionState.ENABLED;
         private bool isRead;
 
         public StatsCollectionState Value

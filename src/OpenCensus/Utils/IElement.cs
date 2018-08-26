@@ -16,7 +16,7 @@
 
 namespace OpenCensus.Utils
 {
-    public interface IElement<T> where T : IElement<T>
+    internal interface IElement<T> where T : IElement<T>
     {
         T Next { get; set; }
 

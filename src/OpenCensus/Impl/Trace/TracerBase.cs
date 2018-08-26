@@ -21,22 +21,22 @@ namespace OpenCensus.Trace
 
     public abstract class TracerBase : ITracer
     {
-        private static readonly NoopTracer noopTracer = new NoopTracer();
-
-        internal static NoopTracer NoopTracer
-        {
-            get
-            {
-                return noopTracer;
-            }
-        }
+        private static readonly NoopTracer NoopTracerInstance = new NoopTracer();
 
         public ISpan CurrentSpan
         {
             get
             {
                 ISpan currentSpan = CurrentSpanUtils.CurrentSpan;
-                return currentSpan != null ? currentSpan : BlankSpan.INSTANCE;
+                return currentSpan ?? BlankSpan.INSTANCE;
+            }
+        }
+
+        internal static NoopTracer NoopTracer
+        {
+            get
+            {
+                return NoopTracerInstance;
             }
         }
 

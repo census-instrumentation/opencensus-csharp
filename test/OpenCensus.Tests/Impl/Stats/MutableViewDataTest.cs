@@ -40,8 +40,8 @@ namespace OpenCensus.Stats.Test
         [Fact]
         public void TestConstants()
         {
-            Assert.Null(MutableViewData.UNKNOWN_TAG_VALUE);
-            Assert.Equal(Timestamp.Create(0, 0), MutableViewData.ZERO_TIMESTAMP);
+            Assert.Null(MutableViewData.UnknownTagValue);
+            Assert.Equal(Timestamp.Create(0, 0), MutableViewData.ZeroTimestamp);
         }
 
         [Fact]
@@ -50,7 +50,7 @@ namespace OpenCensus.Stats.Test
             List<ITagKey> columns = new List<ITagKey>() { CALLER, METHOD, ORIGINATOR };
             IDictionary<ITagKey, ITagValue> tags = new Dictionary<ITagKey, ITagValue>() { { CALLER, CALLER_V }, { METHOD, METHOD_V } };
 
-            Assert.Equal(new List<ITagValue>() { CALLER_V, METHOD_V, MutableViewData.UNKNOWN_TAG_VALUE },
+            Assert.Equal(new List<ITagValue>() { CALLER_V, METHOD_V, MutableViewData.UnknownTagValue },
                 MutableViewData.GetTagValues(tags, columns));
 
         }

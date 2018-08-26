@@ -21,12 +21,20 @@ namespace OpenCensus.Utils
 
     internal sealed class ConcurrentIntrusiveList<T> where T : IElement<T>
     {
+        private readonly object lck = new object();
         private int size = 0;
         private T head = default(T);
-        private readonly object lck = new object();
 
         public ConcurrentIntrusiveList()
         {
+        }
+
+        public int Count
+        {
+            get
+            {
+                return this.size;
+            }
         }
 
         public void AddElement(T element)
@@ -87,14 +95,6 @@ namespace OpenCensus.Utils
                     element.Next = default(T);
                     element.Previous = default(T);
                 }
-            }
-        }
-
-        public int Count
-        {
-            get
-            {
-                return this.size;
             }
         }
 

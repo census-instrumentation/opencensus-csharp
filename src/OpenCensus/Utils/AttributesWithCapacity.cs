@@ -24,9 +24,14 @@ namespace OpenCensus.Utils
 
     internal class AttributesWithCapacity : IDictionary<string, IAttributeValue>
     {
-        private OrderedDictionary @delegate = new OrderedDictionary();
+        private readonly OrderedDictionary @delegate = new OrderedDictionary();
         private readonly int capacity;
         private int totalRecordedAttributes;
+
+        public AttributesWithCapacity(int capacity)
+        {
+            this.capacity = capacity;
+        }
 
         public int NumberOfDroppedAttributes
         {
@@ -66,11 +71,6 @@ namespace OpenCensus.Utils
             {
                 return this.@delegate.IsReadOnly;
             }
-        }
-
-        public AttributesWithCapacity(int capacity)
-        {
-            this.capacity = capacity;
         }
 
         public IAttributeValue this[string key]

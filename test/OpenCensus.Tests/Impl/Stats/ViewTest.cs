@@ -42,7 +42,7 @@ namespace OpenCensus.Stats.Test
         [Fact]
         public void TestConstants()
         {
-            Assert.Equal(255, ViewName.NAME_MAX_LENGTH);
+            Assert.Equal(255, ViewName.NameMaxLength);
         }
 
         [Fact]
@@ -92,7 +92,7 @@ namespace OpenCensus.Stats.Test
         [Fact]
         public void PreventTooLongViewName()
         {
-            char[] chars = new char[ViewName.NAME_MAX_LENGTH + 1];
+            char[] chars = new char[ViewName.NameMaxLength + 1];
             for (int i = 0; i < chars.Length; i++)
             {
                 chars[i] = 'a';

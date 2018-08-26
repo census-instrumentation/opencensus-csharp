@@ -1,4 +1,4 @@
-﻿// <copyright file="SpanExporterWorker.cs" company="OpenCensus Authors">
+// <copyright file="SpanExporterWorker.cs" company="OpenCensus Authors">
 // Copyright 2018, OpenCensus Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,8 +26,8 @@ namespace OpenCensus.Trace.Export
         private readonly int bufferSize;
         private TimeSpan scheduleDelay;
         private bool shutdown = false;
-        private BlockingCollection<ISpan> spans;
-        private ConcurrentDictionary<string, IHandler> serviceHandlers = new ConcurrentDictionary<string, IHandler>();
+        private readonly BlockingCollection<ISpan> spans;
+        private readonly ConcurrentDictionary<string, IHandler> serviceHandlers = new ConcurrentDictionary<string, IHandler>();
 
         public SpanExporterWorker(int bufferSize, IDuration scheduleDelay)
         {

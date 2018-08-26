@@ -375,7 +375,7 @@ namespace OpenCensus.Stats.Test
             // DEFAULT doesn't have tags, but the view has tag key "KEY".
             statsRecorder.NewMeasureMap().Put(MEASURE_DOUBLE, 10.0).Record(tagger.Empty);
             IViewData viewData = viewManager.GetView(VIEW_NAME);
-            var tv = TagValues.Create(new List<ITagValue>() { MutableViewData.UNKNOWN_TAG_VALUE });
+            var tv = TagValues.Create(new List<ITagValue>() { MutableViewData.UnknownTagValue });
             StatsTestUtil.AssertAggregationMapEquals(
                 viewData.AggregationMap,
                 new Dictionary<TagValues, IAggregationData>()
@@ -432,7 +432,7 @@ namespace OpenCensus.Stats.Test
                 .Put(MEASURE_DOUBLE, 50.0)
                 .Record(tagger.EmptyBuilder.Put(TagKey.Create("another wrong key"), VALUE).Build());
             IViewData viewData = viewManager.GetView(VIEW_NAME);
-            var tv = TagValues.Create(new List<ITagValue>() { MutableViewData.UNKNOWN_TAG_VALUE });
+            var tv = TagValues.Create(new List<ITagValue>() { MutableViewData.UnknownTagValue });
             StatsTestUtil.AssertAggregationMapEquals(
                 viewData.AggregationMap,
                 new Dictionary<TagValues, IAggregationData>()

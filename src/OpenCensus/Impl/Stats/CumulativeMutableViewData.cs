@@ -22,8 +22,8 @@ namespace OpenCensus.Stats
 
     internal class CumulativeMutableViewData : MutableViewData
     {
+        private readonly IDictionary<TagValues, MutableAggregation> tagValueAggregationMap = new Dictionary<TagValues, MutableAggregation>();
         private ITimestamp start;
-        private IDictionary<TagValues, MutableAggregation> tagValueAggregationMap = new Dictionary<TagValues, MutableAggregation>();
 
         internal CumulativeMutableViewData(IView view, ITimestamp start)
             : base(view)
@@ -59,8 +59,8 @@ namespace OpenCensus.Stats
                 return ViewData.Create(
                     this.View,
                     new Dictionary<TagValues, IAggregationData>(),
-                    ZERO_TIMESTAMP,
-                    ZERO_TIMESTAMP);
+                    ZeroTimestamp,
+                    ZeroTimestamp);
             }
         }
 
