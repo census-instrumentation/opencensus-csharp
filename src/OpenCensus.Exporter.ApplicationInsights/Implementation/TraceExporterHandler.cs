@@ -16,17 +16,101 @@
 
 namespace OpenCensus.Exporter.ApplicationInsights.Implementation
 {
+    using System;
     using System.Collections.Generic;
+    using Microsoft.ApplicationInsights;
+    using Microsoft.ApplicationInsights.DataContracts;
+    using Microsoft.ApplicationInsights.Extensibility;
+    using Microsoft.ApplicationInsights.Extensibility.Implementation;
+    using OpenCensus.Trace;
     using OpenCensus.Trace.Export;
 
     internal class TraceExporterHandler : IHandler
     {
-        public TraceExporterHandler()
+        private readonly TelemetryClient telemetryClient;
+
+        public TraceExporterHandler(TelemetryConfiguration telemetryConfiguration)
         {
+            this.telemetryClient = new TelemetryClient(telemetryConfiguration);
         }
 
         public void Export(IList<ISpanData> spanDataList)
         {
+            foreach (var span in spanDataList)
+            {
+                OperationTelemetry result;
+                var kind = span.Attributes.AttributeMap[SpanAttributeConstants.SpanKindKey];
+
+                if (this.IsServerSpanKind(kind))
+                {
+                    result = new RequestTelemetry();
+                }
+                else
+                {
+                    result = new DependencyTelemetry();
+                }
+
+                result.Name = span.Name;
+                result.Id = span.Context.SpanId.ToLowerBase16();
+                result.Context.Operation.Id = span.Context.TraceId.ToLowerBase16();
+                result.Context.Operation.ParentId = span.ParentSpanId.ToLowerBase16();
+                var duration = span.StartTimestamp.SubtractTimestamp(span.EndTimestamp);
+                result.Duration = TimeSpan.FromTicks((duration.Seconds * TimeSpan.TicksPerSecond) + (duration.Nanos / 100));
+
+                // span.Annotations
+                // span.Attributes
+                // span.ChildSpanCount
+                // span.Context.IsValid;
+                // span.Context.TraceOptions;
+                // span.HasRemoteParent
+                // span.Links
+                // span.MessageEvents
+                // span.Status
+
+                this.telemetryClient.Track(result);
+            }
+        }
+
+        private bool IsClientSpanKind(IAttributeValue value)
+        {
+            return value.Match(
+                (arg) =>
+                {
+                    return arg.Equals(SpanAttributeConstants.ClientSpanKind);
+                },
+                (arg) =>
+                {
+                    return false;
+                },
+                (arg) =>
+                {
+                    return false;
+                },
+                (arg) =>
+                {
+                    return false;
+                });
+        }
+
+        private bool IsServerSpanKind(IAttributeValue value)
+        {
+            return value.Match(
+                (arg) =>
+                {
+                    return arg.Equals(SpanAttributeConstants.ServerSpanKind);
+                },
+                (arg) =>
+                {
+                    return false;
+                },
+                (arg) =>
+                {
+                    return false;
+                },
+                (arg) =>
+                {
+                    return false;
+                });
         }
     }
 }

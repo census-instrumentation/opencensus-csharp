@@ -67,7 +67,7 @@ namespace OpenCensus.Exporter.ApplicationInsights
                     return;
                 }
 
-                this.handler = new TraceExporterHandler();
+                this.handler = new TraceExporterHandler(this.telemetryConfiguration);
 
                 this.exportComponent.SpanExporter.RegisterHandler(TraceExporterName, this.handler);
 
