@@ -41,5 +41,6 @@
   <PropertyGroup>
     <VersionPrefix>$(SemanticVersionMajor).$(SemanticVersionMinor).$(SemanticVersionPatch)</VersionPrefix>
     <VersionSuffix>$(PreReleaseMilestone)-$(PreReleaseVersion)</VersionSuffix>
+    <FileVersion Condition="'$(PreReleaseVersion)' != ''">$(SemanticVersionMajor).$(SemanticVersionMinor).$(SemanticVersionPatch).$(PreReleaseVersion)</FileVersion>
   </PropertyGroup>
 </Project>
