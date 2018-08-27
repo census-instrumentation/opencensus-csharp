@@ -40,7 +40,7 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void CreateSpanBuilder()
         {
-            ISpanBuilder spanBuilder = tracer.SpanBuilderWithExplicitParent(SPAN_NAME, BlankSpan.INSTANCE);
+            ISpanBuilder spanBuilder = tracer.SpanBuilderWithExplicitParent(SPAN_NAME, BlankSpan.Instance);
             Assert.IsType<SpanBuilder>(spanBuilder);
         }
 

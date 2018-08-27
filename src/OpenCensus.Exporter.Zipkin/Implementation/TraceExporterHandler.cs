@@ -274,7 +274,7 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
         {
             var result = new ZipkinEndpoint()
             {
-                ServiceName = this.options.ServiceName
+                ServiceName = this.options.ServiceName,
             };
 
             string hostName = this.ResolveHostName();

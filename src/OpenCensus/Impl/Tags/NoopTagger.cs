@@ -22,7 +22,7 @@ namespace OpenCensus.Tags
 
     internal sealed class NoopTagger : TaggerBase
     {
-        internal static readonly ITagger INSTANCE = new NoopTagger();
+        internal static readonly ITagger Instance = new NoopTagger();
 
         public override ITagContext Empty
         {
@@ -73,7 +73,7 @@ namespace OpenCensus.Tags
                 throw new ArgumentNullException(nameof(tags));
             }
 
-            return NoopScope.INSTANCE;
+            return NoopScope.Instance;
         }
     }
 }

@@ -20,8 +20,8 @@ namespace OpenCensus.Trace
 
     internal class TraceEvents<T>
     {
-        private int totalRecordedEvents = 0;
         private readonly EvictingQueue<T> events;
+        private int totalRecordedEvents = 0;
 
         public EvictingQueue<T> Events
         {

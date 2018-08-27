@@ -22,7 +22,7 @@ namespace OpenCensus.Stats
 
     internal sealed class NoopMeasureMap : MeasureMapBase
     {
-        internal static readonly NoopMeasureMap INSTANCE = new NoopMeasureMap();
+        internal static readonly NoopMeasureMap Instance = new NoopMeasureMap();
 
         public override IMeasureMap Put(IMeasureDouble measure, double value)
         {

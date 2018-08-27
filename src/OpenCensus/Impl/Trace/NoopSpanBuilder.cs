@@ -33,7 +33,7 @@ namespace OpenCensus.Trace
 
         public override ISpan StartSpan()
         {
-            return BlankSpan.INSTANCE;
+            return BlankSpan.Instance;
         }
 
         public override ISpanBuilder SetSampler(ISampler sampler)

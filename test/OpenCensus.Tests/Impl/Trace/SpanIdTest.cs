@@ -63,7 +63,7 @@ namespace OpenCensus.Trace.Test
 
         }
 
-    [Fact]
+        [Fact]
         public void SpanId_CompareTo()
         {
             Assert.Equal(1, first.CompareTo(second));

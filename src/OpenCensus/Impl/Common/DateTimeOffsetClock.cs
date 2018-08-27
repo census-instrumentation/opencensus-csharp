@@ -20,24 +20,19 @@ namespace OpenCensus.Common
 
     internal class DateTimeOffsetClock : IClock
     {
-        internal const long MILLIS_PER_SECOND = 1000L;
-        internal const long NANOS_PER_MILLI = 1000 * 1000;
-        internal const long NANOS_PER_SECOND = NANOS_PER_MILLI * MILLIS_PER_SECOND;
+        public static readonly DateTimeOffsetClock Instance = new DateTimeOffsetClock();
 
-        public static readonly DateTimeOffsetClock INSTANCE = new DateTimeOffsetClock();
-
-        public static IClock GetInstance()
-        {
-            return INSTANCE;
-        }
+        internal const long MillisPerSecond = 1000L;
+        internal const long NanosPerMilli = 1000 * 1000;
+        internal const long NanosPerSecond = NanosPerMilli * MillisPerSecond;
 
         public ITimestamp Now
         {
             get
             {
                 var nowNanoTicks = this.NowNanos;
-                var nowSecTicks = nowNanoTicks / NANOS_PER_SECOND;
-                var excessNanos = nowNanoTicks - (nowSecTicks * NANOS_PER_SECOND);
+                var nowSecTicks = nowNanoTicks / NanosPerSecond;
+                var excessNanos = nowNanoTicks - (nowSecTicks * NanosPerSecond);
                 return new Timestamp(nowSecTicks, (int)excessNanos);
             }
         }
@@ -47,8 +42,13 @@ namespace OpenCensus.Common
             get
             {
                 var millis = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                return millis * NANOS_PER_MILLI;
+                return millis * NanosPerMilli;
             }
+        }
+
+        public static IClock GetInstance()
+        {
+            return Instance;
         }
     }
 }

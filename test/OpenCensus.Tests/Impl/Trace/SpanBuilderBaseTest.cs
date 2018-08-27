@@ -35,7 +35,7 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void StartScopedSpan()
         {
-            Assert.Same(BlankSpan.INSTANCE, tracer.CurrentSpan);
+            Assert.Same(BlankSpan.Instance, tracer.CurrentSpan);
             IScope scope = spanBuilder.Object.StartScopedSpan();
             try
             {
@@ -46,13 +46,13 @@ namespace OpenCensus.Trace.Test
                 scope.Dispose();
             }
             span.Verify(s => s.End(EndSpanOptions.DEFAULT));
-            Assert.Same(BlankSpan.INSTANCE, tracer.CurrentSpan);
+            Assert.Same(BlankSpan.Instance, tracer.CurrentSpan);
         }
 
         // [Fact]
         // public void StartSpanAndRun()
         //      {
-        //          assertThat(tracer.getCurrentSpan()).isSameAs(BlankSpan.INSTANCE);
+        //          assertThat(tracer.getCurrentSpan()).isSameAs(BlankSpan.Instance);
         //          spanBuilder.startSpanAndRun(
         //              new Runnable() {
         //        @Override
@@ -62,14 +62,14 @@ namespace OpenCensus.Trace.Test
         //          }
         //      });
         //  verify(span).end(EndSpanOptions.DEFAULT);
-        //      assertThat(tracer.getCurrentSpan()).isSameAs(BlankSpan.INSTANCE);
+        //      assertThat(tracer.getCurrentSpan()).isSameAs(BlankSpan.Instance);
         //  }
 
         // [Fact]
         //  public void StartSpanAndCall() throws Exception
         //    {
         //        final Object ret = new Object();
-        //    assertThat(tracer.getCurrentSpan()).isSameAs(BlankSpan.INSTANCE);
+        //    assertThat(tracer.getCurrentSpan()).isSameAs(BlankSpan.Instance);
         //    assertThat(
         //            spanBuilder.startSpanAndCall(
         //                new Callable<Object>() {
@@ -82,7 +82,7 @@ namespace OpenCensus.Trace.Test
         // }))
         //        .isEqualTo(ret);
         // verify(span).end(EndSpanOptions.DEFAULT);
-        // assertThat(tracer.getCurrentSpan()).isSameAs(BlankSpan.INSTANCE);
+        // assertThat(tracer.getCurrentSpan()).isSameAs(BlankSpan.Instance);
         //  }
     }
 }

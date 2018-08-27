@@ -58,7 +58,7 @@ namespace OpenCensus.Stats.Test
                     .Build();
             AssertContains(
                 metrics,
-                 MeasurementDouble.Create(M1, 44.4), MeasurementDouble.Create(M2, 66.6),
+                MeasurementDouble.Create(M1, 44.4), MeasurementDouble.Create(M2, 66.6),
                 MeasurementLong.Create(M3, 9999L),  MeasurementLong.Create(M4, 8888L));
         }
 
