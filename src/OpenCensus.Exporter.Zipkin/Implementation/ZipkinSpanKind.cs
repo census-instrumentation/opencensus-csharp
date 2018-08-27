@@ -36,6 +36,6 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
         /// <summary>
         /// Consumer.
         /// </summary>
-        CONSUMER
+        CONSUMER,
     }
 }

@@ -36,6 +36,12 @@ namespace OpenCensus.Trace
         public static readonly Status Unavailable = new Status(CanonicalCode.UNAVAILABLE);
         public static readonly Status DataLoss = new Status(CanonicalCode.DATA_LOSS);
 
+        internal Status(CanonicalCode canonicalCode, string description = null)
+        {
+            this.CanonicalCode = canonicalCode;
+            this.Description = description;
+        }
+
         public CanonicalCode CanonicalCode { get; }
 
         public string Description { get; }
@@ -46,12 +52,6 @@ namespace OpenCensus.Trace
             {
                 return CanonicalCode.OK == this.CanonicalCode;
             }
-        }
-
-        internal Status(CanonicalCode canonicalCode, string description = null)
-        {
-            this.CanonicalCode = canonicalCode;
-            this.Description = description;
         }
 
         public Status WithDescription(string description)
