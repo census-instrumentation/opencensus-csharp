@@ -17,6 +17,7 @@
 namespace OpenCensus.Exporter.ApplicationInsights
 {
     using System;
+    using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.ApplicationInsights.Extensibility;
     using OpenCensus.Exporter.ApplicationInsights.Implementation;
@@ -41,6 +42,8 @@ namespace OpenCensus.Exporter.ApplicationInsights
         private readonly object lck = new object();
 
         private TraceExporterHandler handler;
+
+        private CancellationToken token;
 
         /// <summary>
         /// Instantiates a new instance of an exporter from Open Census to Azure Application Insights.
@@ -71,7 +74,11 @@ namespace OpenCensus.Exporter.ApplicationInsights
 
                 this.exportComponent.SpanExporter.RegisterHandler(TraceExporterName, this.handler);
 
-                var metricsExporter = new MetricsExporterThread(this.telemetryConfiguration, this.viewManager);
+                CancellationTokenSource tokenSource = new CancellationTokenSource();
+
+                CancellationToken token = tokenSource.Token;
+
+                var metricsExporter = new MetricsExporterThread(this.telemetryConfiguration, this.viewManager, token, TimeSpan.FromMinutes(1));
                 Task.Factory.StartNew((Action)metricsExporter.WorkerThread, TaskCreationOptions.LongRunning);
             }
         }

@@ -17,6 +17,7 @@
 namespace OpenCensus.Exporter.ApplicationInsights.Implementation
 {
     using System;
+    using System.Diagnostics;
     using System.Threading;
     using Microsoft.ApplicationInsights;
     using Microsoft.ApplicationInsights.DataContracts;
@@ -30,28 +31,49 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
 
         private readonly TelemetryClient telemetryClient;
 
-        private readonly TimeSpan interval = TimeSpan.FromSeconds(10); // TODO: make configurable
+        private readonly TimeSpan collectionInterval = TimeSpan.FromSeconds(10);
 
-        public MetricsExporterThread(TelemetryConfiguration telemetryConfiguration, IViewManager viewManager)
+        private readonly TimeSpan cancellationInterval = TimeSpan.FromMilliseconds(10);
+
+        private readonly CancellationToken token;
+
+        public MetricsExporterThread(TelemetryConfiguration telemetryConfiguration, IViewManager viewManager, CancellationToken token, TimeSpan collectionInterval)
         {
             this.telemetryClient = new TelemetryClient(telemetryConfiguration);
             this.viewManager = viewManager;
+            this.collectionInterval = collectionInterval;
+            this.token = token;
         }
 
         public void WorkerThread()
         {
             try
             {
-                // TODO: continuation token
-                while (true)
+                var sleepInterval = this.collectionInterval;
+                Stopwatch sw = new Stopwatch();
+
+                while (!this.token.IsCancellationRequested)
                 {
-                    Thread.Sleep(this.interval);
+                    sw.Start();
                     this.Export();
+                    sw.Stop();
+
+                    // adjust interval for data collection time
+                    sleepInterval = this.collectionInterval.Subtract(sw.Elapsed);
+
+                    // allow faster thread cancellation
+                    while (sleepInterval > this.cancellationInterval && !this.token.IsCancellationRequested)
+                    {
+                        Thread.Sleep(this.cancellationInterval);
+                        sleepInterval.Subtract(this.cancellationInterval);
+                    }
+
+                    Thread.Sleep(sleepInterval);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine("Exception: " + ex.ToString());
+                // TODO: report error
             }
         }
 

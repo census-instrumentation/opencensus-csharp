@@ -56,16 +56,28 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                 result.Context.Operation.ParentId = span.ParentSpanId.ToLowerBase16();
                 var duration = span.StartTimestamp.SubtractTimestamp(span.EndTimestamp);
                 result.Duration = TimeSpan.FromTicks((duration.Seconds * TimeSpan.TicksPerSecond) + (duration.Nanos / 100));
+                result.Success = span.Status.IsOk;
+                ((RequestTelemetry)result).ResponseCode = span.Status.Description ?? span.Status.CanonicalCode.ToString();
 
+                foreach (var attr in span.Attributes.AttributeMap)
+                {
+                    var value = attr.Value.Match<string>(
+                        (s) => { return s; },
+                        (b) => { return b.ToString(); },
+                        (l) => { return l.ToString(); },
+                        (obj) => { return obj.ToString(); });
+
+                    result.Properties.Add(attr.Key, value);
+                }
+
+                // TODO: deal with those:
                 // span.Annotations
-                // span.Attributes
                 // span.ChildSpanCount
                 // span.Context.IsValid;
                 // span.Context.TraceOptions;
                 // span.HasRemoteParent
                 // span.Links
                 // span.MessageEvents
-                // span.Status
 
                 this.telemetryClient.Track(result);
             }
