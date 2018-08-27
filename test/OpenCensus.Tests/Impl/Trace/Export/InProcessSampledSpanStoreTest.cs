@@ -140,7 +140,7 @@ namespace OpenCensus.Trace.Export.Test
         {
             Span span = CreateSampledSpan(REGISTERED_SPAN_NAME) as Span;
             testClock.AdvanceTime(Duration.Create(0, 1000));
-            span.End(EndSpanOptions.Builder().SetStatus(Status.CANCELLED).Build());
+            span.End(EndSpanOptions.Builder().SetStatus(Status.Cancelled).Build());
             IList<ISpanData> samples =
                 sampleStore.GetErrorSampledSpans(
                     SampledSpanStoreErrorFilter.Create(REGISTERED_SPAN_NAME, CanonicalCode.CANCELLED, 0));
@@ -153,12 +153,12 @@ namespace OpenCensus.Trace.Export.Test
         {
             Span span1 = CreateSampledSpan(REGISTERED_SPAN_NAME) as Span;
             testClock.AdvanceTime(Duration.Create(0, 1000));
-            span1.End(EndSpanOptions.Builder().SetStatus(Status.CANCELLED).Build());
+            span1.End(EndSpanOptions.Builder().SetStatus(Status.Cancelled).Build());
             // Advance time to allow other spans to be sampled.
             testClock.AdvanceTime(Duration.Create(5, 0));
             Span span2 = CreateSampledSpan(REGISTERED_SPAN_NAME) as Span;
             testClock.AdvanceTime(Duration.Create(0, 1000));
-            span2.End(EndSpanOptions.Builder().SetStatus(Status.CANCELLED).Build());
+            span2.End(EndSpanOptions.Builder().SetStatus(Status.Cancelled).Build());
             IList<ISpanData> samples =
                 sampleStore.GetErrorSampledSpans(
                     SampledSpanStoreErrorFilter.Create(REGISTERED_SPAN_NAME, CanonicalCode.CANCELLED, 1));
@@ -172,10 +172,10 @@ namespace OpenCensus.Trace.Export.Test
         {
             Span span1 = CreateSampledSpan(REGISTERED_SPAN_NAME) as Span;
             testClock.AdvanceTime(Duration.Create(0, 1000));
-            span1.End(EndSpanOptions.Builder().SetStatus(Status.CANCELLED).Build());
+            span1.End(EndSpanOptions.Builder().SetStatus(Status.Cancelled).Build());
             Span span2 = CreateSampledSpan(REGISTERED_SPAN_NAME) as Span;
             testClock.AdvanceTime(Duration.Create(0, 1000));
-            span2.End(EndSpanOptions.Builder().SetStatus(Status.UNKNOWN).Build());
+            span2.End(EndSpanOptions.Builder().SetStatus(Status.Unknown).Build());
             IList<ISpanData> samples =
                 sampleStore.GetErrorSampledSpans(SampledSpanStoreErrorFilter.Create(REGISTERED_SPAN_NAME, null, 0));
             Assert.Equal(2, samples.Count);
@@ -188,10 +188,10 @@ namespace OpenCensus.Trace.Export.Test
         {
             Span span1 = CreateSampledSpan(REGISTERED_SPAN_NAME) as Span;
             testClock.AdvanceTime(Duration.Create(0, 1000));
-            span1.End(EndSpanOptions.Builder().SetStatus(Status.CANCELLED).Build());
+            span1.End(EndSpanOptions.Builder().SetStatus(Status.Cancelled).Build());
             Span span2 = CreateSampledSpan(REGISTERED_SPAN_NAME) as Span;
             testClock.AdvanceTime(Duration.Create(0, 1000));
-            span2.End(EndSpanOptions.Builder().SetStatus(Status.UNKNOWN).Build());
+            span2.End(EndSpanOptions.Builder().SetStatus(Status.Unknown).Build());
             IList<ISpanData> samples =
                 sampleStore.GetErrorSampledSpans(SampledSpanStoreErrorFilter.Create(REGISTERED_SPAN_NAME, null, 1));
             Assert.Equal(1, samples.Count);

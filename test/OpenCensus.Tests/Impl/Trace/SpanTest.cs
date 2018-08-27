@@ -119,7 +119,7 @@ namespace OpenCensus.Trace.Test
             Assert.Empty(spanData.Annotations.Events);
             Assert.Empty(spanData.MessageEvents.Events);
             Assert.Empty(spanData.Links.Links);
-            Assert.Equal(Status.OK, spanData.Status);
+            Assert.Equal(Status.Ok, spanData.Status);
             Assert.Equal(timestamp, spanData.EndTimestamp);
         }
 
@@ -232,7 +232,7 @@ namespace OpenCensus.Trace.Test
             ILink link = Link.FromSpanContext(spanContext, LinkType.CHILD_LINKED_SPAN);
             span.AddLink(link);
             testClock.AdvanceTime(Duration.Create(0, 100));
-            span.End(EndSpanOptions.Builder().SetStatus(Status.CANCELLED).Build());
+            span.End(EndSpanOptions.Builder().SetStatus(Status.Cancelled).Build());
           
             ISpanData spanData = ((Span)span).ToSpanData();
             Assert.Equal(spanContext, spanData.Context);
@@ -255,7 +255,7 @@ namespace OpenCensus.Trace.Test
             Assert.Equal(1, spanData.Links.Links.Count);
             Assert.Equal(link, spanData.Links.Links[0]);
             Assert.Equal(timestamp, spanData.StartTimestamp);
-            Assert.Equal(Status.CANCELLED, spanData.Status);
+            Assert.Equal(Status.Cancelled, spanData.Status);
             Assert.Equal(timestamp.AddNanos(400), spanData.EndTimestamp);
 
             var startEndMock = Mock.Get<IStartEndHandler>(startEndHandler);
@@ -279,11 +279,11 @@ namespace OpenCensus.Trace.Test
                     timestampConverter,
                     testClock);
             testClock.AdvanceTime(Duration.Create(0, 100));
-            Assert.Equal(Status.OK, span.Status);
-            ((Span)span).Status = Status.CANCELLED;
-            Assert.Equal(Status.CANCELLED, span.Status);
+            Assert.Equal(Status.Ok, span.Status);
+            ((Span)span).Status = Status.Cancelled;
+            Assert.Equal(Status.Cancelled, span.Status);
             span.End();
-            Assert.Equal(Status.CANCELLED, span.Status);
+            Assert.Equal(Status.Cancelled, span.Status);
 
             var startEndMock = Mock.Get<IStartEndHandler>(startEndHandler);
             var spanBase = span as SpanBase;
@@ -305,11 +305,11 @@ namespace OpenCensus.Trace.Test
                     timestampConverter,
                     testClock);
             testClock.AdvanceTime(Duration.Create(0, 100));
-            Assert.Equal(Status.OK, span.Status);
-            ((Span)span).Status = Status.CANCELLED;
-            Assert.Equal(Status.CANCELLED, span.Status);
-            span.End(EndSpanOptions.Builder().SetStatus(Status.ABORTED).Build());
-            Assert.Equal(Status.ABORTED, span.Status);
+            Assert.Equal(Status.Ok, span.Status);
+            ((Span)span).Status = Status.Cancelled;
+            Assert.Equal(Status.Cancelled, span.Status);
+            span.End(EndSpanOptions.Builder().SetStatus(Status.Aborted).Build());
+            Assert.Equal(Status.Aborted, span.Status);
 
             var startEndMock = Mock.Get<IStartEndHandler>(startEndHandler);
             var spanBase = span as SpanBase;
@@ -346,7 +346,7 @@ namespace OpenCensus.Trace.Test
             {
                 Assert.Equal(
                     AttributeValue.LongAttributeValue(i + maxNumberOfAttributes),
-                        spanData
+                    spanData
                             .Attributes
                             .AttributeMap["MyStringAttributeKey" + (i + maxNumberOfAttributes)]);
             }
@@ -358,7 +358,7 @@ namespace OpenCensus.Trace.Test
             {
                 Assert.Equal(
                     AttributeValue.LongAttributeValue(i + maxNumberOfAttributes),
-                        spanData
+                    spanData
                             .Attributes
                             .AttributeMap["MyStringAttributeKey" + (i + maxNumberOfAttributes)]);
             }
@@ -394,7 +394,7 @@ namespace OpenCensus.Trace.Test
             {
                 Assert.Equal(
                     AttributeValue.LongAttributeValue(i + maxNumberOfAttributes),
-                        spanData
+                    spanData
                             .Attributes
                             .AttributeMap["MyStringAttributeKey" + (i + maxNumberOfAttributes)]);
             }
@@ -412,7 +412,7 @@ namespace OpenCensus.Trace.Test
             {
                 Assert.Equal(
                     AttributeValue.LongAttributeValue(i + maxNumberOfAttributes * 3 / 2),
-                        spanData
+                    spanData
                             .Attributes
                             .AttributeMap["MyStringAttributeKey" + (i + maxNumberOfAttributes * 3 / 2)]);
             }

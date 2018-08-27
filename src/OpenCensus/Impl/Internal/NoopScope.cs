@@ -20,18 +20,18 @@ namespace OpenCensus.Internal
 
     public sealed class NoopScope : IScope
     {
-        public static readonly IScope INSTANCE = new NoopScope();
+        public static readonly IScope NoopInstance = new NoopScope();
+
+        private NoopScope()
+        {
+        }
 
         public static IScope Instance
         {
             get
             {
-                return INSTANCE;
+                return NoopInstance;
             }
-        }
-
-        private NoopScope()
-        {
         }
 
         public void Dispose()

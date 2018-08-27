@@ -18,7 +18,7 @@ namespace OpenCensus.Stats
 {
     internal sealed class NoopStatsRecorder : StatsRecorderBase
     {
-        internal static readonly IStatsRecorder INSTANCE = new NoopStatsRecorder();
+        internal static readonly IStatsRecorder Instance = new NoopStatsRecorder();
 
     public override IMeasureMap NewMeasureMap()
         {

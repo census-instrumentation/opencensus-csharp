@@ -44,7 +44,7 @@ namespace OpenCensus.Exporter.Zipkin
         /// <param name="exportComponent">Exporter to get traces from.</param>
         /// <param name="client">Http client to use to upload telemetry.
         /// For local development with invalid certificates use code like this: 
-        /// new HttpClient(new HttpClientHandler() { ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator })
+        /// new HttpClient(new HttpClientHandler() { ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator }).
         /// </param>
         public ZipkinTraceExporter(ZipkinTraceExporterOptions options, IExportComponent exportComponent, HttpClient client = null)
         {

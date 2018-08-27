@@ -36,7 +36,7 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void DefaultGetCurrentSpan()
         {
-            Assert.Equal(BlankSpan.INSTANCE, noopTracer.CurrentSpan);
+            Assert.Equal(BlankSpan.Instance, noopTracer.CurrentSpan);
         }
 
         [Fact]
@@ -48,7 +48,7 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void GetCurrentSpan_WithSpan()
         {
-            Assert.Same(BlankSpan.INSTANCE, noopTracer.CurrentSpan);
+            Assert.Same(BlankSpan.Instance, noopTracer.CurrentSpan);
             IScope ws = noopTracer.WithSpan(span);
             try
             {
@@ -58,14 +58,14 @@ namespace OpenCensus.Trace.Test
             {
                 ws.Dispose();
             }
-            Assert.Same(BlankSpan.INSTANCE, noopTracer.CurrentSpan);
+            Assert.Same(BlankSpan.Instance, noopTracer.CurrentSpan);
         }
 
         // [Fact]
         // public void wrapRunnable()
         //      {
         //          Runnable runnable;
-        //          Assert.Equal(noopTracer.getCurrentSpan()).isSameAs(BlankSpan.INSTANCE);
+        //          Assert.Equal(noopTracer.getCurrentSpan()).isSameAs(BlankSpan.Instance);
         //          runnable =
         //              tracer.withSpan(
         //                  span,
@@ -79,7 +79,7 @@ namespace OpenCensus.Trace.Test
         //  // When we run the runnable we will have the span in the current Context.
         //  runnable.run();
         //  verifyZeroInteractions(span);
-        //      Assert.Equal(noopTracer.getCurrentSpan()).isSameAs(BlankSpan.INSTANCE);
+        //      Assert.Equal(noopTracer.getCurrentSpan()).isSameAs(BlankSpan.Instance);
         //  }
 
         // [Fact]
@@ -87,7 +87,7 @@ namespace OpenCensus.Trace.Test
         //    {
         //        readonly Object ret = new Object();
         //    Callable<Object> callable;
-        //    Assert.Equal(noopTracer.getCurrentSpan()).isSameAs(BlankSpan.INSTANCE);
+        //    Assert.Equal(noopTracer.getCurrentSpan()).isSameAs(BlankSpan.Instance);
         //    callable =
         //        tracer.withSpan(
         //            span,
@@ -102,7 +102,7 @@ namespace OpenCensus.Trace.Test
         //    // When we call the callable we will have the span in the current Context.
         //    Assert.Equal(callable.call()).isEqualTo(ret);
         // verifyZeroInteractions(span);
-        // Assert.Equal(noopTracer.getCurrentSpan()).isSameAs(BlankSpan.INSTANCE);
+        // Assert.Equal(noopTracer.getCurrentSpan()).isSameAs(BlankSpan.Instance);
         //  }
 
         [Fact]
@@ -114,7 +114,7 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void DefaultSpanBuilderWithName()
         {
-            Assert.Same(BlankSpan.INSTANCE, noopTracer.SpanBuilder(SPAN_NAME).StartSpan());
+            Assert.Same(BlankSpan.Instance, noopTracer.SpanBuilder(SPAN_NAME).StartSpan());
         }
 
         [Fact]
@@ -126,7 +126,7 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void DefaultSpanBuilderWithParentAndName()
         {
-            Assert.Same(BlankSpan.INSTANCE, noopTracer.SpanBuilderWithExplicitParent(SPAN_NAME, null).StartSpan());
+            Assert.Same(BlankSpan.Instance, noopTracer.SpanBuilderWithExplicitParent(SPAN_NAME, null).StartSpan());
         }
 
         [Fact]
@@ -138,13 +138,13 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void DefaultSpanBuilderWithRemoteParent_NullParent()
         {
-            Assert.Same(BlankSpan.INSTANCE, noopTracer.SpanBuilderWithRemoteParent(SPAN_NAME, null).StartSpan());
+            Assert.Same(BlankSpan.Instance, noopTracer.SpanBuilderWithRemoteParent(SPAN_NAME, null).StartSpan());
         }
 
         [Fact]
         public void DefaultSpanBuilderWithRemoteParent()
         {
-            Assert.Same(BlankSpan.INSTANCE, noopTracer.SpanBuilderWithRemoteParent(SPAN_NAME, SpanContext.INVALID).StartSpan());
+            Assert.Same(BlankSpan.Instance, noopTracer.SpanBuilderWithRemoteParent(SPAN_NAME, SpanContext.INVALID).StartSpan());
         }
 
         [Fact]
@@ -166,11 +166,11 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void StartSpanWithInvalidParentFromContext()
         {
-            IScope ws = tracer.WithSpan(BlankSpan.INSTANCE);
+            IScope ws = tracer.WithSpan(BlankSpan.Instance);
             try
             {
-                Assert.Same(BlankSpan.INSTANCE, tracer.CurrentSpan);
-                Mock.Get(tracer).Setup((t) => t.SpanBuilderWithExplicitParent(SPAN_NAME, BlankSpan.INSTANCE)).Returns(spanBuilder);
+                Assert.Same(BlankSpan.Instance, tracer.CurrentSpan);
+                Mock.Get(tracer).Setup((t) => t.SpanBuilderWithExplicitParent(SPAN_NAME, BlankSpan.Instance)).Returns(spanBuilder);
                 Assert.Same(spanBuilder, tracer.SpanBuilder(SPAN_NAME));
             }
             finally

@@ -28,7 +28,7 @@ namespace OpenCensus.Trace
             get
             {
                 ISpan currentSpan = CurrentSpanUtils.CurrentSpan;
-                return currentSpan ?? BlankSpan.INSTANCE;
+                return currentSpan ?? BlankSpan.Instance;
             }
         }
 

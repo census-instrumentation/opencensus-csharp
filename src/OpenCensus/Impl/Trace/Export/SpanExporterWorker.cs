@@ -24,10 +24,10 @@ namespace OpenCensus.Trace.Export
     internal class SpanExporterWorker : IDisposable
     {
         private readonly int bufferSize;
-        private TimeSpan scheduleDelay;
-        private bool shutdown = false;
         private readonly BlockingCollection<ISpan> spans;
         private readonly ConcurrentDictionary<string, IHandler> serviceHandlers = new ConcurrentDictionary<string, IHandler>();
+        private readonly TimeSpan scheduleDelay;
+        private bool shutdown = false;
 
         public SpanExporterWorker(int bufferSize, IDuration scheduleDelay)
         {
@@ -85,6 +85,26 @@ namespace OpenCensus.Trace.Export
             }
         }
 
+        internal void RegisterHandler(string name, IHandler handler)
+        {
+            this.serviceHandlers[name] = handler;
+        }
+
+        internal void UnregisterHandler(string name)
+        {
+            this.serviceHandlers.TryRemove(name, out IHandler prev);
+        }
+
+        internal ISpanData ToSpanData(ISpan span)
+        {
+            if (!(span is Span spanImpl))
+            {
+                throw new InvalidOperationException("ISpan not a Span");
+            }
+
+            return spanImpl.ToSpanData();
+        }
+
         private void BuildList(ISpan item, List<ISpanData> toExport)
         {
             if (item is Span span)
@@ -122,26 +142,6 @@ namespace OpenCensus.Trace.Export
                     // Log warning
                 }
             }
-        }
-
-        internal void RegisterHandler(string name, IHandler handler)
-        {
-            this.serviceHandlers[name] = handler;
-        }
-
-        internal void UnregisterHandler(string name)
-        {
-            this.serviceHandlers.TryRemove(name, out IHandler prev);
-        }
-
-        internal ISpanData ToSpanData(ISpan span)
-        {
-            if (!(span is Span spanImpl))
-            {
-                throw new InvalidOperationException("ISpan not a Span");
-            }
-
-            return spanImpl.ToSpanData();
         }
     }
 }

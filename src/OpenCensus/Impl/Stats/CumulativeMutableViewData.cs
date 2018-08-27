@@ -31,7 +31,7 @@ namespace OpenCensus.Stats
             this.start = start;
         }
 
-    internal override void Record(ITagContext context, double value, ITimestamp timestamp)
+        internal override void Record(ITagContext context, double value, ITimestamp timestamp)
         {
             IList<ITagValue> values = GetTagValues(GetTagMap(context), this.View.Columns);
             var tagValues = TagValues.Create(values);

@@ -24,8 +24,8 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void HasInvalidContextAndDefaultSpanOptions()
         {
-            Assert.Equal(SpanContext.INVALID, BlankSpan.INSTANCE.Context);
-            Assert.True(BlankSpan.INSTANCE.Options.HasFlag(SpanOptions.NONE));
+            Assert.Equal(SpanContext.INVALID, BlankSpan.Instance.Context);
+            Assert.True(BlankSpan.Instance.Options.HasFlag(SpanOptions.NONE));
         }
 
         [Fact]
@@ -40,21 +40,21 @@ namespace OpenCensus.Trace.Test
             multipleAttributes.Add("MyBooleanAttributeKey", AttributeValue<bool>.Create(true));
             multipleAttributes.Add("MyLongAttributeKey", AttributeValue<long>.Create(123));
             // Tests only that all the methods are not crashing/throwing errors.
-            BlankSpan.INSTANCE.PutAttribute(
+            BlankSpan.Instance.PutAttribute(
                 "MyStringAttributeKey2", AttributeValue<string>.Create("MyStringAttributeValue2"));
-            BlankSpan.INSTANCE.PutAttributes(attributes);
-            BlankSpan.INSTANCE.PutAttributes(multipleAttributes);
-            BlankSpan.INSTANCE.AddAnnotation("MyAnnotation");
-            BlankSpan.INSTANCE.AddAnnotation("MyAnnotation", attributes);
-            BlankSpan.INSTANCE.AddAnnotation("MyAnnotation", multipleAttributes);
-            BlankSpan.INSTANCE.AddAnnotation(Annotation.FromDescription("MyAnnotation"));
-            // BlankSpan.INSTANCE.addNetworkEvent(NetworkEvent.builder(NetworkEvent.Type.SENT, 1L).build());
-            BlankSpan.INSTANCE.AddMessageEvent(MessageEvent.Builder(MessageEventType.SENT, 1L).Build());
-            BlankSpan.INSTANCE.AddLink(
+            BlankSpan.Instance.PutAttributes(attributes);
+            BlankSpan.Instance.PutAttributes(multipleAttributes);
+            BlankSpan.Instance.AddAnnotation("MyAnnotation");
+            BlankSpan.Instance.AddAnnotation("MyAnnotation", attributes);
+            BlankSpan.Instance.AddAnnotation("MyAnnotation", multipleAttributes);
+            BlankSpan.Instance.AddAnnotation(Annotation.FromDescription("MyAnnotation"));
+            // BlankSpan.Instance.addNetworkEvent(NetworkEvent.builder(NetworkEvent.Type.SENT, 1L).build());
+            BlankSpan.Instance.AddMessageEvent(MessageEvent.Builder(MessageEventType.SENT, 1L).Build());
+            BlankSpan.Instance.AddLink(
                 Link.FromSpanContext(SpanContext.INVALID, LinkType.CHILD_LINKED_SPAN));
-            BlankSpan.INSTANCE.Status = Status.OK;
-            BlankSpan.INSTANCE.End(EndSpanOptions.DEFAULT);
-            BlankSpan.INSTANCE.End();
+            BlankSpan.Instance.Status = Status.Ok;
+            BlankSpan.Instance.End(EndSpanOptions.DEFAULT);
+            BlankSpan.Instance.End();
         }
     }
 }

@@ -45,7 +45,7 @@ namespace OpenCensus.Trace
         {
             get
             {
-                return ZeroTimeClock.INSTANCE;
+                return ZeroTimeClock.Instance;
             }
         }
 

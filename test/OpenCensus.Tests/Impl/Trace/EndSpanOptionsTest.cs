@@ -30,8 +30,8 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void SetStatus_Ok()
         {
-            EndSpanOptions endSpanOptions = EndSpanOptions.Builder().SetStatus(Status.OK).Build();
-            Assert.Equal(Status.OK, endSpanOptions.Status);
+            EndSpanOptions endSpanOptions = EndSpanOptions.Builder().SetStatus(Status.Ok).Build();
+            Assert.Equal(Status.Ok, endSpanOptions.Status);
         }
 
         [Fact]
@@ -39,9 +39,9 @@ namespace OpenCensus.Trace.Test
         {
             EndSpanOptions endSpanOptions =
                 EndSpanOptions.Builder()
-                    .SetStatus(Status.CANCELLED.WithDescription("ThisIsAnError"))
+                    .SetStatus(Status.Cancelled.WithDescription("ThisIsAnError"))
                     .Build();
-            Assert.Equal(Status.CANCELLED.WithDescription("ThisIsAnError"), endSpanOptions.Status);
+            Assert.Equal(Status.Cancelled.WithDescription("ThisIsAnError"), endSpanOptions.Status);
         }
 
         [Fact]
@@ -72,7 +72,7 @@ namespace OpenCensus.Trace.Test
         {
             EndSpanOptions endSpanOptions =
                 EndSpanOptions.Builder()
-                    .SetStatus(Status.CANCELLED.WithDescription("ThisIsAnError"))
+                    .SetStatus(Status.Cancelled.WithDescription("ThisIsAnError"))
                     .Build();
             Assert.Contains("ThisIsAnError", endSpanOptions.ToString());
         }
