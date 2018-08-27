@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-namespace OpenCensusBase.Trace.Config.Test
+namespace OpenCensus.Trace.Config.Test
 {
     using System;
     using OpenCensus.Trace.Config;
