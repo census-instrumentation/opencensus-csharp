@@ -75,11 +75,23 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                         metricTelemetry.Properties.Add(name, val);
                     }
 
+                    // Now those propertis needs to be populated.
+                    // 
+                    // metricTelemetry.Sum
+                    // metricTelemetry.Count
+                    // metricTelemetry.Max
+                    // metricTelemetry.Min
+                    // metricTelemetry.StandardDeviation
+                    //
+                    // See data model for clarification on the meaning of those fields.
+                    // https://docs.microsoft.com/azure/application-insights/application-insights-data-model-metric-telemetry
+
                     value.Value.Match<object>(
                         (combined) =>
                         {
                             if (combined is ISumDataDouble sum)
                             {
+                                metricTelemetry.Sum = sum.Sum;
                             }
                             return null;
                         },
@@ -87,6 +99,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                         {
                             if (combined is ISumDataLong sum)
                             {
+                                metricTelemetry.Sum = sum.Sum;
                             }
                             return null;
                         },
@@ -94,6 +107,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                         {
                             if (combined is ICountData count)
                             {
+                                metricTelemetry.Sum = count.Count;
                             }
                             return null;
                         },
@@ -108,11 +122,10 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                         {
                             if (combined is IDistributionData dist)
                             {
-#pragma warning disable CS0618 // Type or member is obsolete
-                                metricTelemetry.Value = dist.Mean;
-#pragma warning restore CS0618 // Type or member is obsolete
+                                metricTelemetry.Sum = dist.Mean;
                                 metricTelemetry.Min = dist.Min;
                                 metricTelemetry.Max = dist.Max;
+                                metricTelemetry.StandardDeviation = dist.SumOfSquaredDeviations;
                             }
 
                             return null;
@@ -121,6 +134,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                         {
                             if (combined is ILastValueDataDouble lastValue)
                             {
+                                metricTelemetry.Sum = lastValue.LastValue;
                             }
                             return null;
                         },
@@ -128,6 +142,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                         {
                             if (combined is ILastValueDataLong lastValue)
                             {
+                                metricTelemetry.Sum = lastValue.LastValue;
                             }
                             return null;
                         },
@@ -135,6 +150,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                         {
                             if (combined is IAggregationData aggregationData)
                             {
+                                // TODO: report an error
                             }
                             return null;
                         });
