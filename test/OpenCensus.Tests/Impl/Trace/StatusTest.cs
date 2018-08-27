@@ -23,15 +23,15 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void Status_Ok()
         {
-            Assert.Equal(CanonicalCode.OK, Status.OK.CanonicalCode);
-            Assert.Null(Status.OK.Description);
-            Assert.True(Status.OK.IsOk);
+            Assert.Equal(CanonicalCode.OK, Status.Ok.CanonicalCode);
+            Assert.Null(Status.Ok.Description);
+            Assert.True(Status.Ok.IsOk);
         }
 
         [Fact]
         public void CreateStatus_WithDescription()
         {
-            Status status = Status.UNKNOWN.WithDescription("This is an error.");
+            Status status = Status.Unknown.WithDescription("This is an error.");
             Assert.Equal(CanonicalCode.UNKNOWN, status.CanonicalCode);
             Assert.Equal("This is an error.", status.Description);
             Assert.False(status.IsOk);

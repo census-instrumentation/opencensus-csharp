@@ -29,7 +29,7 @@ namespace OpenCensus.Tags
         {
             get
             {
-                return OpenCensus.Tags.NoopTagger.INSTANCE;
+                return OpenCensus.Tags.NoopTagger.Instance;
             }
         }
 
@@ -37,7 +37,7 @@ namespace OpenCensus.Tags
         {
             get
             {
-                return OpenCensus.Tags.NoopTagContextBuilder.INSTANCE;
+                return OpenCensus.Tags.NoopTagContextBuilder.Instance;
             }
         }
 
@@ -45,7 +45,7 @@ namespace OpenCensus.Tags
         {
             get
             {
-                return OpenCensus.Tags.NoopTagContext.INSTANCE;
+                return OpenCensus.Tags.NoopTagContext.Instance;
             }
         }
 
@@ -53,7 +53,7 @@ namespace OpenCensus.Tags
         {
             get
             {
-                return OpenCensus.Tags.NoopTagPropagationComponent.INSTANCE;
+                return OpenCensus.Tags.NoopTagPropagationComponent.Instance;
             }
         }
 
@@ -61,7 +61,7 @@ namespace OpenCensus.Tags
         {
             get
             {
-                return OpenCensus.Tags.NoopTagContextBinarySerializer.INSTANCE;
+                return OpenCensus.Tags.NoopTagContextBinarySerializer.Instance;
             }
         }
     }

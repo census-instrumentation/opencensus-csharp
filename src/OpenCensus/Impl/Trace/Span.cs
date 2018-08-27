@@ -235,7 +235,7 @@ namespace OpenCensus.Trace
         {
             get
             {
-                return this.status ?? Trace.Status.OK;
+                return this.status ?? Trace.Status.Ok;
             }
         }
 

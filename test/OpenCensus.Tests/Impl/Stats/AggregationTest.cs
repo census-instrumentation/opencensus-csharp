@@ -77,7 +77,7 @@ namespace OpenCensus.Stats.Test
                                 Mean.Create(),
                                 Distribution.Create(BucketBoundaries.Create(new List<double>() {-10.0, 1.0, 5.0 })),
                                 LastValue.Create()};
-        List<String> actual = new List<String>();
+            List<String> actual = new List<String>();
             foreach (IAggregation aggregation in aggregations)
             {
                 actual.Add(

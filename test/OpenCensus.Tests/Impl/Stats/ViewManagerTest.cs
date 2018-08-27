@@ -137,7 +137,7 @@ namespace OpenCensus.Stats.Test
                     VIEW_DESCRIPTION,
                     MEASURE_DOUBLE,
                     DISTRIBUTION,
-                   new List<ITagKey>() { KEY });
+                    new List<ITagKey>() { KEY });
             viewManager.RegisterView(view1);
             ISet<IView> exported = viewManager.AllExportedViews;
 
@@ -147,7 +147,7 @@ namespace OpenCensus.Stats.Test
                     VIEW_DESCRIPTION,
                     MEASURE_DOUBLE,
                     DISTRIBUTION,
-                   new List<ITagKey>() { KEY });
+                    new List<ITagKey>() { KEY });
             Assert.Throws<NotSupportedException>(() => exported.Add(view2));
 
         }
@@ -352,7 +352,7 @@ namespace OpenCensus.Stats.Test
                 { tv, StatsTestUtil.CreateAggregationData(DISTRIBUTION, MEASURE_DOUBLE, 10.0)},
                 { tv2, StatsTestUtil.CreateAggregationData(DISTRIBUTION, MEASURE_DOUBLE, 30.0, 50.0)}
                 },
-            EPSILON);
+                EPSILON);
         }
 
 
@@ -495,7 +495,7 @@ namespace OpenCensus.Stats.Test
             var tv3 = TagValues.Create(new List<ITagValue>() { TagValue.Create("v2"), TagValue.Create("v10") });
             StatsTestUtil.AssertAggregationMapEquals(
                 viewData.AggregationMap,
-                 new Dictionary<TagValues, IAggregationData>()
+                new Dictionary<TagValues, IAggregationData>()
                 {
                     { tv1,  StatsTestUtil.CreateAggregationData(DISTRIBUTION, MEASURE_DOUBLE, 1.1, 4.4) },
                     { tv2,  StatsTestUtil.CreateAggregationData(DISTRIBUTION, MEASURE_DOUBLE, 2.2) },
@@ -582,7 +582,7 @@ namespace OpenCensus.Stats.Test
             var tv = TagValues.Create(new List<ITagValue>() { VALUE });
             StatsTestUtil.AssertAggregationMapEquals(
                 viewData1.AggregationMap,
-                 new Dictionary<TagValues, IAggregationData>()
+                new Dictionary<TagValues, IAggregationData>()
                 {
                     {tv, StatsTestUtil.CreateAggregationData(DISTRIBUTION, measure1, value1) }
                  },

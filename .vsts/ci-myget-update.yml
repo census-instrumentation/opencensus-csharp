@@ -1,5 +1,11 @@
 # CI build with the upload to MyGet
 
+trigger:
+  branches:
+    include:
+    - master
+    - develop
+
 queue: Hosted VS2017
 steps:
 - task: DotNetCoreInstaller@0

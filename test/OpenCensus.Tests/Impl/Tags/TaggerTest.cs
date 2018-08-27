@@ -70,14 +70,14 @@ namespace OpenCensus.Tags.Test
         // public void EmptyBuilder_TaggingDisabled()
         // {
         //    tagsComponent.setState(TaggingState.DISABLED);
-        //    Assert.Equal(tagger.EmptyBuilder).isSameAs(NoopTagContextBuilder.INSTANCE);
+        //    Assert.Equal(tagger.EmptyBuilder).isSameAs(NoopTagContextBuilder.Instance);
         // }
 
         // [Fact]
         // public void EmptyBuilder_TaggingReenabled()
         // {
         //    tagsComponent.setState(TaggingState.DISABLED);
-        //    Assert.Equal(tagger.EmptyBuilder).isSameAs(NoopTagContextBuilder.INSTANCE);
+        //    Assert.Equal(tagger.EmptyBuilder).isSameAs(NoopTagContextBuilder.Instance);
         //    tagsComponent.setState(TaggingState.ENABLED);
         //    TagContextBuilder builder = tagger.EmptyBuilder;
         //    Assert.Equal(builder).isInstanceOf(TagContextBuilder);
@@ -124,7 +124,7 @@ namespace OpenCensus.Tags.Test
         // {
         //    tagsComponent.setState(TaggingState.DISABLED);
         //    Assert.Equal(getResultOfCurrentBuilder(new SimpleTagContext(TAG1)))
-        //        .isSameAs(NoopTagContextBuilder.INSTANCE);
+        //        .isSameAs(NoopTagContextBuilder.Instance);
         // }
 
         // [Fact]
@@ -132,7 +132,7 @@ namespace OpenCensus.Tags.Test
         // {
         //    TagContext tags = new SimpleTagContext(TAG1);
         //    tagsComponent.setState(TaggingState.DISABLED);
-        //    Assert.Equal(getResultOfCurrentBuilder(tags)).isSameAs(NoopTagContextBuilder.INSTANCE);
+        //    Assert.Equal(getResultOfCurrentBuilder(tags)).isSameAs(NoopTagContextBuilder.Instance);
         //    tagsComponent.setState(TaggingState.ENABLED);
         //    TagContextBuilder builder = getResultOfCurrentBuilder(tags);
         //    Assert.Equal(builder).isInstanceOf(TagContextBuilder);
@@ -185,7 +185,7 @@ namespace OpenCensus.Tags.Test
         // {
         //    tagsComponent.setState(TaggingState.DISABLED);
         //    Assert.Equal(tagger.ToBuilder(new SimpleTagContext(TAG1)))
-        //        .isSameAs(NoopTagContextBuilder.INSTANCE);
+        //        .isSameAs(NoopTagContextBuilder.Instance);
         // }
 
         // [Fact]
@@ -193,7 +193,7 @@ namespace OpenCensus.Tags.Test
         // {
         //    TagContext tags = new SimpleTagContext(TAG1);
         //    tagsComponent.setState(TaggingState.DISABLED);
-        //    Assert.Equal(tagger.ToBuilder(tags)).isSameAs(NoopTagContextBuilder.INSTANCE);
+        //    Assert.Equal(tagger.ToBuilder(tags)).isSameAs(NoopTagContextBuilder.Instance);
         //    tagsComponent.setState(TaggingState.ENABLED);
         //    TagContextBuilder builder = tagger.ToBuilder(tags);
         //    Assert.Equal(builder).isInstanceOf(TagContextBuilder);

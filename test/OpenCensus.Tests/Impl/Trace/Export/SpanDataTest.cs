@@ -37,7 +37,7 @@ namespace OpenCensus.Trace.Export.Test
         //    NetworkEvent.Builder(NetworkEvent.Type.SENT, 1).build();
         private static readonly IMessageEvent recvMessageEvent = MessageEvent.Builder(MessageEventType.RECEIVED, 1).Build();
         private static readonly IMessageEvent sentMessageEvent = MessageEvent.Builder(MessageEventType.SENT, 1).Build();
-        private static readonly Status status = Status.DEADLINE_EXCEEDED.WithDescription("TooSlow");
+        private static readonly Status status = Status.DeadlineExceeded.WithDescription("TooSlow");
         private static readonly int CHILD_SPAN_COUNT = 13;
         private readonly IRandomGenerator random = new RandomGenerator(1234);
         private readonly ISpanContext spanContext;

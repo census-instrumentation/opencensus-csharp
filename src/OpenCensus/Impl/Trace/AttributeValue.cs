@@ -53,6 +53,8 @@ namespace OpenCensus.Trace
 
     public sealed class AttributeValue<T> : AttributeValue, IAttributeValue<T>
     {
+        public T Value { get; }
+
         public static IAttributeValue<string> Create(string stringValue)
         {
             if (stringValue == null)
@@ -72,8 +74,6 @@ namespace OpenCensus.Trace
         {
             return new AttributeValue<bool>(booleanValue);
         }
-
-        public T Value { get; }
 
         internal AttributeValue(T value)
         {
