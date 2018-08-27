@@ -20,7 +20,7 @@ namespace OpenCensus.Stats.Aggregations
 
     public sealed class LastValue : Aggregation, ILastValue
     {
-        private static readonly LastValue INSTANCE = new LastValue();
+        private static readonly LastValue Instance = new LastValue();
 
         private LastValue()
         {
@@ -28,7 +28,7 @@ namespace OpenCensus.Stats.Aggregations
 
         public static ILastValue Create()
         {
-            return INSTANCE;
+            return Instance;
         }
 
         public override M Match<M>(Func<ISum, M> p0, Func<ICount, M> p1, Func<IMean, M> p2, Func<IDistribution, M> p3, Func<ILastValue, M> p4, Func<IAggregation, M> p5)

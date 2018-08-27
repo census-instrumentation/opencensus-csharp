@@ -22,7 +22,7 @@ namespace OpenCensus.Trace
 
     public sealed class BlankSpan : SpanBase
     {
-        public static readonly BlankSpan INSTANCE = new BlankSpan();
+        public static readonly BlankSpan Instance = new BlankSpan();
 
         private BlankSpan()
             : base(SpanContext.INVALID, default(SpanOptions))
