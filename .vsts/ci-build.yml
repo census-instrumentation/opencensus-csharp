@@ -1,0 +1,64 @@
+# CI build. No publioshing of artifacts
+
+phases:
+
+- phase: Windows
+  queue: Hosted VS2017
+  steps:
+  - task: DotNetCoreInstaller@0
+    displayName: force use of desired dotnet version
+    inputs:
+      version: "2.0.3"
+
+  - task: DotNetCoreCLI@2
+    displayName: restore packages
+    inputs:
+      command: "restore"
+      projects: "*.sln"
+
+  - task: DotNetCoreCLI@2
+    displayName: build solution (Release)
+    inputs:
+      command: "build"
+      projects: "*.sln"
+      arguments: "--configuration Release"
+
+  # consider switch to https://docs.microsoft.com/vsts/pipelines/tasks/test/vstest?view=vsts
+  - task: DotNetCoreCLI@2
+    displayName: test
+    inputs:
+      command: "test"
+      projects: "test/**/*.csproj"
+      arguments: "--configuration Release"
+
+  - task: PublishTestResults@2
+
+- phase: Linux
+  queue: Hosted Linux Preview
+  steps:
+  - task: DotNetCoreInstaller@0
+    displayName: force use of desired dotnet version
+    inputs:
+      version: "2.0.3"
+
+  - task: DotNetCoreCLI@2
+    displayName: restore packages
+    inputs:
+      command: "restore"
+      projects: "*.sln"
+
+  - task: DotNetCoreCLI@2
+    displayName: build
+    inputs:
+      command: "build"
+      projects: "*.sln"
+      arguments: "--configuration Release"
+
+  - task: DotNetCoreCLI@2
+    displayName: test
+    inputs:
+      command: "test"
+      projects: "test/**/*.csproj"
+      arguments: "--configuration Release"
+
+  - task: PublishTestResults@2

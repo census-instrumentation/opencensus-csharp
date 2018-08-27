@@ -20,11 +20,11 @@ namespace OpenCensus.Stats
 
     internal sealed class MutableCount : MutableAggregation
     {
-        internal long Count { get; private set; } = 0;
-
         internal MutableCount()
         {
         }
+
+        internal long Count { get; private set; } = 0;
 
         internal static MutableCount Create()
         {

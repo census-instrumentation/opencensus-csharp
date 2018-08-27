@@ -20,8 +20,8 @@ namespace OpenCensus.Tags
 
     public sealed class CurrentTaggingState
     {
-        private TaggingState currentState = TaggingState.ENABLED;
         private readonly object lck = new object();
+        private TaggingState currentState = TaggingState.ENABLED;
         private bool isRead;
 
         public TaggingState Value

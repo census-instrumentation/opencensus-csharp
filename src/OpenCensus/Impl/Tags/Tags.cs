@@ -20,27 +20,11 @@ namespace OpenCensus.Tags
 
     public sealed class Tags
     {
-        private static readonly object lck = new object();
-
-        private readonly ITagsComponent tagsComponent = new TagsComponent();
+        private static readonly object Lock = new object();
 
         private static Tags tags;
 
-        internal static void Initialize(bool enabled)
-        {
-            if (tags == null)
-            {
-                lock (lck)
-                {
-                    tags =tags ?? new Tags(enabled);
-                }
-            }
-        }
-
-        internal Tags()
-            : this(false)
-        {
-        }
+        private readonly ITagsComponent tagsComponent = new TagsComponent();
 
         internal Tags(bool enabled)
         {
@@ -52,6 +36,11 @@ namespace OpenCensus.Tags
             {
                 this.tagsComponent = NoopTags.NewNoopTagsComponent();
             }
+        }
+
+        internal Tags()
+            : this(false)
+        {
         }
 
         public static ITagger Tagger
@@ -78,6 +67,17 @@ namespace OpenCensus.Tags
             {
                 Initialize(false);
                 return tags.tagsComponent.State;
+            }
+        }
+
+        internal static void Initialize(bool enabled)
+        {
+            if (tags == null)
+            {
+                lock (Lock)
+                {
+                    tags = tags ?? new Tags(enabled);
+                }
             }
         }
     }

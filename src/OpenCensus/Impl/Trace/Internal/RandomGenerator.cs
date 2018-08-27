@@ -20,13 +20,13 @@ namespace OpenCensus.Trace.Internal
 
     internal class RandomGenerator : IRandomGenerator
     {
-        private static readonly Random global = new Random();
-
-        private readonly int seed;
-        private readonly bool sameSeed;
+        private static readonly Random Global = new Random();
 
         [ThreadStatic]
         private static Random local;
+
+        private readonly int seed;
+        private readonly bool sameSeed;
 
         internal RandomGenerator()
         {
@@ -48,7 +48,7 @@ namespace OpenCensus.Trace.Internal
         {
             if (local == null)
             {
-                local = new Random(this.sameSeed ? this.seed : global.Next());
+                local = new Random(this.sameSeed ? this.seed : Global.Next());
             }
 
             local.NextBytes(bytes);

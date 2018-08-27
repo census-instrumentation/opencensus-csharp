@@ -21,14 +21,14 @@ namespace OpenCensus.Stats
 
     public sealed class ViewName : IViewName
     {
-        internal const int NAME_MAX_LENGTH = 255;
-
-        public string AsString { get; }
+        internal const int NameMaxLength = 255;
 
         internal ViewName(string asString)
         {
             this.AsString = asString ?? throw new ArgumentNullException(nameof(asString));
         }
+
+        public string AsString { get; }
 
         public static IViewName Create(string name)
         {
@@ -37,11 +37,11 @@ namespace OpenCensus.Stats
                 throw new ArgumentNullException(nameof(name));
             }
 
-            if (!(StringUtil.IsPrintableString(name) && name.Length <= NAME_MAX_LENGTH))
+            if (!(StringUtil.IsPrintableString(name) && name.Length <= NameMaxLength))
             {
                 throw new ArgumentOutOfRangeException(
                     "Name should be a ASCII string with a length no greater than "
-                    + NAME_MAX_LENGTH
+                    + NameMaxLength
                     + " characters.");
             }
 

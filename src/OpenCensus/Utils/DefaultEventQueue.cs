@@ -19,7 +19,7 @@ namespace OpenCensus.Utils
     using System;
     using OpenCensus.Internal;
 
-    public class DefaultEventQueue : IEventQueue
+    internal class DefaultEventQueue : IEventQueue
     {
         public void Enqueue(IEventQueueEntry entry)
         {

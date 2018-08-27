@@ -20,18 +20,10 @@ namespace OpenCensus.Utils
     using System.Collections;
     using System.Collections.Generic;
 
-    public class EvictingQueue<T> : IEnumerable<T>, IEnumerable
+    internal class EvictingQueue<T> : IEnumerable<T>, IEnumerable
     {
         private readonly Queue<T> @delegate;
         private readonly int maxSize;
-
-        public int Count
-        {
-            get
-            {
-                return this.@delegate.Count;
-            }
-        }
 
         public EvictingQueue(int maxSize)
         {
@@ -42,6 +34,14 @@ namespace OpenCensus.Utils
 
             this.maxSize = maxSize;
             this.@delegate = new Queue<T>(maxSize);
+        }
+
+        public int Count
+        {
+            get
+            {
+                return this.@delegate.Count;
+            }
         }
 
         public int RemainingCapacity()
