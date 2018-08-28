@@ -23,7 +23,7 @@ namespace OpenCensus.Stats
         private IStatsComponent statsComponent = new StatsComponent();
 
         internal Stats()
-            : this(false)
+            : this(true)
         {
         }
 
