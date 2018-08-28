@@ -53,7 +53,7 @@ namespace OpenCensus.Trace.Propagation.Test
         [Fact]
         public void Propagate_SpanContextNoTracing()
         {
-            TestSpanContextConversion(SpanContext.Create(TRACE_ID, SPAN_ID, TraceOptions.DEFAULT));
+            TestSpanContextConversion(SpanContext.Create(TRACE_ID, SPAN_ID, TraceOptions.Default));
         }
 
         [Fact]
@@ -107,7 +107,7 @@ namespace OpenCensus.Trace.Propagation.Test
         public void FromBinaryValue_UnsupportedFieldIdFirst()
         {
             Assert.Equal(
-                SpanContext.Create(TraceId.INVALID, SpanId.INVALID, TraceOptions.DEFAULT),
+                SpanContext.Create(TraceId.INVALID, SpanId.INVALID, TraceOptions.Default),
                 binaryFormat.FromByteArray(
                         new byte[] {
                   0, 4, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 1, 97, 98,
@@ -123,7 +123,7 @@ namespace OpenCensus.Trace.Propagation.Test
                         TraceId.FromBytes(
                             new byte[] { 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79 }),
                         SpanId.INVALID,
-                        TraceOptions.DEFAULT),
+                        TraceOptions.Default),
                  binaryFormat.FromByteArray(
                         new byte[] {
                   0, 0, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 3, 97, 98,

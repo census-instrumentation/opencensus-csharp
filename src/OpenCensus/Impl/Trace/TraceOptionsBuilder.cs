@@ -21,7 +21,7 @@ namespace OpenCensus.Trace
         private byte options;
 
         internal TraceOptionsBuilder()
-            : this(TraceOptions.DEFAULT_OPTIONS)
+            : this(TraceOptions.DefaultOptions)
         {
         }
 
@@ -34,11 +34,11 @@ namespace OpenCensus.Trace
         {
             if (isSampled)
             {
-                this.options = (byte)(this.options | TraceOptions.IS_SAMPLED);
+                this.options = (byte)(this.options | TraceOptions.IsSampledBit);
             }
             else
             {
-                this.options = (byte)(this.options & ~TraceOptions.IS_SAMPLED);
+                this.options = (byte)(this.options & ~TraceOptions.IsSampledBit);
             }
 
             return this;

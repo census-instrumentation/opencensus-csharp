@@ -87,8 +87,6 @@ namespace OpenCensus.Trace
 
         public abstract void End(EndSpanOptions options);
 
-        internal abstract ISpanData ToSpanData();
-
         public void End()
         {
             this.End(EndSpanOptions.DEFAULT);
@@ -102,5 +100,7 @@ namespace OpenCensus.Trace
                 this.Name +
                 "]";
         }
+
+        internal abstract ISpanData ToSpanData();
     }
 }

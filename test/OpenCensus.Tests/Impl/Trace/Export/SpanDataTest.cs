@@ -57,7 +57,7 @@ namespace OpenCensus.Trace.Export.Test
 
         public SpanDataTest()
         {
-            spanContext = SpanContext.Create(TraceId.GenerateRandomId(random), SpanId.GenerateRandomId(random), TraceOptions.DEFAULT);
+            spanContext = SpanContext.Create(TraceId.GenerateRandomId(random), SpanId.GenerateRandomId(random), TraceOptions.Default);
             parentSpanId = SpanId.GenerateRandomId(random);
 
             attributesMap.Add("MyAttributeKey1", AttributeValue.LongAttributeValue(10));

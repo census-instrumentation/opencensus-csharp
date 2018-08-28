@@ -21,12 +21,12 @@ namespace OpenCensus.Stats
 
     public interface IAggregation
     {
-        M Match<M>(
-             Func<ISum, M> p0,
-             Func<ICount, M> p1,
-             Func<IMean, M> p2,
-             Func<IDistribution, M> p3,
-             Func<ILastValue, M> p4,
-             Func<IAggregation, M> p6);
+        T Match<T>(
+             Func<ISum, T> p0,
+             Func<ICount, T> p1,
+             Func<IMean, T> p2,
+             Func<IDistribution, T> p3,
+             Func<ILastValue, T> p4,
+             Func<IAggregation, T> p6);
     }
 }

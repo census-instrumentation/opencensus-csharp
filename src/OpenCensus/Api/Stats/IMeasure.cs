@@ -21,10 +21,10 @@ namespace OpenCensus.Stats
 
     public interface IMeasure
     {
-        M Match<M>(
-            Func<IMeasureDouble, M> p0,
-            Func<IMeasureLong, M> p1,
-            Func<IMeasure, M> defaultFunction);
+        T Match<T>(
+            Func<IMeasureDouble, T> p0,
+            Func<IMeasureLong, T> p1,
+            Func<IMeasure, T> defaultFunction);
 
         string Name { get; }
 

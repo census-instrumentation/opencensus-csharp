@@ -30,7 +30,7 @@ namespace OpenCensus.Trace.Propagation
             get { return new List<string>(); }
         }
 
-        public override void Inject<C>(ISpanContext spanContext, C carrier, ISetter<C> setter)
+        public override void Inject<T>(ISpanContext spanContext, T carrier, ISetter<T> setter)
         {
             if (spanContext == null)
             {
@@ -48,7 +48,7 @@ namespace OpenCensus.Trace.Propagation
             }
         }
 
-        public override ISpanContext Extract<C>(C carrier, IGetter<C> getter)
+        public override ISpanContext Extract<T>(T carrier, IGetter<T> getter)
         {
             if (carrier == null)
             {

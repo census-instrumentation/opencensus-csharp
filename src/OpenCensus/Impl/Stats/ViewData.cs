@@ -113,6 +113,7 @@ namespace OpenCensus.Stats
                             {
                                 throw new ArgumentException(CreateErrorMessageForAggregation(aggregation, aggregationData));
                             }
+
                             return null;
                         },
                         (arg1) =>
@@ -121,6 +122,7 @@ namespace OpenCensus.Stats
                             {
                                 throw new ArgumentException(CreateErrorMessageForAggregation(aggregation, aggregationData));
                             }
+
                             return null;
                         },
                         (arg1) =>
@@ -135,6 +137,7 @@ namespace OpenCensus.Stats
                     {
                         throw new ArgumentException(CreateErrorMessageForAggregation(aggregation, aggregationData));
                     }
+
                     return null;
                 },
                 (arg) =>
@@ -143,6 +146,7 @@ namespace OpenCensus.Stats
                     {
                         throw new ArgumentException(CreateErrorMessageForAggregation(aggregation, aggregationData));
                     }
+
                     return null;
                 },
                 (arg) =>
@@ -151,6 +155,7 @@ namespace OpenCensus.Stats
                     {
                         throw new ArgumentException(CreateErrorMessageForAggregation(aggregation, aggregationData));
                     }
+
                     return null;
                 },
                 (arg) =>
@@ -162,6 +167,7 @@ namespace OpenCensus.Stats
                             {
                                 throw new ArgumentException(CreateErrorMessageForAggregation(aggregation, aggregationData));
                             }
+
                             return null;
                         },
                         (arg1) =>
@@ -170,6 +176,7 @@ namespace OpenCensus.Stats
                             {
                                 throw new ArgumentException(CreateErrorMessageForAggregation(aggregation, aggregationData));
                             }
+
                             return null;
                         },
                         (arg1) =>

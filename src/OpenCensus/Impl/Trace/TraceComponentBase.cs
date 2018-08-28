@@ -23,14 +23,6 @@ namespace OpenCensus.Trace
 
     public abstract class TraceComponentBase : ITraceComponent
     {
-        internal static ITraceComponent NewNoopTraceComponent
-        {
-            get
-            {
-                return new NoopTraceComponent();
-            }
-        }
-
         public abstract ITracer Tracer { get; }
 
         public abstract IPropagationComponent PropagationComponent { get; }
@@ -40,5 +32,13 @@ namespace OpenCensus.Trace
         public abstract IExportComponent ExportComponent { get; }
 
         public abstract ITraceConfig TraceConfig { get; }
+
+        internal static ITraceComponent NewNoopTraceComponent
+        {
+            get
+            {
+                return new NoopTraceComponent();
+            }
+        }
     }
 }

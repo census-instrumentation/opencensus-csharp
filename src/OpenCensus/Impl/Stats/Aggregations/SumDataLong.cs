@@ -32,15 +32,15 @@ namespace OpenCensus.Stats.Aggregations
             return new SumDataLong(sum);
         }
 
-        public override M Match<M>(
-                Func<ISumDataDouble, M> p0,
-                Func<ISumDataLong, M> p1,
-                Func<ICountData, M> p2,
-                Func<IMeanData, M> p3,
-                Func<IDistributionData, M> p4,
-                Func<ILastValueDataDouble, M> p5,
-                Func<ILastValueDataLong, M> p6,
-                Func<IAggregationData, M> defaultFunction)
+        public override T Match<T>(
+                Func<ISumDataDouble, T> p0,
+                Func<ISumDataLong, T> p1,
+                Func<ICountData, T> p2,
+                Func<IMeanData, T> p3,
+                Func<IDistributionData, T> p4,
+                Func<ILastValueDataDouble, T> p5,
+                Func<ILastValueDataLong, T> p6,
+                Func<IAggregationData, T> defaultFunction)
         {
             return p1.Invoke(this);
         }

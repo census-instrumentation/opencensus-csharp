@@ -16,8 +16,8 @@
 
 namespace OpenCensus.Trace.Propagation
 {
-    public interface IGetter<C>
+    public interface IGetter<T>
     {
-        string Get(C carrier, string key);
+        string Get(T carrier, string key);
     }
 }

@@ -56,7 +56,7 @@ namespace OpenCensus.Trace.Propagation.Test
         public void Serialize_NotSampledContext()
         {
             IDictionary<String, String> carrier = new Dictionary<String, String>();
-            var context = SpanContext.Create(TRACE_ID, SPAN_ID, TraceOptions.DEFAULT);
+            var context = SpanContext.Create(TRACE_ID, SPAN_ID, TraceOptions.Default);
             _output.WriteLine(context.ToString());
             b3Format.Inject(context, carrier, setter);
             ContainsExactly(carrier, new Dictionary<string, string>() { { B3Format.X_B3_TRACE_ID, TRACE_ID_BASE16 }, { B3Format.X_B3_SPAN_ID, SPAN_ID_BASE16 } });
@@ -68,7 +68,7 @@ namespace OpenCensus.Trace.Propagation.Test
             IDictionary<String, String> headersNotSampled = new Dictionary<String, String>();
             headersNotSampled.Add(B3Format.X_B3_TRACE_ID, TRACE_ID_BASE16);
             headersNotSampled.Add(B3Format.X_B3_SPAN_ID, SPAN_ID_BASE16);
-            ISpanContext spanContext = SpanContext.Create(TRACE_ID, SPAN_ID, TraceOptions.DEFAULT);
+            ISpanContext spanContext = SpanContext.Create(TRACE_ID, SPAN_ID, TraceOptions.Default);
             Assert.Equal(spanContext, b3Format.Extract(headersNotSampled, getter));
         }
 
@@ -89,7 +89,7 @@ namespace OpenCensus.Trace.Propagation.Test
             headersNotSampled.Add(B3Format.X_B3_TRACE_ID, TRACE_ID_BASE16);
             headersNotSampled.Add(B3Format.X_B3_SPAN_ID, SPAN_ID_BASE16);
             headersNotSampled.Add(B3Format.X_B3_SAMPLED, "0");
-            Assert.Equal(SpanContext.Create(TRACE_ID, SPAN_ID, TraceOptions.DEFAULT), b3Format.Extract(headersNotSampled, getter));
+            Assert.Equal(SpanContext.Create(TRACE_ID, SPAN_ID, TraceOptions.Default), b3Format.Extract(headersNotSampled, getter));
         }
 
         [Fact]
@@ -109,7 +109,7 @@ namespace OpenCensus.Trace.Propagation.Test
             headersFlagNotSampled.Add(B3Format.X_B3_TRACE_ID, TRACE_ID_BASE16);
             headersFlagNotSampled.Add(B3Format.X_B3_SPAN_ID, SPAN_ID_BASE16);
             headersFlagNotSampled.Add(B3Format.X_B3_FLAGS, "0");
-            Assert.Equal(SpanContext.Create(TRACE_ID, SPAN_ID, TraceOptions.DEFAULT), b3Format.Extract(headersFlagNotSampled, getter));
+            Assert.Equal(SpanContext.Create(TRACE_ID, SPAN_ID, TraceOptions.Default), b3Format.Extract(headersFlagNotSampled, getter));
         }
 
         [Fact]
@@ -128,7 +128,7 @@ namespace OpenCensus.Trace.Propagation.Test
             IDictionary<String, String> headersEightBytes = new Dictionary<String, String>();
             headersEightBytes.Add(B3Format.X_B3_TRACE_ID, TRACE_ID_BASE16_EIGHT_BYTES);
             headersEightBytes.Add(B3Format.X_B3_SPAN_ID, SPAN_ID_BASE16);
-            Assert.Equal(SpanContext.Create(TRACE_ID_EIGHT_BYTES, SPAN_ID, TraceOptions.DEFAULT), b3Format.Extract(headersEightBytes, getter));
+            Assert.Equal(SpanContext.Create(TRACE_ID_EIGHT_BYTES, SPAN_ID, TraceOptions.Default), b3Format.Extract(headersEightBytes, getter));
         }
 
         [Fact]
