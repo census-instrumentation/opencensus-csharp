@@ -86,10 +86,10 @@ deprecate it for 18 months before removing it, if possible.
 [gitter-url]:https://gitter.im/census-instrumentation/lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 [opencensus-myget-image]:https://img.shields.io/myget/opencensus/vpre/OpenCensus.svg
 [opencensus-myget-url]: https://www.myget.org/feed/opencensus/package/nuget/OpenCensus
-[opencensus-myget-exporter-zipkin-image]:https://img.shields.io/myget/opencensus/vpre/OpenCensus.Exporter.Zipkin.svg
-[opencensus-myget-exporter-zipkin-url]: https://www.myget.org/feed/opencensus/package/nuget/OpenCensus.Exporter.Zipkin
-[opencensus-myget-exporter-ai-image]:https://img.shields.io/myget/opencensus/vpre/OpenCensus.Exporter.ApplicationInsights.svg
-[opencensus-myget-exporter-ai-url]: https://www.myget.org/feed/opencensus/package/nuget/OpenCensus.Exporter.ApplicationInsights
+[opencensus-exporter-zipkin-myget-image]:https://img.shields.io/myget/opencensus/vpre/OpenCensus.Exporter.Zipkin.svg
+[opencensus-exporter-zipkin-myget-url]: https://www.myget.org/feed/opencensus/package/nuget/OpenCensus.Exporter.Zipkin
+[opencensus-exporter-ai-myget-image]:https://img.shields.io/myget/opencensus/vpre/OpenCensus.Exporter.ApplicationInsights.svg
+[opencensus-exporter-ai-myget-url]: https://www.myget.org/feed/opencensus/package/nuget/OpenCensus.Exporter.ApplicationInsights
 [up-for-grabs-issues]: https://github.com/census-instrumentation/opencensus-csharp/issues?q=is%3Aissue+is%3Aopen+label%3Aup-for-grabs
 [good-first-issues]: https://github.com/census-instrumentation/opencensus-csharp/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22
 [zipkin-get-started]: https://zipkin.io/pages/quickstart.html
