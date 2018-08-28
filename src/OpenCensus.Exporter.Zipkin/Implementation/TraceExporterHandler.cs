@@ -216,7 +216,7 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
         {
             try
             {
-                var requestUri = new Uri(this.options.Endpoint);
+                var requestUri = this.options.Endpoint;
                 var request = this.GetHttpRequestMessage(HttpMethod.Post, requestUri);
                 request.Content = this.GetRequestContent(spans);
                 await this.DoPost(this.httpClient, request);

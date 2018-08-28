@@ -2,16 +2,16 @@
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), 'OpenCensus.sln'))\build\Common.prod.props" />
 
   <PropertyGroup>
-    <Description>OpenCensus .NET API</Description>
     <TargetFrameworks>net46;netstandard2.0</TargetFrameworks>
     <TargetFrameworks Condition="$(OS) != 'Windows_NT'">netstandard2.0</TargetFrameworks>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <IncludeSymbols>True</IncludeSymbols>
-    <PackageId>OpenCensus.Export.Zipkin</PackageId>
-    <PackageTags>Tracing;OpenCensus;Management;Monitoring;Zipkin</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Description>Zipkin exporter for OpenCensus</Description>
+    <PackageId>OpenCensus.Exporter.Zipkin</PackageId>
+    <PackageTags>Tracing;OpenCensus;Management;Monitoring;Zipkin;distributed-tracing</PackageTags>
     <PackageIconUrl>https://opencensus.io/images/opencensus-logo.png</PackageIconUrl>
     <PackageProjectUrl>https://opencensus.io</PackageProjectUrl>
     <PackageLicenseUrl>https://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
@@ -27,9 +27,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 
-
   <ItemGroup Condition="'$(TargetFramework)' == 'net46'">
     <Reference Include="System.Net.Http" />
   </ItemGroup>
-
 </Project>
