@@ -51,11 +51,11 @@ namespace OpenCensus.Exporter.ApplicationInsights
         /// <param name="exportComponent">Exporter to get traces and metrics from.</param>
         /// <param name="viewManager">View manager to get stats from.</param>
         /// <param name="telemetryConfiguration">Telemetry configuration to use to report telemetry.</param>
-        public ApplicationInsightsExporter(IExportComponent exportComponent, IViewManager viewManager, TelemetryConfiguration telemetryConfiguration = null)
+        public ApplicationInsightsExporter(IExportComponent exportComponent, IViewManager viewManager, TelemetryConfiguration telemetryConfiguration)
         {
             this.exportComponent = exportComponent;
             this.viewManager = viewManager;
-            this.telemetryConfiguration = telemetryConfiguration ?? TelemetryConfiguration.Active;
+            this.telemetryConfiguration = telemetryConfiguration;
         }
 
         /// <summary>

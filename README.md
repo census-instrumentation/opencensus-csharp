@@ -53,16 +53,18 @@ span.End();
 ### Using Application Insights exporter
 
 1. Create [Application Insights][ai-get-started] resource.
-  1. Set instrumentation key via configuration or global settings
-     (`TelemetryConfiguration.Active`).
-  2. Create a separate instance (`new TelemetryConfiguration("iKey")`)
-2. See [sample][ai-sample] for example use.
+2. Set instrumentation key via telemetry configuration object
+   (`new TelemetryConfiguration("iKey")`). This object may be injected via
+   dependency injection as well.
+3. Instantiate a new instance of `ApplicationInsightsExporter`.
+4. See [sample][ai-sample] for example use.
 
 ``` csharp
+var config = new TelemetryConfiguration("iKey")
 var exporter = new ApplicationInsightsExporter(
-    Tracing.ExportComponent, 
+    Tracing.ExportComponent,
     Stats.ViewManager,
-    TelemetryConfiguration.Active); // either global or local config can be used
+    config); // either global or local config can be used
 exporter.Start();
 ```
 
@@ -97,5 +99,5 @@ deprecate it for 18 months before removing it, if possible.
 [zipkin-get-started]: https://zipkin.io/pages/quickstart.html
 [ai-get-started]: https://docs.microsoft.com/azure/application-insights
 [semver]: http://semver.org/
-[ai-sample]: https://github.com/census-instrumentation/opencensus-csharp/blob/sergkanz/samples/src/Samples/TestApplicationInsights.cs
-[zipkin-sample]: https://github.com/census-instrumentation/opencensus-csharp/blob/sergkanz/samples/src/Samples/TestZipkin.cs
+[ai-sample]: https://github.com/census-instrumentation/opencensus-csharp/blob/develop/src/Samples/TestApplicationInsights.cs
+[zipkin-sample]: https://github.com/census-instrumentation/opencensus-csharp/blob/develop/src/Samples/TestZipkin.cs
