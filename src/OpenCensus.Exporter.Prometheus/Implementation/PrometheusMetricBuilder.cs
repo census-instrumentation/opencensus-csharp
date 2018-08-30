@@ -28,6 +28,36 @@ namespace OpenCensus.Exporter.Prometheus.Implementation
     {
         public const string ContentType = "text/plain; version = 0.0.4";
 
+        private static char[] firstCharacterNameCharset = new char[]
+        {
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+            '_', ':'
+        };
+
+        private static char[] nameCharset = new char[]
+        {
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+            '_', ':'
+        };
+
+        private static char[] firstCharacterLabelCharset = new char[]
+        {
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+            '_'
+        };
+
+        private static char[] labelCharset = new char[]
+        {
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+            '_'
+        };
+
         private readonly IList<PrometheusMetricValueBuilder> values = new List<PrometheusMetricValueBuilder>();
 
         private string name;
@@ -122,11 +152,25 @@ namespace OpenCensus.Exporter.Prometheus.Implementation
                 if (m.Labels.Count > 0)
                 {
                     writer.Write(@"{");
+                    var isFirst = true;
 
                     foreach (var l in m.Labels)
                     {
+                        if (isFirst)
+                        {
+                            isFirst = false;
+                        }
+                        else
+                        {
+                            writer.Write(",");
+                        }
+
                         var safeKey = GetSafeLabelName(l.Item1);
                         var safeValue = GetSafeLabelValue(l.Item2);
+                        writer.Write(safeKey);
+                        writer.Write("=\"");
+                        writer.Write(safeValue);
+                        writer.Write("\"");
                     }
 
                     writer.Write(@"}");
@@ -161,19 +205,6 @@ namespace OpenCensus.Exporter.Prometheus.Implementation
             // Labels enable Prometheus's dimensional data model: any given combination of labels for the same metric name identifies a particular dimensional instantiation of that metric (for example: all HTTP requests that used the method POST to the /api/tracks handler). The query language allows filtering and aggregation based on these dimensions. Changing any label value, including adding or removing a label, will create a new time series.
             // Label names may contain ASCII letters, numbers, as well as underscores. They must match the regex [a-zA-Z_][a-zA-Z0-9_]*. Label names beginning with __ are reserved for internal use.
             // Label values may contain any Unicode characters.
-
-            char[] firstCharacterNameCharset = new char[] {
-                'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-                '_'
-            };
-
-            char[] nameCharset = new char[] {
-                'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-                '_'
-            };
 
             StringBuilder sb = new StringBuilder();
 
@@ -230,18 +261,60 @@ namespace OpenCensus.Exporter.Prometheus.Implementation
             // Label names may contain ASCII letters, numbers, as well as underscores. They must match the regex [a-zA-Z_][a-zA-Z0-9_]*. Label names beginning with __ are reserved for internal use.
             // Label values may contain any Unicode characters.
 
-            // TODO: implement
-            return name;
+            StringBuilder sb = new StringBuilder();
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                var firstChar = name[0];
+                if (firstCharacterLabelCharset.Contains(firstChar))
+                {
+                    sb.Append(firstChar);
+                }
+                else
+                {
+                    firstChar = firstChar.ToString().ToLowerInvariant()[0];
+
+                    if (firstCharacterLabelCharset.Contains(firstChar))
+                    {
+                        sb.Append(firstChar);
+                    }
+                    else
+                    {
+                        // fallback character
+                        sb.Append('_');
+                    }
+                }
+            }
+
+            for (int i = 1; i < name.Length; ++i)
+            {
+                char c = name[i];
+
+                if (labelCharset.Contains(c))
+                {
+                    sb.Append(c);
+                }
+                else
+                {
+                    // fallback character
+                    sb.Append('_');
+                }
+            }
+
+            return sb.ToString();
         }
 
         private static string GetSafeLabelValue(string value)
         {
             // label_value can be any sequence of UTF-8 characters, but the backslash 
-            // (\, double-quote ("}, and line feed (\n) characters have to be escaped 
+            // (\), double-quote ("), and line feed (\n) characters have to be escaped 
             // as \\, \", and \n, respectively.
 
-            // TODO: implement
-            return value;
+            var result = value.Replace("\\", "\\\\");
+            result = result.Replace("\n", "\\n");
+            result = result.Replace("\"", "\\\"");
+
+            return result;
         }
 
         private static string GetSafeMetricDescription(string description)
