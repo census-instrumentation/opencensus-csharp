@@ -50,6 +50,35 @@ Thread.Sleep(TimeSpan.FromSeconds(1));
 span.End();
 ```
 
+### Using Prometheus exporter
+
+Configure Prometheus exporter to have stats collected by Prometheus.
+
+1. Get Prometheus using [getting started guide][prometheus-get-started].
+2. Start `PrometheusExporter` as below.
+3. See [sample][prometheus-sample] for example use.
+
+``` csharp
+var exporter = new PrometheusExporter(
+    new PrometheusExporterOptions()
+    {
+        Url = new Uri("http://localhost:9184/metrics/")
+    },
+    Stats.ViewManager);
+
+exporter.Start();
+
+try
+{
+    // record metrics
+    statsRecorder.NewMeasureMap().Put(VideoSize, values[0] * MiB).Record();
+}
+finally
+{
+    exporter.Stop();
+}
+```
+
 ### Using Application Insights exporter
 
 1. Create [Application Insights][ai-get-started] resource.
@@ -101,3 +130,5 @@ deprecate it for 18 months before removing it, if possible.
 [semver]: http://semver.org/
 [ai-sample]: https://github.com/census-instrumentation/opencensus-csharp/blob/develop/src/Samples/TestApplicationInsights.cs
 [zipkin-sample]: https://github.com/census-instrumentation/opencensus-csharp/blob/develop/src/Samples/TestZipkin.cs
+[prometheus-get-started]: https://prometheus.io/docs/introduction/first_steps/
+[prometheus-sample]: https://github.com/census-instrumentation/opencensus-csharp/blob/develop/src/Samples/TestPrometheus.cs

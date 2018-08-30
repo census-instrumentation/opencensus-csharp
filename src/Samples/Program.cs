@@ -17,6 +17,7 @@
 
             // TestZipkin.Run();
             // TestApplicationInsights.Run();
+            // TestPrometheus.Run();
         }
     }
 }

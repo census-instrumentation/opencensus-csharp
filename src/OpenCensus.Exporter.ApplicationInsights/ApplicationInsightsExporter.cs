@@ -31,8 +31,6 @@ namespace OpenCensus.Exporter.ApplicationInsights
     {
         private const string TraceExporterName = "ApplicationInsightsTraceExporter";
 
-        private const string MetricsExporterName = "ApplicationInsightsMetricsExporter";
-
         private readonly TelemetryConfiguration telemetryConfiguration;
 
         private readonly IViewManager viewManager;
@@ -44,6 +42,8 @@ namespace OpenCensus.Exporter.ApplicationInsights
         private TraceExporterHandler handler;
 
         private CancellationTokenSource tokenSource;
+
+        private Task workerThread;
 
         /// <summary>
         /// Instantiates a new instance of an exporter from Open Census to Azure Application Insights.
@@ -79,7 +79,7 @@ namespace OpenCensus.Exporter.ApplicationInsights
                 CancellationToken token = this.tokenSource.Token;
 
                 var metricsExporter = new MetricsExporterThread(this.telemetryConfiguration, this.viewManager, token, TimeSpan.FromMinutes(1));
-                Task.Factory.StartNew((Action)metricsExporter.WorkerThread, TaskCreationOptions.LongRunning);
+                this.workerThread = Task.Factory.StartNew((Action)metricsExporter.WorkerThread, TaskCreationOptions.LongRunning);
             }
         }
 
@@ -97,6 +97,7 @@ namespace OpenCensus.Exporter.ApplicationInsights
 
                 this.exportComponent.SpanExporter.UnregisterHandler(TraceExporterName);
                 this.tokenSource.Cancel();
+                this.workerThread.Wait();
                 this.tokenSource = null;
 
                 this.handler = null;

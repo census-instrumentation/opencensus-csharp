@@ -19,6 +19,8 @@ namespace OpenCensus.Exporter.Prometheus.Implementation
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
+    using System.Text;
     using OpenCensus.Stats;
     using OpenCensus.Stats.Aggregations;
 
@@ -160,8 +162,60 @@ namespace OpenCensus.Exporter.Prometheus.Implementation
             // Label names may contain ASCII letters, numbers, as well as underscores. They must match the regex [a-zA-Z_][a-zA-Z0-9_]*. Label names beginning with __ are reserved for internal use.
             // Label values may contain any Unicode characters.
 
-            // TODO: implement
-            return name;
+            char[] firstCharacterNameCharset = new char[] {
+                'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+                '_'
+            };
+
+            char[] nameCharset = new char[] {
+                'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+                '_'
+            };
+
+            StringBuilder sb = new StringBuilder();
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                var firstChar = name[0];
+                if (firstCharacterNameCharset.Contains(firstChar))
+                {
+                    sb.Append(firstChar);
+                }
+                else
+                {
+                    firstChar = firstChar.ToString().ToLowerInvariant()[0];
+
+                    if (firstCharacterNameCharset.Contains(firstChar))
+                    {
+                        sb.Append(firstChar);
+                    }
+                    else
+                    {
+                        // fallback character
+                        sb.Append('_');
+                    }
+                }
+            }
+
+            for (int i = 1; i < name.Length; ++i)
+            {
+                char c = name[i];
+
+                if (nameCharset.Contains(c))
+                {
+                    sb.Append(c);
+                }
+                else
+                {
+                    // fallback character
+                    sb.Append('_');
+                }
+            }
+
+            return sb.ToString();
         }
 
         private static string GetSafeLabelName(string name)

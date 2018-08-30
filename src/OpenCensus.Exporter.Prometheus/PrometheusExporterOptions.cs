@@ -16,14 +16,16 @@
 
 namespace OpenCensus.Exporter.Prometheus
 {
+    using System;
+
     /// <summary>
     /// Options to run prometheus exporter.
     /// </summary>
     public class PrometheusExporterOptions
     {
         /// <summary>
-        /// Gets or sets the port to listen to.
+        /// Gets or sets the port to listen to. Typically it ends with /metrics like http://localhost:9184/metrics/.
         /// </summary>
-        public uint Port { get; set; }
+        public Uri Url { get; set; }
     }
 }

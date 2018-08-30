@@ -27,8 +27,6 @@ namespace OpenCensus.Exporter.Prometheus
     /// </summary>
     public class PrometheusExporter
     {
-        private const string MetricsExporterName = "PrometheusMetricsExporter";
-
         private readonly IViewManager viewManager;
 
         private readonly PrometheusExporterOptions options;
@@ -36,6 +34,8 @@ namespace OpenCensus.Exporter.Prometheus
         private readonly object lck = new object();
 
         private CancellationTokenSource tokenSource;
+
+        private Task workerThread;
 
         /// <summary>
         /// Instantiates a new instance of an exporter from Open Census to Prometheus.
@@ -64,8 +64,8 @@ namespace OpenCensus.Exporter.Prometheus
 
                 CancellationToken token = this.tokenSource.Token;
 
-                var metricsServer = new MetricsHttpServer(this.viewManager, token);
-                Task.Factory.StartNew((Action)metricsServer.WorkerThread, TaskCreationOptions.LongRunning);
+                var metricsServer = new MetricsHttpServer(this.viewManager, this.options, token);
+                this.workerThread = Task.Factory.StartNew((Action)metricsServer.WorkerThread, TaskCreationOptions.LongRunning);
             }
         }
 
@@ -82,6 +82,7 @@ namespace OpenCensus.Exporter.Prometheus
                 }
 
                 this.tokenSource.Cancel();
+                this.workerThread.Wait();
                 this.tokenSource = null;
             }
         }

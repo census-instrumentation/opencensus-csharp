@@ -32,11 +32,11 @@ namespace OpenCensus.Exporter.Prometheus.Implementation
 
         private readonly HttpListener httpListener = new HttpListener();
 
-        public MetricsHttpServer(IViewManager viewManager, CancellationToken token)
+        public MetricsHttpServer(IViewManager viewManager, PrometheusExporterOptions options, CancellationToken token)
         {
             this.viewManager = viewManager;
             this.token = token;
-            this.httpListener.Prefixes.Add($"http://localhost:9184/metrics/");
+            this.httpListener.Prefixes.Add(options.Url.ToString());
         }
 
         public void WorkerThread()
