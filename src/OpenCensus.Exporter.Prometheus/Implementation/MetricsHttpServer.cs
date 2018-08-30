@@ -52,102 +52,51 @@ namespace OpenCensus.Exporter.Prometheus.Implementation
 
                     var ctx = ctxTask.Result;
 
-                    ctx.Response.ContentType = "text/plain; version = 0.0.4";
                     ctx.Response.StatusCode = 200;
+                    ctx.Response.ContentType = PrometheusMetricBuilder.ContentType;
 
                     using (var output = ctx.Response.OutputStream)
                     {
                         using (var writer = new StreamWriter(output))
                         {
-                            // https://prometheus.io/docs/instrumenting/exposition_formats/
-
                             foreach (var view in this.viewManager.AllExportedViews)
                             {
                                 var data = this.viewManager.GetView(view.Name);
 
+                                var builder = new PrometheusMetricBuilder()
+                                    .WithName(data.View.Name.AsString)
+                                    .WithDescription(data.View.Description);
+
+                                builder = data.View.Aggregation.Match<PrometheusMetricBuilder>(
+                                    (agg) => { return builder.WithType("gauge"); }, // Func<ISum, M> p0
+                                    (agg) => { return builder.WithType("counter"); }, // Func< ICount, M > p1, 
+                                    (agg) => { return builder.WithType("histogram"); }, // Func<IMean, M> p2, 
+                                    (agg) => { return builder.WithType("histogram"); }, // Func< IDistribution, M > p3,
+                                    (agg) => { return builder.WithType("gauge"); }, // Func<ILastValue, M> p4,
+                                    (agg) => { return builder.WithType("gauge"); }); // Func< IAggregation, M > p6);
+
                                 foreach (var value in data.AggregationMap)
                                 {
-                                    PrometheusMetricBuilder builder = new PrometheusMetricBuilder();
-                                    builder.WithName(data.View.Name.AsString);
-                                    builder.WithDescription(data.View.Description);
+                                    var metricValueBuilder = builder.AddValue();
+
+                                    // TODO: This is not optimal. Need to refactor to split builder into separate functions
+                                    metricValueBuilder = value.Value.Match<PrometheusMetricBuilder.PrometheusMetricValueBuilder>(
+                                        metricValueBuilder.WithValue,
+                                        metricValueBuilder.WithValue,
+                                        metricValueBuilder.WithValue,
+                                        metricValueBuilder.WithValue,
+                                        metricValueBuilder.WithValue,
+                                        metricValueBuilder.WithValue,
+                                        metricValueBuilder.WithValue,
+                                        metricValueBuilder.WithValue);
 
                                     for (int i = 0; i < value.Key.Values.Count; i++)
                                     {
-                                        var name = data.View.Columns[i].Name;
-                                        var val = value.Key.Values[i].AsString;
-
-                                        value.Value.Match<object>(
-                                            (combined) =>
-                                            {
-                                                if (combined is ISumDataDouble sum)
-                                                {
-                                                    //metricTelemetry.Sum = sum.Sum;
-                                                }
-                                                return null;
-                                            },
-                                            (combined) =>
-                                            {
-                                                if (combined is ISumDataLong sum)
-                                                {
-                                                    //metricTelemetry.Sum = sum.Sum;
-                                                }
-                                                return null;
-                                            },
-                                            (combined) =>
-                                            {
-                                                if (combined is ICountData count)
-                                                {
-                                                    //metricTelemetry.Sum = count.Count;
-                                                }
-                                                return null;
-                                            },
-                                            (combined) =>
-                                            {
-                                                if (combined is IMeanData mean)
-                                                {
-                                                }
-                                                return null;
-                                            },
-                                            (combined) =>
-                                            {
-                                                if (combined is IDistributionData dist)
-                                                {
-                                                    //metricTelemetry.Sum = dist.Mean;
-                                                    //metricTelemetry.Min = dist.Min;
-                                                    //metricTelemetry.Max = dist.Max;
-                                                    //metricTelemetry.StandardDeviation = dist.SumOfSquaredDeviations;
-                                                }
-
-                                                return null;
-                                            },
-                                            (combined) =>
-                                            {
-                                                if (combined is ILastValueDataDouble lastValue)
-                                                {
-                                                    //metricTelemetry.Sum = lastValue.LastValue;
-                                                }
-                                                return null;
-                                            },
-                                            (combined) =>
-                                            {
-                                                if (combined is ILastValueDataLong lastValue)
-                                                {
-                                                    //metricTelemetry.Sum = lastValue.LastValue;
-                                                }
-                                                return null;
-                                            },
-                                            (combined) =>
-                                            {
-                                                if (combined is IAggregationData aggregationData)
-                                                {
-                                                    // TODO: report an error
-                                                }
-                                                return null;
-                                            });
+                                        metricValueBuilder.WithLabel(data.View.Columns[i].Name, value.Key.Values[i].AsString);
                                     }
-
-                                    builder.Write(writer);
                                 }
+
+                                builder.Write(writer);
                             }
                         }
                     }
