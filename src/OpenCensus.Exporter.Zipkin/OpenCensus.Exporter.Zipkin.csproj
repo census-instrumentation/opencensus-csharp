@@ -4,13 +4,11 @@
   <PropertyGroup>
     <TargetFrameworks>net46;netstandard2.0</TargetFrameworks>
     <TargetFrameworks Condition="$(OS) != 'Windows_NT'">netstandard2.0</TargetFrameworks>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <IncludeSymbols>True</IncludeSymbols>
   </PropertyGroup>
 
   <PropertyGroup>
     <Description>Zipkin exporter for OpenCensus</Description>
-    <PackageId>OpenCensus.Exporter.Zipkin</PackageId>
     <PackageTags>Tracing;OpenCensus;Management;Monitoring;Zipkin;distributed-tracing</PackageTags>
     <PackageIconUrl>https://opencensus.io/images/opencensus-logo.png</PackageIconUrl>
     <PackageProjectUrl>https://opencensus.io</PackageProjectUrl>
