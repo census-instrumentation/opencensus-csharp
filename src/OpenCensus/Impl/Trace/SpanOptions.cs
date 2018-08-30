@@ -22,6 +22,6 @@ namespace OpenCensus.Trace
     public enum SpanOptions
     {
         NONE = 0x0,
-        RECORD_EVENTS = 0x1
+        RECORD_EVENTS = 0x1,
     }
 }

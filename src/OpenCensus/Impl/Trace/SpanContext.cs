@@ -23,7 +23,7 @@ namespace OpenCensus.Trace
     /// </summary>
     public sealed class SpanContext : ISpanContext
     {
-        public static readonly SpanContext INVALID = new SpanContext(Trace.TraceId.INVALID, Trace.SpanId.INVALID, TraceOptions.DEFAULT);
+        public static readonly SpanContext INVALID = new SpanContext(Trace.TraceId.INVALID, Trace.SpanId.INVALID, TraceOptions.Default);
 
         public static ISpanContext Create(ITraceId traceId, ISpanId spanId, TraceOptions traceOptions)
         {

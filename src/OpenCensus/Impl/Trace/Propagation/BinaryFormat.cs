@@ -34,7 +34,7 @@ namespace OpenCensus.Trace.Propagation
         private const byte TRACE_OPTION_FIELD_ID = 2;
         private const int TRACE_OPTION_FIELD_ID_OFFSET = SPAN_ID_OFFSET + SpanId.SIZE;
         private const int TRACE_OPTIONS_OFFSET = TRACE_OPTION_FIELD_ID_OFFSET + ID_SIZE;
-        private const int FORMAT_LENGTH = (4 * ID_SIZE) + TraceId.SIZE + SpanId.SIZE + TraceOptions.SIZE;
+        private const int FORMAT_LENGTH = (4 * ID_SIZE) + TraceId.SIZE + SpanId.SIZE + TraceOptions.Size;
 
         public override ISpanContext FromByteArray(byte[] bytes)
         {
@@ -50,7 +50,7 @@ namespace OpenCensus.Trace.Propagation
 
             ITraceId traceId = TraceId.INVALID;
             ISpanId spanId = SpanId.INVALID;
-            TraceOptions traceOptions = TraceOptions.DEFAULT;
+            TraceOptions traceOptions = TraceOptions.Default;
 
             int pos = 1;
             try

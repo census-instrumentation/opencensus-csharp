@@ -108,6 +108,7 @@ namespace OpenCensus.Stats
                     {
                         sum.Add(arg.Sum);
                     }
+
                     return null;
                 },
                 (arg) =>
@@ -116,6 +117,7 @@ namespace OpenCensus.Stats
                     {
                         sum.Add(arg.Sum);
                     }
+
                     return null;
                 },
                 (arg) =>
@@ -124,6 +126,7 @@ namespace OpenCensus.Stats
                     {
                         count.Add(arg.Count);
                     }
+
                     return null;
                 },
                 (arg) =>
@@ -136,11 +139,13 @@ namespace OpenCensus.Stats
                         {
                             mean.Min = arg.Min;
                         }
+
                         if (arg.Max > mean.Max)
                         {
                             mean.Max = arg.Max;
                         }
                     }
+
                     return null;
                 },
                 (arg) =>
@@ -169,6 +174,7 @@ namespace OpenCensus.Stats
                         {
                             dist.Min = arg.Min;
                         }
+
                         if (arg.Max > dist.Max)
                         {
                             dist.Max = arg.Max;
@@ -180,6 +186,7 @@ namespace OpenCensus.Stats
                             dist.BucketCounts[i] += bucketCounts[i];
                         }
                     }
+
                     return null;
                 },
                 (arg) =>
@@ -196,6 +203,7 @@ namespace OpenCensus.Stats
                             lastValue.LastValue += arg.LastValue;
                         }
                     }
+
                     return null;
                 },
                 (arg) =>
@@ -212,6 +220,7 @@ namespace OpenCensus.Stats
                             lastValue.LastValue += arg.LastValue;
                         }
                     }
+
                     return null;
                 },
                 (arg) =>

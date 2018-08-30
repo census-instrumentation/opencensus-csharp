@@ -27,10 +27,10 @@ namespace OpenCensus.Trace
              Func<object, T> defaultFunction);
     }
 
-    public interface IAttributeValue<T> : IAttributeValue
+    public interface IAttributeValue<TAttr> : IAttributeValue
     {
-        T Value { get; }
+        TAttr Value { get; }
 
-        M Apply<M>(Func<T, M> function);
+        T Apply<T>(Func<TAttr, T> function);
     }
 }

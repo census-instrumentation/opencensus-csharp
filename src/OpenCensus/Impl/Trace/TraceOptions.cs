@@ -21,15 +21,15 @@ namespace OpenCensus.Trace
     public sealed class TraceOptions
     {
         // Default options. Nothing set.
-        internal const byte DEFAULT_OPTIONS = 0;
+        internal const byte DefaultOptions = 0;
 
         // Bit to represent whether trace is sampled or not.
-        internal const byte IS_SAMPLED = 0x1;
+        internal const byte IsSampledBit = 0x1;
 
-        public const int SIZE = 1;
+        public const int Size = 1;
 
-        public static readonly TraceOptions DEFAULT = new TraceOptions(DEFAULT_OPTIONS);
-        public static readonly TraceOptions SAMPLED = new TraceOptions(1);
+        public static readonly TraceOptions Default = new TraceOptions(DefaultOptions);
+        public static readonly TraceOptions Sampled = new TraceOptions(1);
 
         // The set of enabled features is determined by all the enabled bits.
         private byte options;
@@ -47,13 +47,13 @@ namespace OpenCensus.Trace
                 throw new ArgumentNullException("buffer");
             }
 
-            if (buffer.Length != SIZE)
+            if (buffer.Length != Size)
             {
-                throw new ArgumentOutOfRangeException(string.Format("Invalid size: expected {0}, got {1}", SIZE, buffer.Length));
+                throw new ArgumentOutOfRangeException(string.Format("Invalid size: expected {0}, got {1}", Size, buffer.Length));
             }
 
-            byte[] bytesCopied = new byte[SIZE];
-            Buffer.BlockCopy(buffer, 0, bytesCopied, 0, SIZE);
+            byte[] bytesCopied = new byte[Size];
+            Buffer.BlockCopy(buffer, 0, bytesCopied, 0, Size);
             return new TraceOptions(bytesCopied[0]);
         }
 
@@ -69,7 +69,7 @@ namespace OpenCensus.Trace
 
         public static TraceOptionsBuilder Builder()
         {
-            return new TraceOptionsBuilder(DEFAULT_OPTIONS);
+            return new TraceOptionsBuilder(DefaultOptions);
         }
 
         public static TraceOptionsBuilder Builder(TraceOptions traceOptions)
@@ -81,9 +81,17 @@ namespace OpenCensus.Trace
         {
             get
             {
-                byte[] bytes = new byte[SIZE];
+                byte[] bytes = new byte[Size];
                 bytes[0] = this.options;
                 return bytes;
+            }
+        }
+
+        public bool IsSampled
+        {
+            get
+            {
+                return this.HasOption(IsSampledBit);
             }
         }
 
@@ -95,14 +103,6 @@ namespace OpenCensus.Trace
             }
 
             dest[destOffset] = this.options;
-        }
-
-        public bool IsSampled
-        {
-            get
-            {
-                return this.HasOption(IS_SAMPLED);
-            }
         }
 
         public override bool Equals(object obj)

@@ -27,7 +27,7 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void getOptions()
         {
-            Assert.Equal(0, TraceOptions.DEFAULT.Options);
+            Assert.Equal(0, TraceOptions.Default.Options);
             Assert.Equal(0, TraceOptions.Builder().SetIsSampled(false).Build().Options);
             Assert.Equal(1, TraceOptions.Builder().SetIsSampled(true).Build().Options);
             Assert.Equal(0, TraceOptions.Builder().SetIsSampled(true).SetIsSampled(false).Build().Options);
@@ -39,7 +39,7 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void IsSampled()
         {
-            Assert.False(TraceOptions.DEFAULT.IsSampled);
+            Assert.False(TraceOptions.Default.IsSampled);
             Assert.True(TraceOptions.Builder().SetIsSampled(true).Build().IsSampled);
         }
 
@@ -75,7 +75,7 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void traceOptions_ToString()
         {
-            Assert.Contains("sampled=False", TraceOptions.DEFAULT.ToString());
+            Assert.Contains("sampled=False", TraceOptions.Default.ToString());
             Assert.Contains("sampled=True", TraceOptions.Builder().SetIsSampled(true).Build().ToString());
         }
     }

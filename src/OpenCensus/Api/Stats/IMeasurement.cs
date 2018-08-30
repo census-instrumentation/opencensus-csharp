@@ -23,6 +23,6 @@ namespace OpenCensus.Stats
     {
         IMeasure Measure { get; }
 
-        M Match<M>(Func<IMeasurementDouble, M> p0, Func<IMeasurementLong, M> p1, Func<IMeasurement, M> defaultFunction);
+        T Match<T>(Func<IMeasurementDouble, T> p0, Func<IMeasurementLong, T> p1, Func<IMeasurement, T> defaultFunction);
     }
 }

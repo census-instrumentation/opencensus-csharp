@@ -41,7 +41,7 @@ namespace OpenCensus.Trace.Test
                 SpanContext.Create(
                     TraceId.GenerateRandomId(random),
                     SpanId.GenerateRandomId(random),
-                    TraceOptions.DEFAULT);
+                    TraceOptions.Default);
             spanOptions = SpanOptions.RECORD_EVENTS;
         }
 

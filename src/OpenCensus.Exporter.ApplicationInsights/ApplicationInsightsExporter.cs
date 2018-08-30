@@ -48,10 +48,10 @@ namespace OpenCensus.Exporter.ApplicationInsights
         /// <summary>
         /// Instantiates a new instance of an exporter from Open Census to Azure Application Insights.
         /// </summary>
-        /// <param name="telemetryConfiguration">Telemetry configuration to use to report telemetry.</param>
         /// <param name="exportComponent">Exporter to get traces and metrics from.</param>
         /// <param name="viewManager">View manager to get stats from.</param>
-        public ApplicationInsightsExporter(TelemetryConfiguration telemetryConfiguration, IExportComponent exportComponent, IViewManager viewManager)
+        /// <param name="telemetryConfiguration">Telemetry configuration to use to report telemetry.</param>
+        public ApplicationInsightsExporter(IExportComponent exportComponent, IViewManager viewManager, TelemetryConfiguration telemetryConfiguration)
         {
             this.exportComponent = exportComponent;
             this.viewManager = viewManager;

@@ -22,6 +22,12 @@ namespace OpenCensus.Trace.Propagation
     {
         private static readonly NoopTextFormat NOOP_TEXT_FORMAT = new NoopTextFormat();
 
+        public abstract IList<string> Fields { get; }
+
+        public abstract ISpanContext Extract<T>(T carrier, IGetter<T> getter);
+
+        public abstract void Inject<T>(ISpanContext spanContext, T carrier, ISetter<T> setter);
+
         internal static ITextFormat NoopTextFormat
         {
             get
@@ -29,11 +35,5 @@ namespace OpenCensus.Trace.Propagation
                 return NOOP_TEXT_FORMAT;
             }
         }
-
-        public abstract IList<string> Fields { get; }
-
-        public abstract ISpanContext Extract<C>(C carrier, IGetter<C> getter);
-
-        public abstract void Inject<C>(ISpanContext spanContext, C carrier, ISetter<C> setter);
     }
 }

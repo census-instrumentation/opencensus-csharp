@@ -87,7 +87,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                 {
                     var metricTelemetry = new MetricTelemetry
                     {
-                        Name = data.View.Name.AsString
+                        Name = data.View.Name.AsString,
                     };
 
                     for (int i = 0; i < value.Key.Values.Count; i++)
@@ -115,6 +115,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                             {
                                 metricTelemetry.Sum = sum.Sum;
                             }
+
                             return null;
                         },
                         (combined) =>
@@ -123,6 +124,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                             {
                                 metricTelemetry.Sum = sum.Sum;
                             }
+
                             return null;
                         },
                         (combined) =>
@@ -131,6 +133,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                             {
                                 metricTelemetry.Sum = count.Count;
                             }
+
                             return null;
                         },
                         (combined) =>
@@ -138,6 +141,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                             if (combined is IMeanData mean)
                             {
                             }
+
                             return null;
                         },
                         (combined) =>
@@ -158,6 +162,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                             {
                                 metricTelemetry.Sum = lastValue.LastValue;
                             }
+
                             return null;
                         },
                         (combined) =>
@@ -166,6 +171,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                             {
                                 metricTelemetry.Sum = lastValue.LastValue;
                             }
+
                             return null;
                         },
                         (combined) =>
@@ -174,6 +180,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                             {
                                 // TODO: report an error
                             }
+
                             return null;
                         });
                     this.telemetryClient.TrackMetric(metricTelemetry);

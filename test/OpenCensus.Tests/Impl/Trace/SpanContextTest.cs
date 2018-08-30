@@ -32,7 +32,7 @@ namespace OpenCensus.Trace.Test
       SpanContext.Create(
           TraceId.FromBytes(firstTraceIdBytes),
           SpanId.FromBytes(firstSpanIdBytes),
-          TraceOptions.DEFAULT);
+          TraceOptions.Default);
 
         private static readonly ISpanContext second =
       SpanContext.Create(
@@ -45,7 +45,7 @@ namespace OpenCensus.Trace.Test
         {
             Assert.Equal(TraceId.INVALID, SpanContext.INVALID.TraceId);
             Assert.Equal(SpanId.INVALID, SpanContext.INVALID.SpanId);
-            Assert.Equal(TraceOptions.DEFAULT, SpanContext.INVALID.TraceOptions);
+            Assert.Equal(TraceOptions.Default, SpanContext.INVALID.TraceOptions);
         }
 
         [Fact]
@@ -54,11 +54,11 @@ namespace OpenCensus.Trace.Test
             Assert.False(SpanContext.INVALID.IsValid);
             Assert.False(
                     SpanContext.Create(
-                            TraceId.FromBytes(firstTraceIdBytes), SpanId.INVALID, TraceOptions.DEFAULT)
+                            TraceId.FromBytes(firstTraceIdBytes), SpanId.INVALID, TraceOptions.Default)
                         .IsValid);
             Assert.False(
                     SpanContext.Create(
-                            TraceId.INVALID, SpanId.FromBytes(firstSpanIdBytes), TraceOptions.DEFAULT)
+                            TraceId.INVALID, SpanId.FromBytes(firstSpanIdBytes), TraceOptions.Default)
                         .IsValid);
             Assert.True(first.IsValid);
             Assert.True(second.IsValid);
@@ -81,7 +81,7 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void GetTraceOptions()
         {
-            Assert.Equal(TraceOptions.DEFAULT, first.TraceOptions);
+            Assert.Equal(TraceOptions.Default, first.TraceOptions);
             Assert.Equal(TraceOptions.Builder().SetIsSampled(true).Build(), second.TraceOptions);
         }
 
@@ -113,7 +113,7 @@ namespace OpenCensus.Trace.Test
         {
             Assert.Contains(TraceId.FromBytes(firstTraceIdBytes).ToString(), first.ToString());
             Assert.Contains(SpanId.FromBytes(firstSpanIdBytes).ToString(), first.ToString());
-            Assert.Contains(TraceOptions.DEFAULT.ToString(), first.ToString());
+            Assert.Contains(TraceOptions.Default.ToString(), first.ToString());
             Assert.Contains(TraceId.FromBytes(secondTraceIdBytes).ToString(), second.ToString());
             Assert.Contains(SpanId.FromBytes(secondSpanIdBytes).ToString(), second.ToString());
             Assert.Contains(TraceOptions.Builder().SetIsSampled(true).Build().ToString(), second.ToString());

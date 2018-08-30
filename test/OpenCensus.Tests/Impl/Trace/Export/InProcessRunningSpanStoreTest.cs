@@ -44,7 +44,7 @@ namespace OpenCensus.Trace.Export.Test
                 SpanContext.Create(
                     TraceId.GenerateRandomId(random),
                     SpanId.GenerateRandomId(random),
-                    TraceOptions.DEFAULT);
+                    TraceOptions.Default);
             return Span.StartSpan(
                 spanContext,
                 recordSpanOptions,

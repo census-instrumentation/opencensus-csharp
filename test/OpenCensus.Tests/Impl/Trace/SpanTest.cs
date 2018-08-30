@@ -47,7 +47,7 @@ namespace OpenCensus.Trace.Test
 
         public SpanTest()
         {
-            spanContext = SpanContext.Create(TraceId.GenerateRandomId(random), SpanId.GenerateRandomId(random), TraceOptions.DEFAULT);
+            spanContext = SpanContext.Create(TraceId.GenerateRandomId(random), SpanId.GenerateRandomId(random), TraceOptions.Default);
             parentSpanId = SpanId.GenerateRandomId(random);
             testClock = TestClock.Create(timestamp);
             timestampConverter = TimestampConverter.Now(testClock);

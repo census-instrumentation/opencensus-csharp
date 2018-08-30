@@ -47,7 +47,7 @@ namespace OpenCensus.Trace.Propagation
             }
         }
 
-        public override ISpanContext Extract<C>(C carrier, IGetter<C> getter)
+        public override ISpanContext Extract<T>(T carrier, IGetter<T> getter)
         {
             if (carrier == null)
             {
@@ -89,7 +89,7 @@ namespace OpenCensus.Trace.Propagation
                     throw new SpanContextParseException("Missing X_B3_SPAN_ID.");
                 }
 
-                TraceOptions traceOptions = TraceOptions.DEFAULT;
+                TraceOptions traceOptions = TraceOptions.Default;
                 if (SAMPLED_VALUE.Equals(getter.Get(carrier, X_B3_SAMPLED))
                     || FLAGS_VALUE.Equals(getter.Get(carrier, X_B3_FLAGS)))
                 {
@@ -104,7 +104,7 @@ namespace OpenCensus.Trace.Propagation
             }
         }
 
-        public override void Inject<C>(ISpanContext spanContext, C carrier, ISetter<C> setter)
+        public override void Inject<T>(ISpanContext spanContext, T carrier, ISetter<T> setter)
         {
             if (spanContext == null)
             {
