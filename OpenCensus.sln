@@ -37,6 +37,7 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenCensus.Exporter.ApplicationInsights", "src\OpenCensus.Exporter.ApplicationInsights\OpenCensus.Exporter.ApplicationInsights.csproj", "{4493F5D9-874E-4FBF-B2F3-37890BD910E0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples", "src\Samples\Samples.csproj", "{C58393EB-32E2-4AC6-9170-697B36306E15}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenCensus.Exporter.Prometheus", "src\OpenCensus.Exporter.Prometheus\OpenCensus.Exporter.Prometheus.csproj", "{A86AF35D-9E84-4B12-AA0E-1C558DC2EE1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,6 +65,10 @@ Global
 		{C58393EB-32E2-4AC6-9170-697B36306E15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C58393EB-32E2-4AC6-9170-697B36306E15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C58393EB-32E2-4AC6-9170-697B36306E15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A86AF35D-9E84-4B12-AA0E-1C558DC2EE1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A86AF35D-9E84-4B12-AA0E-1C558DC2EE1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A86AF35D-9E84-4B12-AA0E-1C558DC2EE1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A86AF35D-9E84-4B12-AA0E-1C558DC2EE1C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

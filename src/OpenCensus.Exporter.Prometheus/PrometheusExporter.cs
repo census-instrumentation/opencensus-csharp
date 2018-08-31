@@ -1,4 +1,4 @@
-﻿// <copyright file="ApplicationInsightsExporter.cs" company="OpenCensus Authors">
+﻿// <copyright file="PrometheusExporter.cs" company="OpenCensus Authors">
 // Copyright 2018, OpenCensus Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,48 +14,38 @@
 // limitations under the License.
 // </copyright>
 
-namespace OpenCensus.Exporter.ApplicationInsights
+namespace OpenCensus.Exporter.Prometheus
 {
     using System;
     using System.Threading;
     using System.Threading.Tasks;
-    using Microsoft.ApplicationInsights.Extensibility;
-    using OpenCensus.Exporter.ApplicationInsights.Implementation;
+    using OpenCensus.Exporter.Prometheus.Implementation;
     using OpenCensus.Stats;
-    using OpenCensus.Trace.Export;
 
     /// <summary>
     /// Exporter of Open Census traces and metrics to Azure Application Insights.
     /// </summary>
-    public class ApplicationInsightsExporter
+    public class PrometheusExporter
     {
-        private const string TraceExporterName = "ApplicationInsightsTraceExporter";
-
-        private readonly TelemetryConfiguration telemetryConfiguration;
-
         private readonly IViewManager viewManager;
 
-        private readonly IExportComponent exportComponent;
+        private readonly PrometheusExporterOptions options;
 
         private readonly object lck = new object();
-
-        private TraceExporterHandler handler;
 
         private CancellationTokenSource tokenSource;
 
         private Task workerThread;
 
         /// <summary>
-        /// Instantiates a new instance of an exporter from Open Census to Azure Application Insights.
+        /// Instantiates a new instance of an exporter from Open Census to Prometheus.
         /// </summary>
-        /// <param name="exportComponent">Exporter to get traces and metrics from.</param>
+        /// <param name="options">Options for the exporter.</param>
         /// <param name="viewManager">View manager to get stats from.</param>
-        /// <param name="telemetryConfiguration">Telemetry configuration to use to report telemetry.</param>
-        public ApplicationInsightsExporter(IExportComponent exportComponent, IViewManager viewManager, TelemetryConfiguration telemetryConfiguration)
+        public PrometheusExporter(PrometheusExporterOptions options, IViewManager viewManager)
         {
-            this.exportComponent = exportComponent;
+            this.options = options;
             this.viewManager = viewManager;
-            this.telemetryConfiguration = telemetryConfiguration;
         }
 
         /// <summary>
@@ -65,21 +55,17 @@ namespace OpenCensus.Exporter.ApplicationInsights
         {
             lock (this.lck)
             {
-                if (this.handler != null)
+                if (this.tokenSource != null)
                 {
                     return;
                 }
-
-                this.handler = new TraceExporterHandler(this.telemetryConfiguration);
-
-                this.exportComponent.SpanExporter.RegisterHandler(TraceExporterName, this.handler);
 
                 this.tokenSource = new CancellationTokenSource();
 
                 CancellationToken token = this.tokenSource.Token;
 
-                var metricsExporter = new MetricsExporterThread(this.telemetryConfiguration, this.viewManager, token, TimeSpan.FromMinutes(1));
-                this.workerThread = Task.Factory.StartNew((Action)metricsExporter.WorkerThread, TaskCreationOptions.LongRunning);
+                var metricsServer = new MetricsHttpServer(this.viewManager, this.options, token);
+                this.workerThread = Task.Factory.StartNew((Action)metricsServer.WorkerThread, TaskCreationOptions.LongRunning);
             }
         }
 
@@ -90,17 +76,14 @@ namespace OpenCensus.Exporter.ApplicationInsights
         {
             lock (this.lck)
             {
-                if (this.handler == null)
+                if (this.tokenSource == null)
                 {
                     return;
                 }
 
-                this.exportComponent.SpanExporter.UnregisterHandler(TraceExporterName);
                 this.tokenSource.Cancel();
                 this.workerThread.Wait();
                 this.tokenSource = null;
-
-                this.handler = null;
             }
         }
     }

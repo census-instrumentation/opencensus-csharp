@@ -140,6 +140,10 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                         {
                             if (combined is IMeanData mean)
                             {
+                                metricTelemetry.Sum = mean.Mean * mean.Count;
+                                metricTelemetry.Count = (int)mean.Count;
+                                metricTelemetry.Max = mean.Max;
+                                metricTelemetry.Min = mean.Min;
                             }
 
                             return null;
@@ -148,7 +152,8 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                         {
                             if (combined is IDistributionData dist)
                             {
-                                metricTelemetry.Sum = dist.Mean;
+                                metricTelemetry.Sum = dist.Mean * dist.Count;
+                                metricTelemetry.Count = (int)dist.Count;
                                 metricTelemetry.Min = dist.Min;
                                 metricTelemetry.Max = dist.Max;
                                 metricTelemetry.StandardDeviation = dist.SumOfSquaredDeviations;

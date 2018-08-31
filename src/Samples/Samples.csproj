@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OpenCensus.Exporter.Prometheus\OpenCensus.Exporter.Prometheus.csproj" />
     <ProjectReference Include="..\OpenCensus\OpenCensus.csproj" />
     <ProjectReference Include="..\OpenCensus.Exporter.Zipkin\OpenCensus.Exporter.Zipkin.csproj" />
     <ProjectReference Include="..\OpenCensus.Exporter.ApplicationInsights\OpenCensus.Exporter.ApplicationInsights.csproj" />
