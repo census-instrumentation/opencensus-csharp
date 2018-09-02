@@ -124,7 +124,7 @@ namespace OpenCensus.Stats.Test
                     MeanData.Create(100.0, 10, 300.0, 500.0),
                     DistributionData.Create(1, 1, 1, 1, 0, new List<long>() { 0L, 10L, 0L }),
                     LastValueDataDouble.Create(20.0),
-                    LastValueDataLong.Create(200000000L)
+                    LastValueDataLong.Create(200000000L),
                     };
 
             List<object> actual = new List<object>();

@@ -21,23 +21,23 @@ namespace OpenCensus.Trace.Propagation
 
     public sealed class B3Format : TextFormatBase
     {
-        public const string X_B3_TRACE_ID = "X-B3-TraceId";
-        public const string X_B3_SPAN_ID = "X-B3-SpanId";
-        public const string X_B3_PARENT_SPAN_ID = "X-B3-ParentSpanId";
-        public const string X_B3_SAMPLED = "X-B3-Sampled";
-        public const string X_B3_FLAGS = "X-B3-Flags";
+        public const string XB3TraceId = "X-B3-TraceId";
+        public const string XB3SpanId = "X-B3-SpanId";
+        public const string XB3ParentSpanId = "X-B3-ParentSpanId";
+        public const string XB3Sampled = "X-B3-Sampled";
+        public const string XB3Flags = "X-B3-Flags";
 
         // Used as the upper TraceId.SIZE hex characters of the traceID. B3-propagation used to send
         // TraceId.SIZE hex characters (8-bytes traceId) in the past.
-        internal const string UPPER_TRACE_ID = "0000000000000000";
+        internal const string UpperTraceId = "0000000000000000";
 
         // Sampled value via the X_B3_SAMPLED header.
-        internal const string SAMPLED_VALUE = "1";
+        internal const string SampledValue = "1";
 
         // "Debug" sampled value.
-        internal const string FLAGS_VALUE = "1";
+        internal const string FlagsValue = "1";
 
-        private static readonly List<string> FIELDS = new List<string>() { X_B3_TRACE_ID, X_B3_SPAN_ID, X_B3_PARENT_SPAN_ID, X_B3_SAMPLED, X_B3_FLAGS };
+        private static readonly List<string> FIELDS = new List<string>() { XB3TraceId, XB3SpanId, XB3ParentSpanId, XB3Sampled, XB3Flags };
 
         public override IList<string> Fields
         {
@@ -62,13 +62,13 @@ namespace OpenCensus.Trace.Propagation
             try
             {
                 ITraceId traceId;
-                string traceIdStr = getter.Get(carrier, X_B3_TRACE_ID);
+                string traceIdStr = getter.Get(carrier, XB3TraceId);
                 if (traceIdStr != null)
                 {
-                    if (traceIdStr.Length == TraceId.SIZE)
+                    if (traceIdStr.Length == TraceId.Size)
                     {
                         // This is an 8-byte traceID.
-                        traceIdStr = UPPER_TRACE_ID + traceIdStr;
+                        traceIdStr = UpperTraceId + traceIdStr;
                     }
 
                     traceId = TraceId.FromLowerBase16(traceIdStr);
@@ -79,7 +79,7 @@ namespace OpenCensus.Trace.Propagation
                 }
 
                 ISpanId spanId;
-                string spanIdStr = getter.Get(carrier, X_B3_SPAN_ID);
+                string spanIdStr = getter.Get(carrier, XB3SpanId);
                 if (spanIdStr != null)
                 {
                     spanId = SpanId.FromLowerBase16(spanIdStr);
@@ -90,8 +90,8 @@ namespace OpenCensus.Trace.Propagation
                 }
 
                 TraceOptions traceOptions = TraceOptions.Default;
-                if (SAMPLED_VALUE.Equals(getter.Get(carrier, X_B3_SAMPLED))
-                    || FLAGS_VALUE.Equals(getter.Get(carrier, X_B3_FLAGS)))
+                if (SampledValue.Equals(getter.Get(carrier, XB3Sampled))
+                    || FlagsValue.Equals(getter.Get(carrier, XB3Flags)))
                 {
                     traceOptions = TraceOptions.Builder().SetIsSampled(true).Build();
                 }
@@ -121,11 +121,11 @@ namespace OpenCensus.Trace.Propagation
                 throw new ArgumentNullException(nameof(setter));
             }
 
-            setter.Put(carrier, X_B3_TRACE_ID, spanContext.TraceId.ToLowerBase16());
-            setter.Put(carrier, X_B3_SPAN_ID, spanContext.SpanId.ToLowerBase16());
+            setter.Put(carrier, XB3TraceId, spanContext.TraceId.ToLowerBase16());
+            setter.Put(carrier, XB3SpanId, spanContext.SpanId.ToLowerBase16());
             if (spanContext.TraceOptions.IsSampled)
             {
-                setter.Put(carrier, X_B3_SAMPLED, SAMPLED_VALUE);
+                setter.Put(carrier, XB3Sampled, SampledValue);
             }
         }
     }

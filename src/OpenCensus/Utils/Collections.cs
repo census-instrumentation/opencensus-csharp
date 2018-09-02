@@ -22,7 +22,7 @@ namespace OpenCensus.Utils
 
     internal static class Collections
     {
-        public static string ToString<K, V>(IDictionary<K, V> dict)
+        public static string ToString<TKey, TValue>(IDictionary<TKey, TValue> dict)
         {
             if (dict == null)
             {
@@ -41,7 +41,7 @@ namespace OpenCensus.Utils
             return sb.ToString();
         }
 
-        public static string ToString<V>(IList<V> list)
+        public static string ToString<T>(IList<T> list)
         {
             if (list == null)
             {

@@ -22,6 +22,16 @@ namespace OpenCensus.Trace.Export
 
     public sealed class LinkList : ILinks
     {
+        internal LinkList(IList<ILink> links, int droppedLinksCount)
+        {
+            this.Links = links ?? throw new ArgumentNullException("Null links");
+            this.DroppedLinksCount = droppedLinksCount;
+        }
+
+        public int DroppedLinksCount { get; }
+
+        public IList<ILink> Links { get; }
+
         public static LinkList Create(IList<ILink> links, int droppedLinksCount)
         {
             if (links == null)
@@ -34,16 +44,7 @@ namespace OpenCensus.Trace.Export
             return new LinkList(copy.AsReadOnly(), droppedLinksCount);
         }
 
-        internal LinkList(IList<ILink> links, int droppedLinksCount)
-        {
-            this.Links = links ?? throw new ArgumentNullException("Null links");
-            this.DroppedLinksCount = droppedLinksCount;
-        }
-
-        public int DroppedLinksCount { get; }
-
-        public IList<ILink> Links { get; }
-
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "Links{"
@@ -52,6 +53,7 @@ namespace OpenCensus.Trace.Export
                 + "}";
         }
 
+    /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -68,6 +70,7 @@ namespace OpenCensus.Trace.Export
             return false;
         }
 
+    /// <inheritdoc/>
         public override int GetHashCode()
         {
             int h = 1;

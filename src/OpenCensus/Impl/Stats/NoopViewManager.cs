@@ -24,13 +24,31 @@ namespace OpenCensus.Stats
 
     internal sealed class NoopViewManager : ViewManagerBase
     {
-        private static readonly ITimestamp ZERO_TIMESTAMP = Timestamp.Create(0, 0);
+        private static readonly ITimestamp ZeroTimestamp = Timestamp.Create(0, 0);
 
         private readonly IDictionary<IViewName, IView> registeredViews = new Dictionary<IViewName, IView>();
 
         // Cached set of exported views. It must be set to null whenever a view is registered or
         // unregistered.
         private volatile ISet<IView> exportedViews;
+
+        public override ISet<IView> AllExportedViews
+        {
+            get
+            {
+                ISet<IView> views = this.exportedViews;
+                if (views == null)
+                {
+                    lock (this.registeredViews)
+                    {
+                        this.exportedViews = views = FilterExportedViews(this.registeredViews.Values);
+                        return ImmutableHashSet.CreateRange(this.exportedViews);
+                    }
+                }
+
+                return views;
+            }
+        }
 
         public override void RegisterView(IView newView)
         {
@@ -74,27 +92,9 @@ namespace OpenCensus.Stats
                     return ViewData.Create(
                         view,
                         new Dictionary<TagValues, IAggregationData>(),
-                        ZERO_TIMESTAMP,
-                        ZERO_TIMESTAMP);
+                        ZeroTimestamp,
+                        ZeroTimestamp);
                 }
-            }
-        }
-
-        public override ISet<IView> AllExportedViews
-        {
-            get
-            {
-                ISet<IView> views = this.exportedViews;
-                if (views == null)
-                {
-                    lock (this.registeredViews)
-                    {
-                        this.exportedViews = views = FilterExportedViews(this.registeredViews.Values);
-                        return ImmutableHashSet.CreateRange(this.exportedViews);
-                    }
-                }
-
-                return views;
             }
         }
 

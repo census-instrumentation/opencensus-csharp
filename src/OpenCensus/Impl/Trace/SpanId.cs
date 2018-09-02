@@ -23,9 +23,14 @@ namespace OpenCensus.Trace
     public sealed class SpanId : ISpanId
     {
         public const int SIZE = 8;
-        public static readonly SpanId INVALID = new SpanId(new byte[SIZE]);
+        public static readonly SpanId Invalid = new SpanId(new byte[SIZE]);
 
         private readonly byte[] bytes;
+
+        private SpanId(byte[] bytes)
+        {
+            this.bytes = bytes;
+        }
 
         public byte[] Bytes
         {
@@ -37,9 +42,9 @@ namespace OpenCensus.Trace
             }
         }
 
-        private SpanId(byte[] bytes)
+        public bool IsValid
         {
-            this.bytes = bytes;
+            get { return !Arrays.Equals(this.bytes, Invalid.bytes); }
         }
 
         public static ISpanId FromBytes(byte[] buffer)
@@ -84,7 +89,7 @@ namespace OpenCensus.Trace
             {
                 random.NextBytes(bytes);
             }
-            while (Arrays.Equals(bytes, INVALID.bytes));
+            while (Arrays.Equals(bytes, Invalid.bytes));
             return new SpanId(bytes);
         }
 
@@ -93,17 +98,13 @@ namespace OpenCensus.Trace
             Buffer.BlockCopy(this.bytes, 0, dest, destOffset, SIZE);
         }
 
-        public bool IsValid
-        {
-            get { return !Arrays.Equals(this.bytes, INVALID.bytes); }
-        }
-
         public string ToLowerBase16()
         {
             var bytes = this.Bytes;
             return Arrays.ByteArrayToString(bytes);
         }
 
+        /// <inheritdoc/>
         public override bool Equals(object obj)
         {
             if (obj == this)
@@ -120,11 +121,13 @@ namespace OpenCensus.Trace
             return Arrays.Equals(this.bytes, that.bytes);
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             return Arrays.GetHashCode(this.bytes);
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "SpanId{"

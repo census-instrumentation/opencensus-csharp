@@ -45,6 +45,7 @@ namespace OpenCensus.Stats.Aggregations
             return p2.Invoke(this);
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "CountData{"
@@ -52,6 +53,7 @@ namespace OpenCensus.Stats.Aggregations
                 + "}";
         }
 
+    /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -67,6 +69,7 @@ namespace OpenCensus.Stats.Aggregations
             return false;
         }
 
+    /// <inheritdoc/>
         public override int GetHashCode()
         {
             long h = 1;

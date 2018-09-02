@@ -24,7 +24,7 @@ namespace OpenCensus.Tags.Test
         [Fact]
         public void TestMaxLength()
         {
-            Assert.Equal(255, TagValue.MAX_LENGTH);
+            Assert.Equal(255, TagValue.MaxLength);
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace OpenCensus.Tags.Test
         [Fact]
         public void Create_AllowTagValueWithMaxLength()
         {
-            char[] chars = new char[TagValue.MAX_LENGTH];
+            char[] chars = new char[TagValue.MaxLength];
             for (int i = 0; i < chars.Length; i++)
             {
                 chars[i] = 'v';
@@ -49,7 +49,7 @@ namespace OpenCensus.Tags.Test
         [Fact]
         public void Create_DisallowTagValueOverMaxLength()
         {
-            char[] chars = new char[TagValue.MAX_LENGTH + 1];
+            char[] chars = new char[TagValue.MaxLength + 1];
             for (int i = 0; i < chars.Length; i++)
             {
                 chars[i] = 'v';

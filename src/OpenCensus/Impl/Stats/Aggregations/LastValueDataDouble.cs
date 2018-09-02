@@ -25,18 +25,19 @@ namespace OpenCensus.Stats.Aggregations
         {
         }
 
-        public double LastValue { get; }
-
         private LastValueDataDouble(double lastValue)
         {
             this.LastValue = lastValue;
         }
+
+        public double LastValue { get; }
 
         public static ILastValueDataDouble Create(double lastValue)
         {
             return new LastValueDataDouble(lastValue);
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "LastValueDataDouble{"
@@ -44,6 +45,7 @@ namespace OpenCensus.Stats.Aggregations
                 + "}";
         }
 
+    /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -59,6 +61,7 @@ namespace OpenCensus.Stats.Aggregations
             return false;
         }
 
+    /// <inheritdoc/>
         public override int GetHashCode()
         {
             long h = 1;
@@ -67,15 +70,15 @@ namespace OpenCensus.Stats.Aggregations
             return (int)h;
         }
 
-        public override M Match<M>(
-            Func<ISumDataDouble, M> p0,
-            Func<ISumDataLong, M> p1,
-            Func<ICountData, M> p2,
-            Func<IMeanData, M> p3,
-            Func<IDistributionData, M> p4,
-            Func<ILastValueDataDouble, M> p5,
-            Func<ILastValueDataLong, M> p6,
-            Func<IAggregationData, M> defaultFunction)
+        public override T Match<T>(
+            Func<ISumDataDouble, T> p0,
+            Func<ISumDataLong, T> p1,
+            Func<ICountData, T> p2,
+            Func<IMeanData, T> p3,
+            Func<IDistributionData, T> p4,
+            Func<ILastValueDataDouble, T> p5,
+            Func<ILastValueDataLong, T> p6,
+            Func<IAggregationData, T> defaultFunction)
         {
             return p5.Invoke(this);
         }

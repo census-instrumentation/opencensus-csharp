@@ -64,6 +64,7 @@ namespace OpenCensus.Trace
             return new Status(this.CanonicalCode, description);
         }
 
+        /// <inheritdoc/>
         public override bool Equals(object obj)
         {
             if (obj == this)
@@ -80,6 +81,7 @@ namespace OpenCensus.Trace
             return this.CanonicalCode == that.CanonicalCode && this.Description == that.Description;
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             int result = 1;
@@ -88,6 +90,7 @@ namespace OpenCensus.Trace
             return result;
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "Status{"

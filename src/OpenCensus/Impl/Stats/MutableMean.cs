@@ -20,6 +20,10 @@ namespace OpenCensus.Stats
 
     internal sealed class MutableMean : MutableAggregation
     {
+        internal MutableMean()
+        {
+        }
+
         internal double Sum { get; set; } = 0.0;
 
         internal long Count { get; set; } = 0;
@@ -35,10 +39,6 @@ namespace OpenCensus.Stats
         internal double Min { get; set; } = double.MaxValue;
 
         internal double Max { get; set; } = double.MinValue;
-
-        internal MutableMean()
-        {
-        }
 
         internal static MutableMean Create()
         {

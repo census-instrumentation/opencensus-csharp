@@ -20,19 +20,19 @@ namespace OpenCensus.Trace.Export
 
     public class LatencyBucketBoundaries : ISampledLatencyBucketBoundaries
     {
-        public static readonly ISampledLatencyBucketBoundaries ZERO_MICROSx10 = new LatencyBucketBoundaries(0, 10000);
-        public static readonly ISampledLatencyBucketBoundaries MICROSx10_MICROSx100 = new LatencyBucketBoundaries(10000, 100000);
-        public static readonly ISampledLatencyBucketBoundaries MICROSx100_MILLIx1 = new LatencyBucketBoundaries(100000, 1000000);
-        public static readonly ISampledLatencyBucketBoundaries MILLIx1_MILLIx10 = new LatencyBucketBoundaries(1000000, 10000000);
-        public static readonly ISampledLatencyBucketBoundaries MILLIx10_MILLIx100 = new LatencyBucketBoundaries(10000000, 100000000);
-        public static readonly ISampledLatencyBucketBoundaries MILLIx100_SECONDx1 = new LatencyBucketBoundaries(100000000, 1000000000);
-        public static readonly ISampledLatencyBucketBoundaries SECONDx1_SECONDx10 = new LatencyBucketBoundaries(1000000000,  10000000000);
-        public static readonly ISampledLatencyBucketBoundaries SECONDx10_SECONDx100 = new LatencyBucketBoundaries(10000000000, 100000000000);
-        public static readonly ISampledLatencyBucketBoundaries SECONDx100_MAX = new LatencyBucketBoundaries(100000000000, long.MaxValue);
+        public static readonly ISampledLatencyBucketBoundaries ZeroMicrosx10 = new LatencyBucketBoundaries(0, 10000);
+        public static readonly ISampledLatencyBucketBoundaries Microsx10Microsx100 = new LatencyBucketBoundaries(10000, 100000);
+        public static readonly ISampledLatencyBucketBoundaries Microsx100Millix1 = new LatencyBucketBoundaries(100000, 1000000);
+        public static readonly ISampledLatencyBucketBoundaries Millix1Millix10 = new LatencyBucketBoundaries(1000000, 10000000);
+        public static readonly ISampledLatencyBucketBoundaries Millix10Millix100 = new LatencyBucketBoundaries(10000000, 100000000);
+        public static readonly ISampledLatencyBucketBoundaries Millix100Secondx1 = new LatencyBucketBoundaries(100000000, 1000000000);
+        public static readonly ISampledLatencyBucketBoundaries Secondx1Secondx10 = new LatencyBucketBoundaries(1000000000,  10000000000);
+        public static readonly ISampledLatencyBucketBoundaries Secondx10Secondx100 = new LatencyBucketBoundaries(10000000000, 100000000000);
+        public static readonly ISampledLatencyBucketBoundaries Secondx100Max = new LatencyBucketBoundaries(100000000000, long.MaxValue);
 
         public static IList<ISampledLatencyBucketBoundaries> Values = new List<ISampledLatencyBucketBoundaries>()
         {
-            ZERO_MICROSx10, MICROSx10_MICROSx100, MICROSx100_MILLIx1, MILLIx1_MILLIx10, MILLIx10_MILLIx100, MILLIx100_SECONDx1, SECONDx1_SECONDx10, SECONDx10_SECONDx100, SECONDx100_MAX,
+            ZeroMicrosx10, Microsx10Microsx100, Microsx100Millix1, Millix1Millix10, Millix10Millix100, Millix100Secondx1, Secondx1Secondx10, Secondx10Secondx100, Secondx100Max,
         };
 
         internal LatencyBucketBoundaries(long latencyLowerNs, long latencyUpperNs)

@@ -26,13 +26,13 @@ namespace OpenCensus.Stats.Test
         [Fact]
         public void TestConstants()
         {
-            Assert.Equal(255, Measure.NAME_MAX_LENGTH);
+            Assert.Equal(255, Measure.NameMaxLength);
         }
 
         [Fact]
         public void PreventTooLongMeasureName()
         {
-            char[] chars = new char[Measure.NAME_MAX_LENGTH + 1];
+            char[] chars = new char[Measure.NameMaxLength + 1];
 
             for (int i = 0; i < chars.Length; i++)
             {
@@ -87,7 +87,7 @@ namespace OpenCensus.Stats.Test
             List<IMeasure> measures =
                 new List<IMeasure>() {
                     MeasureDouble.Create("measure1", "description", "1"),
-                    MeasureLong.Create("measure2", "description", "1")};
+                    MeasureLong.Create("measure2", "description", "1"),};
             List<String> outputs = new List<string>();
             foreach (IMeasure measure in measures)
             {

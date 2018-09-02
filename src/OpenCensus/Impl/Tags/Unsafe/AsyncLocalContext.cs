@@ -21,7 +21,7 @@ namespace OpenCensus.Tags.Unsafe
 
     internal static class AsyncLocalContext
     {
-        private static readonly ITagContext EMPTY_TAG_CONTEXT = new EmptyTagContext();
+        private static readonly ITagContext EmptyTagContextInstance = new EmptyTagContext();
 
         private static AsyncLocal<ITagContext> context = new AsyncLocal<ITagContext>();
 
@@ -31,7 +31,7 @@ namespace OpenCensus.Tags.Unsafe
             {
                 if (context.Value == null)
                 {
-                    return EMPTY_TAG_CONTEXT;
+                    return EmptyTagContextInstance;
                 }
 
                 return context.Value;
@@ -39,7 +39,7 @@ namespace OpenCensus.Tags.Unsafe
 
             set
             {
-                if (value == EMPTY_TAG_CONTEXT)
+                if (value == EmptyTagContextInstance)
                 {
                     context.Value = null;
                 }

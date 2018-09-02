@@ -28,13 +28,13 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void invalidSpanId()
         {
-            Assert.Equal(new byte[8], SpanId.INVALID.Bytes);
+            Assert.Equal(new byte[8], SpanId.Invalid.Bytes);
         }
 
         [Fact]
         public void IsValid()
         {
-            Assert.False(SpanId.INVALID.IsValid);
+            Assert.False(SpanId.Invalid.IsValid);
             Assert.True(first.IsValid);
             Assert.True(second.IsValid);
         }
@@ -42,7 +42,7 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void FromLowerBase16()
         {
-            Assert.Equal(SpanId.INVALID, SpanId.FromLowerBase16("0000000000000000"));
+            Assert.Equal(SpanId.Invalid, SpanId.FromLowerBase16("0000000000000000"));
             Assert.Equal(first, SpanId.FromLowerBase16("0000000000000061"));
             Assert.Equal(second, SpanId.FromLowerBase16("ff00000000000041"));
         }
@@ -50,7 +50,7 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void ToLowerBase16()
         {
-            Assert.Equal("0000000000000000", SpanId.INVALID.ToLowerBase16());
+            Assert.Equal("0000000000000000", SpanId.Invalid.ToLowerBase16());
             Assert.Equal("0000000000000061", first.ToLowerBase16());
             Assert.Equal("ff00000000000041", second.ToLowerBase16());
         }
@@ -85,7 +85,7 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void SpanId_ToString()
         {
-            Assert.Contains("0000000000000000", SpanId.INVALID.ToString());
+            Assert.Contains("0000000000000000", SpanId.Invalid.ToString());
             Assert.Contains("0000000000000061", first.ToString());
             Assert.Contains("ff00000000000041", second.ToString());
         }

@@ -20,16 +20,16 @@ namespace OpenCensus.Trace
 
     public sealed class TraceOptions
     {
+        public const int Size = 1;
+
+        public static readonly TraceOptions Default = new TraceOptions(DefaultOptions);
+        public static readonly TraceOptions Sampled = new TraceOptions(1);
+
         // Default options. Nothing set.
         internal const byte DefaultOptions = 0;
 
         // Bit to represent whether trace is sampled or not.
         internal const byte IsSampledBit = 0x1;
-
-        public const int Size = 1;
-
-        public static readonly TraceOptions Default = new TraceOptions(DefaultOptions);
-        public static readonly TraceOptions Sampled = new TraceOptions(1);
 
         // The set of enabled features is determined by all the enabled bits.
         private byte options;
@@ -38,6 +38,29 @@ namespace OpenCensus.Trace
         internal TraceOptions(byte options)
         {
             this.options = options;
+        }
+
+        public byte[] Bytes
+        {
+            get
+            {
+                byte[] bytes = new byte[Size];
+                bytes[0] = this.options;
+                return bytes;
+            }
+        }
+
+        public bool IsSampled
+        {
+            get
+            {
+                return this.HasOption(IsSampledBit);
+            }
+        }
+
+        internal sbyte Options
+        {
+            get { return (sbyte)this.options; }
         }
 
         public static TraceOptions FromBytes(byte[] buffer)
@@ -77,24 +100,6 @@ namespace OpenCensus.Trace
             return new TraceOptionsBuilder(traceOptions.options);
         }
 
-        public byte[] Bytes
-        {
-            get
-            {
-                byte[] bytes = new byte[Size];
-                bytes[0] = this.options;
-                return bytes;
-            }
-        }
-
-        public bool IsSampled
-        {
-            get
-            {
-                return this.HasOption(IsSampledBit);
-            }
-        }
-
         public void CopyBytesTo(byte[] dest, int destOffset)
         {
             if (destOffset < 0 || destOffset >= dest.Length)
@@ -105,6 +110,7 @@ namespace OpenCensus.Trace
             dest[destOffset] = this.options;
         }
 
+        /// <inheritdoc/>
         public override bool Equals(object obj)
         {
             if (obj == this)
@@ -121,22 +127,19 @@ namespace OpenCensus.Trace
             return this.options == that.options;
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             int result = (31 * 1) + this.options;
             return result;
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "TraceOptions{"
                 + "sampled=" + this.IsSampled
                 + "}";
-        }
-
-        internal sbyte Options
-        {
-            get { return (sbyte)this.options; }
         }
 
         private bool HasOption(int mask)

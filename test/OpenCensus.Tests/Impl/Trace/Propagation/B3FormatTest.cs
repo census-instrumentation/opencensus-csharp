@@ -49,7 +49,7 @@ namespace OpenCensus.Trace.Propagation.Test
         {
             IDictionary<String, String> carrier = new Dictionary<String, String>();
             b3Format.Inject(SpanContext.Create(TRACE_ID, SPAN_ID, TRACE_OPTIONS), carrier, setter);
-            ContainsExactly(carrier, new Dictionary<string, string>() { { B3Format.X_B3_TRACE_ID, TRACE_ID_BASE16 }, { B3Format.X_B3_SPAN_ID, SPAN_ID_BASE16 }, { B3Format.X_B3_SAMPLED, "1" } });
+            ContainsExactly(carrier, new Dictionary<string, string>() { { B3Format.XB3TraceId, TRACE_ID_BASE16 }, { B3Format.XB3SpanId, SPAN_ID_BASE16 }, { B3Format.XB3Sampled, "1" } });
         }
 
         [Fact]
@@ -59,15 +59,15 @@ namespace OpenCensus.Trace.Propagation.Test
             var context = SpanContext.Create(TRACE_ID, SPAN_ID, TraceOptions.Default);
             _output.WriteLine(context.ToString());
             b3Format.Inject(context, carrier, setter);
-            ContainsExactly(carrier, new Dictionary<string, string>() { { B3Format.X_B3_TRACE_ID, TRACE_ID_BASE16 }, { B3Format.X_B3_SPAN_ID, SPAN_ID_BASE16 } });
+            ContainsExactly(carrier, new Dictionary<string, string>() { { B3Format.XB3TraceId, TRACE_ID_BASE16 }, { B3Format.XB3SpanId, SPAN_ID_BASE16 } });
         }
 
         [Fact]
         public void ParseMissingSampledAndMissingFlag()
         {
             IDictionary<String, String> headersNotSampled = new Dictionary<String, String>();
-            headersNotSampled.Add(B3Format.X_B3_TRACE_ID, TRACE_ID_BASE16);
-            headersNotSampled.Add(B3Format.X_B3_SPAN_ID, SPAN_ID_BASE16);
+            headersNotSampled.Add(B3Format.XB3TraceId, TRACE_ID_BASE16);
+            headersNotSampled.Add(B3Format.XB3SpanId, SPAN_ID_BASE16);
             ISpanContext spanContext = SpanContext.Create(TRACE_ID, SPAN_ID, TraceOptions.Default);
             Assert.Equal(spanContext, b3Format.Extract(headersNotSampled, getter));
         }
@@ -76,9 +76,9 @@ namespace OpenCensus.Trace.Propagation.Test
         public void ParseSampled()
         {
             IDictionary<String, String> headersSampled = new Dictionary<String, String>();
-            headersSampled.Add(B3Format.X_B3_TRACE_ID, TRACE_ID_BASE16);
-            headersSampled.Add(B3Format.X_B3_SPAN_ID, SPAN_ID_BASE16);
-            headersSampled.Add(B3Format.X_B3_SAMPLED, "1");
+            headersSampled.Add(B3Format.XB3TraceId, TRACE_ID_BASE16);
+            headersSampled.Add(B3Format.XB3SpanId, SPAN_ID_BASE16);
+            headersSampled.Add(B3Format.XB3Sampled, "1");
             Assert.Equal(SpanContext.Create(TRACE_ID, SPAN_ID, TRACE_OPTIONS), b3Format.Extract(headersSampled, getter));
         }
 
@@ -86,9 +86,9 @@ namespace OpenCensus.Trace.Propagation.Test
         public void ParseZeroSampled()
         {
             IDictionary<String, String> headersNotSampled = new Dictionary<String, String>();
-            headersNotSampled.Add(B3Format.X_B3_TRACE_ID, TRACE_ID_BASE16);
-            headersNotSampled.Add(B3Format.X_B3_SPAN_ID, SPAN_ID_BASE16);
-            headersNotSampled.Add(B3Format.X_B3_SAMPLED, "0");
+            headersNotSampled.Add(B3Format.XB3TraceId, TRACE_ID_BASE16);
+            headersNotSampled.Add(B3Format.XB3SpanId, SPAN_ID_BASE16);
+            headersNotSampled.Add(B3Format.XB3Sampled, "0");
             Assert.Equal(SpanContext.Create(TRACE_ID, SPAN_ID, TraceOptions.Default), b3Format.Extract(headersNotSampled, getter));
         }
 
@@ -96,9 +96,9 @@ namespace OpenCensus.Trace.Propagation.Test
         public void ParseFlag()
         {
             IDictionary<String, String> headersFlagSampled = new Dictionary<String, String>();
-            headersFlagSampled.Add(B3Format.X_B3_TRACE_ID, TRACE_ID_BASE16);
-            headersFlagSampled.Add(B3Format.X_B3_SPAN_ID, SPAN_ID_BASE16);
-            headersFlagSampled.Add(B3Format.X_B3_FLAGS, "1");
+            headersFlagSampled.Add(B3Format.XB3TraceId, TRACE_ID_BASE16);
+            headersFlagSampled.Add(B3Format.XB3SpanId, SPAN_ID_BASE16);
+            headersFlagSampled.Add(B3Format.XB3Flags, "1");
             Assert.Equal(SpanContext.Create(TRACE_ID, SPAN_ID, TRACE_OPTIONS), b3Format.Extract(headersFlagSampled, getter));
         }
 
@@ -106,9 +106,9 @@ namespace OpenCensus.Trace.Propagation.Test
         public void ParseZeroFlag()
         {
             IDictionary<String, String> headersFlagNotSampled = new Dictionary<String, String>();
-            headersFlagNotSampled.Add(B3Format.X_B3_TRACE_ID, TRACE_ID_BASE16);
-            headersFlagNotSampled.Add(B3Format.X_B3_SPAN_ID, SPAN_ID_BASE16);
-            headersFlagNotSampled.Add(B3Format.X_B3_FLAGS, "0");
+            headersFlagNotSampled.Add(B3Format.XB3TraceId, TRACE_ID_BASE16);
+            headersFlagNotSampled.Add(B3Format.XB3SpanId, SPAN_ID_BASE16);
+            headersFlagNotSampled.Add(B3Format.XB3Flags, "0");
             Assert.Equal(SpanContext.Create(TRACE_ID, SPAN_ID, TraceOptions.Default), b3Format.Extract(headersFlagNotSampled, getter));
         }
 
@@ -116,9 +116,9 @@ namespace OpenCensus.Trace.Propagation.Test
         public void ParseEightBytesTraceId()
         {
             IDictionary<String, String> headersEightBytes = new Dictionary<String, String>();
-            headersEightBytes.Add(B3Format.X_B3_TRACE_ID, TRACE_ID_BASE16_EIGHT_BYTES);
-            headersEightBytes.Add(B3Format.X_B3_SPAN_ID, SPAN_ID_BASE16);
-            headersEightBytes.Add(B3Format.X_B3_SAMPLED, "1");
+            headersEightBytes.Add(B3Format.XB3TraceId, TRACE_ID_BASE16_EIGHT_BYTES);
+            headersEightBytes.Add(B3Format.XB3SpanId, SPAN_ID_BASE16);
+            headersEightBytes.Add(B3Format.XB3Sampled, "1");
             Assert.Equal(SpanContext.Create(TRACE_ID_EIGHT_BYTES, SPAN_ID, TRACE_OPTIONS), b3Format.Extract(headersEightBytes, getter));
         }
 
@@ -126,8 +126,8 @@ namespace OpenCensus.Trace.Propagation.Test
         public void ParseEightBytesTraceId_NotSampledSpanContext()
         {
             IDictionary<String, String> headersEightBytes = new Dictionary<String, String>();
-            headersEightBytes.Add(B3Format.X_B3_TRACE_ID, TRACE_ID_BASE16_EIGHT_BYTES);
-            headersEightBytes.Add(B3Format.X_B3_SPAN_ID, SPAN_ID_BASE16);
+            headersEightBytes.Add(B3Format.XB3TraceId, TRACE_ID_BASE16_EIGHT_BYTES);
+            headersEightBytes.Add(B3Format.XB3SpanId, SPAN_ID_BASE16);
             Assert.Equal(SpanContext.Create(TRACE_ID_EIGHT_BYTES, SPAN_ID, TraceOptions.Default), b3Format.Extract(headersEightBytes, getter));
         }
 
@@ -135,8 +135,8 @@ namespace OpenCensus.Trace.Propagation.Test
         public void ParseInvalidTraceId()
         {
             IDictionary<String, String> invalidHeaders = new Dictionary<String, String>();
-            invalidHeaders.Add(B3Format.X_B3_TRACE_ID, "abcdefghijklmnop");
-            invalidHeaders.Add(B3Format.X_B3_SPAN_ID, SPAN_ID_BASE16);
+            invalidHeaders.Add(B3Format.XB3TraceId, "abcdefghijklmnop");
+            invalidHeaders.Add(B3Format.XB3SpanId, SPAN_ID_BASE16);
             Assert.Throws<SpanContextParseException>(() => b3Format.Extract(invalidHeaders, getter));
         }
 
@@ -144,8 +144,8 @@ namespace OpenCensus.Trace.Propagation.Test
         public void ParseInvalidTraceId_Size()
         {
             IDictionary<String, String> invalidHeaders = new Dictionary<String, String>();
-            invalidHeaders.Add(B3Format.X_B3_TRACE_ID, "0123456789abcdef00");
-            invalidHeaders.Add(B3Format.X_B3_SPAN_ID, SPAN_ID_BASE16);
+            invalidHeaders.Add(B3Format.XB3TraceId, "0123456789abcdef00");
+            invalidHeaders.Add(B3Format.XB3SpanId, SPAN_ID_BASE16);
             Assert.Throws<SpanContextParseException>(() => b3Format.Extract(invalidHeaders, getter));
         }
 
@@ -153,7 +153,7 @@ namespace OpenCensus.Trace.Propagation.Test
         public void ParseMissingTraceId()
         {
             IDictionary<String, String> invalidHeaders = new Dictionary<String, String>();
-            invalidHeaders.Add(B3Format.X_B3_SPAN_ID, SPAN_ID_BASE16);
+            invalidHeaders.Add(B3Format.XB3SpanId, SPAN_ID_BASE16);
             Assert.Throws<SpanContextParseException>(() => b3Format.Extract(invalidHeaders, getter));
         }
 
@@ -161,8 +161,8 @@ namespace OpenCensus.Trace.Propagation.Test
         public void ParseInvalidSpanId()
         {
             IDictionary<String, String> invalidHeaders = new Dictionary<String, String>();
-            invalidHeaders.Add(B3Format.X_B3_TRACE_ID, TRACE_ID_BASE16);
-            invalidHeaders.Add(B3Format.X_B3_SPAN_ID, "abcdefghijklmnop");
+            invalidHeaders.Add(B3Format.XB3TraceId, TRACE_ID_BASE16);
+            invalidHeaders.Add(B3Format.XB3SpanId, "abcdefghijklmnop");
             Assert.Throws<SpanContextParseException>(() => b3Format.Extract(invalidHeaders, getter));
         }
 
@@ -170,8 +170,8 @@ namespace OpenCensus.Trace.Propagation.Test
         public void ParseInvalidSpanId_Size()
         {
             IDictionary<String, String> invalidHeaders = new Dictionary<String, String>();
-            invalidHeaders.Add(B3Format.X_B3_TRACE_ID, TRACE_ID_BASE16);
-            invalidHeaders.Add(B3Format.X_B3_SPAN_ID, "0123456789abcdef00");
+            invalidHeaders.Add(B3Format.XB3TraceId, TRACE_ID_BASE16);
+            invalidHeaders.Add(B3Format.XB3SpanId, "0123456789abcdef00");
             Assert.Throws<SpanContextParseException>(() => b3Format.Extract(invalidHeaders, getter));
         }
 
@@ -179,7 +179,7 @@ namespace OpenCensus.Trace.Propagation.Test
         public void ParseMissingSpanId()
         {
             IDictionary<String, String> invalidHeaders = new Dictionary<String, String>();
-            invalidHeaders.Add(B3Format.X_B3_TRACE_ID, TRACE_ID_BASE16);
+            invalidHeaders.Add(B3Format.XB3TraceId, TRACE_ID_BASE16);
             Assert.Throws<SpanContextParseException>(() => b3Format.Extract(invalidHeaders, getter));
         }
 
@@ -187,7 +187,7 @@ namespace OpenCensus.Trace.Propagation.Test
         public void Fields_list()
         {
             ContainsExactly(b3Format.Fields,
-                new List<string>() { B3Format.X_B3_TRACE_ID, B3Format.X_B3_SPAN_ID, B3Format.X_B3_PARENT_SPAN_ID, B3Format.X_B3_SAMPLED, B3Format.X_B3_FLAGS });
+                new List<string>() { B3Format.XB3TraceId, B3Format.XB3SpanId, B3Format.XB3ParentSpanId, B3Format.XB3Sampled, B3Format.XB3Flags });
         }
 
         private void ContainsExactly(IList<string> list, List<string> items)

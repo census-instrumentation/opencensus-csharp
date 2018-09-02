@@ -37,6 +37,7 @@ namespace OpenCensus.Trace.Sampler
             return true;
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "AlwaysSampleSampler";

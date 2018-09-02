@@ -20,13 +20,21 @@ namespace OpenCensus.Trace.Export
 
     public abstract class SampledSpanStoreBase : ISampledSpanStore
     {
-        private static readonly ISampledSpanStore NOOP_SAMPLED_SPAN_STORE = new NoopSampledSpanStore();
+        private static readonly ISampledSpanStore NoopSampledSpanStoreInstance = new NoopSampledSpanStore();
+
+        protected SampledSpanStoreBase()
+        {
+        }
+
+        public abstract ISampledSpanStoreSummary Summary { get; }
+
+        public abstract ISet<string> RegisteredSpanNamesForCollection { get; }
 
         internal static ISampledSpanStore NoopSampledSpanStore
         {
             get
             {
-                return NOOP_SAMPLED_SPAN_STORE;
+                return NoopSampledSpanStoreInstance;
             }
         }
 
@@ -37,14 +45,6 @@ namespace OpenCensus.Trace.Export
                 return new NoopSampledSpanStore();
             }
         }
-
-        protected SampledSpanStoreBase()
-        {
-        }
-
-        public abstract ISampledSpanStoreSummary Summary { get; }
-
-        public abstract ISet<string> RegisteredSpanNamesForCollection { get; }
 
         public abstract void ConsiderForSampling(ISpan span);
 

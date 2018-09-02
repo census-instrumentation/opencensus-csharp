@@ -32,7 +32,7 @@ namespace OpenCensus.Trace.Propagation.Test
         [Fact]
         public void Inject_NotNullSpanContext_DoesNotFail()
         {
-            textFormat.Inject(SpanContext.INVALID, new object(), new TestSetter());
+            textFormat.Inject(SpanContext.Invalid, new object(), new TestSetter());
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace OpenCensus.Trace.Propagation.Test
         [Fact]
         public void FromHeaders_NotNullGetter()
         {
-            Assert.Same(SpanContext.INVALID, textFormat.Extract(new object(), new TestGetter()));
+            Assert.Same(SpanContext.Invalid, textFormat.Extract(new object(), new TestGetter()));
         }
 
         class TestSetter : ISetter<object>

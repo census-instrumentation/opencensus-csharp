@@ -21,14 +21,14 @@ namespace OpenCensus.Tags
 
     public sealed class TagKey : ITagKey
     {
-        public const int MAX_LENGTH = 255;
-
-        public string Name { get; }
+        public const int MaxLength = 255;
 
         internal TagKey(string name)
         {
             this.Name = name ?? throw new ArgumentNullException(nameof(name));
         }
+
+        public string Name { get; }
 
         public static ITagKey Create(string name)
         {
@@ -40,6 +40,7 @@ namespace OpenCensus.Tags
             return new TagKey(name);
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "TagKey{"
@@ -47,6 +48,7 @@ namespace OpenCensus.Tags
                 + "}";
         }
 
+    /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -62,6 +64,7 @@ namespace OpenCensus.Tags
             return false;
         }
 
+    /// <inheritdoc/>
         public override int GetHashCode()
         {
             int h = 1;
@@ -72,7 +75,7 @@ namespace OpenCensus.Tags
 
         private static bool IsValid(string value)
         {
-            return !string.IsNullOrEmpty(value) && value.Length <= MAX_LENGTH && StringUtil.IsPrintableString(value);
+            return !string.IsNullOrEmpty(value) && value.Length <= MaxLength && StringUtil.IsPrintableString(value);
         }
     }
 }

@@ -54,7 +54,7 @@ namespace OpenCensus.Tags.Propagation.Test
         public void TestRoundtrip_TagContextWithMaximumSize()
         {
             ITagContextBuilder builder = tagger.EmptyBuilder;
-            for (int i = 0; i < SerializationUtils.TAGCONTEXT_SERIALIZED_SIZE_LIMIT / 8; i++)
+            for (int i = 0; i < SerializationUtils.TagContextSerializedSizeLimit / 8; i++)
             {
                 // Each tag will be with format {key : "0123", value : "0123"}, so the length of it is 8.
                 // Add 1024 tags, the total size should just be 8192.

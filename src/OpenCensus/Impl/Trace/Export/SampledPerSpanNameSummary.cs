@@ -23,6 +23,12 @@ namespace OpenCensus.Trace.Export
 
     public sealed class SampledPerSpanNameSummary : ISampledPerSpanNameSummary
     {
+        internal SampledPerSpanNameSummary(IDictionary<ISampledLatencyBucketBoundaries, int> numbersOfLatencySampledSpans, IDictionary<CanonicalCode, int> numbersOfErrorSampledSpans)
+        {
+            this.NumbersOfLatencySampledSpans = numbersOfLatencySampledSpans ?? throw new ArgumentNullException(nameof(numbersOfLatencySampledSpans));
+            this.NumbersOfErrorSampledSpans = numbersOfErrorSampledSpans ?? throw new ArgumentNullException(nameof(numbersOfErrorSampledSpans));
+        }
+
         public IDictionary<ISampledLatencyBucketBoundaries, int> NumbersOfLatencySampledSpans { get; }
 
         public IDictionary<CanonicalCode, int> NumbersOfErrorSampledSpans { get; }
@@ -44,12 +50,7 @@ namespace OpenCensus.Trace.Export
             return new SampledPerSpanNameSummary(new ReadOnlyDictionary<ISampledLatencyBucketBoundaries, int>(copy1), new ReadOnlyDictionary<CanonicalCode, int>(copy2));
         }
 
-        internal SampledPerSpanNameSummary(IDictionary<ISampledLatencyBucketBoundaries, int> numbersOfLatencySampledSpans, IDictionary<CanonicalCode, int> numbersOfErrorSampledSpans)
-        {
-            this.NumbersOfLatencySampledSpans = numbersOfLatencySampledSpans ?? throw new ArgumentNullException(nameof(numbersOfLatencySampledSpans));
-            this.NumbersOfErrorSampledSpans = numbersOfErrorSampledSpans ?? throw new ArgumentNullException(nameof(numbersOfErrorSampledSpans));
-        }
-
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "SampledPerSpanNameSummary{"
@@ -58,6 +59,7 @@ namespace OpenCensus.Trace.Export
                 + "}";
         }
 
+    /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -74,6 +76,7 @@ namespace OpenCensus.Trace.Export
             return false;
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             int h = 1;

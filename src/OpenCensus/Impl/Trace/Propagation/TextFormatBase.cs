@@ -20,20 +20,20 @@ namespace OpenCensus.Trace.Propagation
 
     public abstract class TextFormatBase : ITextFormat
     {
-        private static readonly NoopTextFormat NOOP_TEXT_FORMAT = new NoopTextFormat();
+        private static readonly NoopTextFormat NoopTextFormatInstance = new NoopTextFormat();
 
         public abstract IList<string> Fields { get; }
-
-        public abstract ISpanContext Extract<T>(T carrier, IGetter<T> getter);
-
-        public abstract void Inject<T>(ISpanContext spanContext, T carrier, ISetter<T> setter);
 
         internal static ITextFormat NoopTextFormat
         {
             get
             {
-                return NOOP_TEXT_FORMAT;
+                return NoopTextFormatInstance;
             }
         }
+
+        public abstract ISpanContext Extract<T>(T carrier, IGetter<T> getter);
+
+        public abstract void Inject<T>(ISpanContext spanContext, T carrier, ISetter<T> setter);
     }
 }

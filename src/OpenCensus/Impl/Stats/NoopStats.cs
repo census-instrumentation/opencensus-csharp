@@ -22,11 +22,6 @@ namespace OpenCensus.Stats
         {
         }
 
-        internal static IStatsComponent NewNoopStatsComponent()
-        {
-            return new NoopStatsComponent();
-        }
-
         internal static IStatsRecorder NoopStatsRecorder
         {
             get
@@ -41,6 +36,11 @@ namespace OpenCensus.Stats
             {
                 return OpenCensus.Stats.NoopMeasureMap.Instance;
             }
+        }
+
+        internal static IStatsComponent NewNoopStatsComponent()
+        {
+            return new NoopStatsComponent();
         }
 
         internal static IViewManager NewNoopViewManager()

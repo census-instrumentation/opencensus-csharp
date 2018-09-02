@@ -48,6 +48,7 @@ namespace OpenCensus.Stats
             return new ViewName(name);
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "Name{"
@@ -55,6 +56,7 @@ namespace OpenCensus.Stats
                 + "}";
         }
 
+        /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -70,6 +72,7 @@ namespace OpenCensus.Stats
             return false;
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             int h = 1;

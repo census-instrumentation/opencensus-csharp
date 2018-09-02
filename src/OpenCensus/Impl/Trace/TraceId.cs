@@ -22,90 +22,32 @@ namespace OpenCensus.Trace
 
     public sealed class TraceId : ITraceId
     {
-        public const int SIZE = 16;
-        public static readonly TraceId INVALID = new TraceId(new byte[SIZE]);
+        public const int Size = 16;
+        public static readonly TraceId Invalid = new TraceId(new byte[Size]);
 
         private readonly byte[] bytes;
-
-        public byte[] Bytes
-        {
-            get
-            {
-                byte[] copyOf = new byte[SIZE];
-                Buffer.BlockCopy(this.bytes, 0, copyOf, 0, SIZE);
-                return copyOf;
-            }
-        }
 
         private TraceId(byte[] bytes)
         {
             this.bytes = bytes;
         }
 
-        public static ITraceId FromBytes(byte[] buffer)
+        public byte[] Bytes
         {
-            if (buffer == null)
+            get
             {
-                throw new ArgumentNullException("buffer");
+                byte[] copyOf = new byte[Size];
+                Buffer.BlockCopy(this.bytes, 0, copyOf, 0, Size);
+                return copyOf;
             }
-
-            if (buffer.Length != SIZE)
-            {
-                throw new ArgumentOutOfRangeException(string.Format("Invalid size: expected {0}, got {1}", SIZE, buffer.Length));
-            }
-
-            byte[] bytesCopied = new byte[SIZE];
-            Buffer.BlockCopy(buffer, 0, bytesCopied, 0, SIZE);
-            return new TraceId(bytesCopied);
-        }
-
-        public static ITraceId FromBytes(byte[] src, int srcOffset)
-        {
-            byte[] bytes = new byte[SIZE];
-            Buffer.BlockCopy(src, srcOffset, bytes, 0, SIZE);
-            return new TraceId(bytes);
-        }
-
-        public static ITraceId FromLowerBase16(string src)
-        {
-            if (src.Length != 2 * SIZE)
-            {
-                throw new ArgumentOutOfRangeException(string.Format("Invalid size: expected {0}, got {1}", 2 * SIZE, src.Length));
-            }
-
-            byte[] bytes = Arrays.StringToByteArray(src);
-            return new TraceId(bytes);
-        }
-
-        public static ITraceId GenerateRandomId(IRandomGenerator random)
-        {
-            byte[] bytes = new byte[SIZE];
-            do
-            {
-                random.NextBytes(bytes);
-            }
-            while (Arrays.Equals(bytes, INVALID.bytes));
-            return new TraceId(bytes);
-        }
-
-        public void CopyBytesTo(byte[] dest, int destOffset)
-        {
-            Buffer.BlockCopy(this.bytes, 0, dest, destOffset, SIZE);
         }
 
         public bool IsValid
         {
             get
             {
-                return !Arrays.Equals(this.bytes, INVALID.bytes);
+                return !Arrays.Equals(this.bytes, Invalid.bytes);
             }
-        }
-
-        public string ToLowerBase16()
-        {
-            var bytes = this.Bytes;
-            var result = Arrays.ByteArrayToString(bytes);
-            return result;
         }
 
         public long LowerLong
@@ -130,6 +72,65 @@ namespace OpenCensus.Trace
             }
         }
 
+        public static ITraceId FromBytes(byte[] buffer)
+        {
+            if (buffer == null)
+            {
+                throw new ArgumentNullException("buffer");
+            }
+
+            if (buffer.Length != Size)
+            {
+                throw new ArgumentOutOfRangeException(string.Format("Invalid size: expected {0}, got {1}", Size, buffer.Length));
+            }
+
+            byte[] bytesCopied = new byte[Size];
+            Buffer.BlockCopy(buffer, 0, bytesCopied, 0, Size);
+            return new TraceId(bytesCopied);
+        }
+
+        public static ITraceId FromBytes(byte[] src, int srcOffset)
+        {
+            byte[] bytes = new byte[Size];
+            Buffer.BlockCopy(src, srcOffset, bytes, 0, Size);
+            return new TraceId(bytes);
+        }
+
+        public static ITraceId FromLowerBase16(string src)
+        {
+            if (src.Length != 2 * Size)
+            {
+                throw new ArgumentOutOfRangeException(string.Format("Invalid size: expected {0}, got {1}", 2 * Size, src.Length));
+            }
+
+            byte[] bytes = Arrays.StringToByteArray(src);
+            return new TraceId(bytes);
+        }
+
+        public static ITraceId GenerateRandomId(IRandomGenerator random)
+        {
+            byte[] bytes = new byte[Size];
+            do
+            {
+                random.NextBytes(bytes);
+            }
+            while (Arrays.Equals(bytes, Invalid.bytes));
+            return new TraceId(bytes);
+        }
+
+        public void CopyBytesTo(byte[] dest, int destOffset)
+        {
+            Buffer.BlockCopy(this.bytes, 0, dest, destOffset, Size);
+        }
+
+        public string ToLowerBase16()
+        {
+            var bytes = this.Bytes;
+            var result = Arrays.ByteArrayToString(bytes);
+            return result;
+        }
+
+        /// <inheritdoc/>
         public override bool Equals(object obj)
         {
             if (obj == this)
@@ -146,11 +147,13 @@ namespace OpenCensus.Trace
             return Arrays.Equals(this.bytes, that.bytes);
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             return Arrays.GetHashCode(this.bytes);
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "TraceId{"
@@ -161,7 +164,7 @@ namespace OpenCensus.Trace
         public int CompareTo(ITraceId other)
         {
             TraceId that = other as TraceId;
-            for (int i = 0; i < SIZE; i++)
+            for (int i = 0; i < Size; i++)
             {
                 if (this.bytes[i] != that.bytes[i])
                 {

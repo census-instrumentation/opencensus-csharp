@@ -123,7 +123,7 @@ namespace OpenCensus.Stats.Test
             StatsTestUtil.AssertAggregationMapEquals(
                 viewData.AggregationMap,
                 new Dictionary<TagValues, IAggregationData>() {
-                    { tv, StatsTestUtil.CreateAggregationData(Sum.Create(), MEASURE_DOUBLE, 2.0) }
+                    { tv, StatsTestUtil.CreateAggregationData(Sum.Create(), MEASURE_DOUBLE, 2.0) },
                 },
                 1e-6);
         }
@@ -153,7 +153,7 @@ namespace OpenCensus.Stats.Test
                 viewData.AggregationMap,
                 new Dictionary<TagValues, IAggregationData>() {
                     { tv, StatsTestUtil.CreateAggregationData(Sum.Create(), MEASURE_DOUBLE, 1.0) },
-                    { tv2, StatsTestUtil.CreateAggregationData(Sum.Create(), MEASURE_DOUBLE, 1.0) }
+                    { tv2, StatsTestUtil.CreateAggregationData(Sum.Create(), MEASURE_DOUBLE, 1.0) },
                 },
                 1e-6);
         }
@@ -211,7 +211,7 @@ namespace OpenCensus.Stats.Test
                 viewManager.GetView(VIEW_NAME).AggregationMap,
                 new Dictionary<TagValues, IAggregationData>()
                 {
-                    { tv,  StatsTestUtil.CreateAggregationData(Sum.Create(), MEASURE_DOUBLE, 4.0) }
+                    { tv,  StatsTestUtil.CreateAggregationData(Sum.Create(), MEASURE_DOUBLE, 4.0) },
                 },
                 1e-6);
         }

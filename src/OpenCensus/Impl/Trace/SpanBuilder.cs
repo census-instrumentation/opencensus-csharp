@@ -24,6 +24,18 @@ namespace OpenCensus.Trace
 
     public class SpanBuilder : SpanBuilderBase
     {
+        internal SpanBuilder()
+        {
+        }
+
+        private SpanBuilder(string name, SpanBuilderOptions options, ISpanContext remoteParentSpanContext = null, ISpan parent = null)
+        {
+            this.Name = name ?? throw new ArgumentNullException(nameof(name));
+            this.Parent = parent;
+            this.RemoteParentSpanContext = remoteParentSpanContext;
+            this.Options = options;
+        }
+
         private SpanBuilderOptions Options { get; set; }
 
         private string Name { get; set; }
@@ -37,93 +49,6 @@ namespace OpenCensus.Trace
         private IList<ISpan> ParentLinks { get; set; } = new List<ISpan>();
 
         private bool RecordEvents { get; set; }
-
-        internal static ISpanBuilder CreateWithParent(string spanName, ISpan parent, SpanBuilderOptions options)
-        {
-            return new SpanBuilder(spanName, options, null, parent);
-        }
-
-        internal static ISpanBuilder CreateWithRemoteParent(string spanName, ISpanContext remoteParentSpanContext, SpanBuilderOptions options)
-        {
-            return new SpanBuilder(spanName, options, remoteParentSpanContext, null);
-        }
-
-        internal SpanBuilder()
-        {
-        }
-
-        private SpanBuilder(string name, SpanBuilderOptions options, ISpanContext remoteParentSpanContext = null, ISpan parent = null)
-        {
-            this.Name = name ?? throw new ArgumentNullException(nameof(name));
-            this.Parent = parent;
-            this.RemoteParentSpanContext = remoteParentSpanContext;
-            this.Options = options;
-        }
-
-        private ISpan StartSpanInternal(
-             ISpanContext parent,
-             bool hasRemoteParent,
-             string name,
-             ISampler sampler,
-             IList<ISpan> parentLinks,
-             bool recordEvents,
-             ITimestampConverter timestampConverter)
-        {
-            ITraceParams activeTraceParams = this.Options.TraceConfig.ActiveTraceParams;
-            IRandomGenerator random = this.Options.RandomHandler;
-            ITraceId traceId;
-            ISpanId spanId = SpanId.GenerateRandomId(random);
-            ISpanId parentSpanId = null;
-            TraceOptionsBuilder traceOptionsBuilder;
-            if (parent == null || !parent.IsValid)
-            {
-                // New root span.
-                traceId = TraceId.GenerateRandomId(random);
-                traceOptionsBuilder = TraceOptions.Builder();
-
-                // This is a root span so no remote or local parent.
-                // hasRemoteParent = null;
-                hasRemoteParent = false;
-            }
-            else
-            {
-                // New child span.
-                traceId = parent.TraceId;
-                parentSpanId = parent.SpanId;
-                traceOptionsBuilder = TraceOptions.Builder(parent.TraceOptions);
-            }
-
-            traceOptionsBuilder.SetIsSampled(
-                 MakeSamplingDecision(
-                    parent,
-                    hasRemoteParent,
-                    name,
-                    sampler,
-                    parentLinks,
-                    traceId,
-                    spanId,
-                    activeTraceParams));
-            TraceOptions traceOptions = traceOptionsBuilder.Build();
-            SpanOptions spanOptions = SpanOptions.NONE;
-
-            if (traceOptions.IsSampled || recordEvents)
-            {
-                spanOptions = SpanOptions.RECORD_EVENTS;
-            }
-
-            ISpan span = Span.StartSpan(
-                        SpanContext.Create(traceId, spanId, traceOptions),
-                        spanOptions,
-                        name,
-                        parentSpanId,
-                        hasRemoteParent,
-                        activeTraceParams,
-                        this.Options.StartEndHandler,
-                        timestampConverter,
-                        this.Options.Clock);
-            LinkSpans(span, parentLinks);
-            return span;
-        }
 
         public override ISpan StartSpan()
         {
@@ -181,6 +106,16 @@ namespace OpenCensus.Trace
             return this;
         }
 
+        internal static ISpanBuilder CreateWithParent(string spanName, ISpan parent, SpanBuilderOptions options)
+        {
+            return new SpanBuilder(spanName, options, null, parent);
+        }
+
+        internal static ISpanBuilder CreateWithRemoteParent(string spanName, ISpanContext remoteParentSpanContext, SpanBuilderOptions options)
+        {
+            return new SpanBuilder(spanName, options, remoteParentSpanContext, null);
+        }
+
         private static bool IsAnyParentLinkSampled(IList<ISpan> parentLinks)
         {
             foreach (ISpan parentLink in parentLinks)
@@ -234,6 +169,71 @@ namespace OpenCensus.Trace
 
             // Parent is always different than null because otherwise we use the default sampler.
             return parent.TraceOptions.IsSampled || IsAnyParentLinkSampled(parentLinks);
+        }
+
+        private ISpan StartSpanInternal(
+                     ISpanContext parent,
+                     bool hasRemoteParent,
+                     string name,
+                     ISampler sampler,
+                     IList<ISpan> parentLinks,
+                     bool recordEvents,
+                     ITimestampConverter timestampConverter)
+        {
+            ITraceParams activeTraceParams = this.Options.TraceConfig.ActiveTraceParams;
+            IRandomGenerator random = this.Options.RandomHandler;
+            ITraceId traceId;
+            ISpanId spanId = SpanId.GenerateRandomId(random);
+            ISpanId parentSpanId = null;
+            TraceOptionsBuilder traceOptionsBuilder;
+            if (parent == null || !parent.IsValid)
+            {
+                // New root span.
+                traceId = TraceId.GenerateRandomId(random);
+                traceOptionsBuilder = TraceOptions.Builder();
+
+                // This is a root span so no remote or local parent.
+                // hasRemoteParent = null;
+                hasRemoteParent = false;
+            }
+            else
+            {
+                // New child span.
+                traceId = parent.TraceId;
+                parentSpanId = parent.SpanId;
+                traceOptionsBuilder = TraceOptions.Builder(parent.TraceOptions);
+            }
+
+            traceOptionsBuilder.SetIsSampled(
+                 MakeSamplingDecision(
+                    parent,
+                    hasRemoteParent,
+                    name,
+                    sampler,
+                    parentLinks,
+                    traceId,
+                    spanId,
+                    activeTraceParams));
+            TraceOptions traceOptions = traceOptionsBuilder.Build();
+            SpanOptions spanOptions = SpanOptions.NONE;
+
+            if (traceOptions.IsSampled || recordEvents)
+            {
+                spanOptions = SpanOptions.RECORD_EVENTS;
+            }
+
+            ISpan span = Span.StartSpan(
+                        SpanContext.Create(traceId, spanId, traceOptions),
+                        spanOptions,
+                        name,
+                        parentSpanId,
+                        hasRemoteParent,
+                        activeTraceParams,
+                        this.Options.StartEndHandler,
+                        timestampConverter,
+                        this.Options.Clock);
+            LinkSpans(span, parentLinks);
+            return span;
         }
     }
 }

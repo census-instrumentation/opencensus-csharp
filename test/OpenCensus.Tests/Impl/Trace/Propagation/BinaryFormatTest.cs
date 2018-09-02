@@ -30,7 +30,7 @@ namespace OpenCensus.Trace.Propagation.Test
         private static readonly byte[] EXAMPLE_BYTES =
             new byte[] {
             0, 0, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 1, 97, 98, 99, 100,
-            101, 102, 103, 104, 2, 1
+            101, 102, 103, 104, 2, 1,
             };
 
         private static readonly ISpanContext EXAMPLE_SPAN_CONTEXT = SpanContext.Create(TRACE_ID, SPAN_ID, TRACE_OPTIONS);
@@ -67,9 +67,9 @@ namespace OpenCensus.Trace.Propagation.Test
         {
             Assert.Equal(
                 new byte[] {
-              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0
+              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0,
                     },
-                binaryFormat.ToByteArray(SpanContext.INVALID));
+                binaryFormat.ToByteArray(SpanContext.Invalid));
 
         }
 
@@ -99,7 +99,7 @@ namespace OpenCensus.Trace.Propagation.Test
             Assert.Throws<SpanContextParseException>(() => binaryFormat.FromByteArray(
                 new byte[] {
           66, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 97, 98, 99, 100, 101,
-          102, 103, 104, 1
+          102, 103, 104, 1,
                 }));
         }
 
@@ -107,11 +107,11 @@ namespace OpenCensus.Trace.Propagation.Test
         public void FromBinaryValue_UnsupportedFieldIdFirst()
         {
             Assert.Equal(
-                SpanContext.Create(TraceId.INVALID, SpanId.INVALID, TraceOptions.Default),
+                SpanContext.Create(TraceId.Invalid, SpanId.Invalid, TraceOptions.Default),
                 binaryFormat.FromByteArray(
                         new byte[] {
                   0, 4, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 1, 97, 98,
-                  99, 100, 101, 102, 103, 104, 2, 1
+                  99, 100, 101, 102, 103, 104, 2, 1,
                         }));
         }
 
@@ -122,12 +122,12 @@ namespace OpenCensus.Trace.Propagation.Test
                  SpanContext.Create(
                         TraceId.FromBytes(
                             new byte[] { 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79 }),
-                        SpanId.INVALID,
+                        SpanId.Invalid,
                         TraceOptions.Default),
                  binaryFormat.FromByteArray(
                         new byte[] {
                   0, 0, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 3, 97, 98,
-                  99, 100, 101, 102, 103, 104, 2, 1
+                  99, 100, 101, 102, 103, 104, 2, 1,
                         }));
 
         }
@@ -154,7 +154,7 @@ namespace OpenCensus.Trace.Propagation.Test
             Assert.Throws<SpanContextParseException>(() => binaryFormat.FromByteArray(
                 new byte[] {
           0, 0, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 1, 97, 98, 99, 100,
-          101, 102, 103, 104, 2
+          101, 102, 103, 104, 2,
                 }));
         }
     }

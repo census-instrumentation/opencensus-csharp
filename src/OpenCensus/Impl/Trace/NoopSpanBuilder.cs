@@ -21,14 +21,12 @@ namespace OpenCensus.Trace
 
     public class NoopSpanBuilder : SpanBuilderBase
     {
-        internal static ISpanBuilder CreateWithParent(string spanName, ISpan parent = null)
+        private NoopSpanBuilder(string name)
         {
-            return new NoopSpanBuilder(spanName);
-        }
-
-        internal static ISpanBuilder CreateWithRemoteParent(string spanName, ISpanContext remoteParentSpanContext = null)
-        {
-            return new NoopSpanBuilder(spanName);
+            if (name == null)
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
         }
 
         public override ISpan StartSpan()
@@ -51,12 +49,14 @@ namespace OpenCensus.Trace
             return this;
         }
 
-        private NoopSpanBuilder(string name)
+        internal static ISpanBuilder CreateWithParent(string spanName, ISpan parent = null)
         {
-            if (name == null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
+            return new NoopSpanBuilder(spanName);
+        }
+
+        internal static ISpanBuilder CreateWithRemoteParent(string spanName, ISpanContext remoteParentSpanContext = null)
+        {
+            return new NoopSpanBuilder(spanName);
         }
     }
 }

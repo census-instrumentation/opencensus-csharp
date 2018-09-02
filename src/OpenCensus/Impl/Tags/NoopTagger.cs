@@ -48,6 +48,14 @@ namespace OpenCensus.Tags
             }
         }
 
+        public override ITagContextBuilder CurrentBuilder
+        {
+            get
+            {
+                return NoopTags.NoopTagContextBuilder;
+            }
+        }
+
         public override ITagContextBuilder ToBuilder(ITagContext tags)
         {
             if (tags == null)
@@ -56,14 +64,6 @@ namespace OpenCensus.Tags
             }
 
             return NoopTags.NoopTagContextBuilder;
-        }
-
-        public override ITagContextBuilder CurrentBuilder
-        {
-            get
-            {
-                return NoopTags.NoopTagContextBuilder;
-            }
         }
 
         public override IScope WithTagContext(ITagContext tags)

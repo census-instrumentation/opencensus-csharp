@@ -21,26 +21,27 @@ namespace OpenCensus.Stats.Measurements
 
     public sealed class MeasurementLong : Measurement, IMeasurementLong
     {
-        public override IMeasure Measure { get; }
-
-        public long Value { get; }
-
         private MeasurementLong(IMeasureLong measure, long value)
         {
             this.Measure = measure ?? throw new ArgumentNullException(nameof(measure));
             this.Value = value;
         }
 
+        public override IMeasure Measure { get; }
+
+        public long Value { get; }
+
         public static IMeasurementLong Create(IMeasureLong measure, long value)
         {
             return new MeasurementLong(measure, value);
         }
 
-        public override M Match<M>(Func<IMeasurementDouble, M> p0, Func<IMeasurementLong, M> p1, Func<IMeasurement, M> defaultFunction)
+        public override T Match<T>(Func<IMeasurementDouble, T> p0, Func<IMeasurementLong, T> p1, Func<IMeasurement, T> defaultFunction)
         {
             return p1.Invoke(this);
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "MeasurementLong{"
@@ -49,6 +50,7 @@ namespace OpenCensus.Stats.Measurements
                 + "}";
         }
 
+    /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -65,6 +67,7 @@ namespace OpenCensus.Stats.Measurements
             return false;
         }
 
+    /// <inheritdoc/>
         public override int GetHashCode()
         {
             long h = 1;

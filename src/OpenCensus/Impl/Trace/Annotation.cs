@@ -24,12 +24,22 @@ namespace OpenCensus.Trace
 
     public sealed class Annotation : IAnnotation
     {
-        private static readonly ReadOnlyDictionary<string, IAttributeValue> EMPTY_ATTRIBUTES =
+        private static readonly ReadOnlyDictionary<string, IAttributeValue> EmptyAttributes =
                 new ReadOnlyDictionary<string, IAttributeValue>(new Dictionary<string, IAttributeValue>());
+
+        internal Annotation(string description, IDictionary<string, IAttributeValue> attributes)
+        {
+            this.Description = description ?? throw new ArgumentNullException("Null description");
+            this.Attributes = attributes ?? throw new ArgumentNullException("Null attributes");
+        }
+
+        public string Description { get; }
+
+        public IDictionary<string, IAttributeValue> Attributes { get; }
 
         public static IAnnotation FromDescription(string description)
         {
-            return new Annotation(description, EMPTY_ATTRIBUTES);
+            return new Annotation(description, EmptyAttributes);
         }
 
         public static IAnnotation FromDescriptionAndAttributes(string description, IDictionary<string, IAttributeValue> attributes)
@@ -43,16 +53,7 @@ namespace OpenCensus.Trace
             return new Annotation(description, readOnly);
         }
 
-        public string Description { get; }
-
-        public IDictionary<string, IAttributeValue> Attributes { get; }
-
-        internal Annotation(string description, IDictionary<string, IAttributeValue> attributes)
-        {
-            this.Description = description ?? throw new ArgumentNullException("Null description");
-            this.Attributes = attributes ?? throw new ArgumentNullException("Null attributes");
-        }
-
+        /// <inheritdoc/>
         public override bool Equals(object obj)
         {
             if (obj == this)
@@ -69,6 +70,7 @@ namespace OpenCensus.Trace
             return false;
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             int h = 1;
@@ -79,6 +81,7 @@ namespace OpenCensus.Trace
             return h;
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "Annotation{"

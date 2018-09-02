@@ -117,7 +117,7 @@ namespace OpenCensus.Trace
             return span;
         }
 
-        private static void PutHeadersAttribute(ISpan span, string key, List<KeyValuePair<string, IEnumerable<string>>> headers)
+        public static void PutHeadersAttribute(ISpan span, string key, List<KeyValuePair<string, IEnumerable<string>>> headers)
         {
             foreach (var header in headers)
             {

@@ -18,13 +18,13 @@ namespace OpenCensus.Trace.Export
 {
     public abstract class SpanExporterBase : ISpanExporter
     {
-        private static readonly ISpanExporter NOOP_SPAN_EXPORTER = new NoopSpanExporter();
+        private static readonly ISpanExporter NoopSpanExporterInstance = new NoopSpanExporter();
 
         public static ISpanExporter NoopSpanExporter
         {
             get
             {
-                return NOOP_SPAN_EXPORTER;
+                return NoopSpanExporterInstance;
             }
         }
 

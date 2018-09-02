@@ -32,13 +32,13 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void invalidTraceId()
         {
-            Assert.Equal(new byte[16], TraceId.INVALID.Bytes);
+            Assert.Equal(new byte[16], TraceId.Invalid.Bytes);
         }
 
         [Fact]
         public void IsValid()
         {
-            Assert.False(TraceId.INVALID.IsValid);
+            Assert.False(TraceId.Invalid.IsValid);
             Assert.True(first.IsValid);
             Assert.True(second.IsValid);
         }
@@ -53,7 +53,7 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void FromLowerBase16()
         {
-            Assert.Equal(TraceId.INVALID, TraceId.FromLowerBase16("00000000000000000000000000000000"));
+            Assert.Equal(TraceId.Invalid, TraceId.FromLowerBase16("00000000000000000000000000000000"));
             Assert.Equal(first, TraceId.FromLowerBase16("00000000000000000000000000000061"));
             Assert.Equal(second, TraceId.FromLowerBase16("ff000000000000000000000000000041"));
         }
@@ -61,7 +61,7 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void ToLowerBase16()
         {
-            Assert.Equal("00000000000000000000000000000000", TraceId.INVALID.ToLowerBase16());
+            Assert.Equal("00000000000000000000000000000000", TraceId.Invalid.ToLowerBase16());
             Assert.Equal("00000000000000000000000000000061", first.ToLowerBase16());
             Assert.Equal("ff000000000000000000000000000041", second.ToLowerBase16());
         }
@@ -88,7 +88,7 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void TraceId_ToString()
         {
-            Assert.Contains("00000000000000000000000000000000", TraceId.INVALID.ToString());
+            Assert.Contains("00000000000000000000000000000000", TraceId.Invalid.ToString());
             Assert.Contains("00000000000000000000000000000061", first.ToString());
             Assert.Contains("ff000000000000000000000000000041", second.ToString());
         }

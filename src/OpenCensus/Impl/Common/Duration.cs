@@ -18,9 +18,9 @@ namespace OpenCensus.Common
 {
     public class Duration : IDuration
     {
-        private const long MAX_SECONDS = 315576000000L;
-        private const int MAX_NANOS = 999999999;
-        private static readonly IDuration ZERO = new Duration(0, 0);
+        private const long MaxSeconds = 315576000000L;
+        private const int MaxNanos = 999999999;
+        private static readonly IDuration Zero = new Duration(0, 0);
 
         public Duration(long seconds, int nanos)
         {
@@ -34,19 +34,19 @@ namespace OpenCensus.Common
 
         public static IDuration Create(long seconds, int nanos)
         {
-            if (seconds < -MAX_SECONDS || seconds > MAX_SECONDS)
+            if (seconds < -MaxSeconds || seconds > MaxSeconds)
             {
-                return ZERO;
+                return Zero;
             }
 
-            if (nanos < -MAX_NANOS || nanos > MAX_NANOS)
+            if (nanos < -MaxNanos || nanos > MaxNanos)
             {
-                return ZERO;
+                return Zero;
             }
 
             if ((seconds < 0 && nanos > 0) || (seconds > 0 && nanos < 0))
             {
-                return ZERO;
+                return Zero;
             }
 
             return new Duration(seconds, nanos);
@@ -63,6 +63,7 @@ namespace OpenCensus.Common
             return (this.Nanos < other.Nanos) ? -1 : ((this.Nanos > other.Nanos) ? 1 : 0);
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "Duration{"
@@ -71,6 +72,7 @@ namespace OpenCensus.Common
                 + "}";
         }
 
+    /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -87,6 +89,7 @@ namespace OpenCensus.Common
             return false;
         }
 
+    /// <inheritdoc/>
         public override int GetHashCode()
         {
             long h = 1;

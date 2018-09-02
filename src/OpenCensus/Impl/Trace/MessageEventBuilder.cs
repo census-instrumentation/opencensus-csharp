@@ -41,18 +41,6 @@ namespace OpenCensus.Trace
             this.compressedMessageSize = compressedMessageSize;
         }
 
-        internal MessageEventBuilder SetType(MessageEventType type)
-        {
-            this.type = type;
-            return this;
-        }
-
-        internal MessageEventBuilder SetMessageId(long messageId)
-        {
-            this.messageId = messageId;
-            return this;
-        }
-
         public MessageEventBuilder SetUncompressedMessageSize(long uncompressedMessageSize)
         {
             this.uncompressedMessageSize = uncompressedMessageSize;
@@ -98,6 +86,18 @@ namespace OpenCensus.Trace
                 this.messageId.Value,
                 this.uncompressedMessageSize.Value,
                 this.compressedMessageSize.Value);
+        }
+
+        internal MessageEventBuilder SetType(MessageEventType type)
+        {
+            this.type = type;
+            return this;
+        }
+
+        internal MessageEventBuilder SetMessageId(long messageId)
+        {
+            this.messageId = messageId;
+            return this;
         }
     }
 }

@@ -26,10 +26,10 @@ namespace OpenCensus.Tags
 
         ITagContextBuilder EmptyBuilder { get; }
 
-        ITagContextBuilder ToBuilder(ITagContext tags);
-
         ITagContextBuilder CurrentBuilder { get; }
 
         IScope WithTagContext(ITagContext tags);
+
+        ITagContextBuilder ToBuilder(ITagContext tags);
     }
 }

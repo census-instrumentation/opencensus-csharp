@@ -23,27 +23,7 @@ namespace OpenCensus.Trace
 
     public abstract class SpanBase : ISpan, IElement<SpanBase>
     {
-        private static readonly IDictionary<string, IAttributeValue> EMPTY_ATTRIBUTES = new Dictionary<string, IAttributeValue>();
-
-        public virtual ISpanContext Context { get; }
-
-        public virtual SpanOptions Options { get; }
-
-        public abstract Status Status { get; set; }
-
-        public abstract string Name { get; }
-
-        public SpanBase Next { get; set; }
-
-        public SpanBase Previous { get; set; }
-
-        public abstract long EndNanoTime { get; }
-
-        public abstract long LatencyNs { get; }
-
-        public abstract bool IsSampleToLocalSpanStore { get; }
-
-        public abstract ISpanId ParentSpanId { get; }
+        private static readonly IDictionary<string, IAttributeValue> EmptyAttributes = new Dictionary<string, IAttributeValue>();
 
         internal SpanBase()
         {
@@ -65,6 +45,28 @@ namespace OpenCensus.Trace
             this.Options = options;
         }
 
+        public virtual ISpanContext Context { get; }
+
+        public virtual SpanOptions Options { get; }
+
+        public abstract Status Status { get; set; }
+
+        public abstract string Name { get; }
+
+        public SpanBase Next { get; set; }
+
+        public SpanBase Previous { get; set; }
+
+        public abstract long EndNanoTime { get; }
+
+        public abstract long LatencyNs { get; }
+
+        public abstract bool IsSampleToLocalSpanStore { get; }
+
+        public abstract ISpanId ParentSpanId { get; }
+
+        public abstract bool HasEnded { get; }
+
         public virtual void PutAttribute(string key, IAttributeValue value)
         {
             this.PutAttributes(new Dictionary<string, IAttributeValue>() { { key, value } });
@@ -74,7 +76,7 @@ namespace OpenCensus.Trace
 
         public void AddAnnotation(string description)
         {
-            this.AddAnnotation(description, EMPTY_ATTRIBUTES);
+            this.AddAnnotation(description, EmptyAttributes);
         }
 
         public abstract void AddAnnotation(string description, IDictionary<string, IAttributeValue> attributes);
@@ -92,8 +94,7 @@ namespace OpenCensus.Trace
             this.End(EndSpanOptions.DEFAULT);
         }
 
-        public abstract bool HasEnded { get; }
-
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "Span[" +

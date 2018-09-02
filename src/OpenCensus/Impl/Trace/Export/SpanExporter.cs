@@ -36,6 +36,14 @@ namespace OpenCensus.Trace.Export
             this.workerThread.Start();
         }
 
+        internal Thread ServiceExporterThread
+        {
+            get
+            {
+                return this.workerThread;
+            }
+        }
+
         public override void AddSpan(ISpan span)
         {
             this.worker.AddSpan(span);
@@ -60,14 +68,6 @@ namespace OpenCensus.Trace.Export
         {
             SpanExporterWorker worker = new SpanExporterWorker(bufferSize, scheduleDelay);
             return new SpanExporter(worker);
-        }
-
-        internal Thread ServiceExporterThread
-        {
-            get
-            {
-                return this.workerThread;
-            }
         }
     }
 }

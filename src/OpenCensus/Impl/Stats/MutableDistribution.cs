@@ -22,6 +22,12 @@ namespace OpenCensus.Stats
     {
         private const double TOLERANCE = 1e-6;
 
+        internal MutableDistribution(IBucketBoundaries bucketBoundaries)
+        {
+            this.BucketBoundaries = bucketBoundaries;
+            this.BucketCounts = new long[bucketBoundaries.Boundaries.Count + 1];
+        }
+
         internal double Sum { get; set; } = 0.0;
 
         internal double Mean { get; set; } = 0.0;
@@ -38,12 +44,6 @@ namespace OpenCensus.Stats
         internal IBucketBoundaries BucketBoundaries { get; }
 
         internal long[] BucketCounts { get; }
-
-        internal MutableDistribution(IBucketBoundaries bucketBoundaries)
-        {
-            this.BucketBoundaries = bucketBoundaries;
-            this.BucketCounts = new long[bucketBoundaries.Boundaries.Count + 1];
-        }
 
         internal static MutableDistribution Create(IBucketBoundaries bucketBoundaries)
         {

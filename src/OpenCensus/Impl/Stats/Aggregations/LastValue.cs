@@ -31,17 +31,19 @@ namespace OpenCensus.Stats.Aggregations
             return Instance;
         }
 
-        public override M Match<M>(Func<ISum, M> p0, Func<ICount, M> p1, Func<IMean, M> p2, Func<IDistribution, M> p3, Func<ILastValue, M> p4, Func<IAggregation, M> p5)
+        public override T Match<T>(Func<ISum, T> p0, Func<ICount, T> p1, Func<IMean, T> p2, Func<IDistribution, T> p3, Func<ILastValue, T> p4, Func<IAggregation, T> p5)
         {
             return p4.Invoke(this);
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "LastValue{"
                 + "}";
         }
 
+    /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -57,6 +59,7 @@ namespace OpenCensus.Stats.Aggregations
             return false;
         }
 
+    /// <inheritdoc/>
         public override int GetHashCode()
         {
             int h = 1;

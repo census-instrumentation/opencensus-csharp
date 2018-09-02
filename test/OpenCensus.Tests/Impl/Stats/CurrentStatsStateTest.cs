@@ -51,15 +51,14 @@ namespace OpenCensus.Stats.Test
             Assert.Throws<ArgumentException>(() => state.Set(StatsCollectionState.DISABLED));
         }
 
-        /// <summary>
-        /// This test relies on timing, and as such may not FAIL reliably under some conditions
-        /// (e.g. more/less machine load, faster/slower processors).
-        /// It will not incorrectly fail transiently though.
-        /// </summary>
         [Fact]
 
         public async Task PreventSettingStateAfterReadingState_IsThreadSafe()
         {
+            // This test relies on timing, and as such may not FAIL reliably under some conditions
+            // (e.g. more/less machine load, faster/slower processors).
+            // It will not incorrectly fail transiently though.
+
             for (int i = 0; i < 10; i ++)
             {
                 var state = new CurrentStatsState();

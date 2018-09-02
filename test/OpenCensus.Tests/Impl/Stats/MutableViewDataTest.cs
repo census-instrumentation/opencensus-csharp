@@ -81,7 +81,7 @@ namespace OpenCensus.Stats.Test
                 new List<MutableAggregation>() {
                     MutableCount.Create(),
                     MutableMean.Create(),
-                    MutableDistribution.Create(bucketBoundaries)};
+                    MutableDistribution.Create(bucketBoundaries),};
             List<IAggregationData> aggregates = new List<IAggregationData>();
 
             aggregates.Add(MutableViewData.CreateAggregationData(MutableSum.Create(), MEASURE_DOUBLE));
@@ -107,7 +107,7 @@ namespace OpenCensus.Stats.Test
                         Double.PositiveInfinity,
                         Double.NegativeInfinity,
                         0,
-                        new List<long>() { 0L, 0L, 0L, 0L })
+                        new List<long>() { 0L, 0L, 0L, 0L }),
             };
             Assert.Equal(expected, aggregates);
 

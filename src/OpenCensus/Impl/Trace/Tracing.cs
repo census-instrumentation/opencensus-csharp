@@ -27,6 +27,8 @@ namespace OpenCensus.Trace
     {
         private static Tracing tracing = new Tracing(true);
 
+        private ITraceComponent traceComponent = null;
+
         internal Tracing()
             : this(false)
         {
@@ -43,8 +45,6 @@ namespace OpenCensus.Trace
                 this.traceComponent = TraceComponent.NewNoopTraceComponent;
             }
         }
-
-        private ITraceComponent traceComponent = null;
 
         public static ITracer Tracer
         {

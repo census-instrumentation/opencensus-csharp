@@ -20,11 +20,6 @@ namespace OpenCensus.Tags
 
     internal sealed class NoopTags
     {
-        internal static ITagsComponent NewNoopTagsComponent()
-        {
-            return new NoopTagsComponent();
-        }
-
         internal static ITagger NoopTagger
         {
             get
@@ -63,6 +58,11 @@ namespace OpenCensus.Tags
             {
                 return OpenCensus.Tags.NoopTagContextBinarySerializer.Instance;
             }
+        }
+
+        internal static ITagsComponent NewNoopTagsComponent()
+        {
+            return new NoopTagsComponent();
         }
     }
 }

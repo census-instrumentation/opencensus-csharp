@@ -43,22 +43,22 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void InvalidSpanContext()
         {
-            Assert.Equal(TraceId.INVALID, SpanContext.INVALID.TraceId);
-            Assert.Equal(SpanId.INVALID, SpanContext.INVALID.SpanId);
-            Assert.Equal(TraceOptions.Default, SpanContext.INVALID.TraceOptions);
+            Assert.Equal(TraceId.Invalid, SpanContext.Invalid.TraceId);
+            Assert.Equal(SpanId.Invalid, SpanContext.Invalid.SpanId);
+            Assert.Equal(TraceOptions.Default, SpanContext.Invalid.TraceOptions);
         }
 
         [Fact]
         public void IsValid()
         {
-            Assert.False(SpanContext.INVALID.IsValid);
+            Assert.False(SpanContext.Invalid.IsValid);
             Assert.False(
                     SpanContext.Create(
-                            TraceId.FromBytes(firstTraceIdBytes), SpanId.INVALID, TraceOptions.Default)
+                            TraceId.FromBytes(firstTraceIdBytes), SpanId.Invalid, TraceOptions.Default)
                         .IsValid);
             Assert.False(
                     SpanContext.Create(
-                            TraceId.INVALID, SpanId.FromBytes(firstSpanIdBytes), TraceOptions.Default)
+                            TraceId.Invalid, SpanId.FromBytes(firstSpanIdBytes), TraceOptions.Default)
                         .IsValid);
             Assert.True(first.IsValid);
             Assert.True(second.IsValid);

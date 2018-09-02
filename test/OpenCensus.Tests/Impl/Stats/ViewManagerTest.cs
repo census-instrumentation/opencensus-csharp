@@ -52,7 +52,7 @@ namespace OpenCensus.Stats.Test
         private static readonly IBucketBoundaries BUCKET_BOUNDARIES =
             BucketBoundaries.Create(
                 new List<double>() {
-              0.0, 0.2, 0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 7.0, 10.0, 15.0, 20.0, 30.0, 40.0, 50.0});
+              0.0, 0.2, 0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 7.0, 10.0, 15.0, 20.0, 30.0, 40.0, 50.0,});
 
         private static readonly ISum SUM = Sum.Create();
         private static readonly IMean MEAN = Mean.Create();
@@ -284,7 +284,7 @@ namespace OpenCensus.Stats.Test
                 viewData.AggregationMap,
                 new Dictionary<TagValues, IAggregationData>()
                 {
-                    {tv,  StatsTestUtil.CreateAggregationData(aggregation, measure, values) }
+                    {tv,  StatsTestUtil.CreateAggregationData(aggregation, measure, values) },
                 },
                 EPSILON);
         }
@@ -350,7 +350,7 @@ namespace OpenCensus.Stats.Test
                 new Dictionary<TagValues, IAggregationData>()
                 {
                 { tv, StatsTestUtil.CreateAggregationData(DISTRIBUTION, MEASURE_DOUBLE, 10.0)},
-                { tv2, StatsTestUtil.CreateAggregationData(DISTRIBUTION, MEASURE_DOUBLE, 30.0, 50.0)}
+                { tv2, StatsTestUtil.CreateAggregationData(DISTRIBUTION, MEASURE_DOUBLE, 30.0, 50.0)},
                 },
                 EPSILON);
         }
@@ -385,7 +385,7 @@ namespace OpenCensus.Stats.Test
                     { tv,
                     // Should Record stats with default tag value: "KEY" : "unknown/not set".
                     StatsTestUtil.CreateAggregationData(DISTRIBUTION, MEASURE_DOUBLE, 10.0)
-                    }
+                    },
                 },
                 EPSILON);
 
@@ -441,7 +441,7 @@ namespace OpenCensus.Stats.Test
                 // tag value : "unknown/not set".
                 { tv,
                     // Should Record stats with default tag value: "KEY" : "unknown/not set".
-                    StatsTestUtil.CreateAggregationData(DISTRIBUTION, MEASURE_DOUBLE, 10.0, 50.0) }
+                    StatsTestUtil.CreateAggregationData(DISTRIBUTION, MEASURE_DOUBLE, 10.0, 50.0) },
                 },
                 EPSILON);
         }
@@ -499,7 +499,7 @@ namespace OpenCensus.Stats.Test
                 {
                     { tv1,  StatsTestUtil.CreateAggregationData(DISTRIBUTION, MEASURE_DOUBLE, 1.1, 4.4) },
                     { tv2,  StatsTestUtil.CreateAggregationData(DISTRIBUTION, MEASURE_DOUBLE, 2.2) },
-                    { tv3,  StatsTestUtil.CreateAggregationData(DISTRIBUTION, MEASURE_DOUBLE, 3.3)}
+                    { tv3,  StatsTestUtil.CreateAggregationData(DISTRIBUTION, MEASURE_DOUBLE, 3.3)},
                  },
                 EPSILON);
         }
@@ -528,7 +528,7 @@ namespace OpenCensus.Stats.Test
                 viewData1.AggregationMap,
                 new Dictionary<TagValues, IAggregationData>()
                 {
-                    {tv, StatsTestUtil.CreateAggregationData(DISTRIBUTION, MEASURE_DOUBLE, 5.0) }
+                    {tv, StatsTestUtil.CreateAggregationData(DISTRIBUTION, MEASURE_DOUBLE, 5.0) },
                 },
                 EPSILON);
 
@@ -536,7 +536,7 @@ namespace OpenCensus.Stats.Test
                 viewData2.AggregationMap,
                 new Dictionary<TagValues, IAggregationData>()
                 {
-                    {tv, StatsTestUtil.CreateAggregationData(DISTRIBUTION, MEASURE_DOUBLE, 5.0) }
+                    {tv, StatsTestUtil.CreateAggregationData(DISTRIBUTION, MEASURE_DOUBLE, 5.0) },
                 },
                 EPSILON);
         }
@@ -584,7 +584,7 @@ namespace OpenCensus.Stats.Test
                 viewData1.AggregationMap,
                 new Dictionary<TagValues, IAggregationData>()
                 {
-                    {tv, StatsTestUtil.CreateAggregationData(DISTRIBUTION, measure1, value1) }
+                    {tv, StatsTestUtil.CreateAggregationData(DISTRIBUTION, measure1, value1) },
                  },
                 EPSILON);
 
@@ -592,7 +592,7 @@ namespace OpenCensus.Stats.Test
                 viewData2.AggregationMap,
                 new Dictionary<TagValues, IAggregationData>()
                 {
-                    { tv, StatsTestUtil.CreateAggregationData(DISTRIBUTION, measure2, value2) }
+                    { tv, StatsTestUtil.CreateAggregationData(DISTRIBUTION, measure2, value2) },
                 },
                 EPSILON);
         }
@@ -616,7 +616,7 @@ namespace OpenCensus.Stats.Test
                 viewData.AggregationMap,
                 new Dictionary<TagValues, IAggregationData>()
                 {
-                    {tv, StatsTestUtil.CreateAggregationData(noHistogram, MEASURE_DOUBLE, 1.1) }
+                    {tv, StatsTestUtil.CreateAggregationData(noHistogram, MEASURE_DOUBLE, 1.1) },
                 },
                 EPSILON);
         }
@@ -638,7 +638,7 @@ namespace OpenCensus.Stats.Test
                 viewData.AggregationMap,
                 new Dictionary<TagValues, IAggregationData>()
                 {
-                    {tv, StatsTestUtil.CreateAggregationData(MEAN, MEASURE_DOUBLE, 1.1) }
+                    {tv, StatsTestUtil.CreateAggregationData(MEAN, MEASURE_DOUBLE, 1.1) },
                 },
                 EPSILON);
         }
@@ -672,7 +672,7 @@ namespace OpenCensus.Stats.Test
                 viewManager.GetView(VIEW_NAME).AggregationMap,
                 new Dictionary<TagValues, IAggregationData>()
                 {
-                    { tv, StatsTestUtil.CreateAggregationData(MEAN, MEASURE_DOUBLE, 1.1) }
+                    { tv, StatsTestUtil.CreateAggregationData(MEAN, MEASURE_DOUBLE, 1.1) },
                 },
                 EPSILON);
         }
@@ -694,7 +694,7 @@ namespace OpenCensus.Stats.Test
                 viewManager.GetView(VIEW_NAME).AggregationMap,
                 new Dictionary<TagValues, IAggregationData>()
                 {
-                    { tv, StatsTestUtil.CreateAggregationData(MEAN, MEASURE_DOUBLE, 1.1) }
+                    { tv, StatsTestUtil.CreateAggregationData(MEAN, MEASURE_DOUBLE, 1.1) },
                 },
                 EPSILON);
         }
@@ -757,7 +757,7 @@ namespace OpenCensus.Stats.Test
                 viewManager.GetView(view.Name).AggregationMap,
                 new Dictionary<TagValues, IAggregationData>()
                 {
-                    { tv, StatsTestUtil.CreateAggregationData(view.Aggregation, view.Measure, 1.1) }
+                    { tv, StatsTestUtil.CreateAggregationData(view.Aggregation, view.Measure, 1.1) },
                 },
                 EPSILON);
 

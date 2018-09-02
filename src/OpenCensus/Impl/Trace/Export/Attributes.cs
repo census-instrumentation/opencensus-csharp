@@ -44,6 +44,7 @@ namespace OpenCensus.Trace.Export
             return new Attributes(new ReadOnlyDictionary<string, IAttributeValue>(copy), droppedAttributesCount);
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "Attributes{"
@@ -52,6 +53,7 @@ namespace OpenCensus.Trace.Export
                 + "}";
         }
 
+    /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -68,6 +70,7 @@ namespace OpenCensus.Trace.Export
             return false;
         }
 
+    /// <inheritdoc/>
         public override int GetHashCode()
         {
             int h = 1;

@@ -22,10 +22,10 @@ namespace OpenCensus.Internal
     public static class VarInt
     {
         /** Maximum encoded size of 32-bit positive integers (in bytes) */
-        public const int MAX_VARINT_SIZE = 5;
+        public const int MaxVarintSize = 5;
 
         /** maximum encoded size of 64-bit longs, and negative 32-bit ints (in bytes) */
-        public const int MAX_VARLONG_SIZE = 10;
+        public const int MaxVarlongSize = 10;
 
         public static int VarIntSize(int i)
         {

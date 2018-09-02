@@ -23,7 +23,7 @@ namespace OpenCensus.Stats
         internal double LastValue = double.NaN;
 
         // TODO(songya): remove this once interval stats is completely removed.
-        internal bool initialized = false;
+        internal bool Initialized = false;
 
         internal MutableLastValue()
         {
@@ -39,9 +39,9 @@ namespace OpenCensus.Stats
             this.LastValue = value;
 
             // TODO(songya): remove this once interval stats is completely removed.
-            if (!this.initialized)
+            if (!this.Initialized)
             {
-                this.initialized = true;
+                this.Initialized = true;
             }
         }
 
@@ -56,7 +56,7 @@ namespace OpenCensus.Stats
 
             // Assume other is always newer than this, because we combined interval buckets in time order.
             // If there's a newer value, overwrite current value.
-            this.LastValue = otherValue.initialized ? otherValue.LastValue : this.LastValue;
+            this.LastValue = otherValue.Initialized ? otherValue.LastValue : this.LastValue;
         }
 
         internal override T Match<T>(Func<MutableSum, T> p0, Func<MutableCount, T> p1, Func<MutableMean, T> p2, Func<MutableDistribution, T> p3, Func<MutableLastValue, T> p4)

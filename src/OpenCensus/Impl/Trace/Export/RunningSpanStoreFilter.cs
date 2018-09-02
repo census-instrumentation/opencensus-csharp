@@ -20,16 +20,6 @@ namespace OpenCensus.Trace.Export
 
     public sealed class RunningSpanStoreFilter : IRunningSpanStoreFilter
     {
-        public static IRunningSpanStoreFilter Create(string spanName, int maxSpansToReturn)
-        {
-            if (maxSpansToReturn < 0)
-            {
-                throw new ArgumentOutOfRangeException("Negative maxSpansToReturn.");
-            }
-
-            return new RunningSpanStoreFilter(spanName, maxSpansToReturn);
-        }
-
         internal RunningSpanStoreFilter(string spanName, int maxSpansToReturn)
         {
             this.SpanName = spanName ?? throw new ArgumentNullException("Null spanName");
@@ -40,6 +30,17 @@ namespace OpenCensus.Trace.Export
 
         public int MaxSpansToReturn { get; }
 
+        public static IRunningSpanStoreFilter Create(string spanName, int maxSpansToReturn)
+        {
+            if (maxSpansToReturn < 0)
+            {
+                throw new ArgumentOutOfRangeException("Negative maxSpansToReturn.");
+            }
+
+            return new RunningSpanStoreFilter(spanName, maxSpansToReturn);
+        }
+
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "RunningFilter{"
@@ -48,6 +49,7 @@ namespace OpenCensus.Trace.Export
                 + "}";
         }
 
+    /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -64,6 +66,7 @@ namespace OpenCensus.Trace.Export
             return false;
         }
 
+    /// <inheritdoc/>
         public override int GetHashCode()
         {
             int h = 1;

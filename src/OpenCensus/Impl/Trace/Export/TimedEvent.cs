@@ -20,21 +20,22 @@ namespace OpenCensus.Trace.Export
 
     public sealed class TimedEvent<T> : ITimedEvent<T>
     {
-        public static ITimedEvent<T> Create(ITimestamp timestamp, T @event)
-        {
-            return new TimedEvent<T>(timestamp, @event);
-        }
-
-        public ITimestamp Timestamp { get; }
-
-        public T Event { get; }
-
         internal TimedEvent(ITimestamp timestamp, T @event)
         {
             this.Timestamp = timestamp;
             this.Event = @event;
         }
 
+        public ITimestamp Timestamp { get; }
+
+        public T Event { get; }
+
+        public static ITimedEvent<T> Create(ITimestamp timestamp, T @event)
+        {
+            return new TimedEvent<T>(timestamp, @event);
+        }
+
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "TimedEvent{"
@@ -43,6 +44,7 @@ namespace OpenCensus.Trace.Export
                 + "}";
         }
 
+    /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -59,6 +61,7 @@ namespace OpenCensus.Trace.Export
             return false;
         }
 
+    /// <inheritdoc/>
         public override int GetHashCode()
         {
             int h = 1;
