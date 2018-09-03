@@ -22,8 +22,8 @@ namespace OpenCensus.Trace
 
     public sealed class SpanId : ISpanId
     {
-        public const int SIZE = 8;
-        public static readonly SpanId Invalid = new SpanId(new byte[SIZE]);
+        public const int Size = 8;
+        public static readonly SpanId Invalid = new SpanId(new byte[Size]);
 
         private readonly byte[] bytes;
 
@@ -36,8 +36,8 @@ namespace OpenCensus.Trace
         {
             get
             {
-                byte[] copyOf = new byte[SIZE];
-                Buffer.BlockCopy(this.bytes, 0, copyOf, 0, SIZE);
+                byte[] copyOf = new byte[Size];
+                Buffer.BlockCopy(this.bytes, 0, copyOf, 0, Size);
                 return copyOf;
             }
         }
@@ -54,28 +54,28 @@ namespace OpenCensus.Trace
                 throw new ArgumentNullException("buffer");
             }
 
-            if (buffer.Length != SIZE)
+            if (buffer.Length != Size)
             {
-                throw new ArgumentOutOfRangeException(string.Format("Invalid size: expected {0}, got {1}", SIZE, buffer.Length));
+                throw new ArgumentOutOfRangeException(string.Format("Invalid size: expected {0}, got {1}", Size, buffer.Length));
             }
 
-            byte[] bytesCopied = new byte[SIZE];
-            Buffer.BlockCopy(buffer, 0, bytesCopied, 0, SIZE);
+            byte[] bytesCopied = new byte[Size];
+            Buffer.BlockCopy(buffer, 0, bytesCopied, 0, Size);
             return new SpanId(bytesCopied);
         }
 
         public static ISpanId FromBytes(byte[] src, int srcOffset)
         {
-            byte[] bytes = new byte[SIZE];
-            Buffer.BlockCopy(src, srcOffset, bytes, 0, SIZE);
+            byte[] bytes = new byte[Size];
+            Buffer.BlockCopy(src, srcOffset, bytes, 0, Size);
             return new SpanId(bytes);
         }
 
         public static ISpanId FromLowerBase16(string src)
         {
-            if (src.Length != 2 * SIZE)
+            if (src.Length != 2 * Size)
             {
-                throw new ArgumentOutOfRangeException(string.Format("Invalid size: expected {0}, got {1}", 2 * SIZE, src.Length));
+                throw new ArgumentOutOfRangeException(string.Format("Invalid size: expected {0}, got {1}", 2 * Size, src.Length));
             }
 
             byte[] bytes = Arrays.StringToByteArray(src);
@@ -84,7 +84,7 @@ namespace OpenCensus.Trace
 
         public static ISpanId GenerateRandomId(IRandomGenerator random)
         {
-            byte[] bytes = new byte[SIZE];
+            byte[] bytes = new byte[Size];
             do
             {
                 random.NextBytes(bytes);
@@ -95,7 +95,7 @@ namespace OpenCensus.Trace
 
         public void CopyBytesTo(byte[] dest, int destOffset)
         {
-            Buffer.BlockCopy(this.bytes, 0, dest, destOffset, SIZE);
+            Buffer.BlockCopy(this.bytes, 0, dest, destOffset, Size);
         }
 
         public string ToLowerBase16()
@@ -138,7 +138,7 @@ namespace OpenCensus.Trace
         public int CompareTo(ISpanId other)
         {
             SpanId that = other as SpanId;
-            for (int i = 0; i < SIZE; i++)
+            for (int i = 0; i < Size; i++)
             {
                 if (this.bytes[i] != that.bytes[i])
                 {

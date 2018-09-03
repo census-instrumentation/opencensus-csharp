@@ -32,9 +32,9 @@ namespace OpenCensus.Trace.Propagation
         private const int SpaneIdFieldIdOffset = TraceIdOffset + TraceId.Size;
         private const int SpanIdOffset = SpaneIdFieldIdOffset + IdSize;
         private const byte TraceOptionsFieldId = 2;
-        private const int TraceOptionFieldIdOffset = SpanIdOffset + SpanId.SIZE;
+        private const int TraceOptionFieldIdOffset = SpanIdOffset + SpanId.Size;
         private const int TraceOptionOffset = TraceOptionFieldIdOffset + IdSize;
-        private const int FormatLength = (4 * IdSize) + TraceId.Size + SpanId.SIZE + TraceOptions.Size;
+        private const int FormatLength = (4 * IdSize) + TraceId.Size + SpanId.Size + TraceOptions.Size;
 
         public override ISpanContext FromByteArray(byte[] bytes)
         {
@@ -64,7 +64,7 @@ namespace OpenCensus.Trace.Propagation
                 if (bytes.Length > pos && bytes[pos] == SpanIdFieldId)
                 {
                     spanId = SpanId.FromBytes(bytes, pos + IdSize);
-                    pos += IdSize + SpanId.SIZE;
+                    pos += IdSize + SpanId.Size;
                 }
 
                 if (bytes.Length > pos && bytes[pos] == TraceOptionsFieldId)

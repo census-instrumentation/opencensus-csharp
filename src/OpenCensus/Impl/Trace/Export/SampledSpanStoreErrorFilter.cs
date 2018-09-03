@@ -35,7 +35,7 @@ namespace OpenCensus.Trace.Export
 
         public static ISampledSpanStoreErrorFilter Create(string spanName, CanonicalCode? canonicalCode, int maxSpansToReturn)
         {
-            if (canonicalCode == Trace.CanonicalCode.OK)
+            if (canonicalCode == Trace.CanonicalCode.Ok)
             {
                 throw new ArgumentOutOfRangeException("Invalid canonical code.");
             }

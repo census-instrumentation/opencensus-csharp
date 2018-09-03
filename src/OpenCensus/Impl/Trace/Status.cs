@@ -18,23 +18,23 @@ namespace OpenCensus.Trace
 {
     public class Status
     {
-        public static readonly Status Ok = new Status(CanonicalCode.OK);
-        public static readonly Status Cancelled = new Status(CanonicalCode.CANCELLED);
-        public static readonly Status Unknown = new Status(CanonicalCode.UNKNOWN);
-        public static readonly Status InvalidArgument = new Status(CanonicalCode.INVALID_ARGUMENT);
-        public static readonly Status DeadlineExceeded = new Status(CanonicalCode.DEADLINE_EXCEEDED);
-        public static readonly Status NotFound = new Status(CanonicalCode.NOT_FOUND);
-        public static readonly Status AlreadyExists = new Status(CanonicalCode.ALREADY_EXISTS);
-        public static readonly Status PermissionDenied = new Status(CanonicalCode.PERMISSION_DENIED);
-        public static readonly Status Unauthenticated = new Status(CanonicalCode.UNAUTHENTICATED);
-        public static readonly Status ResourceExhausted = new Status(CanonicalCode.RESOURCE_EXHAUSTED);
-        public static readonly Status FailedPrecondition = new Status(CanonicalCode.FAILED_PRECONDITION);
-        public static readonly Status Aborted = new Status(CanonicalCode.ABORTED);
-        public static readonly Status OutOfRange = new Status(CanonicalCode.OUT_OF_RANGE);
-        public static readonly Status Unimplemented = new Status(CanonicalCode.UNIMPLEMENTED);
-        public static readonly Status Internal = new Status(CanonicalCode.INTERNAL);
-        public static readonly Status Unavailable = new Status(CanonicalCode.UNAVAILABLE);
-        public static readonly Status DataLoss = new Status(CanonicalCode.DATA_LOSS);
+        public static readonly Status Ok = new Status(CanonicalCode.Ok);
+        public static readonly Status Cancelled = new Status(CanonicalCode.Cancelled);
+        public static readonly Status Unknown = new Status(CanonicalCode.Unknown);
+        public static readonly Status InvalidArgument = new Status(CanonicalCode.InvalidArgument);
+        public static readonly Status DeadlineExceeded = new Status(CanonicalCode.DeadlineExceeded);
+        public static readonly Status NotFound = new Status(CanonicalCode.NotFound);
+        public static readonly Status AlreadyExists = new Status(CanonicalCode.AlreadyExists);
+        public static readonly Status PermissionDenied = new Status(CanonicalCode.PermissionDenied);
+        public static readonly Status Unauthenticated = new Status(CanonicalCode.Unauthenticated);
+        public static readonly Status ResourceExhausted = new Status(CanonicalCode.ResourceExhausted);
+        public static readonly Status FailedPrecondition = new Status(CanonicalCode.FailedPrecondition);
+        public static readonly Status Aborted = new Status(CanonicalCode.Aborted);
+        public static readonly Status OutOfRange = new Status(CanonicalCode.OutOfRange);
+        public static readonly Status Unimplemented = new Status(CanonicalCode.Unimplemented);
+        public static readonly Status Internal = new Status(CanonicalCode.Internal);
+        public static readonly Status Unavailable = new Status(CanonicalCode.Unavailable);
+        public static readonly Status DataLoss = new Status(CanonicalCode.DataLoss);
 
         internal Status(CanonicalCode canonicalCode, string description = null)
         {
@@ -50,7 +50,7 @@ namespace OpenCensus.Trace
         {
             get
             {
-                return CanonicalCode.OK == this.CanonicalCode;
+                return CanonicalCode.Ok == this.CanonicalCode;
             }
         }
 
