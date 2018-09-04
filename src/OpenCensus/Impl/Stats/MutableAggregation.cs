@@ -20,13 +20,13 @@ namespace OpenCensus.Stats
 
     internal abstract class MutableAggregation
     {
+        private const double Tolerance = 1e-6;
+
         protected MutableAggregation()
         {
         }
 
         // Tolerance for double comparison.
-        private const double TOLERANCE = 1e-6;
-
         internal abstract void Add(double value);
 
         internal abstract void Combine(MutableAggregation other, double fraction);

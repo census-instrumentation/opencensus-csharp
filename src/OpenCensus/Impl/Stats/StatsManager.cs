@@ -39,6 +39,14 @@ namespace OpenCensus.Stats
             this.state = state ?? throw new ArgumentNullException(nameof(state));
         }
 
+        internal ISet<IView> ExportedViews
+        {
+            get
+            {
+                return this.measureToViewMap.ExportedViews;
+            }
+        }
+
         internal void RegisterView(IView view)
         {
             this.measureToViewMap.RegisterView(view, this.clock);
@@ -47,14 +55,6 @@ namespace OpenCensus.Stats
         internal IViewData GetView(IViewName viewName)
         {
             return this.measureToViewMap.GetView(viewName, this.clock, this.state.Internal);
-        }
-
-        internal ISet<IView> ExportedViews
-        {
-            get
-            {
-                return this.measureToViewMap.ExportedViews;
-            }
         }
 
         internal void Record(ITagContext tags, IList<IMeasurement> measurementValues)

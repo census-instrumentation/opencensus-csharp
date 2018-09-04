@@ -20,21 +20,22 @@ namespace OpenCensus.Tags
 
     public sealed class Tag : ITag
     {
-        public ITagKey Key { get; }
-
-        public ITagValue Value { get; }
-
         internal Tag(ITagKey key, ITagValue value)
         {
             this.Key = key ?? throw new ArgumentNullException(nameof(key));
             this.Value = value ?? throw new ArgumentNullException(nameof(value));
         }
 
+        public ITagKey Key { get; }
+
+        public ITagValue Value { get; }
+
         public static ITag Create(ITagKey key, ITagValue value)
         {
             return new Tag(key, value);
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "Tag{"
@@ -43,6 +44,7 @@ namespace OpenCensus.Tags
                 + "}";
         }
 
+    /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -59,6 +61,7 @@ namespace OpenCensus.Tags
             return false;
         }
 
+    /// <inheritdoc/>
         public override int GetHashCode()
         {
             int h = 1;

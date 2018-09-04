@@ -20,6 +20,22 @@ namespace OpenCensus.Trace.Export
 
     public sealed class SampledSpanStoreLatencyFilter : ISampledSpanStoreLatencyFilter
     {
+        internal SampledSpanStoreLatencyFilter(string spanName, long latencyLowerNs, long latencyUpperNs, int maxSpansToReturn)
+        {
+            this.SpanName = spanName ?? throw new ArgumentNullException(nameof(spanName));
+            this.LatencyLowerNs = latencyLowerNs;
+            this.LatencyUpperNs = latencyUpperNs;
+            this.MaxSpansToReturn = maxSpansToReturn;
+        }
+
+        public string SpanName { get; }
+
+        public long LatencyLowerNs { get; }
+
+        public long LatencyUpperNs { get; }
+
+        public int MaxSpansToReturn { get; }
+
         public static ISampledSpanStoreLatencyFilter Create(string spanName, long latencyLowerNs, long latencyUpperNs, int maxSpansToReturn)
         {
             if (maxSpansToReturn < 0)
@@ -40,22 +56,7 @@ namespace OpenCensus.Trace.Export
             return new SampledSpanStoreLatencyFilter(spanName, latencyLowerNs, latencyUpperNs, maxSpansToReturn);
         }
 
-        public string SpanName { get; }
-
-        public long LatencyLowerNs { get; }
-
-        public long LatencyUpperNs { get; }
-
-        public int MaxSpansToReturn { get; }
-
-        internal SampledSpanStoreLatencyFilter(string spanName, long latencyLowerNs, long latencyUpperNs, int maxSpansToReturn)
-        {
-            this.SpanName = spanName ?? throw new ArgumentNullException(nameof(spanName));
-            this.LatencyLowerNs = latencyLowerNs;
-            this.LatencyUpperNs = latencyUpperNs;
-            this.MaxSpansToReturn = maxSpansToReturn;
-        }
-
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "LatencyFilter{"
@@ -66,6 +67,7 @@ namespace OpenCensus.Trace.Export
                 + "}";
         }
 
+    /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -84,6 +86,7 @@ namespace OpenCensus.Trace.Export
             return false;
         }
 
+    /// <inheritdoc/>
         public override int GetHashCode()
         {
             long h = 1;

@@ -21,31 +21,32 @@ namespace OpenCensus.Stats.Aggregations
 
     public sealed class SumDataDouble : AggregationData, ISumDataDouble
     {
-        public double Sum { get; }
-
         internal SumDataDouble(double sum)
         {
             this.Sum = sum;
         }
+
+        public double Sum { get; }
 
         public static ISumDataDouble Create(double sum)
         {
             return new SumDataDouble(sum);
         }
 
-        public override M Match<M>(
-            Func<ISumDataDouble, M> p0,
-            Func<ISumDataLong, M> p1,
-            Func<ICountData, M> p2,
-            Func<IMeanData, M> p3,
-            Func<IDistributionData, M> p4,
-            Func<ILastValueDataDouble, M> p5,
-            Func<ILastValueDataLong, M> p6,
-            Func<IAggregationData, M> defaultFunction)
+        public override T Match<T>(
+            Func<ISumDataDouble, T> p0,
+            Func<ISumDataLong, T> p1,
+            Func<ICountData, T> p2,
+            Func<IMeanData, T> p3,
+            Func<IDistributionData, T> p4,
+            Func<ILastValueDataDouble, T> p5,
+            Func<ILastValueDataLong, T> p6,
+            Func<IAggregationData, T> defaultFunction)
         {
             return p0.Invoke(this);
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "SumDataDouble{"
@@ -53,6 +54,7 @@ namespace OpenCensus.Stats.Aggregations
                 + "}";
         }
 
+    /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -68,6 +70,7 @@ namespace OpenCensus.Stats.Aggregations
             return false;
         }
 
+    /// <inheritdoc/>
         public override int GetHashCode()
         {
             long h = 1;

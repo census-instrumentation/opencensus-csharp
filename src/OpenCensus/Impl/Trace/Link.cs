@@ -24,11 +24,27 @@ namespace OpenCensus.Trace
 
     public sealed class Link : ILink
     {
-        private static readonly IDictionary<string, IAttributeValue> EMPTY_ATTRIBUTES = new Dictionary<string, IAttributeValue>();
+        private static readonly IDictionary<string, IAttributeValue> EmptyAttributes = new Dictionary<string, IAttributeValue>();
+
+        private Link(ITraceId traceId, ISpanId spanId, LinkType type, IDictionary<string, IAttributeValue> attributes)
+        {
+            this.TraceId = traceId ?? throw new ArgumentNullException(nameof(traceId));
+            this.SpanId = spanId ?? throw new ArgumentNullException(nameof(spanId));
+            this.Type = type;
+            this.Attributes = attributes ?? throw new ArgumentNullException(nameof(attributes));
+        }
+
+        public ITraceId TraceId { get; }
+
+        public ISpanId SpanId { get; }
+
+        public LinkType Type { get; }
+
+        public IDictionary<string, IAttributeValue> Attributes { get; }
 
         public static ILink FromSpanContext(ISpanContext context, LinkType type)
         {
-            return new Link(context.TraceId, context.SpanId, type, EMPTY_ATTRIBUTES);
+            return new Link(context.TraceId, context.SpanId, type, EmptyAttributes);
         }
 
         public static ILink FromSpanContext(ISpanContext context, LinkType type, IDictionary<string, IAttributeValue> attributes)
@@ -41,22 +57,7 @@ namespace OpenCensus.Trace
                 new ReadOnlyDictionary<string, IAttributeValue>(copy));
         }
 
-        public ITraceId TraceId { get; }
-
-        public ISpanId SpanId { get; }
-
-        public LinkType Type { get; }
-
-        public IDictionary<string, IAttributeValue> Attributes { get; }
-
-        private Link(ITraceId traceId, ISpanId spanId, LinkType type, IDictionary<string, IAttributeValue> attributes)
-        {
-            this.TraceId = traceId ?? throw new ArgumentNullException(nameof(traceId));
-            this.SpanId = spanId ?? throw new ArgumentNullException(nameof(spanId));
-            this.Type = type;
-            this.Attributes = attributes ?? throw new ArgumentNullException(nameof(attributes));
-        }
-
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "Link{"
@@ -67,6 +68,7 @@ namespace OpenCensus.Trace
                 + "}";
         }
 
+        /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -85,6 +87,7 @@ namespace OpenCensus.Trace
             return false;
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             int h = 1;

@@ -23,12 +23,12 @@ namespace OpenCensus.Stats
 
     public sealed class BucketBoundaries : IBucketBoundaries
     {
-        public IList<double> Boundaries { get; }
-
         private BucketBoundaries(IList<double> boundaries)
         {
             this.Boundaries = boundaries;
         }
+
+        public IList<double> Boundaries { get; }
 
         public static IBucketBoundaries Create(IList<double> bucketBoundaries)
         {
@@ -57,6 +57,7 @@ namespace OpenCensus.Stats
             return new BucketBoundaries(bucketBoundariesCopy.AsReadOnly());
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "BucketBoundaries{"
@@ -64,6 +65,7 @@ namespace OpenCensus.Stats
                 + "}";
         }
 
+        /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -79,6 +81,7 @@ namespace OpenCensus.Stats
             return false;
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             int h = 1;

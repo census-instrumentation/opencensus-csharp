@@ -18,13 +18,13 @@ namespace OpenCensus.Trace.Config
 {
     public abstract class TraceConfigBase : ITraceConfig
     {
-        private static readonly NoopTraceConfig NOOP_TRACE_CONFIG = new NoopTraceConfig();
+        private static readonly NoopTraceConfig NoopTraceConfigInstance = new NoopTraceConfig();
 
         public static ITraceConfig NoopTraceConfig
         {
             get
             {
-                return NOOP_TRACE_CONFIG;
+                return NoopTraceConfigInstance;
             }
         }
 

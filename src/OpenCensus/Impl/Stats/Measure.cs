@@ -21,7 +21,7 @@ namespace OpenCensus.Stats
 
     public abstract class Measure : IMeasure
     {
-        internal const int NAME_MAX_LENGTH = 255;
+        internal const int NameMaxLength = 255;
 
         public abstract string Name { get; }
 
@@ -29,6 +29,6 @@ namespace OpenCensus.Stats
 
         public abstract string Unit { get; }
 
-        public abstract M Match<M>(Func<IMeasureDouble, M> p0, Func<IMeasureLong, M> p1, Func<IMeasure, M> defaultFunction);
+        public abstract T Match<T>(Func<IMeasureDouble, T> p0, Func<IMeasureLong, T> p1, Func<IMeasure, T> defaultFunction);
     }
 }

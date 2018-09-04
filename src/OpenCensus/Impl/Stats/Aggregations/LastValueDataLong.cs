@@ -24,18 +24,19 @@ namespace OpenCensus.Stats.Aggregations
         {
         }
 
-        public long LastValue { get; }
-
         private LastValueDataLong(long lastValue)
         {
             this.LastValue = lastValue;
         }
+
+        public long LastValue { get; }
 
         public static ILastValueDataLong Create(long lastValue)
         {
             return new LastValueDataLong(lastValue);
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "LastValueDataLong{"
@@ -43,6 +44,7 @@ namespace OpenCensus.Stats.Aggregations
                 + "}";
         }
 
+    /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -58,6 +60,7 @@ namespace OpenCensus.Stats.Aggregations
             return false;
         }
 
+    /// <inheritdoc/>
         public override int GetHashCode()
         {
             long h = 1;

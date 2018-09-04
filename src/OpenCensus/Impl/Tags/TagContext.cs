@@ -22,14 +22,14 @@ namespace OpenCensus.Tags
 
     public sealed class TagContext : TagContextBase
     {
-        public static readonly ITagContext EMPTY = new TagContext(new Dictionary<ITagKey, ITagValue>());
-
-        public IDictionary<ITagKey, ITagValue> Tags { get; }
+        public static readonly ITagContext Empty = new TagContext(new Dictionary<ITagKey, ITagValue>());
 
         public TagContext(IDictionary<ITagKey, ITagValue> tags)
         {
             this.Tags = new ReadOnlyDictionary<ITagKey, ITagValue>(new Dictionary<ITagKey, ITagValue>(tags));
         }
+
+        public IDictionary<ITagKey, ITagValue> Tags { get; }
 
         public override IEnumerator<ITag> GetEnumerator()
         {

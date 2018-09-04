@@ -24,7 +24,7 @@ namespace OpenCensus.Tags.Test
         [Fact]
         public void TestMaxLength()
         {
-            Assert.Equal(255, TagKey.MAX_LENGTH);
+            Assert.Equal(255, TagKey.MaxLength);
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace OpenCensus.Tags.Test
         [Fact]
         public void Create_AllowTagKeyNameWithMaxLength()
         {
-            char[] chars = new char[TagKey.MAX_LENGTH];
+            char[] chars = new char[TagKey.MaxLength];
             for (int i = 0; i < chars.Length; i++)
             {
                 chars[i] = 'k';
@@ -49,7 +49,7 @@ namespace OpenCensus.Tags.Test
         [Fact]
         public void Create_DisallowTagKeyNameOverMaxLength()
         {
-            char[] chars = new char[TagKey.MAX_LENGTH + 1];
+            char[] chars = new char[TagKey.MaxLength + 1];
             for (int i = 0; i < chars.Length; i++)
             {
                 chars[i] = 'k';

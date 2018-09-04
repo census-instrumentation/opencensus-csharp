@@ -60,7 +60,7 @@ namespace OpenCensus.Trace.Propagation
                 throw new ArgumentNullException(nameof(getter));
             }
 
-            return SpanContext.INVALID;
+            return SpanContext.Invalid;
         }
     }
 }

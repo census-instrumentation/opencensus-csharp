@@ -24,11 +24,11 @@ namespace OpenCensus.Tags.Propagation
 
     internal static class SerializationUtils
     {
-        internal const int VERSION_ID = 0;
-        internal const int TAG_FIELD_ID = 0;
+        internal const int VersionId = 0;
+        internal const int TagFieldId = 0;
 
         // This size limit only applies to the bytes representing tag keys and values.
-        internal const int TAGCONTEXT_SERIALIZED_SIZE_LIMIT = 8192;
+        internal const int TagContextSerializedSizeLimit = 8192;
 
         // Serializes a TagContext to the on-the-wire format.
         // Encoded tags are of the form: <version_id><encoded_tags>
@@ -38,7 +38,7 @@ namespace OpenCensus.Tags.Propagation
             // ByteArrayDataOutput byteArrayDataOutput = ByteStreams.newDataOutput();
             MemoryStream byteArrayDataOutput = new MemoryStream();
 
-            byteArrayDataOutput.WriteByte(VERSION_ID);
+            byteArrayDataOutput.WriteByte(VersionId);
             int totalChars = 0; // Here chars are equivalent to bytes, since we're using ascii chars.
             foreach (var tag in tags)
             {
@@ -53,11 +53,11 @@ namespace OpenCensus.Tags.Propagation
             //    totalChars += tag.getValue().asString().length();
             //    encodeTag(tag, byteArrayDataOutput);
             // }
-            if (totalChars > TAGCONTEXT_SERIALIZED_SIZE_LIMIT)
+            if (totalChars > TagContextSerializedSizeLimit)
             {
                 throw new TagContextSerializationException(
                     "Size of TagContext exceeds the maximum serialized size "
-                        + TAGCONTEXT_SERIALIZED_SIZE_LIMIT);
+                        + TagContextSerializedSizeLimit);
             }
 
             return byteArrayDataOutput.ToArray();
@@ -77,10 +77,10 @@ namespace OpenCensus.Tags.Propagation
 
                 MemoryStream buffer = new MemoryStream(bytes);
                 int versionId = buffer.ReadByte();
-                if (versionId > VERSION_ID || versionId < 0)
+                if (versionId > VersionId || versionId < 0)
                 {
                     throw new TagContextDeserializationException(
-                        "Wrong Version ID: " + versionId + ". Currently supports version up to: " + VERSION_ID);
+                        "Wrong Version ID: " + versionId + ". Currently supports version up to: " + VersionId);
                 }
 
                 return new TagContext(ParseTags(buffer));
@@ -99,7 +99,7 @@ namespace OpenCensus.Tags.Propagation
             while (buffer.Position < limit)
             {
                 int type = buffer.ReadByte();
-                if (type == TAG_FIELD_ID)
+                if (type == TagFieldId)
                 {
                     ITagKey key = CreateTagKey(DecodeString(buffer));
                     ITagValue val = CreateTagValue(key, DecodeString(buffer));
@@ -115,11 +115,11 @@ else
                 }
             }
 
-            if (totalChars > TAGCONTEXT_SERIALIZED_SIZE_LIMIT)
+            if (totalChars > TagContextSerializedSizeLimit)
             {
                 throw new TagContextDeserializationException(
                     "Size of TagContext exceeds the maximum serialized size "
-                        + TAGCONTEXT_SERIALIZED_SIZE_LIMIT);
+                        + TagContextSerializedSizeLimit);
             }
 
             return tags;
@@ -156,7 +156,7 @@ else
 
         private static void EncodeTag(ITag tag, MemoryStream byteArrayDataOutput)
         {
-            byteArrayDataOutput.WriteByte(TAG_FIELD_ID);
+            byteArrayDataOutput.WriteByte(TagFieldId);
             EncodeString(tag.Key.Name, byteArrayDataOutput);
             EncodeString(tag.Value.AsString, byteArrayDataOutput);
         }

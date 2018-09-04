@@ -117,6 +117,7 @@ namespace OpenCensus.Trace.Export
                 endTimestamp);
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "SpanData{"
@@ -135,6 +136,7 @@ namespace OpenCensus.Trace.Export
                 + "}";
         }
 
+    /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -161,6 +163,7 @@ namespace OpenCensus.Trace.Export
             return false;
         }
 
+    /// <inheritdoc/>
         public override int GetHashCode()
         {
             int h = 1;

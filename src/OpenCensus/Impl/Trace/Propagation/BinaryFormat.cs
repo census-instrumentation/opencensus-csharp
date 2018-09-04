@@ -20,21 +20,21 @@ namespace OpenCensus.Trace.Propagation
 
     internal class BinaryFormat : BinaryFormatBase
     {
-        private const byte VERSION_ID = 0;
-        private const int VERSION_ID_OFFSET = 0;
+        private const byte VersionId = 0;
+        private const int VersionIdOffset = 0;
 
         // The version_id/field_id size in bytes.
-        private const byte ID_SIZE = 1;
-        private const byte TRACE_ID_FIELD_ID = 0;
-        private const int TRACE_ID_FIELD_ID_OFFSET = VERSION_ID_OFFSET + ID_SIZE;
-        private const int TRACE_ID_OFFSET = TRACE_ID_FIELD_ID_OFFSET + ID_SIZE;
-        private const byte SPAN_ID_FIELD_ID = 1;
-        private const int SPAN_ID_FIELD_ID_OFFSET = TRACE_ID_OFFSET + TraceId.SIZE;
-        private const int SPAN_ID_OFFSET = SPAN_ID_FIELD_ID_OFFSET + ID_SIZE;
-        private const byte TRACE_OPTION_FIELD_ID = 2;
-        private const int TRACE_OPTION_FIELD_ID_OFFSET = SPAN_ID_OFFSET + SpanId.SIZE;
-        private const int TRACE_OPTIONS_OFFSET = TRACE_OPTION_FIELD_ID_OFFSET + ID_SIZE;
-        private const int FORMAT_LENGTH = (4 * ID_SIZE) + TraceId.SIZE + SpanId.SIZE + TraceOptions.Size;
+        private const byte IdSize = 1;
+        private const byte TraceIdFieldId = 0;
+        private const int TraceIdFieldIdOffset = VersionIdOffset + IdSize;
+        private const int TraceIdOffset = TraceIdFieldIdOffset + IdSize;
+        private const byte SpanIdFieldId = 1;
+        private const int SpaneIdFieldIdOffset = TraceIdOffset + TraceId.Size;
+        private const int SpanIdOffset = SpaneIdFieldIdOffset + IdSize;
+        private const byte TraceOptionsFieldId = 2;
+        private const int TraceOptionFieldIdOffset = SpanIdOffset + SpanId.Size;
+        private const int TraceOptionOffset = TraceOptionFieldIdOffset + IdSize;
+        private const int FormatLength = (4 * IdSize) + TraceId.Size + SpanId.Size + TraceOptions.Size;
 
         public override ISpanContext FromByteArray(byte[] bytes)
         {
@@ -43,33 +43,33 @@ namespace OpenCensus.Trace.Propagation
                 throw new ArgumentNullException(nameof(bytes));
             }
 
-            if (bytes.Length == 0 || bytes[0] != VERSION_ID)
+            if (bytes.Length == 0 || bytes[0] != VersionId)
             {
                 throw new SpanContextParseException("Unsupported version.");
             }
 
-            ITraceId traceId = TraceId.INVALID;
-            ISpanId spanId = SpanId.INVALID;
+            ITraceId traceId = TraceId.Invalid;
+            ISpanId spanId = SpanId.Invalid;
             TraceOptions traceOptions = TraceOptions.Default;
 
             int pos = 1;
             try
             {
-                if (bytes.Length > pos && bytes[pos] == TRACE_ID_FIELD_ID)
+                if (bytes.Length > pos && bytes[pos] == TraceIdFieldId)
                 {
-                    traceId = TraceId.FromBytes(bytes, pos + ID_SIZE);
-                    pos += ID_SIZE + TraceId.SIZE;
+                    traceId = TraceId.FromBytes(bytes, pos + IdSize);
+                    pos += IdSize + TraceId.Size;
                 }
 
-                if (bytes.Length > pos && bytes[pos] == SPAN_ID_FIELD_ID)
+                if (bytes.Length > pos && bytes[pos] == SpanIdFieldId)
                 {
-                    spanId = SpanId.FromBytes(bytes, pos + ID_SIZE);
-                    pos += ID_SIZE + SpanId.SIZE;
+                    spanId = SpanId.FromBytes(bytes, pos + IdSize);
+                    pos += IdSize + SpanId.Size;
                 }
 
-                if (bytes.Length > pos && bytes[pos] == TRACE_OPTION_FIELD_ID)
+                if (bytes.Length > pos && bytes[pos] == TraceOptionsFieldId)
                 {
-                    traceOptions = TraceOptions.FromBytes(bytes, pos + ID_SIZE);
+                    traceOptions = TraceOptions.FromBytes(bytes, pos + IdSize);
                 }
 
                 return SpanContext.Create(traceId, spanId, traceOptions);
@@ -87,14 +87,14 @@ namespace OpenCensus.Trace.Propagation
                 throw new ArgumentNullException(nameof(spanContext));
             }
 
-            byte[] bytes = new byte[FORMAT_LENGTH];
-            bytes[VERSION_ID_OFFSET] = VERSION_ID;
-            bytes[TRACE_ID_FIELD_ID_OFFSET] = TRACE_ID_FIELD_ID;
-            spanContext.TraceId.CopyBytesTo(bytes, TRACE_ID_OFFSET);
-            bytes[SPAN_ID_FIELD_ID_OFFSET] = SPAN_ID_FIELD_ID;
-            spanContext.SpanId.CopyBytesTo(bytes, SPAN_ID_OFFSET);
-            bytes[TRACE_OPTION_FIELD_ID_OFFSET] = TRACE_OPTION_FIELD_ID;
-            spanContext.TraceOptions.CopyBytesTo(bytes, TRACE_OPTIONS_OFFSET);
+            byte[] bytes = new byte[FormatLength];
+            bytes[VersionIdOffset] = VersionId;
+            bytes[TraceIdFieldIdOffset] = TraceIdFieldId;
+            spanContext.TraceId.CopyBytesTo(bytes, TraceIdOffset);
+            bytes[SpaneIdFieldIdOffset] = SpanIdFieldId;
+            spanContext.SpanId.CopyBytesTo(bytes, SpanIdOffset);
+            bytes[TraceOptionFieldIdOffset] = TraceOptionsFieldId;
+            spanContext.TraceOptions.CopyBytesTo(bytes, TraceOptionOffset);
             return bytes;
         }
     }

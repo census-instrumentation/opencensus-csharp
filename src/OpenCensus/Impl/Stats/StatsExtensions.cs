@@ -193,7 +193,7 @@ namespace OpenCensus.Stats
                 {
                     if (combined is MutableLastValue lastValue)
                     {
-                        lastValue.initialized = true;
+                        lastValue.Initialized = true;
                         if (double.IsNaN(lastValue.LastValue))
                         {
                             lastValue.LastValue = arg.LastValue;
@@ -210,7 +210,7 @@ namespace OpenCensus.Stats
                 {
                     if (combined is MutableLastValue lastValue)
                     {
-                        lastValue.initialized = true;
+                        lastValue.Initialized = true;
                         if (double.IsNaN(lastValue.LastValue))
                         {
                             lastValue.LastValue = arg.LastValue;

@@ -59,6 +59,7 @@ namespace OpenCensus.Stats
                 end);
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "ViewData{"
@@ -69,6 +70,7 @@ namespace OpenCensus.Stats
                 + "}";
         }
 
+        /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -87,6 +89,7 @@ namespace OpenCensus.Stats
             return false;
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             int h = 1;

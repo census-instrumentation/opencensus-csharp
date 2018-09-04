@@ -143,7 +143,7 @@ namespace OpenCensus.Trace.Export.Test
             span.End(EndSpanOptions.Builder().SetStatus(Status.Cancelled).Build());
             IList<ISpanData> samples =
                 sampleStore.GetErrorSampledSpans(
-                    SampledSpanStoreErrorFilter.Create(REGISTERED_SPAN_NAME, CanonicalCode.CANCELLED, 0));
+                    SampledSpanStoreErrorFilter.Create(REGISTERED_SPAN_NAME, CanonicalCode.Cancelled, 0));
             Assert.Equal(1, samples.Count);
             Assert.True(samples.Contains(span.ToSpanData()));
         }
@@ -161,7 +161,7 @@ namespace OpenCensus.Trace.Export.Test
             span2.End(EndSpanOptions.Builder().SetStatus(Status.Cancelled).Build());
             IList<ISpanData> samples =
                 sampleStore.GetErrorSampledSpans(
-                    SampledSpanStoreErrorFilter.Create(REGISTERED_SPAN_NAME, CanonicalCode.CANCELLED, 1));
+                    SampledSpanStoreErrorFilter.Create(REGISTERED_SPAN_NAME, CanonicalCode.Cancelled, 1));
             Assert.Equal(1, samples.Count);
             // No order guaranteed so one of the spans should be in the list.
             Assert.True(samples.Contains(span1.ToSpanData()) || samples.Contains(span2.ToSpanData()));
@@ -359,7 +359,7 @@ namespace OpenCensus.Trace.Export.Test
         {
             foreach (CanonicalCode code in Enum.GetValues(typeof(CanonicalCode)).Cast<CanonicalCode>())
             {
-                if (code != CanonicalCode.OK)
+                if (code != CanonicalCode.Ok)
                 {
                     ISpan sampledSpan = CreateSampledSpan(spanName);
                     ISpan notSampledSpan = CreateNotSampledSpan(spanName);

@@ -48,6 +48,7 @@ namespace OpenCensus.Trace
                     .SetCompressedMessageSize(0);
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "MessageEvent{"
@@ -58,6 +59,7 @@ namespace OpenCensus.Trace
                 + "}";
         }
 
+    /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -76,6 +78,7 @@ namespace OpenCensus.Trace
             return false;
         }
 
+    /// <inheritdoc/>
         public override int GetHashCode()
         {
             long h = 1;

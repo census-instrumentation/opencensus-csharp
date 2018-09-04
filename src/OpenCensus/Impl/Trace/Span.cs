@@ -77,7 +77,7 @@ namespace OpenCensus.Trace
             }
         }
 
-       public override string Name
+        public override string Name
         {
             get
             {

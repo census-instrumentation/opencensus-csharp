@@ -47,7 +47,7 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void CreateSpanBuilderWithRemoteParet()
         {
-            ISpanBuilder spanBuilder = tracer.SpanBuilderWithRemoteParent(SPAN_NAME, SpanContext.INVALID);
+            ISpanBuilder spanBuilder = tracer.SpanBuilderWithRemoteParent(SPAN_NAME, SpanContext.Invalid);
             Assert.IsType<SpanBuilder>(spanBuilder);
         }
     }

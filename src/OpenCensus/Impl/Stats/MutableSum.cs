@@ -20,11 +20,11 @@ namespace OpenCensus.Stats
 
     internal sealed class MutableSum : MutableAggregation
     {
-        internal double Sum { get; private set; } = 0.0;
-
         internal MutableSum()
         {
         }
+
+        internal double Sum { get; private set; } = 0.0;
 
         internal static MutableSum Create()
         {

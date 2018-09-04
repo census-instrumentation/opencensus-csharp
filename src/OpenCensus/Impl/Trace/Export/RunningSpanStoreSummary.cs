@@ -23,6 +23,13 @@ namespace OpenCensus.Trace.Export
 
     public sealed class RunningSpanStoreSummary : IRunningSpanStoreSummary
     {
+        internal RunningSpanStoreSummary(IDictionary<string, IRunningPerSpanNameSummary> perSpanNameSummary)
+        {
+            this.PerSpanNameSummary = perSpanNameSummary;
+        }
+
+        public IDictionary<string, IRunningPerSpanNameSummary> PerSpanNameSummary { get; }
+
         public static IRunningSpanStoreSummary Create(IDictionary<string, IRunningPerSpanNameSummary> perSpanNameSummary)
         {
             if (perSpanNameSummary == null)
@@ -34,13 +41,7 @@ namespace OpenCensus.Trace.Export
             return new RunningSpanStoreSummary(new ReadOnlyDictionary<string, IRunningPerSpanNameSummary>(copy));
         }
 
-        internal RunningSpanStoreSummary(IDictionary<string, IRunningPerSpanNameSummary> perSpanNameSummary)
-        {
-            this.PerSpanNameSummary = perSpanNameSummary;
-        }
-
-        public IDictionary<string, IRunningPerSpanNameSummary> PerSpanNameSummary { get; }
-
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "RunningSummary{"
@@ -48,6 +49,7 @@ namespace OpenCensus.Trace.Export
                 + "}";
         }
 
+    /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -63,6 +65,7 @@ namespace OpenCensus.Trace.Export
             return false;
         }
 
+    /// <inheritdoc/>
         public override int GetHashCode()
         {
             int h = 1;

@@ -21,12 +21,12 @@ namespace OpenCensus.Trace.Export
 
     internal sealed class NoopSampledSpanStore : SampledSpanStoreBase
     {
-        private static readonly ISampledPerSpanNameSummary EMPTY_PER_SPAN_NAME_SUMMARY = SampledPerSpanNameSummary.Create(
+        private static readonly ISampledPerSpanNameSummary EmptyPerSpanNameSummary = SampledPerSpanNameSummary.Create(
             new Dictionary<ISampledLatencyBucketBoundaries, int>(), new Dictionary<CanonicalCode, int>());
 
-        private static readonly ISampledSpanStoreSummary EMPTY_SUMMARY = SampledSpanStoreSummary.Create(new Dictionary<string, ISampledPerSpanNameSummary>());
+        private static readonly ISampledSpanStoreSummary EmptySummary = SampledSpanStoreSummary.Create(new Dictionary<string, ISampledPerSpanNameSummary>());
 
-        private static readonly IList<ISpanData> EMPTY_SPANDATA = new List<ISpanData>();
+        private static readonly IList<ISpanData> EmptySpanData = new List<ISpanData>();
 
         private readonly HashSet<string> registeredSpanNames = new HashSet<string>();
 
@@ -39,7 +39,7 @@ namespace OpenCensus.Trace.Export
                 {
                     foreach (string registeredSpanName in this.registeredSpanNames)
                     {
-                        result[registeredSpanName] = EMPTY_PER_SPAN_NAME_SUMMARY;
+                        result[registeredSpanName] = EmptyPerSpanNameSummary;
                     }
                 }
 
@@ -61,12 +61,12 @@ namespace OpenCensus.Trace.Export
 
         public override IList<ISpanData> GetErrorSampledSpans(ISampledSpanStoreErrorFilter filter)
         {
-            return EMPTY_SPANDATA;
+            return EmptySpanData;
         }
 
         public override IList<ISpanData> GetLatencySampledSpans(ISampledSpanStoreLatencyFilter filter)
         {
-            return EMPTY_SPANDATA;
+            return EmptySpanData;
         }
 
         public override void RegisterSpanNamesForCollection(IList<string> spanNames)

@@ -34,6 +34,7 @@ namespace OpenCensus.Tags
             return new TagValues(values);
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "TagValues{"
@@ -41,6 +42,7 @@ namespace OpenCensus.Tags
                 + "}";
         }
 
+        /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -79,6 +81,7 @@ namespace OpenCensus.Tags
             return false;
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             int h = 1;

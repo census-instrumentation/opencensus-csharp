@@ -29,11 +29,6 @@ namespace OpenCensus.Stats
             this.statsManager = statsManager;
         }
 
-        internal static IMeasureMap Create(StatsManager statsManager)
-        {
-            return new MeasureMap(statsManager);
-        }
-
         public override IMeasureMap Put(IMeasureDouble measure, double value)
         {
             this.builder.Put(measure, value);
@@ -55,6 +50,11 @@ namespace OpenCensus.Stats
         public override void Record(ITagContext tags)
         {
             this.statsManager.Record(tags, this.builder.Build());
+        }
+
+        internal static IMeasureMap Create(StatsManager statsManager)
+        {
+            return new MeasureMap(statsManager);
         }
     }
 }

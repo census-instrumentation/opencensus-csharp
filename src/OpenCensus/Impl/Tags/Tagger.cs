@@ -30,7 +30,7 @@ namespace OpenCensus.Tags
 
         public override ITagContext Empty
         {
-            get { return TagContext.EMPTY; }
+            get { return TagContext.Empty; }
         }
 
         public override ITagContext CurrentTagContext
@@ -38,7 +38,7 @@ namespace OpenCensus.Tags
             get
             {
                 return this.state.Internal == TaggingState.DISABLED
-                    ? TagContext.EMPTY
+                    ? TagContext.Empty
                     : ToTagContext(CurrentTagContextUtils.CurrentTagContext);
             }
         }

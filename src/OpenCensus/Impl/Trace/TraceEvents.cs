@@ -23,6 +23,11 @@ namespace OpenCensus.Trace
         private readonly EvictingQueue<T> events;
         private int totalRecordedEvents = 0;
 
+        public TraceEvents(int maxNumEvents)
+        {
+            this.events = new EvictingQueue<T>(maxNumEvents);
+        }
+
         public EvictingQueue<T> Events
         {
             get
@@ -34,11 +39,6 @@ namespace OpenCensus.Trace
         public int NumberOfDroppedEvents
         {
             get { return this.totalRecordedEvents - this.events.Count; }
-        }
-
-        public TraceEvents(int maxNumEvents)
-        {
-            this.events = new EvictingQueue<T>(maxNumEvents);
         }
 
         internal void AddEvent(T @event)

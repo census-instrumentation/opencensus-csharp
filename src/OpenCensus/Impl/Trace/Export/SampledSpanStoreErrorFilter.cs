@@ -20,9 +20,22 @@ namespace OpenCensus.Trace.Export
 
     public sealed class SampledSpanStoreErrorFilter : ISampledSpanStoreErrorFilter
     {
+        internal SampledSpanStoreErrorFilter(string spanName, CanonicalCode? canonicalCode, int maxSpansToReturn)
+        {
+            this.SpanName = spanName ?? throw new ArgumentNullException(nameof(spanName));
+            this.CanonicalCode = canonicalCode;
+            this.MaxSpansToReturn = maxSpansToReturn;
+        }
+
+        public string SpanName { get; }
+
+        public CanonicalCode? CanonicalCode { get; }
+
+        public int MaxSpansToReturn { get; }
+
         public static ISampledSpanStoreErrorFilter Create(string spanName, CanonicalCode? canonicalCode, int maxSpansToReturn)
         {
-            if (canonicalCode == Trace.CanonicalCode.OK)
+            if (canonicalCode == Trace.CanonicalCode.Ok)
             {
                 throw new ArgumentOutOfRangeException("Invalid canonical code.");
             }
@@ -35,19 +48,7 @@ namespace OpenCensus.Trace.Export
             return new SampledSpanStoreErrorFilter(spanName, canonicalCode, maxSpansToReturn);
         }
 
-        public string SpanName { get; }
-
-        public CanonicalCode? CanonicalCode { get; }
-
-        public int MaxSpansToReturn { get; }
-
-        internal SampledSpanStoreErrorFilter(string spanName, CanonicalCode? canonicalCode, int maxSpansToReturn)
-        {
-            this.SpanName = spanName ?? throw new ArgumentNullException(nameof(spanName));
-            this.CanonicalCode = canonicalCode;
-            this.MaxSpansToReturn = maxSpansToReturn;
-        }
-
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "ErrorFilter{"
@@ -57,6 +58,7 @@ namespace OpenCensus.Trace.Export
                 + "}";
         }
 
+    /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -74,6 +76,7 @@ namespace OpenCensus.Trace.Export
             return false;
         }
 
+    /// <inheritdoc/>
         public override int GetHashCode()
         {
             int h = 1;

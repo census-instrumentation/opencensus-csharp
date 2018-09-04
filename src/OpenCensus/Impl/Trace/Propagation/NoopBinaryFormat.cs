@@ -27,12 +27,12 @@ namespace OpenCensus.Trace.Propagation
                 throw new ArgumentNullException(nameof(bytes));
             }
 
-            return SpanContext.INVALID;
+            return SpanContext.Invalid;
         }
 
         public byte[] ToByteArray(ISpanContext spanContext)
         {
-           if (spanContext == null)
+            if (spanContext == null)
             {
                 throw new ArgumentNullException(nameof(spanContext));
             }

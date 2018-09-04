@@ -16,8 +16,8 @@
 
 namespace OpenCensus.Trace.Propagation
 {
-    public interface ISetter<C>
+    public interface ISetter<T>
     {
-        void Put(C carrier, string key, string value);
+        void Put(T carrier, string key, string value);
     }
 }

@@ -22,8 +22,6 @@ namespace OpenCensus.Tags
 
     internal sealed class TagContextBuilder : TagContextBuilderBase
     {
-        internal IDictionary<ITagKey, ITagValue> Tags { get; }
-
         internal TagContextBuilder(IDictionary<ITagKey, ITagValue> tags)
         {
             this.Tags = new Dictionary<ITagKey, ITagValue>(tags);
@@ -33,6 +31,8 @@ namespace OpenCensus.Tags
         {
             this.Tags = new Dictionary<ITagKey, ITagValue>();
         }
+
+        internal IDictionary<ITagKey, ITagValue> Tags { get; }
 
         public override ITagContextBuilder Put(ITagKey key, ITagValue value)
         {

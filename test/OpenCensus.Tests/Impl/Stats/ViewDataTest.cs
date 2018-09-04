@@ -48,7 +48,7 @@ namespace OpenCensus.Stats.Test
         private static readonly IDictionary<TagValues, IAggregationData> ENTRIES =
             new Dictionary<TagValues, IAggregationData>() {
           { TagValues.Create(new List<ITagValue>(){ V1, V2 }), DistributionData.Create(1, 1, 1, 1, 0, new List<long>() {0L, 1L, 0L }) },
-          { TagValues.Create(new List<ITagValue>(){ V10, V20 }), DistributionData.Create(-5, 6, -20, 5, 100.1,  new List<long>() {5L, 0L, 1L }) }
+          { TagValues.Create(new List<ITagValue>(){ V10, V20 }), DistributionData.Create(-5, 6, -20, 5, 100.1,  new List<long>() {5L, 0L, 1L }) },
             };
 
         // name
@@ -208,7 +208,7 @@ namespace OpenCensus.Stats.Test
                 CreateView(Sum.Create(), MEASURE_DOUBLE),
                 new Dictionary<TagValues, IAggregationData>()
                 {
-                    {tagValues, SumDataLong.Create(100) }
+                    {tagValues, SumDataLong.Create(100) },
                 });
         }
 
@@ -220,7 +220,7 @@ namespace OpenCensus.Stats.Test
                 CreateView(Sum.Create(), MEASURE_LONG),
                 new Dictionary<TagValues, IAggregationData>()
                 {
-                    {tagValues, SumDataDouble.Create(100) }
+                    {tagValues, SumDataDouble.Create(100) },
                 });
         }
 
@@ -246,7 +246,7 @@ namespace OpenCensus.Stats.Test
                 new Dictionary<TagValues, IAggregationData>()
                 {
                     { tagValues1, DistributionData.Create(1, 1, 1, 1, 0, new List<long>() {0L, 1L, 0L }) },
-                    { tagValues2, CountData.Create(100) }
+                    { tagValues2, CountData.Create(100) },
                 });
         }
 
@@ -258,7 +258,7 @@ namespace OpenCensus.Stats.Test
                 CreateView(LastValue.Create(), MEASURE_DOUBLE),
                 new Dictionary<TagValues, IAggregationData>()
                 {
-                    {tagValues, LastValueDataLong.Create(100) }
+                    {tagValues, LastValueDataLong.Create(100) },
                 });
         }
 
@@ -270,7 +270,7 @@ namespace OpenCensus.Stats.Test
                 CreateView(LastValue.Create(), MEASURE_LONG),
                 new Dictionary<TagValues, IAggregationData>()
                 {
-                    {tagValues, LastValueDataDouble.Create(100) }
+                    {tagValues, LastValueDataDouble.Create(100) },
                 });
         }
 

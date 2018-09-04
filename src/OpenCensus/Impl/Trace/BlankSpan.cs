@@ -25,7 +25,7 @@ namespace OpenCensus.Trace
         public static readonly BlankSpan Instance = new BlankSpan();
 
         private BlankSpan()
-            : base(SpanContext.INVALID, default(SpanOptions))
+            : base(SpanContext.Invalid, default(SpanOptions))
         {
         }
 
@@ -95,6 +95,7 @@ namespace OpenCensus.Trace
         {
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "BlankSpan";

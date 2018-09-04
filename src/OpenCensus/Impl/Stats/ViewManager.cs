@@ -27,6 +27,14 @@ namespace OpenCensus.Stats
             this.statsManager = statsManager;
         }
 
+        public override ISet<IView> AllExportedViews
+        {
+            get
+            {
+                return this.statsManager.ExportedViews;
+            }
+        }
+
         public override void RegisterView(IView view)
         {
             this.statsManager.RegisterView(view);
@@ -35,14 +43,6 @@ namespace OpenCensus.Stats
         public override IViewData GetView(IViewName viewName)
         {
             return this.statsManager.GetView(viewName);
-        }
-
-        public override ISet<IView> AllExportedViews
-        {
-            get
-            {
-                return this.statsManager.ExportedViews;
-            }
         }
 
         internal void ClearStats()

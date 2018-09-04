@@ -20,7 +20,7 @@ namespace OpenCensus.Stats
     {
         internal static readonly IStatsRecorder Instance = new NoopStatsRecorder();
 
-    public override IMeasureMap NewMeasureMap()
+        public override IMeasureMap NewMeasureMap()
         {
             return NoopStats.NoopMeasureMap;
         }

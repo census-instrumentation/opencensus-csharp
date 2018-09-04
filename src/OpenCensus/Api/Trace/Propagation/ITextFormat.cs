@@ -22,8 +22,8 @@ namespace OpenCensus.Trace.Propagation
     {
         IList<string> Fields { get; }
 
-        void Inject<C>(ISpanContext spanContext, C carrier, ISetter<C> setter);
+        void Inject<T>(ISpanContext spanContext, T carrier, ISetter<T> setter);
 
-        ISpanContext Extract<C>(C carrier, IGetter<C> getter);
+        ISpanContext Extract<T>(T carrier, IGetter<T> getter);
     }
 }

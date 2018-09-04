@@ -22,6 +22,8 @@ namespace OpenCensus.Trace.Export
     {
         ISampledSpanStoreSummary Summary { get; }
 
+        ISet<string> RegisteredSpanNamesForCollection { get; }
+
         IList<ISpanData> GetLatencySampledSpans(ISampledSpanStoreLatencyFilter filter);
 
         IList<ISpanData> GetErrorSampledSpans(ISampledSpanStoreErrorFilter filter);
@@ -29,8 +31,6 @@ namespace OpenCensus.Trace.Export
         void RegisterSpanNamesForCollection(IList<string> spanNames);
 
         void UnregisterSpanNamesForCollection(IList<string> spanNames);
-
-        ISet<string> RegisteredSpanNamesForCollection { get; }
 
         void ConsiderForSampling(ISpan span);
     }

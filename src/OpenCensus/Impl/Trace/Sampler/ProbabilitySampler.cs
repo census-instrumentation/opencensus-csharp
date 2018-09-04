@@ -28,35 +28,6 @@ namespace OpenCensus.Trace.Sampler
             this.IdUpperBound = idUpperBound;
         }
 
-        internal static ProbabilitySampler Create(double probability)
-        {
-            if (probability < 0.0 || probability > 1.0)
-            {
-                throw new ArgumentOutOfRangeException("probability must be in range [0.0, 1.0]");
-            }
-
-            long idUpperBound;
-
-            // Special case the limits, to avoid any possible issues with lack of precision across
-            // double/long boundaries. For probability == 0.0, we use Long.MIN_VALUE as this guarantees
-            // that we will never sample a trace, even in the case where the id == Long.MIN_VALUE, since
-            // Math.Abs(Long.MIN_VALUE) == Long.MIN_VALUE.
-            if (probability == 0.0)
-            {
-                idUpperBound = long.MinValue;
-            }
-            else if (probability == 1.0)
-            {
-                idUpperBound = long.MaxValue;
-            }
-            else
-            {
-                idUpperBound = (long)(probability * long.MaxValue);
-            }
-
-            return new ProbabilitySampler(probability, idUpperBound);
-        }
-
         public string Description
         {
             get
@@ -64,6 +35,10 @@ namespace OpenCensus.Trace.Sampler
                 return string.Format("ProbabilitySampler({0:F6})", this.Probability);
             }
         }
+
+        public double Probability { get; }
+
+        public long IdUpperBound { get; }
 
         public bool ShouldSample(ISpanContext parentContext, bool hasRemoteParent, ITraceId traceId, ISpanId spanId, string name, IList<ISpan> parentLinks)
         {
@@ -95,10 +70,7 @@ namespace OpenCensus.Trace.Sampler
             return Math.Abs(traceId.LowerLong) < this.IdUpperBound;
         }
 
-        public double Probability { get; }
-
-        public long IdUpperBound { get; }
-
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "ProbabilitySampler{"
@@ -107,6 +79,7 @@ namespace OpenCensus.Trace.Sampler
                 + "}";
         }
 
+    /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -123,6 +96,7 @@ namespace OpenCensus.Trace.Sampler
             return false;
         }
 
+    /// <inheritdoc/>
         public override int GetHashCode()
         {
             long h = 1;
@@ -131,6 +105,35 @@ namespace OpenCensus.Trace.Sampler
             h *= 1000003;
             h ^= (this.IdUpperBound >> 32) ^ this.IdUpperBound;
             return (int)h;
+        }
+
+        internal static ProbabilitySampler Create(double probability)
+        {
+            if (probability < 0.0 || probability > 1.0)
+            {
+                throw new ArgumentOutOfRangeException("probability must be in range [0.0, 1.0]");
+            }
+
+            long idUpperBound;
+
+            // Special case the limits, to avoid any possible issues with lack of precision across
+            // double/long boundaries. For probability == 0.0, we use Long.MIN_VALUE as this guarantees
+            // that we will never sample a trace, even in the case where the id == Long.MIN_VALUE, since
+            // Math.Abs(Long.MIN_VALUE) == Long.MIN_VALUE.
+            if (probability == 0.0)
+            {
+                idUpperBound = long.MinValue;
+            }
+            else if (probability == 1.0)
+            {
+                idUpperBound = long.MaxValue;
+            }
+            else
+            {
+                idUpperBound = (long)(probability * long.MaxValue);
+            }
+
+            return new ProbabilitySampler(probability, idUpperBound);
         }
     }
 }

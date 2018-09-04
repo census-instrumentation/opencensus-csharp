@@ -124,7 +124,7 @@ namespace OpenCensus.Trace.Test
         public void StartRemoteSpanInvalidParent()
         {
             ISpan span =
-                SpanBuilder.CreateWithRemoteParent(SPAN_NAME, SpanContext.INVALID, spanBuilderOptions)
+                SpanBuilder.CreateWithRemoteParent(SPAN_NAME, SpanContext.Invalid, spanBuilderOptions)
                     .StartSpan();
             Assert.True(span.Context.IsValid);
             Assert.True(span.Options.HasFlag(SpanOptions.RECORD_EVENTS));
@@ -296,7 +296,7 @@ namespace OpenCensus.Trace.Test
               0,
               0,
               0,
-              0
+              0,
                     });
 
             // If parent is sampled then the remote child must be sampled.

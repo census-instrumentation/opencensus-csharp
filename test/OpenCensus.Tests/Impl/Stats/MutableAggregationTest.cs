@@ -68,7 +68,7 @@ namespace OpenCensus.Stats.Test
                 MutableCount.Create(),
                 MutableMean.Create(),
                 MutableDistribution.Create(BUCKET_BOUNDARIES),
-                MutableLastValue.Create()};
+                MutableLastValue.Create(),};
 
             List<double> values = new List<double>() { -1.0, 1.0, -5.0, 20.0, 5.0 };
 
@@ -127,7 +127,7 @@ namespace OpenCensus.Stats.Test
                 MutableCount.Create(),
                 MutableMean.Create(),
                 MutableDistribution.Create(BUCKET_BOUNDARIES),
-                MutableLastValue.Create()};
+                MutableLastValue.Create(),};
 
             List<String> actual = new List<String>();
             foreach (MutableAggregation aggregation in aggregations)

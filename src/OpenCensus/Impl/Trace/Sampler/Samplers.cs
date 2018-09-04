@@ -18,14 +18,14 @@ namespace OpenCensus.Trace.Sampler
 {
     public sealed class Samplers
     {
-        private static readonly ISampler ALWAYS_SAMPLE = new AlwaysSampleSampler();
-        private static readonly ISampler NEVER_SAMPLE = new NeverSampleSampler();
+        private static readonly ISampler AlwaysSampleInstance = new AlwaysSampleSampler();
+        private static readonly ISampler NeverSampleInstance = new NeverSampleSampler();
 
         public static ISampler AlwaysSample
         {
             get
             {
-                return ALWAYS_SAMPLE;
+                return AlwaysSampleInstance;
             }
         }
 
@@ -33,7 +33,7 @@ namespace OpenCensus.Trace.Sampler
         {
             get
             {
-                return NEVER_SAMPLE;
+                return NeverSampleInstance;
             }
         }
 

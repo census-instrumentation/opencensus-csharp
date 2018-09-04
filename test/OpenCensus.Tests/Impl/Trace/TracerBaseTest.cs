@@ -144,7 +144,7 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void DefaultSpanBuilderWithRemoteParent()
         {
-            Assert.Same(BlankSpan.Instance, noopTracer.SpanBuilderWithRemoteParent(SPAN_NAME, SpanContext.INVALID).StartSpan());
+            Assert.Same(BlankSpan.Instance, noopTracer.SpanBuilderWithRemoteParent(SPAN_NAME, SpanContext.Invalid).StartSpan());
         }
 
         [Fact]

@@ -22,13 +22,13 @@ namespace OpenCensus.Trace.Config
     public sealed class TraceParams : ITraceParams
     {
         public static readonly ITraceParams DEFAULT =
-            new TraceParams(Samplers.GetProbabilitySampler(DefaultProbability), DEFAULT_SPAN_MAX_NUM_ATTRIBUTES, DEFAULT_SPAN_MAX_NUM_ANNOTATIONS, DEFAULT_SPAN_MAX_NUM_MESSAGE_EVENTS, DEFAULT_SPAN_MAX_NUM_LINKS);
+            new TraceParams(Samplers.GetProbabilitySampler(DefaultProbability), DefaultSpanMaxNumAttributes, DefaultSpanMaxNumAnnotations, DefaultSpanMaxNumMessageEvents, DefaultSpanMaxNumLinks);
 
         private const double DefaultProbability = 1e-4;
-        private const int DEFAULT_SPAN_MAX_NUM_ATTRIBUTES = 32;
-        private const int DEFAULT_SPAN_MAX_NUM_ANNOTATIONS = 32;
-        private const int DEFAULT_SPAN_MAX_NUM_MESSAGE_EVENTS = 128;
-        private const int DEFAULT_SPAN_MAX_NUM_LINKS = 128;
+        private const int DefaultSpanMaxNumAttributes = 32;
+        private const int DefaultSpanMaxNumAnnotations = 32;
+        private const int DefaultSpanMaxNumMessageEvents = 128;
+        private const int DefaultSpanMaxNumLinks = 128;
 
         internal TraceParams(ISampler sampler, int maxNumberOfAttributes, int maxNumberOfAnnotations, int maxNumberOfMessageEvents, int maxNumberOfLinks)
         {
@@ -74,6 +74,7 @@ namespace OpenCensus.Trace.Config
             return new TraceParamsBuilder(this);
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "TraceParams{"
@@ -85,6 +86,7 @@ namespace OpenCensus.Trace.Config
                 + "}";
         }
 
+    /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -104,6 +106,7 @@ namespace OpenCensus.Trace.Config
             return false;
         }
 
+    /// <inheritdoc/>
         public override int GetHashCode()
         {
             int h = 1;

@@ -20,12 +20,12 @@ namespace OpenCensus.Stats.Aggregations
 
     public sealed class SumDataLong : AggregationData, ISumDataLong
     {
-        public long Sum { get; }
-
         internal SumDataLong(long sum)
         {
             this.Sum = sum;
         }
+
+        public long Sum { get; }
 
         public static ISumDataLong Create(long sum)
         {
@@ -45,6 +45,7 @@ namespace OpenCensus.Stats.Aggregations
             return p1.Invoke(this);
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "SumDataLong{"
@@ -52,6 +53,7 @@ namespace OpenCensus.Stats.Aggregations
                 + "}";
         }
 
+    /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -67,6 +69,7 @@ namespace OpenCensus.Stats.Aggregations
             return false;
         }
 
+    /// <inheritdoc/>
         public override int GetHashCode()
         {
             long h = 1;

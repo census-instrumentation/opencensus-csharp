@@ -23,6 +23,15 @@ namespace OpenCensus.Stats
 
     public sealed class View : IView
     {
+        internal View(IViewName name, string description, IMeasure measure, IAggregation aggregation, IList<ITagKey> columns)
+        {
+            this.Name = name ?? throw new ArgumentNullException(nameof(name));
+            this.Description = description ?? throw new ArgumentNullException(nameof(description));
+            this.Measure = measure ?? throw new ArgumentNullException(nameof(measure));
+            this.Aggregation = aggregation ?? throw new ArgumentNullException(nameof(aggregation));
+            this.Columns = columns ?? throw new ArgumentNullException(nameof(columns));
+        }
+
         public IViewName Name { get; }
 
         public string Description { get; }
@@ -32,15 +41,6 @@ namespace OpenCensus.Stats
         public IAggregation Aggregation { get; }
 
         public IList<ITagKey> Columns { get; }
-
-        internal View(IViewName name, string description, IMeasure measure, IAggregation aggregation, IList<ITagKey> columns)
-        {
-            this.Name = name ?? throw new ArgumentNullException(nameof(name));
-            this.Description = description ?? throw new ArgumentNullException(nameof(description));
-            this.Measure = measure ?? throw new ArgumentNullException(nameof(measure));
-            this.Aggregation = aggregation ?? throw new ArgumentNullException(nameof(aggregation));
-            this.Columns = columns ?? throw new ArgumentNullException(nameof(columns));
-        }
 
         public static IView Create(IViewName name, string description, IMeasure measure, IAggregation aggregation, IList<ITagKey> columns)
         {
@@ -58,6 +58,7 @@ namespace OpenCensus.Stats
                 new List<ITagKey>(columns).AsReadOnly());
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "View{"
@@ -69,6 +70,7 @@ namespace OpenCensus.Stats
                 + "}";
         }
 
+    /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -88,6 +90,7 @@ namespace OpenCensus.Stats
             return false;
         }
 
+    /// <inheritdoc/>
         public override int GetHashCode()
         {
             int h = 1;

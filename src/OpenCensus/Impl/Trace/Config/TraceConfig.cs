@@ -18,12 +18,12 @@ namespace OpenCensus.Trace.Config
 {
     public sealed class TraceConfig : TraceConfigBase
     {
+        private ITraceParams activeTraceParams;
+
         public TraceConfig()
         {
             this.activeTraceParams = TraceParams.DEFAULT;
         }
-
-        private ITraceParams activeTraceParams;
 
         public override ITraceParams ActiveTraceParams
         {

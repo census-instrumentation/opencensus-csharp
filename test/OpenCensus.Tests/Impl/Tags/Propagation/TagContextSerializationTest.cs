@@ -74,7 +74,7 @@ namespace OpenCensus.Tags.Propagation.Test
         public void TestSerializeTooLargeTagContext()
         {
             ITagContextBuilder builder = tagger.EmptyBuilder;
-            for (int i = 0; i < SerializationUtils.TAGCONTEXT_SERIALIZED_SIZE_LIMIT / 8 - 1; i++) {
+            for (int i = 0; i < SerializationUtils.TagContextSerializedSizeLimit / 8 - 1; i++) {
                 // Each tag will be with format {key : "0123", value : "0123"}, so the length of it is 8.
                 String str;
                 if (i < 10)
@@ -118,9 +118,9 @@ namespace OpenCensus.Tags.Propagation.Test
             ISet<String> possibleOutPuts = new HashSet<String>();
             foreach (List<ITag> list in tagPermutation) {
                 MemoryStream expected = new MemoryStream();
-                expected.WriteByte(SerializationUtils.VERSION_ID);
+                expected.WriteByte(SerializationUtils.VersionId);
                 foreach (ITag tag in list) {
-                    expected.WriteByte(SerializationUtils.TAG_FIELD_ID);
+                    expected.WriteByte(SerializationUtils.TagFieldId);
                     EncodeString(tag.Key.Name, expected);
                     EncodeString(tag.Value.AsString, expected);
                 }

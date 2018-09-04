@@ -206,7 +206,7 @@ namespace OpenCensus.Trace.Sampler.Test
               0,
               0,
               0,
-              0
+              0,
                     });
             Assert.False(
                     defaultProbability.ShouldSample(
@@ -236,7 +236,7 @@ namespace OpenCensus.Trace.Sampler.Test
               0,
               0,
               0,
-              0
+              0,
                     });
             Assert.True(
                     defaultProbability.ShouldSample(

@@ -28,7 +28,7 @@ namespace OpenCensus.Stats
 
         public static string Tarabyte { get; } = "terabytes";
 
-        private static string Minutes { get; } = "minutes";
+        public static string Minutes { get; } = "minutes";
 
         public static string Seconds { get; } = "seconds";
 

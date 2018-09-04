@@ -39,6 +39,7 @@ namespace OpenCensus.Trace
             return new EndSpanOptionsBuilder().SetSampleToLocalSpanStore(false);
         }
 
+        /// <inheritdoc/>
         public override bool Equals(object obj)
         {
             if (obj == this)
@@ -55,6 +56,7 @@ namespace OpenCensus.Trace
             return false;
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             int h = 1;
@@ -65,6 +67,7 @@ namespace OpenCensus.Trace
             return h;
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return "EndSpanOptions{"
