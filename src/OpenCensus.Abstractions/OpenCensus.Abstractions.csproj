@@ -22,6 +22,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Api\Trace\Sampler\" />
+    <Folder Include="Common\" />
+    <Folder Include="Internal\" />
+    <Folder Include="Stats\" />
+    <Folder Include="Tags\" />
+    <Folder Include="Trace\" />
   </ItemGroup>
 </Project>
