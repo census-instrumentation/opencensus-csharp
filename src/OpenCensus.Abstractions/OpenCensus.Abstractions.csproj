@@ -28,4 +28,8 @@
     <Folder Include="Tags\" />
     <Folder Include="Trace\" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Utils\Arrays.cs" />
+    <Compile Remove="Utils\AttributesWithCapacity.cs" />
+  </ItemGroup>
 </Project>
