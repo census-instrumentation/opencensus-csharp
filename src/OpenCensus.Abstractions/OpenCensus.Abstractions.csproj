@@ -21,4 +21,7 @@
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Api\Trace\Sampler\" />
+  </ItemGroup>
 </Project>
