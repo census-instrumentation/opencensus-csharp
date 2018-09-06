@@ -19,6 +19,7 @@ namespace OpenCensus.Tags
     using System;
     using System.Collections.Generic;
     using OpenCensus.Utils;
+    using OpenCensus.Utils.Abstractions;
 
     public sealed class TagValues
     {

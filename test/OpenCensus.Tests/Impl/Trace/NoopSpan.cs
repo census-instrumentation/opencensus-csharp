@@ -64,7 +64,7 @@ namespace OpenCensus.Trace.Test
         {
         }
 
-        internal override ISpanData ToSpanData()
+        public override ISpanData ToSpanData()
         {
             return null;
         }
