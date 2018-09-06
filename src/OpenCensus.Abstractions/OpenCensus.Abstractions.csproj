@@ -1,10 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), 'OpenCensus.sln'))\build\Common.prod.props" />
-
   <PropertyGroup>
     <TargetFrameworks>net46;netstandard2.0</TargetFrameworks>
     <TargetFrameworks Condition="$(OS) != 'Windows_NT'">netstandard2.0</TargetFrameworks>
-    <Description>OpenCensus .NET API</Description>
+    <Description>OpenCensus .NET API abstractions</Description>
     <IncludeSymbols>True</IncludeSymbols>
     <PackageTags>Tracing;OpenCensus;Management;Monitoring</PackageTags>
     <PackageIconUrl>https://opencensus.io/images/opencensus-logo.png</PackageIconUrl>
@@ -13,15 +12,11 @@
     <Authors>OpenCensus authors</Authors>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
-
   <ItemGroup>
-    <ProjectReference Include="..\OpenCensus.Abstractions\OpenCensus.Abstractions.csproj" />
-    <PackageReference Include="System.Collections.Immutable" Version="1.4.0" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.0-beta008">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
