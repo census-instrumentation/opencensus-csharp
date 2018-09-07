@@ -19,7 +19,7 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\OpenCensus\OpenCensus.csproj" />
+    <ProjectReference Include="..\OpenCensus.Abstractions\OpenCensus.Abstractions.csproj" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.0.2">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
