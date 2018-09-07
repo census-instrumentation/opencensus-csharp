@@ -435,7 +435,7 @@ namespace OpenCensus.Trace
         // addNetworkEvent(BaseMessageEventUtil.asNetworkEvent(messageEvent));
         // }
 
-        internal override ISpanData ToSpanData()
+        public override ISpanData ToSpanData()
         {
             if (!this.Options.HasFlag(SpanOptions.RECORD_EVENTS))
             {

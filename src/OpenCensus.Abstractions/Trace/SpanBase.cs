@@ -102,6 +102,6 @@ namespace OpenCensus.Trace
                 "]";
         }
 
-        internal abstract ISpanData ToSpanData();
+        public abstract ISpanData ToSpanData();
     }
 }

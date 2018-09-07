@@ -101,7 +101,7 @@ namespace OpenCensus.Trace
             return "BlankSpan";
         }
 
-        internal override ISpanData ToSpanData()
+        public override ISpanData ToSpanData()
         {
             throw new NotImplementedException();
         }
