@@ -40,6 +40,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples", "src\Samples\Samp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenCensus.Abstractions", "src\OpenCensus.Abstractions\OpenCensus.Abstractions.csproj", "{99F8A331-05E9-45A5-89BA-4C54E825E5B2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenCensus.Exporter.Prometheus", "src\OpenCensus.Exporter.Prometheus\OpenCensus.Exporter.Prometheus.csproj", "{AD9B2B54-EC9C-448E-BD3C-EDCC3F7AD022}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,6 +76,10 @@ Global
 		{99F8A331-05E9-45A5-89BA-4C54E825E5B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99F8A331-05E9-45A5-89BA-4C54E825E5B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99F8A331-05E9-45A5-89BA-4C54E825E5B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD9B2B54-EC9C-448E-BD3C-EDCC3F7AD022}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD9B2B54-EC9C-448E-BD3C-EDCC3F7AD022}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD9B2B54-EC9C-448E-BD3C-EDCC3F7AD022}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD9B2B54-EC9C-448E-BD3C-EDCC3F7AD022}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
