@@ -20,7 +20,6 @@ namespace OpenCensus.Collector.Dependencies.Implementation
     using System.Net.Http;
     using System.Threading.Tasks;
     using OpenCensus.Trace;
-    using OpenCensus.Trace.Sampler;
 
     internal class HttpClientListener : ListenerHandler
     {
@@ -28,35 +27,32 @@ namespace OpenCensus.Collector.Dependencies.Implementation
         private readonly PropertyFetcher stopResponseFetcher = new PropertyFetcher("Response");
         private readonly PropertyFetcher stopRequestStatusFetcher = new PropertyFetcher("RequestTaskStatus");
 
-        public HttpClientListener(ITracer tracer) : base("HttpHandlerDiagnosticListener", tracer)
+        public HttpClientListener(ITracer tracer, ISampler sampler) : base("HttpHandlerDiagnosticListener", tracer, sampler)
         {
         }
 
         public override void OnStartActivity(Activity activity, object payload)
         {
-            var request = this.startRequestFetcher.Fetch(payload) as HttpRequestMessage;
-            if (request == null)
+            if (!(this.startRequestFetcher.Fetch(payload) is HttpRequestMessage request))
             {
-                Debug.WriteLine("request is null");
+                // Debug.WriteLine("request is null");
                 return;
             }
 
-            // TODO; sampling
-            this.LocalScope.Value = this.Tracer.SpanBuilder("HttpOut").SetSampler(Samplers.AlwaysSample).StartScopedSpan();
+            this.LocalScope.Value = this.Tracer.SpanBuilder("HttpOut").SetSampler(this.Sampler).StartScopedSpan();
             var span = this.Tracer.CurrentSpan;
-            // span.PutClientSpanKindAttribute();
-            // span.PutHttpMethodAttribute(request.Method.ToString());
-            // span.PutHttpHostAttribute(request.RequestUri.Host);
-            // span.PutHttpPathAttribute(request.RequestUri.AbsolutePath);
-            // span.PutHttpUrlAttribute(request.RequestUri.ToString());
+            span.PutClientSpanKindAttribute();
+            span.PutHttpMethodAttribute(request.Method.ToString());
+            span.PutHttpHostAttribute(request.RequestUri.Host);
+            span.PutHttpPathAttribute(request.RequestUri.AbsolutePath);
+            span.PutHttpUrlAttribute(request.RequestUri.ToString());
         }
 
         public override void OnStopActivity(Activity activity, object payload)
         {
-            var response = this.stopResponseFetcher.Fetch(payload) as HttpResponseMessage;
-            if (response == null)
+            if (!(this.stopResponseFetcher.Fetch(payload) is HttpResponseMessage response))
             {
-                Debug.WriteLine("response is null");
+                // Debug.WriteLine("response is null");
                 return;
             }
 
@@ -67,13 +63,13 @@ namespace OpenCensus.Collector.Dependencies.Implementation
             {
                 if (requestTaskStatus != TaskStatus.RanToCompletion)
                 {
-                    // span.PutErrorAttribute(requestTaskStatus.ToString());
+                    span.PutErrorAttribute(requestTaskStatus.ToString());
                 }
             }
 
             // TODO status
             // span.Status = new Status(((int)response.StatusCode >= 200 && (int)response.StatusCode < 300) ? CanonicalCode.Ok : CanonicalCode.Unknown, response.StatusCode.ToString());
-            // span.PutHttpStatusCodeAttribute((int)response.StatusCode);
+            span.PutHttpStatusCodeAttribute((int)response.StatusCode);
             this.LocalScope.Value?.Dispose();
         }
     }

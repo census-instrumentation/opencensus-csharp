@@ -26,20 +26,23 @@ namespace OpenCensus.Collector.Dependencies.Implementation
     {
         protected readonly ITracer Tracer;
 
+        protected readonly ISampler Sampler;
+
         // TODO: fix IScope and AsyncLocalContext so that current is always available
         protected readonly AsyncLocal<IScope> LocalScope = new AsyncLocal<IScope>();
 
-        public ListenerHandler(string sourceName, ITracer tracer)
+        public ListenerHandler(string sourceName, ITracer tracer, ISampler sampler)
         {
             this.SourceName = sourceName;
             this.Tracer = tracer;
+            this.Sampler = sampler;
         }
 
         public string SourceName { get; }
 
         public virtual void OnStartActivity(Activity activity, object payload)
         {
-            this.LocalScope.Value = this.Tracer.SpanBuilder(activity.OperationName).SetRecordEvents(true).SetSampler(Samplers.AlwaysSample).StartScopedSpan();
+            this.LocalScope.Value = this.Tracer.SpanBuilder(activity.OperationName).SetRecordEvents(true).SetSampler(this.Sampler).StartScopedSpan();
         }
 
         public virtual void OnStopActivity(Activity activity, object payload)
@@ -47,7 +50,7 @@ namespace OpenCensus.Collector.Dependencies.Implementation
             var span = this.Tracer.CurrentSpan;
             foreach (var tag in activity.Tags)
             {
-                // span.PutAttribute(tag.Key, AttributeValue.StringAttributeValue(tag.Value));
+                span.PutAttribute(tag.Key, AttributeValue.StringAttributeValue(tag.Value));
             }
 
             this.LocalScope.Value?.Dispose();
