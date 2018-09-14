@@ -39,6 +39,11 @@ namespace OpenCensus.Collector.Dependencies.Implementation
                 return;
             }
 
+            if (request.RequestUri.ToString().Contains("zipkin.azurewebsites.net"))
+            {
+                return;
+            }
+
             this.LocalScope.Value = this.Tracer.SpanBuilder("HttpOut").SetSampler(this.Sampler).StartScopedSpan();
             var span = this.Tracer.CurrentSpan;
             span.PutClientSpanKindAttribute();

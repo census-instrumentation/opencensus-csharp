@@ -63,17 +63,17 @@ namespace OpenCensus.Collector.Dependencies.Tests
 
             public ISpanBuilder SpanBuilder(string spanName)
             {
-                return null;
+                return new SpanBuilder();
             }
 
             public ISpanBuilder SpanBuilderWithExplicitParent(string spanName, ISpan parent = null)
             {
-                return null;
+                return new SpanBuilder();
             }
 
             public ISpanBuilder SpanBuilderWithRemoteParent(string spanName, ISpanContext remoteParentSpanContext = null)
             {
-                return null;
+                return new SpanBuilder();
             }
 
             public IScope WithSpan(ISpan span)
