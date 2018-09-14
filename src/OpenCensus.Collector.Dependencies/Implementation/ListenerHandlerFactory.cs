@@ -31,7 +31,10 @@ namespace OpenCensus.Collector.Dependencies.Implementation
                 switch (name)
                 {
                     case "HttpHandlerDiagnosticListener":
-                        handler = new HttpClientListener(tracer, sampler);
+                        handler = new HttpHandlerDiagnosticListener(tracer, sampler);
+                        break;
+                    case "System.Net.Http.Desktop":
+                        handler = new SystemNetHttpDesktopListener(tracer, sampler);
                         break;
                     default:
                         handler = new ListenerHandler(name, tracer, sampler);

@@ -1,4 +1,4 @@
-﻿// <copyright file="HttpClientListener.cs" company="OpenCensus Authors">
+﻿// <copyright file="SystemNetHttpDesktopListener.cs" company="OpenCensus Authors">
 // Copyright 2018, OpenCensus Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,23 +17,24 @@
 namespace OpenCensus.Collector.Dependencies.Implementation
 {
     using System.Diagnostics;
+    using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
     using OpenCensus.Trace;
 
-    internal class HttpClientListener : ListenerHandler
+    internal class SystemNetHttpDesktopListener : ListenerHandler
     {
         private readonly PropertyFetcher startRequestFetcher = new PropertyFetcher("Request");
         private readonly PropertyFetcher stopResponseFetcher = new PropertyFetcher("Response");
         private readonly PropertyFetcher stopRequestStatusFetcher = new PropertyFetcher("RequestTaskStatus");
 
-        public HttpClientListener(ITracer tracer, ISampler sampler) : base("HttpHandlerDiagnosticListener", tracer, sampler)
+        public SystemNetHttpDesktopListener(ITracer tracer, ISampler sampler) : base("System.Net.Http.Desktop", tracer, sampler)
         {
         }
 
         public override void OnStartActivity(Activity activity, object payload)
         {
-            if (!(this.startRequestFetcher.Fetch(payload) is HttpRequestMessage request))
+            if (!(this.startRequestFetcher.Fetch(payload) is HttpWebRequest request))
             {
                 // Debug.WriteLine("request is null");
                 return;
@@ -50,7 +51,7 @@ namespace OpenCensus.Collector.Dependencies.Implementation
 
         public override void OnStopActivity(Activity activity, object payload)
         {
-            if (!(this.stopResponseFetcher.Fetch(payload) is HttpResponseMessage response))
+            if (!(this.stopResponseFetcher.Fetch(payload) is HttpWebResponse response))
             {
                 // Debug.WriteLine("response is null");
                 return;
