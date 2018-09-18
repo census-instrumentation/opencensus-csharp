@@ -22,6 +22,9 @@ namespace OpenCensus.Collector.Dependencies.Implementation
     using System.Threading.Tasks;
     using OpenCensus.Trace;
 
+    /// <summary>
+    /// This listener will work with the "System.Net.Http.Desktop" diagnostics source.
+    /// </summary>
     internal class SystemNetHttpDesktopListener : ListenerHandler
     {
         private readonly PropertyFetcher startRequestFetcher = new PropertyFetcher("Request");

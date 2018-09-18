@@ -22,8 +22,8 @@ namespace OpenCensus.Collector.Dependencies.Tests
     using OpenCensus.Trace.Config;
     using OpenCensus.Trace.Internal;
     using OpenCensus.Trace.Sampler;
-    using System.Collections.Generic;
     using System.Net.Http;
+    using System.Threading;
     using Xunit;
 
     public class HttpClientTests
@@ -37,6 +37,8 @@ namespace OpenCensus.Collector.Dependencies.Tests
 
             var dc = new DependenciesCollector(new DependenciesCollectorOptions(), tracer, Samplers.AlwaysSample);
 
+            Assert.False(ExecutionContext.IsFlowSuppressed());
+
             using (var c = new HttpClient())
             {
                 var t = c.GetAsync("http://bing.com");
@@ -45,7 +47,30 @@ namespace OpenCensus.Collector.Dependencies.Tests
             }
 
             Assert.Equal(2, startEndHandler.Invocations.Count); // begin and end was called
-            var span = startEndHandler.Invocations[1].Arguments[0];
+            var spanData = ((Span)startEndHandler.Invocations[1].Arguments[0]).ToSpanData();
+
+            Assert.Equal("HttpOut", spanData.Name);
+            Assert.Null(spanData.ParentSpanId);
+            Assert.NotNull(spanData.Context.TraceId);
+            Assert.NotNull(spanData.Context.SpanId);
+            Assert.True(spanData.Status.IsOk);
+
+            Assert.Equal("http://bing.com/", AttributeToSimpleString(spanData.Attributes.AttributeMap["http.url"]));
+            Assert.Equal("/", AttributeToSimpleString(spanData.Attributes.AttributeMap["http.path"]));
+            Assert.Equal("GET", AttributeToSimpleString(spanData.Attributes.AttributeMap["http.method"]));
+            Assert.Equal("bing.com", AttributeToSimpleString(spanData.Attributes.AttributeMap["http.host"]));
+            Assert.Equal("200", AttributeToSimpleString(spanData.Attributes.AttributeMap["http.status_code"]));
+            Assert.Equal("client", AttributeToSimpleString(spanData.Attributes.AttributeMap["span.kind"]));
+        }
+
+        private string AttributeToSimpleString(IAttributeValue value)
+        {
+            return value.Match<string>(
+                x => x.ToString(),
+                x => x.ToString(),
+                x => x.ToString(),
+                x => x.ToString()
+            );
         }
     }
 }
