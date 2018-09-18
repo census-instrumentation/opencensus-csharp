@@ -55,5 +55,17 @@ namespace OpenCensus.Collector.Dependencies.Implementation
 
             this.LocalScope.Value?.Dispose();
         }
+
+        public virtual void OnStopActivityWithException(Activity activity, object payload)
+        {
+            var span = this.Tracer.CurrentSpan;
+            foreach (var tag in activity.Tags)
+            {
+                span.PutAttribute(tag.Key, AttributeValue.StringAttributeValue(tag.Value));
+            }
+
+            this.LocalScope.Value?.Dispose();
+        }
+
     }
 }

@@ -60,6 +60,10 @@ namespace OpenCensus.Collector.Dependencies.Implementation
                 {
                     this.handler.OnStopActivity(Activity.Current, value.Value);
                 }
+                else if (value.Key.EndsWith("Exception"))
+                {
+                    this.handler.OnStopActivityWithException(Activity.Current, value.Value);
+                }
             }
             catch (Exception e)
             {
