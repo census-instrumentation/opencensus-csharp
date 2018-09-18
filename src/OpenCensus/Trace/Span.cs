@@ -60,7 +60,7 @@ namespace OpenCensus.Trace
             this.parentSpanId = parentSpanId;
             this.hasRemoteParent = hasRemoteParent;
             this.name = name;
-            this.traceParams = traceParams;
+            this.traceParams = traceParams ?? throw new ArgumentNullException(nameof(traceParams));
             this.startEndHandler = startEndHandler;
             this.clock = clock;
             this.hasBeenEnded = false;

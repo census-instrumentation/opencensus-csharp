@@ -16,83 +16,36 @@
 
 namespace OpenCensus.Collector.Dependencies.Tests
 {
+    using Moq;
     using OpenCensus.Common;
     using OpenCensus.Trace;
     using OpenCensus.Trace.Config;
-    using OpenCensus.Trace.Export;
-    using OpenCensus.Trace.Propagation;
+    using OpenCensus.Trace.Internal;
     using OpenCensus.Trace.Sampler;
     using System.Collections.Generic;
     using System.Net.Http;
-    using System.Threading.Tasks;
     using Xunit;
 
     public class HttpClientTests
     {
-        private class SpanBuilder : ISpanBuilder
-        {
-            public ISpanBuilder SetParentLinks(IList<ISpan> parentLinks)
-            {
-                return this;
-            }
-
-            public ISpanBuilder SetRecordEvents(bool recordEvents)
-            {
-                return this;
-            }
-
-            public ISpanBuilder SetSampler(ISampler sampler)
-            {
-                return this;
-            }
-
-            public IScope StartScopedSpan()
-            {
-                return null;
-            }
-
-            public ISpan StartSpan()
-            {
-                return null;
-            }
-        }
-
-        private class CustomTracer : ITracer
-        {
-            public ISpan CurrentSpan => throw new System.NotImplementedException();
-
-            public ISpanBuilder SpanBuilder(string spanName)
-            {
-                return new SpanBuilder();
-            }
-
-            public ISpanBuilder SpanBuilderWithExplicitParent(string spanName, ISpan parent = null)
-            {
-                return new SpanBuilder();
-            }
-
-            public ISpanBuilder SpanBuilderWithRemoteParent(string spanName, ISpanContext remoteParentSpanContext = null)
-            {
-                return new SpanBuilder();
-            }
-
-            public IScope WithSpan(ISpan span)
-            {
-                return null;
-            }
-        }
-
         [Fact]
         public void HttpClientCallIsCollected()
         {
-            var tracer = new CustomTracer();
+            var startEndHandler = new Mock<IStartEndHandler>();
+
+            var tracer = new Tracer(new RandomGenerator(), startEndHandler.Object, new DateTimeOffsetClock(), new TraceConfig());
 
             var dc = new DependenciesCollector(new DependenciesCollectorOptions(), tracer, Samplers.AlwaysSample);
 
-            var t = new HttpClient().GetStringAsync("http://bing.com");
-            t.Wait();
+            using (var c = new HttpClient())
+            {
+                var t = c.GetAsync("http://bing.com");
+                t.Wait();
+                Assert.NotNull(t.Result);
+            }
 
-            Assert.NotNull(t.Result);
+            Assert.Equal(2, startEndHandler.Invocations.Count); // begin and end was called
+            var span = startEndHandler.Invocations[1].Arguments[0];
         }
     }
 }

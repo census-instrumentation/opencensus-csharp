@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Description>Zipkin exporter for OpenCensus</Description>
-    <PackageTags>Tracing;OpenCensus;Management;Monitoring;Zipkin;distributed-tracing</PackageTags>
+    <Description>OpenCensus collector for calls to dependencies</Description>
+    <PackageTags>Tracing;OpenCensus;Management;Monitoring;distributed-tracing;HttpClient</PackageTags>
     <PackageIconUrl>https://opencensus.io/images/opencensus-logo.png</PackageIconUrl>
     <PackageProjectUrl>https://opencensus.io</PackageProjectUrl>
     <PackageLicenseUrl>https://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
