@@ -18,6 +18,7 @@ namespace OpenCensus.Trace
 {
     using System.Collections.Generic;
     using System.Collections.Specialized;
+    using System.Globalization;
 
     public static class SpanExtensions
     {
@@ -45,6 +46,14 @@ namespace OpenCensus.Trace
             return span;
         }
 
+        /// <summary>
+        /// Helper method that populates span properties from http status code according 
+        /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md
+        /// </summary>
+        /// <param name="span">Span to fill out.</param>
+        /// <param name="statusCode">Http status code.</param>
+        /// <param name="reasonPhrase">Http reason phrase.</param>
+        /// <returns>Span with populated statis code properties.</returns>
         public static ISpan PutHttpStatusCodeAttribute(this ISpan span, int statusCode)
         {
             span.PutAttribute(SpanAttributeConstants.HttpStatusCodeKey, AttributeValue.LongAttributeValue(statusCode));
@@ -75,9 +84,16 @@ namespace OpenCensus.Trace
             return span;
         }
 
-        public static ISpan PutErrorAttribute(this ISpan span, string errorMessage)
+        /// <summary>
+        /// Helper method that populates span properties from error attribute
+        /// according to TODO: link to spec.
+        /// </summary>
+        /// <param name="span">Span to fill out.</param>
+        /// <param name="error">Indicate whether span ended with error.</param>
+        /// <returns>Span with populated properties.</returns>
+        public static ISpan PutErrorAttribute(this ISpan span, bool error = true)
         {
-            span.PutAttribute(SpanAttributeConstants.ErrorKey, AttributeValue.StringAttributeValue(errorMessage));
+            span.PutAttribute(SpanAttributeConstants.ErrorKey, AttributeValue.BooleanAttributeValue(error));
             return span;
         }
 
@@ -134,6 +150,67 @@ namespace OpenCensus.Trace
         public static ISpan PutHttpResponseHeadersAttribute(this ISpan span, NameValueCollection headers)
         {
             PutHeadersAttribute(span, "http.response.", headers);
+            return span;
+        }
+
+        /// <summary>
+        /// Helper method that populates span properties from http status code according 
+        /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md
+        /// </summary>
+        /// <param name="span">Span to fill out.</param>
+        /// <param name="statusCode">Http status code.</param>
+        /// <param name="reasonPhrase">Http reason phrase.</param>
+        /// <returns>Span with populated properties.</returns>
+        public static ISpan PutHttpStatusCode(this ISpan span, int statusCode, string reasonPhrase)
+        {
+            span.PutHttpStatusCodeAttribute(statusCode);
+
+            if ((int)statusCode < 200)
+            {
+                span.Status = Status.Unknown;
+            } else if ((int)statusCode >= 200 && (int)statusCode <= 399)
+            {
+                span.Status = Status.Ok;
+            }
+            else if ((int)statusCode == 400)
+            {
+                span.Status = Status.InvalidArgument;
+            }
+            else if ((int)statusCode == 401)
+            {
+                span.Status = Status.Unauthenticated;
+            }
+            else if ((int)statusCode == 403)
+            {
+                span.Status = Status.PermissionDenied;
+            }
+            else if ((int)statusCode == 404)
+            {
+                span.Status = Status.NotFound;
+            }
+            else if ((int)statusCode == 429)
+            {
+                span.Status = Status.ResourceExhausted;
+            }
+            else if ((int)statusCode == 501)
+            {
+                span.Status = Status.Unimplemented;
+            }
+            else if ((int)statusCode == 503)
+            {
+                span.Status = Status.Unavailable;
+            }
+            else if ((int)statusCode == 504)
+            {
+                span.Status = Status.DeadlineExceeded;
+            }
+            else
+            {
+                span.Status = Status.Unknown;
+            }
+
+            span.Status = span.Status.WithDescription(reasonPhrase);
+
             return span;
         }
 

@@ -16,29 +16,21 @@
 
 namespace OpenCensus.Collector.Dependencies.Implementation
 {
-    using System.Collections.Generic;
     using OpenCensus.Trace;
 
     internal static class ListenerHandlerFactory
     {
-        private static readonly Dictionary<string, ListenerHandler> KnownHandlers =
-            new Dictionary<string, ListenerHandler>();
-
         public static ListenerHandler GetHandler(string name, ITracer tracer, ISampler sampler)
         {
-            if (!KnownHandlers.TryGetValue(name, out var handler))
+            ListenerHandler handler = null;
+            switch (name)
             {
-                switch (name)
-                {
-                    case "HttpHandlerDiagnosticListener":
-                        handler = new HttpHandlerDiagnosticListener(tracer, sampler);
-                        break;
-                    default:
-                        handler = new ListenerHandler(name, tracer, sampler);
-                        break;
-                }
-
-                KnownHandlers[name] = handler;
+                case "HttpHandlerDiagnosticListener":
+                    handler = new HttpHandlerDiagnosticListener(tracer, sampler);
+                    break;
+                default:
+                    handler = new ListenerHandler(name, tracer, sampler);
+                    break;
             }
 
             return handler;

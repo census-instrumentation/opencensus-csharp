@@ -48,7 +48,7 @@ namespace OpenCensus.Collector.Dependencies.Implementation
                 return;
             }
 
-            this.LocalScope.Value = this.Tracer.SpanBuilder("HttpOut").SetSampler(this.Sampler).StartScopedSpan();
+            this.Tracer.SpanBuilder("HttpOut").SetSampler(this.Sampler).StartScopedSpan();
             var span = this.Tracer.CurrentSpan;
             span.PutClientSpanKindAttribute();
             span.PutHttpMethodAttribute(request.Method.ToString());
@@ -59,55 +59,38 @@ namespace OpenCensus.Collector.Dependencies.Implementation
 
         public override void OnStopActivity(Activity activity, object payload)
         {
+            var span = this.Tracer.CurrentSpan;
+
             if (!(this.stopResponseFetcher.Fetch(payload) is HttpResponseMessage response))
             {
-                // Debug.WriteLine("response is null");
+                // response could be null for DNS issues, timeouts, etc...
+                // TODO: how do we make sure we will not close a scope that wasn't opened?
+
+                span.End();
                 return;
             }
 
             var requestTaskStatus = this.stopRequestStatusFetcher.Fetch(payload) as TaskStatus?;
 
-            var span = this.Tracer.CurrentSpan;
             if (requestTaskStatus.HasValue)
             {
                 if (requestTaskStatus != TaskStatus.RanToCompletion)
                 {
-                    span.PutErrorAttribute(requestTaskStatus.ToString());
+                    span.PutErrorAttribute();
+
+                    if (requestTaskStatus == TaskStatus.Canceled)
+                    {
+                        span.Status = Status.Cancelled;
+                    }
                 }
             }
 
-            if ((int)response.StatusCode >= 200 && (int)response.StatusCode <= 301)
-            {
-                span.Status = Status.Ok;
-            }
-            else if ((int)response.StatusCode == 401)
-            {
-                span.Status = Status.Unauthenticated;
-            }
-            else if ((int)response.StatusCode == 403)
-            {
-                span.Status = Status.PermissionDenied;
-            }
-            else if ((int)response.StatusCode == 404)
-            {
-                span.Status = Status.NotFound;
-            }
-            else if ((int)response.StatusCode == 501)
-            {
-                span.Status = Status.Unimplemented;
-            }
-            else
-            {
-                span.Status = Status.Unknown;
-            }
+            span.PutHttpStatusCode((int)response.StatusCode, response.ReasonPhrase);
 
-            span.Status = span.Status.WithDescription(response.StatusCode + " " + response.ReasonPhrase);
-
-            span.PutHttpStatusCodeAttribute((int)response.StatusCode);
-            this.LocalScope.Value?.Dispose();
+            span.End();
         }
 
-        public override void OnStopActivityWithException(Activity activity, object payload)
+        public override void OnException(Activity activity, object payload)
         {
             if (!(this.stopExceptionFetcher.Fetch(payload) is Exception exc))
             {
@@ -116,46 +99,21 @@ namespace OpenCensus.Collector.Dependencies.Implementation
             }
 
             var span = this.Tracer.CurrentSpan;
-            var requestTaskStatus = this.stopRequestStatusFetcher.Fetch(payload) as TaskStatus?;
-            if (requestTaskStatus.HasValue)
-            {
-                if (requestTaskStatus != TaskStatus.RanToCompletion)
-                {
-                    span.PutErrorAttribute(requestTaskStatus.ToString());
-                }
-            }
-
-            this.LocalScope.Value?.Dispose();
 
             if (exc is HttpRequestException)
             {
-                // this will be System.Net.Http.WinHttpException: The server name or address could not be resolved
-                // on netstandard...
+                // TODO: on netstandard this will be System.Net.Http.WinHttpException: The server name or address could not be resolved
                 if (exc.InnerException is WebException &&
                     ((WebException)exc.InnerException).Status == WebExceptionStatus.NameResolutionFailure)
                 {
                     span.Status = Status.InvalidArgument;
                 }
-            }
+                else if (exc.InnerException != null)
+                {
+                    span.Status = Status.Unknown.WithDescription(exc.Message);
+                }
 
+            }
         }
     }
 }
-
-/*
-public static readonly Status Ok = new Status(CanonicalCode.Ok);
-public static readonly Status Cancelled = new Status(CanonicalCode.Cancelled);
-public static readonly Status Unknown = new Status(CanonicalCode.Unknown);
-public static readonly Status InvalidArgument = new Status(CanonicalCode.InvalidArgument);
-public static readonly Status DeadlineExceeded = new Status(CanonicalCode.DeadlineExceeded);
-public static readonly Status AlreadyExists = new Status(CanonicalCode.AlreadyExists);
-public static readonly Status ResourceExhausted = new Status(CanonicalCode.ResourceExhausted);
-public static readonly Status FailedPrecondition = new Status(CanonicalCode.FailedPrecondition);
-public static readonly Status Aborted = new Status(CanonicalCode.Aborted);
-public static readonly Status OutOfRange = new Status(CanonicalCode.OutOfRange);
-public static readonly Status Unimplemented = new Status(CanonicalCode.Unimplemented);
-public static readonly Status Internal = new Status(CanonicalCode.Internal);
-public static readonly Status Unavailable = new Status(CanonicalCode.Unavailable);
-public static readonly Status DataLoss = new Status(CanonicalCode.DataLoss);
-
-*/

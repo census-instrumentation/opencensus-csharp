@@ -16,6 +16,7 @@
 
 namespace OpenCensus.Collector.Dependencies
 {
+    using System;
     using System.Collections.Generic;
     using OpenCensus.Collector.Dependencies.Implementation;
     using OpenCensus.Trace;
@@ -23,7 +24,7 @@ namespace OpenCensus.Collector.Dependencies
     /// <summary>
     /// Dependencies collector.
     /// </summary>
-    public class DependenciesCollector
+    public class DependenciesCollector : IDisposable
     {
         private readonly DiagnosticSourceSubscriber diagnosticSourceSubscriber;
 
@@ -40,6 +41,11 @@ namespace OpenCensus.Collector.Dependencies
                 tracer, 
                 sampler);
             this.diagnosticSourceSubscriber.Subscribe();
+        }
+
+        public void Dispose()
+        {
+            this.diagnosticSourceSubscriber.Dispose();
         }
     }
 }

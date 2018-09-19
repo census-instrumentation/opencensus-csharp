@@ -1,0 +1,61 @@
+﻿[
+  {
+    "name": "Successfull GET call to https://example.com",
+    "method": "GET",
+    "url": "https://example.com/",
+    "spanName": "HttpOut",
+    "spanStatus": "Ok",
+    "spanAttributes": {
+      "http.url": "https://example.com/",
+      "http.path": "/",
+      "http.method": "GET",
+      "http.host": "example.com",
+      "http.status_code": "200",
+      "span.kind": "client"
+    }
+  },
+  {
+    "name": "Successfull POST call to https://example.com",
+    "method": "POST",
+    "url": "https://example.com/",
+    "spanName": "HttpOut",
+    "spanStatus": "Ok",
+    "spanAttributes": {
+      "http.url": "https://example.com/",
+      "http.path": "/",
+      "http.method": "POST",
+      "http.host": "example.com",
+      "http.status_code": "200",
+      "span.kind": "client"
+    }
+  },
+  {
+    "name": "Name is populated as a path",
+    "method": "GET",
+    "url": "https://bing.com/path/to/page/",
+    "spanName": "HttpOut",
+    "spanStatus": "NotFound",
+    "spanAttributes": {
+      "http.url": "https://bing.com/path/to/page/",
+      "http.path": "/path/to/page/",
+      "http.method": "GET",
+      "http.host": "bing.com",
+      "http.status_code": "404",
+      "span.kind": "client"
+    }
+  },
+  {
+    "name": "Call that cannot resolve DNS",
+    "method": "GET",
+    "url": "https://sdlfaldfjalkdfjlkajdflkajlsdjf.sdlkjafsdjfalfadslkf.com/",
+    "spanName": "HttpOut",
+    "spanStatus": "Unknown",
+    "spanAttributes": {
+      "http.url": "https://sdlfaldfjalkdfjlkajdflkajlsdjf.sdlkjafsdjfalfadslkf.com/",
+      "http.path": "/",
+      "http.method": "GET",
+      "http.host": "sdlfaldfjalkdfjlkajdflkajlsdjf.sdlkjafsdjfalfadslkf.com",
+      "span.kind": "client"
+    }
+  }
+]
