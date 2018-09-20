@@ -136,21 +136,22 @@ namespace OpenCensus.Collector.Dependencies.Tests
         {
             var serializer = new JsonSerializer();
             var input = serializer.Deserialize<HttpOutTestCase[]>(new JsonTextReader(new StringReader(@"
-[  {
-    ""name"": ""Name is populated as a path"",
+[    {
+    ""name"": ""Call that cannot resolve DNS"",
     ""method"": ""GET"",
-    ""url"": ""https://bing.com/path/to/page/"",
+    ""url"": ""https://sdlfaldfjalkdfjlkajdflkajlsdjf.sdlkjafsdjfalfadslkf.com/"",
     ""spanName"": ""HttpOut"",
-    ""spanStatus"": ""NotFound"",
+    ""spanStatus"": ""Unknown"",
     ""spanAttributes"": {
-                ""http.url"": ""https://bing.com/path/to/page/"",
-      ""http.path"": ""/path/to/page/"",
+                ""http.url"": ""https://sdlfaldfjalkdfjlkajdflkajlsdjf.sdlkjafsdjfalfadslkf.com/"",
+      ""http.path"": ""/"",
       ""http.method"": ""GET"",
-      ""http.host"": ""bing.com"",
-      ""http.status_code"": ""404"",
-      ""span.kind"": ""client""
+      ""http.host"": ""sdlfaldfjalkdfjlkajdflkajlsdjf.sdlkjafsdjfalfadslkf.com"",
+      ""span.kind"": ""client"",
+      ""error"": ""true""
     }
-        }]
+        }
+]
 ")));
 
             this.GetType().InvokeMember(nameof(HttpOutCallsAreCollectedSuccesfully), BindingFlags.InvokeMethod, null, this, getArgumentsFromTestCaseObject(input).First());
@@ -160,7 +161,7 @@ namespace OpenCensus.Collector.Dependencies.Tests
         {
             return value.Match<string>(
                 x => x.ToString(),
-                x => x.ToString(),
+                x => x ? "true" : "false",
                 x => x.ToString(),
                 x => x.ToString()
             );

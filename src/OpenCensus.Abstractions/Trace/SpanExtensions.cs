@@ -86,7 +86,7 @@ namespace OpenCensus.Trace
 
         /// <summary>
         /// Helper method that populates span properties from error attribute
-        /// according to TODO: link to spec.
+        /// according to https://github.com/opentracing/specification/blob/master/semantic_conventions.md#span-tags-table.
         /// </summary>
         /// <param name="span">Span to fill out.</param>
         /// <param name="error">Indicate whether span ended with error.</param>

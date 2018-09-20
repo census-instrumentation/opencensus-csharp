@@ -61,15 +61,6 @@ namespace OpenCensus.Collector.Dependencies.Implementation
         {
             var span = this.Tracer.CurrentSpan;
 
-            if (!(this.stopResponseFetcher.Fetch(payload) is HttpResponseMessage response))
-            {
-                // response could be null for DNS issues, timeouts, etc...
-                // TODO: how do we make sure we will not close a scope that wasn't opened?
-
-                span.End();
-                return;
-            }
-
             var requestTaskStatus = this.stopRequestStatusFetcher.Fetch(payload) as TaskStatus?;
 
             if (requestTaskStatus.HasValue)
@@ -83,6 +74,15 @@ namespace OpenCensus.Collector.Dependencies.Implementation
                         span.Status = Status.Cancelled;
                     }
                 }
+            }
+
+            if (!(this.stopResponseFetcher.Fetch(payload) is HttpResponseMessage response))
+            {
+                // response could be null for DNS issues, timeouts, etc...
+                // TODO: how do we make sure we will not close a scope that wasn't opened?
+
+                span.End();
+                return;
             }
 
             span.PutHttpStatusCode((int)response.StatusCode, response.ReasonPhrase);

@@ -55,7 +55,8 @@
       "http.path": "/",
       "http.method": "GET",
       "http.host": "sdlfaldfjalkdfjlkajdflkajlsdjf.sdlkjafsdjfalfadslkf.com",
-      "span.kind": "client"
+      "span.kind": "client",
+      "error": "true"
     }
   }
 ]
