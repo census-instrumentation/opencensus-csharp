@@ -56,22 +56,7 @@
     }
   },
   {
-    "name": "Response code 199",
-    "method": "GET",
-    "url": "http://{host}:{port}/",
-    "responseCode": 199,
-    "spanName": "/",
-    "spanStatus": "UNKNOWN",
-    "spanAttributes": {
-      "http.url": "http://{host}:{port}/",
-      "http.path": "/",
-      "http.method": "GET",
-      "http.host": "{host}",
-      "http.status_code": "199"
-    }
-  },
-  {
-    "name": "Response code 200",
+    "name": "Response code: 199. This test case is not possible to implement for some platforms as this considered an invalid status code. Fallback into 200 test case",
     "method": "GET",
     "url": "http://{host}:{port}/",
     "responseCode": 200,
@@ -86,7 +71,22 @@
     }
   },
   {
-    "name": "Response code 399",
+    "name": "Response code: 200",
+    "method": "GET",
+    "url": "http://{host}:{port}/",
+    "responseCode": 200,
+    "spanName": "/",
+    "spanStatus": "OK",
+    "spanAttributes": {
+      "http.url": "http://{host}:{port}/",
+      "http.path": "/",
+      "http.method": "GET",
+      "http.host": "{host}",
+      "http.status_code": "200"
+    }
+  },
+  {
+    "name": "Response code: 399",
     "method": "GET",
     "url": "http://{host}:{port}/",
     "responseCode": 399,
@@ -101,7 +101,7 @@
     }
   },
   {
-    "name": "Response code 400",
+    "name": "Response code: 400",
     "method": "GET",
     "url": "http://{host}:{port}/",
     "responseCode": 400,
@@ -113,6 +113,126 @@
       "http.method": "GET",
       "http.host": "{host}",
       "http.status_code": "400"
+    }
+  },
+  {
+    "name": "Response code: 401",
+    "method": "GET",
+    "url": "http://{host}:{port}/",
+    "responseCode": 401,
+    "spanName": "/",
+    "spanStatus": "UNAUTHENTICATED",
+    "spanAttributes": {
+      "http.url": "http://{host}:{port}/",
+      "http.path": "/",
+      "http.method": "GET",
+      "http.host": "{host}",
+      "http.status_code": "401"
+    }
+  },
+  {
+    "name": "Response code: 403",
+    "method": "GET",
+    "url": "http://{host}:{port}/",
+    "responseCode": 403,
+    "spanName": "/",
+    "spanStatus": "PERMISSION_DENIED",
+    "spanAttributes": {
+      "http.url": "http://{host}:{port}/",
+      "http.path": "/",
+      "http.method": "GET",
+      "http.host": "{host}",
+      "http.status_code": "403"
+    }
+  },
+  {
+    "name": "Response code: 404",
+    "method": "GET",
+    "url": "http://{host}:{port}/",
+    "responseCode": 404,
+    "spanName": "/",
+    "spanStatus": "NOT_FOUND",
+    "spanAttributes": {
+      "http.url": "http://{host}:{port}/",
+      "http.path": "/",
+      "http.method": "GET",
+      "http.host": "{host}",
+      "http.status_code": "404"
+    }
+  },
+  {
+    "name": "Response code: 429",
+    "method": "GET",
+    "url": "http://{host}:{port}/",
+    "responseCode": 429,
+    "spanName": "/",
+    "spanStatus": "RESOURCE_EXHAUSTED",
+    "spanAttributes": {
+      "http.url": "http://{host}:{port}/",
+      "http.path": "/",
+      "http.method": "GET",
+      "http.host": "{host}",
+      "http.status_code": "429"
+    }
+  },
+  {
+    "name": "Response code: 501",
+    "method": "GET",
+    "url": "http://{host}:{port}/",
+    "responseCode": 501,
+    "spanName": "/",
+    "spanStatus": "UNIMPLEMENTED",
+    "spanAttributes": {
+      "http.url": "http://{host}:{port}/",
+      "http.path": "/",
+      "http.method": "GET",
+      "http.host": "{host}",
+      "http.status_code": "501"
+    }
+  },
+  {
+    "name": "Response code: 503",
+    "method": "GET",
+    "url": "http://{host}:{port}/",
+    "responseCode": 503,
+    "spanName": "/",
+    "spanStatus": "UNAVAILABLE",
+    "spanAttributes": {
+      "http.url": "http://{host}:{port}/",
+      "http.path": "/",
+      "http.method": "GET",
+      "http.host": "{host}",
+      "http.status_code": "503"
+    }
+  },
+  {
+    "name": "Response code: 504",
+    "method": "GET",
+    "url": "http://{host}:{port}/",
+    "responseCode": 504,
+    "spanName": "/",
+    "spanStatus": "DEADLINE_EXCEEDED",
+    "spanAttributes": {
+      "http.url": "http://{host}:{port}/",
+      "http.path": "/",
+      "http.method": "GET",
+      "http.host": "{host}",
+      "http.status_code": "504"
+    }
+  },
+  {
+    "name": "Response code: 600",
+    "method": "GET",
+    "url": "http://{host}:{port}/",
+    "responseCode": 600,
+    "spanName": "/",
+    "spanStatus": "UNKNOWN",
+    "spanAttributes": {
+      "http.url": "http://{host}:{port}/",
+      "http.path": "/",
+      "http.method": "GET",
+      "http.host": "{host}",
+      "http.status_code": "600"
     }
   }
 
