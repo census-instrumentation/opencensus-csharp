@@ -42,13 +42,13 @@ namespace OpenCensus.Collector.Dependencies.Implementation
                 return;
             }
 
-            // TODO: this needs to be generilized
+            // TODO: this needs to be generalized
             if (request.RequestUri.ToString().Contains("zipkin.azurewebsites.net"))
             {
                 return;
             }
 
-            this.Tracer.SpanBuilder("HttpOut").SetSampler(this.Sampler).StartScopedSpan();
+            this.Tracer.SpanBuilder(request.RequestUri.AbsolutePath).SetSampler(this.Sampler).StartScopedSpan();
             var span = this.Tracer.CurrentSpan;
             span.PutClientSpanKindAttribute();
             span.PutHttpMethodAttribute(request.Method.ToString());

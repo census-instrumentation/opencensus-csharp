@@ -33,6 +33,8 @@ namespace OpenCensus.Trace
 
         public override Status Status { get; set; }
 
+        public override SpanKind? Kind { get; set; }
+
         public override long EndNanoTime
         {
             get

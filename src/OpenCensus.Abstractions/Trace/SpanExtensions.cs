@@ -18,19 +18,18 @@ namespace OpenCensus.Trace
 {
     using System.Collections.Generic;
     using System.Collections.Specialized;
-    using System.Globalization;
 
     public static class SpanExtensions
     {
         public static ISpan PutClientSpanKindAttribute(this ISpan span)
         {
-            span.PutAttribute(SpanAttributeConstants.SpanKindKey, AttributeValue.StringAttributeValue(SpanAttributeConstants.ClientSpanKind));
+            span.Kind = SpanKind.Client;
             return span;
         }
 
         public static ISpan PutServerSpanKindAttribute(this ISpan span)
         {
-            span.PutAttribute(SpanAttributeConstants.SpanKindKey, AttributeValue.StringAttributeValue(SpanAttributeConstants.ServerSpanKind));
+            span.Kind = SpanKind.Server;
             return span;
         }
 

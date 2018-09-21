@@ -45,7 +45,7 @@ namespace OpenCensus.Collector.Dependencies.Tests
 
             public string url { get; set; }
 
-            public string responseCode { get; set; }
+            public int responseCode { get; set; }
 
             public string spanName { get; set; }
 
@@ -118,9 +118,9 @@ namespace OpenCensus.Collector.Dependencies.Tests
                         ctxTask.Wait(token);
 
                         var ctx = ctxTask.Result;
-                        if (!string.IsNullOrEmpty(tc.responseCode))
+                        if (tc.responseCode != 0)
                         {
-                            ctx.Response.StatusCode = Convert.ToInt32(tc.responseCode);
+                            ctx.Response.StatusCode = tc.responseCode;
                         }
                         else
                         {
@@ -179,7 +179,28 @@ namespace OpenCensus.Collector.Dependencies.Tests
 
             Assert.Equal(tc.spanName, spanData.Name);
 
-            Assert.Equal(tc.spanStatus, spanData.Status.CanonicalCode.ToString());
+            var d = new Dictionary<CanonicalCode, string>()
+            {
+                { CanonicalCode.Ok, "OK"},
+                { CanonicalCode.Cancelled, "CANCELLED"},
+                { CanonicalCode.Unknown, "UNKNOWN"},
+                { CanonicalCode.InvalidArgument, "INVALID_ARGUMENT"},
+                { CanonicalCode.DeadlineExceeded, "DEADLINE_EXCEEDED"},
+                { CanonicalCode.NotFound, "NOT_FOUND"},
+                { CanonicalCode.AlreadyExists, "ALREADY_EXISTS"},
+                { CanonicalCode.PermissionDenied, "PERMISSION_DENIED"},
+                { CanonicalCode.ResourceExhausted, "RESOURCE_EXHAUSTED"},
+                { CanonicalCode.FailedPrecondition, "FAILED_PRECONDITION"},
+                { CanonicalCode.Aborted, "ABORTED"},
+                { CanonicalCode.OutOfRange, "OUT_OF_RANGE"},
+                { CanonicalCode.Unimplemented, "UNIMPLEMENTED"},
+                { CanonicalCode.Internal, "INTERNAL"},
+                { CanonicalCode.Unavailable, "UNAVAILABLE"},
+                { CanonicalCode.DataLoss, "DATA_LOSS"},
+                { CanonicalCode.Unauthenticated, "UNAUTHENTICATED"},
+            };
+
+            Assert.Equal(tc.spanStatus, d[spanData.Status.CanonicalCode]);
 
             var normilizedAttributes = spanData.Attributes.AttributeMap.ToDictionary(x => x.Key, x => AttributeToSimpleString(x.Value));
             tc.spanAttributes = tc.spanAttributes.ToDictionary(x => x.Key, x => NormaizeValues(x.Value, host, port));
@@ -196,15 +217,14 @@ namespace OpenCensus.Collector.Dependencies.Tests
     ""name"": ""Response code 404"",
     ""method"": ""GET"",
     ""url"": ""http://{host}:{port}/"",
-    ""responseCode"": ""404"",
-    ""spanName"": ""HttpOut"",
-    ""spanStatus"": ""NotFound"",
+    ""responseCode"": 404,
+    ""spanName"": ""/"",
+    ""spanStatus"": ""NOT_FOUND"",
     ""spanAttributes"": {
                 ""http.url"": ""http://{host}:{port}/"",
       ""http.path"": ""/"",
       ""http.method"": ""GET"",
       ""http.host"": ""{host}"",
-      ""span.kind"": ""client"",
 ""http.status_code"": ""404""
     }
         }

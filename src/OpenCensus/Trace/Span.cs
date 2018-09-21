@@ -115,6 +115,13 @@ namespace OpenCensus.Trace
             }
         }
 
+        public override SpanKind? Kind
+        {
+            get;
+
+            set; // TODO: do we need to notify when attempt to set on already closed Span?
+        }
+
         public override long EndNanoTime
         {
             get

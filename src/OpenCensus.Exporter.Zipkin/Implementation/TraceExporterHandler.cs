@@ -146,70 +146,26 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
 
         private ZipkinSpanKind ToSpanKind(ISpanData spanData)
         {
-            foreach (var label in spanData.Attributes.AttributeMap)
+            if (spanData.Kind.HasValue)
             {
-                if (label.Key.Equals(SpanAttributeConstants.SpanKindKey))
+                if (spanData.Kind.Value == SpanKind.Client)
                 {
-                    if (this.IsClientSpanKind(label.Value))
-                    {
-                        return ZipkinSpanKind.CLIENT;
-                    }
-
-                    if (this.IsServerSpanKind(label.Value))
-                    {
-                        return ZipkinSpanKind.SERVER;
-                    }
+                    return ZipkinSpanKind.CLIENT;
+                }
+                else if (spanData.Kind.Value == SpanKind.Server)
+                {
+                    return ZipkinSpanKind.SERVER;
+                }
+            }
+            else
+            {
+                if (spanData.HasRemoteParent.HasValue && spanData.HasRemoteParent.Value)
+                {
+                    return ZipkinSpanKind.SERVER;
                 }
             }
 
-            if (spanData.HasRemoteParent.HasValue && spanData.HasRemoteParent.Value)
-            {
-                return ZipkinSpanKind.SERVER;
-            }
-
             return ZipkinSpanKind.CLIENT;
-        }
-
-        private bool IsClientSpanKind(IAttributeValue value)
-        {
-            return value.Match(
-                (arg) =>
-                {
-                    return arg.Equals(SpanAttributeConstants.ClientSpanKind);
-                },
-                (arg) =>
-                {
-                    return false;
-                },
-                (arg) =>
-                {
-                    return false;
-                },
-                (arg) =>
-                {
-                    return false;
-                });
-        }
-
-        private bool IsServerSpanKind(IAttributeValue value)
-        {
-            return value.Match(
-                (arg) =>
-                {
-                    return arg.Equals(SpanAttributeConstants.ServerSpanKind);
-                },
-                (arg) =>
-                {
-                    return false;
-                },
-                (arg) =>
-                {
-                    return false;
-                },
-                (arg) =>
-                {
-                    return false;
-                });
         }
 
         private async void SendSpansAsync(List<ZipkinSpan> spans)
