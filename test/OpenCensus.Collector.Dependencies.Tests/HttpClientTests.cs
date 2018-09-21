@@ -48,6 +48,7 @@ namespace OpenCensus.Collector.Dependencies.Tests
             public string responseCode { get; set; }
 
             public string spanName { get; set; }
+
             public string spanStatus { get; set; }
 
             public Dictionary<string, string> spanAttributes { get; set; }
@@ -117,7 +118,15 @@ namespace OpenCensus.Collector.Dependencies.Tests
                         ctxTask.Wait(token);
 
                         var ctx = ctxTask.Result;
-                        ctx.Response.StatusCode = Convert.ToInt32(tc.responseCode);
+                        if (!string.IsNullOrEmpty(tc.responseCode))
+                        {
+                            ctx.Response.StatusCode = Convert.ToInt32(tc.responseCode);
+                        }
+                        else
+                        {
+                            ctx.Response.StatusCode = 200;
+                        }
+
                         using (var output = ctx.Response.OutputStream)
                         {
                             using (var writer = new StreamWriter(output))
@@ -187,9 +196,7 @@ namespace OpenCensus.Collector.Dependencies.Tests
     ""name"": ""Response code 404"",
     ""method"": ""GET"",
     ""url"": ""http://{host}:{port}/"",
-    ""response"": {
-                ""code"":  ""404""
-    },
+    ""responseCode"": ""404"",
     ""spanName"": ""HttpOut"",
     ""spanStatus"": ""NotFound"",
     ""spanAttributes"": {

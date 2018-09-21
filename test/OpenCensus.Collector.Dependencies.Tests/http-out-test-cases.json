@@ -76,7 +76,7 @@
     }
   },
   {
-    "name": "Response code 501"
+    "name": "Response code 501",
     "method": "GET",
     "url": "http://{host}:{port}/",
     "responseCode": "501",
