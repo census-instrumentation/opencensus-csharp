@@ -58,5 +58,37 @@
       "span.kind": "client",
       "error": "true"
     }
+  },
+  {
+    "name": "Response code 404",
+    "method": "GET",
+    "url": "http://{host}:{port}/",
+    "responseCode": "404",
+    "spanName": "HttpOut",
+    "spanStatus": "NotFound",
+    "spanAttributes": {
+      "http.url": "http://{host}:{port}/",
+      "http.path": "/",
+      "http.method": "GET",
+      "http.host": "{host}",
+      "span.kind": "client",
+      "http.status_code": "404"
+    }
+  },
+  {
+    "name": "Response code 501"
+    "method": "GET",
+    "url": "http://{host}:{port}/",
+    "responseCode": "501",
+    "spanName": "HttpOut",
+    "spanStatus": "Unimplemented",
+    "spanAttributes": {
+      "http.url": "http://{host}:{port}/",
+      "http.path": "/",
+      "http.method": "GET",
+      "http.host": "{host}",
+      "span.kind": "client",
+      "http.status_code": "501"
+    }
   }
 ]

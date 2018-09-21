@@ -28,20 +28,24 @@ namespace OpenCensus.Collector.Dependencies.Tests
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Net;
     using System.Net.Http;
     using System.Reflection;
     using System.Threading;
+    using System.Threading.Tasks;
     using Xunit;
 
     public class HttpClientTests
     {
-        private class HttpOutTestCase
+        public class HttpOutTestCase
         {
             public string name { get; set; }
 
             public string method { get; set; }
 
             public string url { get; set; }
+
+            public string responseCode { get; set; }
 
             public string spanName { get; set; }
             public string spanStatus { get; set; }
@@ -65,12 +69,7 @@ namespace OpenCensus.Collector.Dependencies.Tests
             foreach (var testCase in input)
             {
                 result.Add(new object[] {
-                    testCase.name,
-                    testCase.method,
-                    testCase.url,
-                    testCase.spanName,
-                    testCase.spanStatus,
-                    testCase.spanAttributes,
+                    testCase,
                 });
             }
 
@@ -87,48 +86,96 @@ namespace OpenCensus.Collector.Dependencies.Tests
 
         [Theory]
         [MemberData(nameof(TestData))]
-        public void HttpOutCallsAreCollectedSuccesfully(
-            string name,
-            string method,
-            string url,
-            string spanName,
-            string spanStatus,
-            Dictionary<string, string> spanAttributes)
+        public void HttpOutCallsAreCollectedSuccesfully(HttpOutTestCase tc)
         {
             var startEndHandler = new Mock<IStartEndHandler>();
-            startEndHandler.Invocations.Clear();
 
-            var tracer = new Tracer(new RandomGenerator(), startEndHandler.Object, new DateTimeOffsetClock(), new TraceConfig());
-            using (var dc = new DependenciesCollector(new DependenciesCollectorOptions(), tracer, Samplers.AlwaysSample))
+            var random = new Random();
+            random.Next();
+
+            var host = "localhost";
+            var port = random.Next(2000, 5000);
+
+            tc.url = NormaizeValues(tc.url, host, port);
+
+            CancellationTokenSource cts = new CancellationTokenSource();
+            CancellationToken token = cts.Token;
+            var httpListener = new HttpListener();
+            Task httpListenerTask = null;
+
+            try
             {
+                httpListener.Prefixes.Add($"http://{host}:{port}/");
+                httpListener.Start();
 
-                try
+                httpListenerTask = new Task(() =>
                 {
-                    using (var c = new HttpClient())
+                    var ctxTask = httpListener.GetContextAsync();
+
+                    try
                     {
-                        var request = new HttpRequestMessage();
-                        request.RequestUri = new Uri(url);
-                        request.Method = new HttpMethod(method);
-                        var t = c.SendAsync(request);
-                        t.Wait();
+                        ctxTask.Wait(token);
+
+                        var ctx = ctxTask.Result;
+                        ctx.Response.StatusCode = Convert.ToInt32(tc.responseCode);
+                        using (var output = ctx.Response.OutputStream)
+                        {
+                            using (var writer = new StreamWriter(output))
+                            {
+                                writer.WriteLine(DateTime.UtcNow.ToString());
+                            }
+                        }
+                    }
+                    catch (OperationCanceledException)
+                    {
+                    }
+                    catch (Exception ex)
+                    {
+                        Assert.True(false, ex.ToString());
+                    }
+                });
+
+                httpListenerTask.Start();
+
+                var tracer = new Tracer(new RandomGenerator(), startEndHandler.Object, new DateTimeOffsetClock(), new TraceConfig());
+                using (var dc = new DependenciesCollector(new DependenciesCollectorOptions(), tracer, Samplers.AlwaysSample))
+                {
+
+                    try
+                    {
+                        using (var c = new HttpClient())
+                        {
+                            var request = new HttpRequestMessage();
+                            request.RequestUri = new Uri(tc.url);
+                            request.Method = new HttpMethod(tc.method);
+                            var t = c.SendAsync(request);
+                            t.Wait();
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        //test case can intentiaonlly send request that will result in exception
                     }
                 }
-                catch (Exception)
-                {
-                    //test case can intentiaonlly send request that will result in exception
-                }
             }
+            finally
+            {
+                cts.Cancel();
+                httpListener?.Stop();
+            }
+
 
             Assert.Equal(2, startEndHandler.Invocations.Count); // begin and end was called
             var spanData = ((Span)startEndHandler.Invocations[1].Arguments[0]).ToSpanData();
 
-            Assert.Equal(spanName, spanData.Name);
+            Assert.Equal(tc.spanName, spanData.Name);
 
-            Assert.Equal(spanStatus, spanData.Status.CanonicalCode.ToString());
+            Assert.Equal(tc.spanStatus, spanData.Status.CanonicalCode.ToString());
 
             var normilizedAttributes = spanData.Attributes.AttributeMap.ToDictionary(x => x.Key, x => AttributeToSimpleString(x.Value));
+            tc.spanAttributes = tc.spanAttributes.ToDictionary(x => x.Key, x => NormaizeValues(x.Value, host, port));
 
-            Assert.Equal(spanAttributes.ToHashSet(), normilizedAttributes.ToHashSet());
+            Assert.Equal(tc.spanAttributes.ToHashSet(), normilizedAttributes.ToHashSet());
         }
 
         [Fact]
@@ -136,19 +183,22 @@ namespace OpenCensus.Collector.Dependencies.Tests
         {
             var serializer = new JsonSerializer();
             var input = serializer.Deserialize<HttpOutTestCase[]>(new JsonTextReader(new StringReader(@"
-[    {
-    ""name"": ""Call that cannot resolve DNS"",
+[   {
+    ""name"": ""Response code 404"",
     ""method"": ""GET"",
-    ""url"": ""https://sdlfaldfjalkdfjlkajdflkajlsdjf.sdlkjafsdjfalfadslkf.com/"",
+    ""url"": ""http://{host}:{port}/"",
+    ""response"": {
+                ""code"":  ""404""
+    },
     ""spanName"": ""HttpOut"",
-    ""spanStatus"": ""Unknown"",
+    ""spanStatus"": ""NotFound"",
     ""spanAttributes"": {
-                ""http.url"": ""https://sdlfaldfjalkdfjlkajdflkajlsdjf.sdlkjafsdjfalfadslkf.com/"",
+                ""http.url"": ""http://{host}:{port}/"",
       ""http.path"": ""/"",
       ""http.method"": ""GET"",
-      ""http.host"": ""sdlfaldfjalkdfjlkajdflkajlsdjf.sdlkjafsdjfalfadslkf.com"",
+      ""http.host"": ""{host}"",
       ""span.kind"": ""client"",
-      ""error"": ""true""
+""http.status_code"": ""404""
     }
         }
 ]
@@ -166,5 +216,11 @@ namespace OpenCensus.Collector.Dependencies.Tests
                 x => x.ToString()
             );
         }
+
+        private string NormaizeValues(string value, string host, int port)
+        {
+            return value.Replace("{host}", host).Replace("{port}", port.ToString());
+        }
+
     }
 }
