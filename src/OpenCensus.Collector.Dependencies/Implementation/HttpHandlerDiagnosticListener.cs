@@ -61,6 +61,12 @@ namespace OpenCensus.Collector.Dependencies.Implementation
         {
             var span = this.Tracer.CurrentSpan;
 
+            if (span == null)
+            {
+                // TODO: Notify that span got lost
+                return;
+            }
+
             var requestTaskStatus = this.stopRequestStatusFetcher.Fetch(payload) as TaskStatus?;
 
             if (requestTaskStatus.HasValue)
@@ -99,6 +105,12 @@ namespace OpenCensus.Collector.Dependencies.Implementation
             }
 
             var span = this.Tracer.CurrentSpan;
+
+            if (span == null)
+            {
+                // TODO: Notify that span got lost
+                return;
+            }
 
             if (exc is HttpRequestException)
             {
