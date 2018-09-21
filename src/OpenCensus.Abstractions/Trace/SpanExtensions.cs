@@ -75,9 +75,25 @@ namespace OpenCensus.Trace
             return span;
         }
 
-        public static ISpan PutHttpHostAttribute(this ISpan span, string hostName)
+        /// <summary>
+        /// Helper method that populates span properties from host and port
+        /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md
+        /// </summary>
+        /// <param name="span">Span to fill out.</param>
+        /// <param name="hostName">Hostr name.</param>
+        /// <param name="port">Port number.</param>
+        /// <returns>Span with populated host properties.</returns>
+        public static ISpan PutHttpHostAttribute(this ISpan span, string hostName, int port)
         {
-            span.PutAttribute(SpanAttributeConstants.HttpHostKey, AttributeValue.StringAttributeValue(hostName));
+            if (port == 80 || port == 443)
+            {
+                span.PutAttribute(SpanAttributeConstants.HttpHostKey, AttributeValue.StringAttributeValue(hostName));
+            }
+            else
+            {
+                span.PutAttribute(SpanAttributeConstants.HttpHostKey, AttributeValue.StringAttributeValue(hostName + ":" + port));
+            }
+
             return span;
         }
 

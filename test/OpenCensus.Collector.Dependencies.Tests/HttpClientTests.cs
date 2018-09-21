@@ -240,7 +240,7 @@ namespace OpenCensus.Collector.Dependencies.Tests
                 ""http.url"": ""http://{host}:{port}/"",
       ""http.path"": ""/"",
       ""http.method"": ""GET"",
-      ""http.host"": ""{host}"",
+      ""http.host"": ""{host}:{port}"",
 ""http.status_code"": ""404""
     }
         }

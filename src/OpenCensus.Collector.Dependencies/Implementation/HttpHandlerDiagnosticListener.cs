@@ -53,7 +53,7 @@ namespace OpenCensus.Collector.Dependencies.Implementation
             var span = this.Tracer.CurrentSpan;
             span.PutClientSpanKindAttribute();
             span.PutHttpMethodAttribute(request.Method.ToString());
-            span.PutHttpHostAttribute(request.RequestUri.Host);
+            span.PutHttpHostAttribute(request.RequestUri.Host, request.RequestUri.Port);
             span.PutHttpPathAttribute(request.RequestUri.AbsolutePath);
             span.PutHttpUrlAttribute(request.RequestUri.ToString());
             span.PutHttpUserAgentAttribute(request.Headers.GetValues("User-Agent").FirstOrDefault());
