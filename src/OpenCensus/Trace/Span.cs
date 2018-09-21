@@ -468,6 +468,7 @@ namespace OpenCensus.Trace
                 linksSpanData,
                 null, // Not supported yet.
                 this.hasBeenEnded ? this.StatusWithDefault : null,
+                this.Kind.HasValue ? this.Kind.Value : SpanKind.Client,
                 this.hasBeenEnded ? this.timestampConverter.ConvertNanoTime(this.endNanoTime) : null);
         }
 

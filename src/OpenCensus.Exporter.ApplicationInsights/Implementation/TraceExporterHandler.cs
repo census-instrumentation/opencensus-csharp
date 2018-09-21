@@ -40,7 +40,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
             {
                 OperationTelemetry result;
 
-                if (span.Kind.HasValue && span.Kind.Value == SpanKind.Server)
+                if (span.Kind == SpanKind.Server)
                 {
                     result = new RequestTelemetry();
                 }

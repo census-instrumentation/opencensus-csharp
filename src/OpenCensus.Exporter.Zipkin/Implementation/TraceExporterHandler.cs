@@ -146,23 +146,18 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
 
         private ZipkinSpanKind ToSpanKind(ISpanData spanData)
         {
-            if (spanData.Kind.HasValue)
+            if (spanData.Kind == SpanKind.Server)
             {
-                if (spanData.Kind.Value == SpanKind.Client)
-                {
-                    return ZipkinSpanKind.CLIENT;
-                }
-                else if (spanData.Kind.Value == SpanKind.Server)
-                {
-                    return ZipkinSpanKind.SERVER;
-                }
+                return ZipkinSpanKind.SERVER;
             }
-            else
+            else if (spanData.Kind == SpanKind.Client)
             {
                 if (spanData.HasRemoteParent.HasValue && spanData.HasRemoteParent.Value)
                 {
                     return ZipkinSpanKind.SERVER;
                 }
+
+                return ZipkinSpanKind.CLIENT;
             }
 
             return ZipkinSpanKind.CLIENT;

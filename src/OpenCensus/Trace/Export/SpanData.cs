@@ -34,6 +34,7 @@ namespace OpenCensus.Trace.Export
             ILinks links,
             int? childSpanCount,
             Status status,
+            SpanKind kind,
             ITimestamp endTimestamp)
         {
             this.Context = context ?? throw new ArgumentNullException(nameof(context));
@@ -47,6 +48,7 @@ namespace OpenCensus.Trace.Export
             this.Links = links ?? throw new ArgumentNullException(nameof(links));
             this.ChildSpanCount = childSpanCount;
             this.Status = status;
+            this.Kind = kind;
             this.EndTimestamp = endTimestamp;
         }
 
@@ -72,7 +74,7 @@ namespace OpenCensus.Trace.Export
 
         public Status Status { get; }
 
-        public SpanKind? Kind { get; }
+        public SpanKind Kind { get; }
 
         public ITimestamp EndTimestamp { get; }
 
@@ -90,6 +92,7 @@ namespace OpenCensus.Trace.Export
                         ILinks links,
                         int? childSpanCount,
                         Status status,
+                        SpanKind kind,
                         ITimestamp endTimestamp)
         {
             if (messageOrNetworkEvents == null)
@@ -116,6 +119,7 @@ namespace OpenCensus.Trace.Export
                 links,
                 childSpanCount,
                 status,
+                kind,
                 endTimestamp);
         }
 

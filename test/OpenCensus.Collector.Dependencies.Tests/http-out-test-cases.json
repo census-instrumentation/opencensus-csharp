@@ -5,6 +5,7 @@
     "url": "https://example.com/",
     "spanName": "/",
     "spanStatus": "OK",
+    "spanKind":  "Client",
     "spanAttributes": {
       "http.url": "https://example.com/",
       "http.path": "/",
@@ -19,6 +20,7 @@
     "url": "https://example.com/",
     "spanName": "/",
     "spanStatus": "OK",
+    "spanKind": "Client",
     "spanAttributes": {
       "http.url": "https://example.com/",
       "http.path": "/",
@@ -33,6 +35,7 @@
     "url": "https://bing.com/path/to/page/",
     "spanName": "/path/to/page/",
     "spanStatus": "NOT_FOUND",
+    "spanKind": "Client",
     "spanAttributes": {
       "http.url": "https://bing.com/path/to/page/",
       "http.path": "/path/to/page/",
@@ -42,11 +45,12 @@
     }
   },
   {
-    "name": "Call that cannot resolve DNS",
+    "name": "Call that cannot resolve DNS will be reported as error span",
     "method": "GET",
     "url": "https://sdlfaldfjalkdfjlkajdflkajlsdjf.sdlkjafsdjfalfadslkf.com/",
     "spanName": "/",
     "spanStatus": "UNKNOWN",
+    "spanKind": "Client",
     "spanAttributes": {
       "http.url": "https://sdlfaldfjalkdfjlkajdflkajlsdjf.sdlkjafsdjfalfadslkf.com/",
       "http.path": "/",
@@ -62,6 +66,7 @@
     "responseCode": 200,
     "spanName": "/",
     "spanStatus": "OK",
+    "spanKind": "Client",
     "spanAttributes": {
       "http.url": "http://{host}:{port}/",
       "http.path": "/",
@@ -77,6 +82,7 @@
     "responseCode": 200,
     "spanName": "/",
     "spanStatus": "OK",
+    "spanKind": "Client",
     "spanAttributes": {
       "http.url": "http://{host}:{port}/",
       "http.path": "/",
@@ -92,6 +98,7 @@
     "responseCode": 399,
     "spanName": "/",
     "spanStatus": "OK",
+    "spanKind": "Client",
     "spanAttributes": {
       "http.url": "http://{host}:{port}/",
       "http.path": "/",
@@ -107,6 +114,7 @@
     "responseCode": 400,
     "spanName": "/",
     "spanStatus": "INVALID_ARGUMENT",
+    "spanKind": "Client",
     "spanAttributes": {
       "http.url": "http://{host}:{port}/",
       "http.path": "/",
@@ -122,6 +130,7 @@
     "responseCode": 401,
     "spanName": "/",
     "spanStatus": "UNAUTHENTICATED",
+    "spanKind": "Client",
     "spanAttributes": {
       "http.url": "http://{host}:{port}/",
       "http.path": "/",
@@ -137,6 +146,7 @@
     "responseCode": 403,
     "spanName": "/",
     "spanStatus": "PERMISSION_DENIED",
+    "spanKind": "Client",
     "spanAttributes": {
       "http.url": "http://{host}:{port}/",
       "http.path": "/",
@@ -152,6 +162,7 @@
     "responseCode": 404,
     "spanName": "/",
     "spanStatus": "NOT_FOUND",
+    "spanKind": "Client",
     "spanAttributes": {
       "http.url": "http://{host}:{port}/",
       "http.path": "/",
@@ -167,6 +178,7 @@
     "responseCode": 429,
     "spanName": "/",
     "spanStatus": "RESOURCE_EXHAUSTED",
+    "spanKind": "Client",
     "spanAttributes": {
       "http.url": "http://{host}:{port}/",
       "http.path": "/",
@@ -182,6 +194,7 @@
     "responseCode": 501,
     "spanName": "/",
     "spanStatus": "UNIMPLEMENTED",
+    "spanKind": "Client",
     "spanAttributes": {
       "http.url": "http://{host}:{port}/",
       "http.path": "/",
@@ -197,6 +210,7 @@
     "responseCode": 503,
     "spanName": "/",
     "spanStatus": "UNAVAILABLE",
+    "spanKind": "Client",
     "spanAttributes": {
       "http.url": "http://{host}:{port}/",
       "http.path": "/",
@@ -212,6 +226,7 @@
     "responseCode": 504,
     "spanName": "/",
     "spanStatus": "DEADLINE_EXCEEDED",
+    "spanKind": "Client",
     "spanAttributes": {
       "http.url": "http://{host}:{port}/",
       "http.path": "/",
@@ -227,6 +242,7 @@
     "responseCode": 600,
     "spanName": "/",
     "spanStatus": "UNKNOWN",
+    "spanKind": "Client",
     "spanAttributes": {
       "http.url": "http://{host}:{port}/",
       "http.path": "/",

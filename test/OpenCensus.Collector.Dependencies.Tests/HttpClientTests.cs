@@ -49,6 +49,8 @@ namespace OpenCensus.Collector.Dependencies.Tests
 
             public string spanName { get; set; }
 
+            public string spanKind { get; set; }
+
             public string spanStatus { get; set; }
 
             public Dictionary<string, string> spanAttributes { get; set; }
@@ -178,6 +180,8 @@ namespace OpenCensus.Collector.Dependencies.Tests
             var spanData = ((Span)startEndHandler.Invocations[1].Arguments[0]).ToSpanData();
 
             Assert.Equal(tc.spanName, spanData.Name);
+            Assert.Equal(tc.spanKind, spanData.Kind.ToString());
+
 
             var d = new Dictionary<CanonicalCode, string>()
             {
@@ -220,6 +224,7 @@ namespace OpenCensus.Collector.Dependencies.Tests
     ""responseCode"": 404,
     ""spanName"": ""/"",
     ""spanStatus"": ""NOT_FOUND"",
+    ""spanKind"": ""Client"",
     ""spanAttributes"": {
                 ""http.url"": ""http://{host}:{port}/"",
       ""http.path"": ""/"",
