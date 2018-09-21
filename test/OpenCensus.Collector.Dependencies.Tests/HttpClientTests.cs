@@ -237,7 +237,6 @@ namespace OpenCensus.Collector.Dependencies.Tests
     ""spanStatus"": ""NOT_FOUND"",
     ""spanKind"": ""Client"",
     ""spanAttributes"": {
-                ""http.url"": ""http://{host}:{port}/"",
       ""http.path"": ""/"",
       ""http.method"": ""GET"",
       ""http.host"": ""{host}:{port}"",

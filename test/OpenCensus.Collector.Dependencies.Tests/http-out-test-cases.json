@@ -7,7 +7,6 @@
     "spanStatus": "OK",
     "spanKind":  "Client",
     "spanAttributes": {
-      "http.url": "https://example.com/",
       "http.path": "/",
       "http.method": "GET",
       "http.host": "example.com",
@@ -22,7 +21,6 @@
     "spanStatus": "OK",
     "spanKind": "Client",
     "spanAttributes": {
-      "http.url": "https://example.com/",
       "http.path": "/",
       "http.method": "POST",
       "http.host": "example.com",
@@ -37,7 +35,6 @@
     "spanStatus": "NOT_FOUND",
     "spanKind": "Client",
     "spanAttributes": {
-      "http.url": "https://bing.com/path/to/page/",
       "http.path": "/path/to/page/",
       "http.method": "GET",
       "http.host": "bing.com",
@@ -52,7 +49,6 @@
     "spanStatus": "UNKNOWN",
     "spanKind": "Client",
     "spanAttributes": {
-      "http.url": "https://sdlfaldfjalkdfjlkajdflkajlsdjf.sdlkjafsdjfalfadslkf.com/",
       "http.path": "/",
       "http.method": "GET",
       "http.host": "sdlfaldfjalkdfjlkajdflkajlsdjf.sdlkjafsdjfalfadslkf.com",
@@ -68,7 +64,6 @@
     "spanStatus": "OK",
     "spanKind": "Client",
     "spanAttributes": {
-      "http.url": "http://{host}:{port}/",
       "http.path": "/",
       "http.method": "GET",
       "http.host": "{host}:{port}",
@@ -84,7 +79,6 @@
     "spanStatus": "OK",
     "spanKind": "Client",
     "spanAttributes": {
-      "http.url": "http://{host}:{port}/",
       "http.path": "/",
       "http.method": "GET",
       "http.host": "{host}:{port}",
@@ -100,7 +94,6 @@
     "spanStatus": "OK",
     "spanKind": "Client",
     "spanAttributes": {
-      "http.url": "http://{host}:{port}/",
       "http.path": "/",
       "http.method": "GET",
       "http.host": "{host}:{port}",
@@ -116,7 +109,6 @@
     "spanStatus": "INVALID_ARGUMENT",
     "spanKind": "Client",
     "spanAttributes": {
-      "http.url": "http://{host}:{port}/",
       "http.path": "/",
       "http.method": "GET",
       "http.host": "{host}:{port}",
@@ -132,7 +124,6 @@
     "spanStatus": "UNAUTHENTICATED",
     "spanKind": "Client",
     "spanAttributes": {
-      "http.url": "http://{host}:{port}/",
       "http.path": "/",
       "http.method": "GET",
       "http.host": "{host}:{port}",
@@ -148,7 +139,6 @@
     "spanStatus": "PERMISSION_DENIED",
     "spanKind": "Client",
     "spanAttributes": {
-      "http.url": "http://{host}:{port}/",
       "http.path": "/",
       "http.method": "GET",
       "http.host": "{host}:{port}",
@@ -164,7 +154,6 @@
     "spanStatus": "NOT_FOUND",
     "spanKind": "Client",
     "spanAttributes": {
-      "http.url": "http://{host}:{port}/",
       "http.path": "/",
       "http.method": "GET",
       "http.host": "{host}:{port}",
@@ -180,7 +169,6 @@
     "spanStatus": "RESOURCE_EXHAUSTED",
     "spanKind": "Client",
     "spanAttributes": {
-      "http.url": "http://{host}:{port}/",
       "http.path": "/",
       "http.method": "GET",
       "http.host": "{host}:{port}",
@@ -196,7 +184,6 @@
     "spanStatus": "UNIMPLEMENTED",
     "spanKind": "Client",
     "spanAttributes": {
-      "http.url": "http://{host}:{port}/",
       "http.path": "/",
       "http.method": "GET",
       "http.host": "{host}:{port}",
@@ -212,7 +199,6 @@
     "spanStatus": "UNAVAILABLE",
     "spanKind": "Client",
     "spanAttributes": {
-      "http.url": "http://{host}:{port}/",
       "http.path": "/",
       "http.method": "GET",
       "http.host": "{host}:{port}",
@@ -228,7 +214,6 @@
     "spanStatus": "DEADLINE_EXCEEDED",
     "spanKind": "Client",
     "spanAttributes": {
-      "http.url": "http://{host}:{port}/",
       "http.path": "/",
       "http.method": "GET",
       "http.host": "{host}:{port}",
@@ -244,7 +229,6 @@
     "spanStatus": "UNKNOWN",
     "spanKind": "Client",
     "spanAttributes": {
-      "http.url": "http://{host}:{port}/",
       "http.path": "/",
       "http.method": "GET",
       "http.host": "{host}:{port}",
@@ -263,7 +247,6 @@
     "spanStatus": "OK",
     "spanKind": "Client",
     "spanAttributes": {
-      "http.url": "http://{host}:{port}/",
       "http.path": "/",
       "http.method": "GET",
       "http.host": "{host}:{port}",

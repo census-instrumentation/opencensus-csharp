@@ -33,12 +33,6 @@ namespace OpenCensus.Trace
             return span;
         }
 
-        public static ISpan PutHttpUrlAttribute(this ISpan span, string url)
-        {
-            span.PutAttribute(SpanAttributeConstants.HttpUrlKey, AttributeValue.StringAttributeValue(url));
-            return span;
-        }
-
         public static ISpan PutHttpMethodAttribute(this ISpan span, string method)
         {
             span.PutAttribute(SpanAttributeConstants.HttpMethodKey, AttributeValue.StringAttributeValue(method));

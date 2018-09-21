@@ -55,7 +55,6 @@ namespace OpenCensus.Collector.Dependencies.Implementation
             span.PutHttpMethodAttribute(request.Method.ToString());
             span.PutHttpHostAttribute(request.RequestUri.Host, request.RequestUri.Port);
             span.PutHttpPathAttribute(request.RequestUri.AbsolutePath);
-            span.PutHttpUrlAttribute(request.RequestUri.ToString());
             span.PutHttpUserAgentAttribute(request.Headers.GetValues("User-Agent").FirstOrDefault());
         }
 
@@ -126,7 +125,6 @@ namespace OpenCensus.Collector.Dependencies.Implementation
                 {
                     span.Status = Status.Unknown.WithDescription(exc.Message);
                 }
-
             }
         }
     }
