@@ -18,6 +18,7 @@ namespace OpenCensus.Collector.Dependencies.Implementation
 {
     using System;
     using System.Diagnostics;
+    using System.Linq;
     using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
@@ -55,6 +56,7 @@ namespace OpenCensus.Collector.Dependencies.Implementation
             span.PutHttpHostAttribute(request.RequestUri.Host);
             span.PutHttpPathAttribute(request.RequestUri.AbsolutePath);
             span.PutHttpUrlAttribute(request.RequestUri.ToString());
+            span.PutHttpUserAgentAttribute(request.Headers.GetValues("User-Agent").FirstOrDefault());
         }
 
         public override void OnStopActivity(Activity activity, object payload)

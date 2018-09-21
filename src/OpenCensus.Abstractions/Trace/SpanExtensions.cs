@@ -51,11 +51,27 @@ namespace OpenCensus.Trace
         /// </summary>
         /// <param name="span">Span to fill out.</param>
         /// <param name="statusCode">Http status code.</param>
-        /// <param name="reasonPhrase">Http reason phrase.</param>
-        /// <returns>Span with populated statis code properties.</returns>
+        /// <returns>Span with populated status code properties.</returns>
         public static ISpan PutHttpStatusCodeAttribute(this ISpan span, int statusCode)
         {
             span.PutAttribute(SpanAttributeConstants.HttpStatusCodeKey, AttributeValue.LongAttributeValue(statusCode));
+            return span;
+        }
+
+        /// <summary>
+        /// Helper method that populates span properties from http user agent according 
+        /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md
+        /// </summary>
+        /// <param name="span">Span to fill out.</param>
+        /// <param name="userAgent">Http status code.</param>
+        /// <returns>Span with populated user agent code properties.</returns>
+        public static ISpan PutHttpUserAgentAttribute(this ISpan span, string userAgent)
+        {
+            if (!string.IsNullOrWhiteSpace(userAgent))
+            {
+                span.PutAttribute(SpanAttributeConstants.HttpUserAgentKey, AttributeValue.StringAttributeValue(userAgent));
+            }
+
             return span;
         }
 

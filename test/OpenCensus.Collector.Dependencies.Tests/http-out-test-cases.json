@@ -250,6 +250,25 @@
       "http.host": "{host}",
       "http.status_code": "600"
     }
+  },
+  {
+    "name": "User agent attribute populated",
+    "method": "GET",
+    "url": "http://{host}:{port}/",
+    "headers": {
+      "User-Agent": "test-user-agent"
+    },
+    "responseCode": 200,
+    "spanName": "/",
+    "spanStatus": "OK",
+    "spanKind": "Client",
+    "spanAttributes": {
+      "http.url": "http://{host}:{port}/",
+      "http.path": "/",
+      "http.method": "GET",
+      "http.host": "{host}",
+      "http.status_code": "200",
+      "http.user_agent": "test-user-agent"
+    }
   }
-
 ]

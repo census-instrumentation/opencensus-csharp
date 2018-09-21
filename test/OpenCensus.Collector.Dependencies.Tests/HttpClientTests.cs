@@ -45,6 +45,8 @@ namespace OpenCensus.Collector.Dependencies.Tests
 
             public string url { get; set; }
 
+            public Dictionary<string, string> headers { get; set; }
+
             public int responseCode { get; set; }
 
             public string spanName { get; set; }
@@ -159,6 +161,15 @@ namespace OpenCensus.Collector.Dependencies.Tests
                             var request = new HttpRequestMessage();
                             request.RequestUri = new Uri(tc.url);
                             request.Method = new HttpMethod(tc.method);
+
+                            if (tc.headers != null)
+                            {
+                                foreach(var header in tc.headers)
+                                {
+                                    request.Headers.Add(header.Key, header.Value);
+                                }
+                            }
+
                             var t = c.SendAsync(request);
                             t.Wait();
                         }
