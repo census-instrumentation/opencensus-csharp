@@ -21,18 +21,35 @@ namespace OpenCensus.Trace
 
     public static class SpanExtensions
     {
+        /// <summary>
+        /// Helper method that sets span kind to client.
+        /// </summary>
+        /// <param name="span">Span to fill out.</param>
+        /// <returns>Span set client span.</returns>
         public static ISpan PutClientSpanKindAttribute(this ISpan span)
         {
             span.Kind = SpanKind.Client;
             return span;
         }
 
+        /// <summary>
+        /// Helper method that sets span kind to server.
+        /// </summary>
+        /// <param name="span">Span to fill out.</param>
+        /// <returns>Span set server span.</returns>
         public static ISpan PutServerSpanKindAttribute(this ISpan span)
         {
             span.Kind = SpanKind.Server;
             return span;
         }
 
+        /// <summary>
+        /// Helper method that populates span properties from http method according 
+        /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md
+        /// </summary>
+        /// <param name="span">Span to fill out.</param>
+        /// <param name="method">Http method.</param>
+        /// <returns>Span with populated http method properties.</returns>
         public static ISpan PutHttpMethodAttribute(this ISpan span, string method)
         {
             span.PutAttribute(SpanAttributeConstants.HttpMethodKey, AttributeValue.StringAttributeValue(method));
@@ -91,18 +108,39 @@ namespace OpenCensus.Trace
             return span;
         }
 
+        /// <summary>
+        /// Helper method that populates span properties from url path according 
+        /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md
+        /// </summary>
+        /// <param name="span">Span to fill out.</param>
+        /// <param name="path">Url path.</param>
+        /// <returns>Span with populated path properties.</returns>
         public static ISpan PutHttpPathAttribute(this ISpan span, string path)
         {
             span.PutAttribute(SpanAttributeConstants.HttpPathKey, AttributeValue.StringAttributeValue(path));
             return span;
         }
 
+        /// <summary>
+        /// Helper method that populates span properties from size according 
+        /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md
+        /// </summary>
+        /// <param name="span">Span to fill out.</param>
+        /// <param name="size">Response size.</param>
+        /// <returns>Span with populated response size properties.</returns>
         public static ISpan PutHttpResponseSizeAttribute(this ISpan span, long size)
         {
             span.PutAttribute(SpanAttributeConstants.HttpResponseSizeKey, AttributeValue.LongAttributeValue(size));
             return span;
         }
 
+        /// <summary>
+        /// Helper method that populates span properties from request size according 
+        /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md
+        /// </summary>
+        /// <param name="span">Span to fill out.</param>
+        /// <param name="size">Request size.</param>
+        /// <returns>Span with populated request size properties.</returns>
         public static ISpan PutHttpRequestSizeAttribute(this ISpan span, long size)
         {
             span.PutAttribute(SpanAttributeConstants.HttpRequestSizeKey, AttributeValue.LongAttributeValue(size));
