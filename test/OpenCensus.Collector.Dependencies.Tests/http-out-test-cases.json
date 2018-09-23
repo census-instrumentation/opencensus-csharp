@@ -5,7 +5,7 @@
     "url": "https://example.com/",
     "spanName": "/",
     "spanStatus": "OK",
-    "spanKind":  "Client",
+    "spanKind": "Client",
     "spanAttributes": {
       "http.path": "/",
       "http.method": "GET",
@@ -14,7 +14,7 @@
     }
   },
   {
-    "name": "Successfull POST call to https://example.com",
+    "name": "Successfully POST call to https://example.com",
     "method": "POST",
     "url": "https://example.com/",
     "spanName": "/",
@@ -30,15 +30,16 @@
   {
     "name": "Name is populated as a path",
     "method": "GET",
-    "url": "https://bing.com/path/to/page/",
-    "spanName": "/path/to/page/",
-    "spanStatus": "NOT_FOUND",
+    "url": "http://{host}:{port}/path/to/resource/",
+    "responseCode": 200,
+    "spanName": "/path/to/resource/",
+    "spanStatus": "OK",
     "spanKind": "Client",
     "spanAttributes": {
-      "http.path": "/path/to/page/",
+      "http.path": "/path/to/resource/",
       "http.method": "GET",
-      "http.host": "bing.com",
-      "http.status_code": "404"
+      "http.host": "{host}:{port}",
+      "http.status_code": "200"
     }
   },
   {
