@@ -44,10 +44,16 @@ namespace OpenCensus.Trace
             return new AttributeValue<bool>(booleanValue);
         }
 
+        public static IAttributeValue<double> DoubleAttributeValue(double doubleValue)
+        {
+            return new AttributeValue<double>(doubleValue);
+        }
+
         public abstract T Match<T>(
             Func<string, T> stringFunction,
             Func<bool, T> booleanFunction,
             Func<long, T> longFunction,
+            Func<double, T> doubleFunction,
             Func<object, T> defaultFunction);
     }
 }

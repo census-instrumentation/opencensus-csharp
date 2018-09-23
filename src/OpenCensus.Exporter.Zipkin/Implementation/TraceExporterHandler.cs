@@ -124,6 +124,7 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
                 (arg) => { return arg; },
                 (arg) => { return arg.ToString(); },
                 (arg) => { return arg.ToString(); },
+                (arg) => { return arg.ToString(); },
                 (arg) => { return null; });
         }
 
@@ -188,6 +189,10 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
                 (arg) =>
                 {
                     return false;
+                },
+                (arg) =>
+                {
+                    return false;
                 });
         }
 
@@ -197,6 +202,10 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
                 (arg) =>
                 {
                     return arg.Equals(SpanAttributeConstants.ServerSpanKind);
+                },
+                (arg) =>
+                {
+                    return false;
                 },
                 (arg) =>
                 {

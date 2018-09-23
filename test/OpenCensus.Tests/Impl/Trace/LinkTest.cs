@@ -34,6 +34,7 @@ namespace OpenCensus.Trace.Test
             attributesMap.Add("MyAttributeKey0", AttributeValue<string>.Create("MyStringAttribute"));
             attributesMap.Add("MyAttributeKey1", AttributeValue<long>.Create(10));
             attributesMap.Add("MyAttributeKey2", AttributeValue<bool>.Create(true));
+            attributesMap.Add("MyAttributeKey3", AttributeValue<double>.Create(0.005));
         }
 
         [Fact]

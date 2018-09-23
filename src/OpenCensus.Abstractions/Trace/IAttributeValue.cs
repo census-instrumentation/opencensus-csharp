@@ -24,6 +24,7 @@ namespace OpenCensus.Trace
              Func<string, T> stringFunction,
              Func<bool, T> booleanFunction,
              Func<long, T> longFunction,
+             Func<double, T> doubleFunction,
              Func<object, T> defaultFunction);
     }
 
