@@ -255,6 +255,7 @@ namespace OpenCensus.Collector.Dependencies.Tests
                 x => x.ToString(),
                 x => x ? "true" : "false",
                 x => x.ToString(),
+                x => x.ToString(),
                 x => x.ToString()
             );
         }
