@@ -1,18 +1,22 @@
 ﻿namespace Samples
 {
     using System;
+    using System.Net.Http;
     using System.Threading;
+    using OpenCensus.Collector.Dependencies;
     using OpenCensus.Exporter.Zipkin;
     using OpenCensus.Trace;
     using OpenCensus.Trace.Sampler;
 
-    internal class TestZipkin
+    internal class TestHttpClient
     {
         private static ITracer tracer = Tracing.Tracer;
 
         internal static void Run()
         {
             Console.WriteLine("Hello World!");
+
+            var collector = new DependenciesCollector(new DependenciesCollectorOptions(), tracer, Samplers.AlwaysSample);
 
             var exporter = new ZipkinTraceExporter(
                 new ZipkinTraceExporterOptions()
@@ -23,11 +27,15 @@
                 Tracing.ExportComponent);
             exporter.Start();
 
-            var span = tracer.SpanBuilder("incoming request").SetSampler(Samplers.AlwaysSample).StartScopedSpan();
+            var scope = tracer.SpanBuilder("incoming request").SetSampler(Samplers.AlwaysSample).StartScopedSpan();
+            //Thread.Sleep(TimeSpan.FromSeconds(1));
 
-            Thread.Sleep(TimeSpan.FromSeconds(1));
-            var span2 = tracer.CurrentSpan;
-            span2.End();
+            HttpClient client = new HttpClient();
+            var t = client.GetStringAsync("http://bing.com");
+
+            t.Wait();
+
+            scope.Dispose();
 
             Console.ReadLine();
         }
