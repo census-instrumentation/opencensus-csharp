@@ -64,6 +64,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                         (s) => { return s; },
                         (b) => { return b.ToString(); },
                         (l) => { return l.ToString(); },
+                        (d) => { return d.ToString(); },
                         (obj) => { return obj.ToString(); });
 
                     result.Properties.Add(attr.Key, value);

@@ -124,6 +124,7 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
                 (arg) => { return arg; },
                 (arg) => { return arg.ToString(); },
                 (arg) => { return arg.ToString(); },
+                (arg) => { return arg.ToString(); },
                 (arg) => { return null; });
         }
 
