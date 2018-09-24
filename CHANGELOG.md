@@ -1,5 +1,6 @@
 # Unreleased
 
+- Support double attributes according to the [spec change](https://github.com/census-instrumentation/opencensus-specs/issues/172).
 - Initial implementation of Prometheus exporter.
 - Initial version of Application Insights exporter implemented.
 - Zipkin exporter implemented.

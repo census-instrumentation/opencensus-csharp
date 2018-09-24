@@ -65,6 +65,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                         (s) => { return s; },
                         (b) => { return b.ToString(); },
                         (l) => { return l.ToString(); },
+                        (d) => { return d.ToString(); },
                         (obj) => { return obj.ToString(); });
 
                     result.Properties.Add(attr.Key, value);
@@ -101,6 +102,10 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                 (arg) =>
                 {
                     return false;
+                },
+                (arg) =>
+                {
+                    return false;
                 });
         }
 
@@ -110,6 +115,10 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                 (arg) =>
                 {
                     return arg.Equals(SpanAttributeConstants.ServerSpanKind);
+                },
+                (arg) =>
+                {
+                    return false;
                 },
                 (arg) =>
                 {
