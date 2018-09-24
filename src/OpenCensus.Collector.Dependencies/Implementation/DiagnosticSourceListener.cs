@@ -67,7 +67,8 @@ namespace OpenCensus.Collector.Dependencies.Implementation
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e);
+                // Debug.WriteLine(e); 
+                // TODO: make sure to output the handler name as part of error message
             }
         }
 
