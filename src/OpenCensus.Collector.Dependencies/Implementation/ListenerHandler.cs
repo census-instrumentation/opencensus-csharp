@@ -45,12 +45,17 @@ namespace OpenCensus.Collector.Dependencies.Implementation
         public virtual void OnStopActivity(Activity activity, object payload)
         {
             var span = this.Tracer.CurrentSpan;
+
+            if (span == null)
+            {
+                // TODO: Notify that span got lost
+                return;
+            }
+
             foreach (var tag in activity.Tags)
             {
                 span.PutAttribute(tag.Key, AttributeValue.StringAttributeValue(tag.Value));
             }
-
-            //span.
         }
 
         public virtual void OnException(Activity activity, object payload)
