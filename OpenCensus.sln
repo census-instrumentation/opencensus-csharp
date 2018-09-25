@@ -46,6 +46,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenCensus.Collector.Depend
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenCensus.Collector.Dependencies.Tests", "test\OpenCensus.Collector.Dependencies.Tests\OpenCensus.Collector.Dependencies.Tests.csproj", "{56E2647A-B814-4BAC-B854-BEA0051B5F2E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenCensus.Collector.AspNetCore", "src\OpenCensus.Collector.AspNetCore\OpenCensus.Collector.AspNetCore.csproj", "{752D2182-A351-41D8-99EE-DD363D7D5B43}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -88,6 +90,10 @@ Global
 		{56E2647A-B814-4BAC-B854-BEA0051B5F2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56E2647A-B814-4BAC-B854-BEA0051B5F2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56E2647A-B814-4BAC-B854-BEA0051B5F2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{752D2182-A351-41D8-99EE-DD363D7D5B43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{752D2182-A351-41D8-99EE-DD363D7D5B43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{752D2182-A351-41D8-99EE-DD363D7D5B43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{752D2182-A351-41D8-99EE-DD363D7D5B43}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,4 @@
-// <copyright file="SpanKind.cs" company="OpenCensus Authors">
+﻿// <copyright file="RequestsCollectorOptions.cs" company="OpenCensus Authors">
 // Copyright 2018, OpenCensus Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,11 +14,12 @@
 // limitations under the License.
 // </copyright>
 
-namespace OpenCensus.Trace
+namespace OpenCensus.Collector.Dependencies
 {
-public enum SpanKind {
-    Server,
-
-    Client
-}
+    /// <summary>
+    /// Options for dependencies collector.
+    /// </summary>
+    public class RequestsCollectorOptions
+    {
+    }
 }
