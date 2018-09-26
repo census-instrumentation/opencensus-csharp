@@ -33,8 +33,7 @@ namespace OpenCensus.Collector.AspNetCore.Tests
         }
 
         [Theory]
-        [InlineData("/")]
-        [InlineData("/Values")]
+        [InlineData("/api/values")]
         public async Task Get_EndpointsReturnSuccessAndCorrectContentType(string url)
         {
             // Arrange
@@ -45,8 +44,6 @@ namespace OpenCensus.Collector.AspNetCore.Tests
 
             // Assert
             response.EnsureSuccessStatusCode(); // Status Code 200-299
-            Assert.Equal("text/html; charset=utf-8",
-                response.Content.Headers.ContentType.ToString());
         }
 
     }
