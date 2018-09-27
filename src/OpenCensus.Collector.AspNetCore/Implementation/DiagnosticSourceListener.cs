@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-namespace OpenCensus.Collector.Dependencies.Implementation
+namespace OpenCensus.Collector.AspNetCore.Implementation
 {
     using System;
     using System.Collections.Generic;

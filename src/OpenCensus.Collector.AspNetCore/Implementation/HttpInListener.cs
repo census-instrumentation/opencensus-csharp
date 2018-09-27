@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-namespace OpenCensus.Collector.Dependencies.Implementation
+namespace OpenCensus.Collector.AspNetCore.Implementation
 {
     using System.Diagnostics;
     using Microsoft.AspNetCore.Http;
@@ -75,6 +75,7 @@ namespace OpenCensus.Collector.Dependencies.Implementation
             var response = context.Response;
 
             span.PutHttpStatusCode(response.StatusCode, response.HttpContext.Features.Get<IHttpResponseFeature>().ReasonPhrase);
+            span.End();
         }
     }
 }

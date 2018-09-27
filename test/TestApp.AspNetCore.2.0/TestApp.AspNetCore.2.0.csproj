@@ -16,4 +16,10 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\OpenCensus.Abstractions\OpenCensus.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\OpenCensus.Collector.AspNetCore\OpenCensus.Collector.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\src\OpenCensus\OpenCensus.csproj" />
+  </ItemGroup>
+
 </Project>

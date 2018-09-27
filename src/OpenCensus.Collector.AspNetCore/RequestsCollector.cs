@@ -14,11 +14,11 @@
 // limitations under the License.
 // </copyright>
 
-namespace OpenCensus.Collector.Dependencies
+namespace OpenCensus.Collector.AspNetCore
 {
     using System;
     using System.Collections.Generic;
-    using OpenCensus.Collector.Dependencies.Implementation;
+    using OpenCensus.Collector.AspNetCore.Implementation;
     using OpenCensus.Trace;
 
     /// <summary>
@@ -37,7 +37,7 @@ namespace OpenCensus.Collector.Dependencies
         public RequestsCollector(RequestsCollectorOptions options, ITracer tracer, ISampler sampler)
         {
             this.diagnosticSourceSubscriber = new DiagnosticSourceSubscriber(
-                new HashSet<string>() { "System.Net.Http.Desktop", "HttpHandlerDiagnosticListener" }, 
+                new HashSet<string>() { "Microsoft.AspNetCore" }, 
                 tracer, 
                 sampler);
             this.diagnosticSourceSubscriber.Subscribe();

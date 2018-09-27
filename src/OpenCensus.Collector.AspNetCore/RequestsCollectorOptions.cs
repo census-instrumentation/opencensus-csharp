@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-namespace OpenCensus.Collector.Dependencies
+namespace OpenCensus.Collector.AspNetCore
 {
     /// <summary>
     /// Options for dependencies collector.

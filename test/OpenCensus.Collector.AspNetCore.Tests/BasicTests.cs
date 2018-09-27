@@ -20,6 +20,15 @@ namespace OpenCensus.Collector.AspNetCore.Tests
     using Microsoft.AspNetCore.Mvc.Testing;
     using TestApp.AspNetCore._2._0;
     using System.Threading.Tasks;
+    using Microsoft.Extensions.DependencyInjection;
+    using OpenCensus.Trace;
+    using OpenCensus.Trace.Config;
+    using OpenCensus.Trace.Internal;
+    using OpenCensus.Common;
+    using Moq;
+    using Microsoft.AspNetCore.TestHost;
+    using System.Threading;
+    using System;
 
     // See https://github.com/aspnet/Docs/tree/master/aspnetcore/test/integration-tests/samples/2.x/IntegrationTestsSample
     public class BasicTests
@@ -30,20 +39,39 @@ namespace OpenCensus.Collector.AspNetCore.Tests
         public BasicTests(WebApplicationFactory<Startup> factory)
         {
             this.factory = factory;
+            
         }
 
-        [Theory]
-        [InlineData("/api/values")]
-        public async Task Get_EndpointsReturnSuccessAndCorrectContentType(string url)
+        [Fact]
+        public async Task Get_EndpointsReturnSuccessAndCorrectContentType()
         {
+            var startEndHandler = new Mock<IStartEndHandler>();
+            var tracer = new Tracer(new RandomGenerator(), startEndHandler.Object, new DateTimeOffsetClock(), new TraceConfig());
+
+            void ConfigureTestServices(IServiceCollection services) =>
+                services.AddSingleton<ITracer>(tracer);
+
             // Arrange
-            var client = this.factory.CreateClient();
+            var client = this.factory
+                .WithWebHostBuilder(builder =>
+                    builder.ConfigureTestServices(ConfigureTestServices))
+                .CreateClient();
 
             // Act
-            var response = await client.GetAsync(url);
+            var response = await client.GetAsync("/api/values");
 
             // Assert
             response.EnsureSuccessStatusCode(); // Status Code 200-299
+
+            // TODO: this is needed as span generation happens after response is returned for some reason. 
+            // need to investigate
+            Thread.Sleep(TimeSpan.FromMilliseconds(1));
+
+            Assert.Equal(2, startEndHandler.Invocations.Count); // begin and end was called
+            var spanData = ((Span)startEndHandler.Invocations[1].Arguments[0]).ToSpanData();
+
+            Assert.Equal(SpanKind.Server, spanData.Kind);
+            Assert.Equal(AttributeValue.StringAttributeValue("/api/values"), spanData.Attributes.AttributeMap["http.path"]);
         }
 
     }

@@ -8,6 +8,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using OpenCensus.Collector.AspNetCore;
+using OpenCensus.Trace;
+using OpenCensus.Trace.Sampler;
 
 namespace TestApp.AspNetCore._2._0
 {
@@ -24,6 +27,12 @@ namespace TestApp.AspNetCore._2._0
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            
+            services.AddSingleton<ITracer>(Tracing.Tracer);
+            services.AddSingleton<ISampler>(Samplers.AlwaysSample);
+            services.AddSingleton<RequestsCollectorOptions>(new RequestsCollectorOptions());
+            services.AddSingleton<RequestsCollector>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,6 +44,7 @@ namespace TestApp.AspNetCore._2._0
             }
 
             app.UseMvc();
+            var collector = app.ApplicationServices.GetService<RequestsCollector>();
         }
     }
 }
