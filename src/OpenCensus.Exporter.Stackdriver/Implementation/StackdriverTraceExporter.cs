@@ -46,6 +46,19 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                 EndTime = spanData.EndTimestamp.ToTimestamp(),
                 ChildSpanCount = spanData.ChildSpanCount,
             };
+
+            if (spanData.Attributes != null)
+            {
+                span.Attributes = new Span.Types.Attributes
+                {
+                    DroppedAttributesCount = spanData.Attributes != null ? spanData.Attributes.DroppedAttributesCount : 0,
+
+                    AttributeMap = { spanData.Attributes?.AttributeMap?.ToDictionary(
+                                        s => s.Key,
+                                        s => s.Value?.ToAttributeValue()) },
+                };
+            }
+
             if (spanData.ParentSpanId != null)
             {
                 string parentSpanId = spanData.ParentSpanId.ToLowerBase16();
