@@ -33,6 +33,7 @@ namespace OpenCensus.Exporter.Stackdriver
 
         public StackdriverExporter(string projectId, IExportComponent exportComponent)
         {
+            this.projectId = projectId;
             this.exportComponent = exportComponent;
         }
 

@@ -17,7 +17,8 @@
 
             // TestZipkin.Run();
             // TestApplicationInsights.Run();
-            TestPrometheus.Run();
+            TestStackdriver.Run();
+            //TestPrometheus.Run();
         }
     }
 }
