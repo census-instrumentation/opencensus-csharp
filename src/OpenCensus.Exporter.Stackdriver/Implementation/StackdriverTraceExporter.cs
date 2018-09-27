@@ -22,21 +22,25 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             string spanId = spanData.Context.SpanId.ToLowerBase16();
             var span = new Span
             {
-                Name = string.Format($"project/{projectId}/traces/{spanData.Context.TraceId.ToLowerBase16()}/spans/{spanId}"),
+                SpanName = new SpanName(projectId, spanData.Context.TraceId.ToLowerBase16(), spanId),
                 SpanId = spanId,
                 DisplayName = new TruncatableString { Value = spanData.Name },
                 StartTime = spanData.StartTimestamp.ToTimestamp(),
                 EndTime = spanData.EndTimestamp.ToTimestamp(),
                 ChildSpanCount = spanData.ChildSpanCount,
-                /*
-                Attributes =
+            };
+
+            if (spanData.Attributes != null)
+            {
+                span.Attributes = new Span.Types.Attributes
                 {
                     DroppedAttributesCount = spanData.Attributes != null ? spanData.Attributes.DroppedAttributesCount : 0,
+
                     AttributeMap = { spanData.Attributes?.AttributeMap?.ToDictionary(
-                                        s => s.Key, 
+                                        s => s.Key,
                                         s => s.Value?.ToAttributeValue()) },
-                },*/
-            };
+                };
+            }
 
             if (spanData.ParentSpanId != null)
             {
