@@ -33,7 +33,8 @@
 
         internal static void Run()
         {
-            var exporter = new StackdriverExporter("YOUR-GOOGLE-PROJECT-ID", Tracing.ExportComponent);
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"C:\Users\zeltser\Downloads\aspnetcoreissue-1af8a0ca869b.json");
+            var exporter = new StackdriverExporter("aspnetcoreissue", Tracing.ExportComponent);
             exporter.Start();
 
             ITagContextBuilder tagContextBuilder = tagger.CurrentBuilder.Put(FrontendKey, TagValue.Create("mobile-ios9.3.5"));
