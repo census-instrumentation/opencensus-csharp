@@ -3,7 +3,7 @@
 
   <PropertyGroup>
     <Description>Unit test project for OpenCensus</Description>
-    <TargetFrameworks>netcoreapp2.0</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,7 +22,7 @@
     <ProjectReference Include="..\..\src\OpenCensus.Collector.AspNetCore\OpenCensus.Collector.AspNetCore.csproj" />
     <ProjectReference Include="..\..\src\OpenCensus\OpenCensus.csproj" />
     <ProjectReference Include="..\TestApp.AspNetCore.2.0\TestApp.AspNetCore.2.0.csproj" />
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.4" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="2.1.2" />
   </ItemGroup>
 
