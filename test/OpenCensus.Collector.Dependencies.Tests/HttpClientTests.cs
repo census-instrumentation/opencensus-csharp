@@ -161,9 +161,11 @@ namespace OpenCensus.Collector.Dependencies.Tests
                     {
                         using (var c = new HttpClient())
                         {
-                            var request = new HttpRequestMessage();
-                            request.RequestUri = new Uri(tc.url);
-                            request.Method = new HttpMethod(tc.method);
+                            var request = new HttpRequestMessage
+                            {
+                                RequestUri = new Uri(tc.url),
+                                Method = new HttpMethod(tc.method)
+                            };
 
                             if (tc.headers != null)
                             {

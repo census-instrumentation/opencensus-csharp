@@ -18,6 +18,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\OpenCensus.Collector.Implementation.Common\**" LinkBase="Implementation\Common\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\OpenCensus.Abstractions\OpenCensus.Abstractions.csproj" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.0-beta008">
       <PrivateAssets>All</PrivateAssets>

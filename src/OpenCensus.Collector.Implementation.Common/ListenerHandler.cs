@@ -14,13 +14,10 @@
 // limitations under the License.
 // </copyright>
 
-namespace OpenCensus.Collector.AspNetCore.Implementation
+namespace OpenCensus.Collector.Implementation.Common
 {
     using System.Diagnostics;
-    using System.Threading;
-    using OpenCensus.Common;
     using OpenCensus.Trace;
-    using OpenCensus.Trace.Sampler;
 
     internal class ListenerHandler
     {

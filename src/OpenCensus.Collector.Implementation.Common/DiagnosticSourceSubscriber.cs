@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-namespace OpenCensus.Collector.Dependencies.Implementation
+namespace OpenCensus.Collector.Implementation.Common
 {
     using System;
     using System.Collections.Concurrent;
@@ -25,17 +25,17 @@ namespace OpenCensus.Collector.Dependencies.Implementation
 
     internal class DiagnosticSourceSubscriber : IDisposable, IObserver<DiagnosticListener>
     {
-        private readonly HashSet<string> sourceNames;
+        private readonly Dictionary<string, Func<ITracer, ISampler, ListenerHandler>> handlers;
         private readonly ITracer tracer;
         private readonly ISampler sampler;
         private ConcurrentDictionary<string, DiagnosticSourceListener> subscriptions;
         private bool disposing;
         private IDisposable subscription;
 
-        public DiagnosticSourceSubscriber(HashSet<string> sourceNames, ITracer tracer, ISampler sampler)
+        public DiagnosticSourceSubscriber(Dictionary<string, Func<ITracer, ISampler, ListenerHandler>> handlers, ITracer tracer, ISampler sampler)
         {
             this.subscriptions = new ConcurrentDictionary<string, DiagnosticSourceListener>();
-            this.sourceNames = sourceNames;
+            this.handlers = handlers;
             this.tracer = tracer;
             this.sampler = sampler;
         }
@@ -52,11 +52,11 @@ namespace OpenCensus.Collector.Dependencies.Implementation
         {
             if (!Volatile.Read(ref this.disposing) && this.subscriptions != null)
             {
-                if (this.sourceNames.Contains(value.Name))
+                if (this.handlers.ContainsKey(value.Name))
                 {
                     this.subscriptions.GetOrAdd(value.Name, name =>
                     {
-                        var dl = new DiagnosticSourceListener(value.Name, this.tracer, this.sampler);
+                        var dl = new DiagnosticSourceListener(value.Name, this.handlers[value.Name] (this.tracer, this.sampler));
                         dl.Subscription = value.Subscribe(dl);
                         return dl;
                     });

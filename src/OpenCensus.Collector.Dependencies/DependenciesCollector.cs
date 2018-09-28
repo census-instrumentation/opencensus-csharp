@@ -19,6 +19,7 @@ namespace OpenCensus.Collector.Dependencies
     using System;
     using System.Collections.Generic;
     using OpenCensus.Collector.Dependencies.Implementation;
+    using OpenCensus.Collector.Implementation.Common;
     using OpenCensus.Trace;
 
     /// <summary>
@@ -37,7 +38,8 @@ namespace OpenCensus.Collector.Dependencies
         public DependenciesCollector(DependenciesCollectorOptions options, ITracer tracer, ISampler sampler)
         {
             this.diagnosticSourceSubscriber = new DiagnosticSourceSubscriber(
-                new HashSet<string>() { "System.Net.Http.Desktop", "HttpHandlerDiagnosticListener" }, 
+                new Dictionary<string, Func<ITracer, ISampler, ListenerHandler>>()
+                { {"HttpHandlerDiagnosticListener", (t, s) => new HttpHandlerDiagnosticListener(t, s) } },
                 tracer, 
                 sampler);
             this.diagnosticSourceSubscriber.Subscribe();
