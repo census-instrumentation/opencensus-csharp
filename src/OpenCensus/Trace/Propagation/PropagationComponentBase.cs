@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using OpenCensus.Trace.Propagation.Implementation;
+
 namespace OpenCensus.Trace.Propagation
 {
     public abstract class PropagationComponentBase : IPropagationComponent

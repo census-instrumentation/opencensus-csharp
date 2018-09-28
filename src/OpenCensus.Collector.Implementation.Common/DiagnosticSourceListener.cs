@@ -19,7 +19,6 @@ namespace OpenCensus.Collector.Implementation.Common
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using OpenCensus.Trace;
 
     internal class DiagnosticSourceListener : IObserver<KeyValuePair<string, object>>, IDisposable
     {

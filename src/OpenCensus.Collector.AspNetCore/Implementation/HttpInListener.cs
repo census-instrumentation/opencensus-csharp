@@ -21,14 +21,17 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
     using Microsoft.AspNetCore.Http.Features;
     using OpenCensus.Collector.Implementation.Common;
     using OpenCensus.Trace;
+    using OpenCensus.Trace.Propagation;
 
     internal class HttpInListener : ListenerHandler
     {
         private readonly PropertyFetcher startContextFetcher = new PropertyFetcher("HttpContext");
         private readonly PropertyFetcher stopContextFetcher = new PropertyFetcher("HttpContext");
+        private readonly IPropagationComponent propagationComponent;
 
-        public HttpInListener(ITracer tracer, ISampler sampler) : base("Microsoft.AspNetCore", tracer, sampler)
+        public HttpInListener(ITracer tracer, ISampler sampler, IPropagationComponent propagationComponent) : base("Microsoft.AspNetCore", tracer, sampler)
         {
+            this.propagationComponent = propagationComponent;
         }
 
         public override void OnStartActivity(Activity activity, object payload)
@@ -43,7 +46,9 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
 
             var request = context.Request;
 
-            this.Tracer.SpanBuilder("HttpIn").SetSampler(this.Sampler).StartScopedSpan();
+            var ctx = this.propagationComponent.TextFormat.Extract<HttpRequest>(request, (r, name) => r.Headers["name"].ToString());
+
+            this.Tracer.SpanBuilderWithRemoteParent("HttpIn", ctx).SetSampler(this.Sampler).StartScopedSpan();
 
             var span = this.Tracer.CurrentSpan;
 

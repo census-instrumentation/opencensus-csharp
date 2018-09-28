@@ -31,6 +31,5 @@
     <Folder Include="Internal\" />
     <Folder Include="Stats\" />
     <Folder Include="Tags\" />
-    <Folder Include="Trace\" />
   </ItemGroup>
 </Project>

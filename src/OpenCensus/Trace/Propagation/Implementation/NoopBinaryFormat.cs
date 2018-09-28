@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-namespace OpenCensus.Trace.Propagation
+namespace OpenCensus.Trace.Propagation.Implementation
 {
     using System;
 

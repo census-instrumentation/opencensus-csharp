@@ -16,6 +16,8 @@
 
 namespace OpenCensus.Trace.Propagation
 {
+    using OpenCensus.Trace.Propagation.Implementation;
+
     public abstract class BinaryFormatBase : IBinaryFormat
     {
         internal static readonly NoopBinaryFormat NoopBinaryFormatInstance = new NoopBinaryFormat();

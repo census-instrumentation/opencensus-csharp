@@ -16,8 +16,6 @@
 
 namespace OpenCensus.Utils
 {
-    using System;
-
     internal static class StringUtil
     {
         public static bool IsPrintableString(string str)

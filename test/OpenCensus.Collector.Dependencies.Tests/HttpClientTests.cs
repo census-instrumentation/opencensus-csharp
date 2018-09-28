@@ -22,9 +22,9 @@ namespace OpenCensus.Collector.Dependencies.Tests
     using OpenCensus.Trace;
     using OpenCensus.Trace.Config;
     using OpenCensus.Trace.Internal;
+    using OpenCensus.Trace.Propagation;
     using OpenCensus.Trace.Sampler;
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -154,7 +154,7 @@ namespace OpenCensus.Collector.Dependencies.Tests
                 httpListenerTask.Start();
 
                 var tracer = new Tracer(new RandomGenerator(), startEndHandler.Object, new DateTimeOffsetClock(), new TraceConfig());
-                using (var dc = new DependenciesCollector(new DependenciesCollectorOptions(), tracer, Samplers.AlwaysSample))
+                using (var dc = new DependenciesCollector(new DependenciesCollectorOptions(), tracer, Samplers.AlwaysSample, PropagationComponentBase.NoopPropagationComponent))
                 {
 
                     try

@@ -34,8 +34,8 @@ namespace OpenCensus.Trace.Propagation.Test
         private readonly B3Format b3Format = new B3Format();
 
 
-        private static readonly ISetter<IDictionary<string, string>> setter = new TestSetter();
-        private static readonly IGetter<IDictionary<string, string>> getter = new TestGetter();
+        private static readonly Action<IDictionary<string, string>, string, string> setter = (d, k, v) => d[k] = v;
+        private static readonly Func<IDictionary<string, string>, string, string> getter = (d, k) => { d.TryGetValue(k, out string v); return v; };
         ITestOutputHelper _output;
 
         public B3FormatTest(ITestOutputHelper output)
@@ -212,24 +212,6 @@ namespace OpenCensus.Trace.Propagation.Test
                 Assert.Contains(item, dict);
             }
         }
-
-        class TestSetter : ISetter<IDictionary<string, string>>
-        {
-            public void Put(IDictionary<string, string> carrier, string key, string value)
-            {
-                carrier[key] = value;
-            }
-        }
-
-        class TestGetter : IGetter<IDictionary<string, string>>
-        {
-            public string Get(IDictionary<string, string> carrier, string key)
-            {
-                carrier.TryGetValue(key, out string result);
-                return result;
-            }
-        }
-
     }
 }
 

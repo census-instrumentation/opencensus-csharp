@@ -45,7 +45,7 @@ namespace OpenCensus.Trace
                 this.ExportComponent = Export.ExportComponent.CreateWithInProcessStores(eventQueue);
             }
 
-            this.PropagationComponent = new PropagationComponent();
+            this.PropagationComponent = new DefaultPropagationComponent();
             IStartEndHandler startEndHandler =
                 new StartEndHandler(
                     this.ExportComponent.SpanExporter,

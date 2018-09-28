@@ -11,7 +11,6 @@
     <CodeAnalysisRuleSet>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), 'OpenCensus.sln'))\build\OpenCensus.test.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
  
-
   <ItemGroup>
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)/stylecop.json" />
   </ItemGroup>
