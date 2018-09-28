@@ -121,21 +121,24 @@ namespace OpenCensus.Collector.Dependencies.Tests
                     {
                         ctxTask.Wait(token);
 
-                        var ctx = ctxTask.Result;
-                        if (tc.responseCode != 0)
+                        if (ctxTask.Status == TaskStatus.RanToCompletion)
                         {
-                            ctx.Response.StatusCode = tc.responseCode;
-                        }
-                        else
-                        {
-                            ctx.Response.StatusCode = 200;
-                        }
-
-                        using (var output = ctx.Response.OutputStream)
-                        {
-                            using (var writer = new StreamWriter(output))
+                            var ctx = ctxTask.Result;
+                            if (tc.responseCode != 0)
                             {
-                                writer.WriteLine(DateTime.UtcNow.ToString());
+                                ctx.Response.StatusCode = tc.responseCode;
+                            }
+                            else
+                            {
+                                ctx.Response.StatusCode = 200;
+                            }
+
+                            using (var output = ctx.Response.OutputStream)
+                            {
+                                using (var writer = new StreamWriter(output))
+                                {
+                                    writer.WriteLine(DateTime.UtcNow.ToString());
+                                }
                             }
                         }
                     }
@@ -158,9 +161,11 @@ namespace OpenCensus.Collector.Dependencies.Tests
                     {
                         using (var c = new HttpClient())
                         {
-                            var request = new HttpRequestMessage();
-                            request.RequestUri = new Uri(tc.url);
-                            request.Method = new HttpMethod(tc.method);
+                            var request = new HttpRequestMessage
+                            {
+                                RequestUri = new Uri(tc.url),
+                                Method = new HttpMethod(tc.method)
+                            };
 
                             if (tc.headers != null)
                             {
@@ -182,8 +187,8 @@ namespace OpenCensus.Collector.Dependencies.Tests
             }
             finally
             {
-                cts.Cancel();
                 httpListener?.Stop();
+                cts.Cancel();
             }
 
 

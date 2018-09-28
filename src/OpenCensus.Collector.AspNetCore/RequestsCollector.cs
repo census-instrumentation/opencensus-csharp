@@ -1,4 +1,4 @@
-﻿// <copyright file="DependenciesCollector.cs" company="OpenCensus Authors">
+﻿// <copyright file="RequestsCollector.cs" company="OpenCensus Authors">
 // Copyright 2018, OpenCensus Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,18 +14,18 @@
 // limitations under the License.
 // </copyright>
 
-namespace OpenCensus.Collector.Dependencies
+namespace OpenCensus.Collector.AspNetCore
 {
     using System;
     using System.Collections.Generic;
-    using OpenCensus.Collector.Dependencies.Implementation;
+    using OpenCensus.Collector.AspNetCore.Implementation;
     using OpenCensus.Collector.Implementation.Common;
     using OpenCensus.Trace;
 
     /// <summary>
     /// Dependencies collector.
     /// </summary>
-    public class DependenciesCollector : IDisposable
+    public class RequestsCollector : IDisposable
     {
         private readonly DiagnosticSourceSubscriber diagnosticSourceSubscriber;
 
@@ -35,11 +35,11 @@ namespace OpenCensus.Collector.Dependencies
         /// <param name="options">Configuration options for dependencies collector.</param>
         /// <param name="tracer">Tracer to record traced with.</param>
         /// <param name="sampler">Sampler to use to sample dependnecy calls.</param>
-        public DependenciesCollector(DependenciesCollectorOptions options, ITracer tracer, ISampler sampler)
+        public RequestsCollector(RequestsCollectorOptions options, ITracer tracer, ISampler sampler)
         {
             this.diagnosticSourceSubscriber = new DiagnosticSourceSubscriber(
                 new Dictionary<string, Func<ITracer, ISampler, ListenerHandler>>()
-                { {"HttpHandlerDiagnosticListener", (t, s) => new HttpHandlerDiagnosticListener(t, s) } },
+                { {"Microsoft.AspNetCore", (t, s) => new HttpInListener(t, s) } }, 
                 tracer, 
                 sampler);
             this.diagnosticSourceSubscriber.Subscribe();

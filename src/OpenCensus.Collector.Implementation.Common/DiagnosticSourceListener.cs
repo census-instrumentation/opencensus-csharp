@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-namespace OpenCensus.Collector.Dependencies.Implementation
+namespace OpenCensus.Collector.Implementation.Common
 {
     using System;
     using System.Collections.Generic;
@@ -26,10 +26,10 @@ namespace OpenCensus.Collector.Dependencies.Implementation
         private readonly string sourceName;
         private readonly ListenerHandler handler;
 
-        public DiagnosticSourceListener(string sourceName, ITracer tracer, ISampler sampler)
+        public DiagnosticSourceListener(string sourceName, ListenerHandler handler)
         {
             this.sourceName = sourceName;
-            this.handler = ListenerHandlerFactory.GetHandler(sourceName, tracer, sampler);
+            this.handler = handler;
         }
 
         public IDisposable Subscription { get; set; }

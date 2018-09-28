@@ -46,6 +46,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenCensus.Collector.Depend
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenCensus.Collector.Dependencies.Tests", "test\OpenCensus.Collector.Dependencies.Tests\OpenCensus.Collector.Dependencies.Tests.csproj", "{56E2647A-B814-4BAC-B854-BEA0051B5F2E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenCensus.Collector.AspNetCore", "src\OpenCensus.Collector.AspNetCore\OpenCensus.Collector.AspNetCore.csproj", "{752D2182-A351-41D8-99EE-DD363D7D5B43}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenCensus.Collector.AspNetCore.Tests", "test\OpenCensus.Collector.AspNetCore.Tests\OpenCensus.Collector.AspNetCore.Tests.csproj", "{2A47F6A8-63E5-4237-8046-94CAF321E797}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "testdata", "testdata", "{77C7929A-2EED-4AA6-8705-B5C443C8AA0F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp.AspNetCore.2.0", "test\TestApp.AspNetCore.2.0\TestApp.AspNetCore.2.0.csproj", "{F2F81E76-6A0E-466B-B673-EBBF1A9ED075}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -88,9 +96,24 @@ Global
 		{56E2647A-B814-4BAC-B854-BEA0051B5F2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56E2647A-B814-4BAC-B854-BEA0051B5F2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56E2647A-B814-4BAC-B854-BEA0051B5F2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{752D2182-A351-41D8-99EE-DD363D7D5B43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{752D2182-A351-41D8-99EE-DD363D7D5B43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{752D2182-A351-41D8-99EE-DD363D7D5B43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{752D2182-A351-41D8-99EE-DD363D7D5B43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A47F6A8-63E5-4237-8046-94CAF321E797}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A47F6A8-63E5-4237-8046-94CAF321E797}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A47F6A8-63E5-4237-8046-94CAF321E797}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A47F6A8-63E5-4237-8046-94CAF321E797}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2F81E76-6A0E-466B-B673-EBBF1A9ED075}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2F81E76-6A0E-466B-B673-EBBF1A9ED075}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2F81E76-6A0E-466B-B673-EBBF1A9ED075}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2F81E76-6A0E-466B-B673-EBBF1A9ED075}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F2F81E76-6A0E-466B-B673-EBBF1A9ED075} = {77C7929A-2EED-4AA6-8705-B5C443C8AA0F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {55639B5C-0770-4A22-AB56-859604650521}

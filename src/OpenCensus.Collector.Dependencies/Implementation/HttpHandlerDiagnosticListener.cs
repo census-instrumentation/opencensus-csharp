@@ -22,6 +22,7 @@ namespace OpenCensus.Collector.Dependencies.Implementation
     using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
+    using OpenCensus.Collector.Implementation.Common;
     using OpenCensus.Trace;
 
     internal class HttpHandlerDiagnosticListener : ListenerHandler
