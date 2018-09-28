@@ -40,7 +40,7 @@ namespace OpenCensus.Trace
             {
                 this.ExportComponent = Export.ExportComponent.CreateWithoutInProcessStores(eventQueue);
             }
-else
+            else
             {
                 this.ExportComponent = Export.ExportComponent.CreateWithInProcessStores(eventQueue);
             }

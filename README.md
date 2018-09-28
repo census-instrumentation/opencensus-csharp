@@ -79,6 +79,17 @@ finally
 }
 ```
 
+### Using Stackdriver Exporter
+
+1. Enable [Stackdriver Trace][stackdriver-setup] resource.
+2. Instantiate a new instance of `StackdriverExporter` with your Google Cloud's ProjectId
+3. See [sample][stackdriver-sample] for example use.
+
+``` csharp
+var exporter = new StackdriverExporter("YOUR-GOOGLE-PROJECT-ID", Tracing.ExportComponent);
+exporter.Start();
+```
+
 ### Using Application Insights exporter
 
 1. Create [Application Insights][ai-get-started] resource.
@@ -127,8 +138,10 @@ deprecate it for 18 months before removing it, if possible.
 [good-first-issues]: https://github.com/census-instrumentation/opencensus-csharp/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22
 [zipkin-get-started]: https://zipkin.io/pages/quickstart.html
 [ai-get-started]: https://docs.microsoft.com/azure/application-insights
+[stackdriver-setup]: https://cloud.google.com/trace/docs/setup/
 [semver]: http://semver.org/
 [ai-sample]: https://github.com/census-instrumentation/opencensus-csharp/blob/develop/src/Samples/TestApplicationInsights.cs
+[stackdriver-sample]: https://github.com/census-instrumentation/opencensus-csharp/blob/develop/src/Samples/TestStackdriver.cs
 [zipkin-sample]: https://github.com/census-instrumentation/opencensus-csharp/blob/develop/src/Samples/TestZipkin.cs
 [prometheus-get-started]: https://prometheus.io/docs/introduction/first_steps/
 [prometheus-sample]: https://github.com/census-instrumentation/opencensus-csharp/blob/develop/src/Samples/TestPrometheus.cs

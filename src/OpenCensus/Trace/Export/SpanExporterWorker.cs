@@ -137,9 +137,10 @@ namespace OpenCensus.Trace.Export
                 {
                     handler.Export(export);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    // Log warning
+                    // TODO Log warning
+                    Console.WriteLine(ex);
                 }
             }
         }
