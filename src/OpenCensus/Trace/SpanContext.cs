@@ -23,13 +23,14 @@ namespace OpenCensus.Trace
     /// </summary>
     public sealed class SpanContext : ISpanContext
     {
-        public static readonly SpanContext Invalid = new SpanContext(Trace.TraceId.Invalid, Trace.SpanId.Invalid, TraceOptions.Default);
+        public static readonly SpanContext Invalid = new SpanContext(Trace.TraceId.Invalid, Trace.SpanId.Invalid, TraceOptions.Default, Tracestate.Empty);
 
-        private SpanContext(ITraceId traceId, ISpanId spanId, TraceOptions traceOptions)
+        private SpanContext(ITraceId traceId, ISpanId spanId, TraceOptions traceOptions, Tracestate tracestate)
         {
             this.TraceId = traceId;
             this.SpanId = spanId;
             this.TraceOptions = traceOptions;
+            this.Tracestate = tracestate;
         }
 
         public ITraceId TraceId { get; }
@@ -40,9 +41,11 @@ namespace OpenCensus.Trace
 
         public bool IsValid => this.TraceId.IsValid && this.SpanId.IsValid;
 
-        public static ISpanContext Create(ITraceId traceId, ISpanId spanId, TraceOptions traceOptions)
+        public Tracestate Tracestate { get; }
+
+        public static ISpanContext Create(ITraceId traceId, ISpanId spanId, TraceOptions traceOptions, Tracestate tracestate)
         {
-            return new SpanContext(traceId, spanId, traceOptions);
+            return new SpanContext(traceId, spanId, traceOptions, tracestate);
         }
 
         /// <inheritdoc/>

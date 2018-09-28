@@ -32,13 +32,13 @@ namespace OpenCensus.Trace.Test
       SpanContext.Create(
           TraceId.FromBytes(firstTraceIdBytes),
           SpanId.FromBytes(firstSpanIdBytes),
-          TraceOptions.Default);
+          TraceOptions.Default, Tracestate.Empty);
 
         private static readonly ISpanContext second =
       SpanContext.Create(
           TraceId.FromBytes(secondTraceIdBytes),
           SpanId.FromBytes(secondSpanIdBytes),
-          TraceOptions.Builder().SetIsSampled(true).Build());
+          TraceOptions.Builder().SetIsSampled(true).Build(), Tracestate.Empty);
 
         [Fact]
         public void InvalidSpanContext()
@@ -54,11 +54,11 @@ namespace OpenCensus.Trace.Test
             Assert.False(SpanContext.Invalid.IsValid);
             Assert.False(
                     SpanContext.Create(
-                            TraceId.FromBytes(firstTraceIdBytes), SpanId.Invalid, TraceOptions.Default)
+                            TraceId.FromBytes(firstTraceIdBytes), SpanId.Invalid, TraceOptions.Default, Tracestate.Empty)
                         .IsValid);
             Assert.False(
                     SpanContext.Create(
-                            TraceId.Invalid, SpanId.FromBytes(firstSpanIdBytes), TraceOptions.Default)
+                            TraceId.Invalid, SpanId.FromBytes(firstSpanIdBytes), TraceOptions.Default, Tracestate.Empty)
                         .IsValid);
             Assert.True(first.IsValid);
             Assert.True(second.IsValid);

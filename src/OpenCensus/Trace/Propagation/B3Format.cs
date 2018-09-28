@@ -102,7 +102,7 @@ namespace OpenCensus.Trace.Propagation
                     traceOptions = TraceOptions.Builder().SetIsSampled(true).Build();
                 }
 
-                return SpanContext.Create(traceId, spanId, traceOptions);
+                return SpanContext.Create(traceId, spanId, traceOptions, Tracestate.Empty);
             }
             catch (Exception e)
             {

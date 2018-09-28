@@ -34,7 +34,7 @@ namespace OpenCensus.Trace.Propagation.Test
             101, 102, 103, 104, 2, 1,
             };
 
-        private static readonly ISpanContext EXAMPLE_SPAN_CONTEXT = SpanContext.Create(TRACE_ID, SPAN_ID, TRACE_OPTIONS);
+        private static readonly ISpanContext EXAMPLE_SPAN_CONTEXT = SpanContext.Create(TRACE_ID, SPAN_ID, TRACE_OPTIONS, Tracestate.Empty);
 
         private readonly BinaryFormat binaryFormat = new BinaryFormat();
 
@@ -48,13 +48,13 @@ namespace OpenCensus.Trace.Propagation.Test
         public void Propagate_SpanContextTracingEnabled()
         {
             TestSpanContextConversion(
-            SpanContext.Create(TRACE_ID, SPAN_ID, TraceOptions.Builder().SetIsSampled(true).Build()));
+            SpanContext.Create(TRACE_ID, SPAN_ID, TraceOptions.Builder().SetIsSampled(true).Build(), Tracestate.Empty));
         }
 
         [Fact]
         public void Propagate_SpanContextNoTracing()
         {
-            TestSpanContextConversion(SpanContext.Create(TRACE_ID, SPAN_ID, TraceOptions.Default));
+            TestSpanContextConversion(SpanContext.Create(TRACE_ID, SPAN_ID, TraceOptions.Default, Tracestate.Empty));
         }
 
         [Fact]
@@ -108,7 +108,7 @@ namespace OpenCensus.Trace.Propagation.Test
         public void FromBinaryValue_UnsupportedFieldIdFirst()
         {
             Assert.Equal(
-                SpanContext.Create(TraceId.Invalid, SpanId.Invalid, TraceOptions.Default),
+                SpanContext.Create(TraceId.Invalid, SpanId.Invalid, TraceOptions.Default, Tracestate.Empty),
                 binaryFormat.FromByteArray(
                         new byte[] {
                   0, 4, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 1, 97, 98,
@@ -124,7 +124,7 @@ namespace OpenCensus.Trace.Propagation.Test
                         TraceId.FromBytes(
                             new byte[] { 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79 }),
                         SpanId.Invalid,
-                        TraceOptions.Default),
+                        TraceOptions.Default, Tracestate.Empty),
                  binaryFormat.FromByteArray(
                         new byte[] {
                   0, 0, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 3, 97, 98,

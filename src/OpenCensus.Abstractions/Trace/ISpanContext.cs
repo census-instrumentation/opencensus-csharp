@@ -16,14 +16,34 @@
 
 namespace OpenCensus.Trace
 {
+    /// <summary>
+    /// Context associated with the span.
+    /// </summary>
     public interface ISpanContext
     {
+        /// <summary>
+        /// Gets tracestate collection that allows different vendors to participate in a trace.
+        /// </summary>
+        Tracestate Tracestate { get; }
+
+        /// <summary>
+        /// Gets trace identifier.
+        /// </summary>
         ITraceId TraceId { get; }
 
+        /// <summary>
+        /// Gets stan identifier.
+        /// </summary>
         ISpanId SpanId { get; }
 
+        /// <summary>
+        /// Gets trace options.
+        /// </summary>
         TraceOptions TraceOptions { get; }
 
+        /// <summary>
+        /// Gets a value indicating whether the span is valid.
+        /// </summary>
         bool IsValid { get; }
     }
 }
