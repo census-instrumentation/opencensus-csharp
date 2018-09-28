@@ -4,21 +4,7 @@
   <PropertyGroup>
     <Description>Unit test project for OpenCensus</Description>
     <TargetFrameworks>netcoreapp2.0</TargetFrameworks>
-    <TargetFrameworks Condition="$(OS) != 'Windows_NT'">netcoreapp2.0</TargetFrameworks>
   </PropertyGroup>
-
-  <PropertyGroup>
-    <CodeAnalysisRuleSet>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), 'OpenCensus.sln'))\build\OpenCensus.test.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="http-out-test-cases.json" />
-    <None Remove="xunit.runner.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <AdditionalFiles Include="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), 'OpenCensus.sln'))\build\stylecop.json" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />

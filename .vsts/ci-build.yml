@@ -6,11 +6,10 @@ phases:
   queue: Hosted VS2017
   steps:
   
-  # test project uses `Microsoft.AspNetCore.Mvc.Testing` and requires netcoreapp2.1
   - task: DotNetCoreInstaller@0
     displayName: force use of desired dotnet version
     inputs:
-      version: "2.1.4" 
+      version: "2.0.3"
 
   - task: DotNetCoreCLI@2
     displayName: restore packages
