@@ -48,7 +48,7 @@ namespace OpenCensus.Trace.Propagation.Implementation
             }
         }
 
-        public override ISpanContext Extract<T>(T carrier, Func<T, string, string> getter)
+        public override ISpanContext Extract<T>(T carrier, Func<T, string, IEnumerable<string>> getter)
         {
             if (carrier == null)
             {

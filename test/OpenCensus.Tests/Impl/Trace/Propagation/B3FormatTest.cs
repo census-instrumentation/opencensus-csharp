@@ -35,7 +35,7 @@ namespace OpenCensus.Trace.Propagation.Test
 
 
         private static readonly Action<IDictionary<string, string>, string, string> setter = (d, k, v) => d[k] = v;
-        private static readonly Func<IDictionary<string, string>, string, string> getter = (d, k) => { d.TryGetValue(k, out string v); return v; };
+        private static readonly Func<IDictionary<string, string>, string, IEnumerable<string>> getter = (d, k) => { d.TryGetValue(k, out string v); return new string[] { v }; };
         ITestOutputHelper _output;
 
         public B3FormatTest(ITestOutputHelper output)

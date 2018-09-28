@@ -31,6 +31,7 @@ namespace OpenCensus.Collector.AspNetCore.Tests
     using System;
     using OpenCensus.Trace.Propagation;
     using Microsoft.AspNetCore.Http;
+    using System.Collections.Generic;
 
     // See https://github.com/aspnet/Docs/tree/master/aspnetcore/test/integration-tests/samples/2.x/IntegrationTestsSample
     public class BasicTests
@@ -86,7 +87,7 @@ namespace OpenCensus.Collector.AspNetCore.Tests
             var expectedSpanId = SpanId.GenerateRandomId(new RandomGenerator());
 
             var tf = new Mock<ITextFormat>();
-            tf.Setup(m => m.Extract<HttpRequest>(It.IsAny<HttpRequest>(), It.IsAny<Func<HttpRequest, string, string>>())).Returns(SpanContext.Create(
+            tf.Setup(m => m.Extract<HttpRequest>(It.IsAny<HttpRequest>(), It.IsAny<Func<HttpRequest, string, IEnumerable<string>>>())).Returns(SpanContext.Create(
                 expectedTraceId,
                 expectedSpanId,
                 TraceOptions.Default

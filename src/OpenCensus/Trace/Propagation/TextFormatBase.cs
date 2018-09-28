@@ -39,7 +39,7 @@ namespace OpenCensus.Trace.Propagation
         }
 
         /// <inheritdoc/>
-        public abstract ISpanContext Extract<T>(T carrier, Func<T, string, string> getter);
+        public abstract ISpanContext Extract<T>(T carrier, Func<T, string, IEnumerable<string>> getter);
 
         /// <inheritdoc/>
         public abstract void Inject<T>(ISpanContext spanContext, T carrier, Action<T, string, string> setter);

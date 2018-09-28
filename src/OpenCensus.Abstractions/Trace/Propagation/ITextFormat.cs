@@ -48,6 +48,6 @@ namespace OpenCensus.Trace.Propagation
         /// <param name="carrier">Object to extract context from. Instance of this object will be passed to the getter.</param>
         /// <param name="getter">Function that will return string value of a key with the specified name.</param>
         /// <returns>Span context from it's text representation.</returns>
-        ISpanContext Extract<T>(T carrier, Func<T, string, string> getter);
+        ISpanContext Extract<T>(T carrier, Func<T, string, IEnumerable<string>> getter);
     }
 }

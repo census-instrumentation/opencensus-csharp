@@ -18,6 +18,7 @@ namespace OpenCensus.Trace.Propagation
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// B3 text propagator. See https://github.com/openzipkin/b3-propagation for the specification.
@@ -52,7 +53,7 @@ namespace OpenCensus.Trace.Propagation
         }
 
         /// <inheritdoc/>
-        public override ISpanContext Extract<T>(T carrier, Func<T, string, string> getter)
+        public override ISpanContext Extract<T>(T carrier, Func<T, string, IEnumerable<string>> getter)
         {
             if (carrier == null)
             {
@@ -67,7 +68,7 @@ namespace OpenCensus.Trace.Propagation
             try
             {
                 ITraceId traceId;
-                string traceIdStr = getter(carrier, XB3TraceId);
+                string traceIdStr = getter(carrier, XB3TraceId)?.FirstOrDefault();
                 if (traceIdStr != null)
                 {
                     if (traceIdStr.Length == TraceId.Size)
@@ -84,7 +85,7 @@ namespace OpenCensus.Trace.Propagation
                 }
 
                 ISpanId spanId;
-                string spanIdStr = getter(carrier, XB3SpanId);
+                string spanIdStr = getter(carrier, XB3SpanId)?.FirstOrDefault();
                 if (spanIdStr != null)
                 {
                     spanId = SpanId.FromLowerBase16(spanIdStr);
@@ -95,8 +96,8 @@ namespace OpenCensus.Trace.Propagation
                 }
 
                 TraceOptions traceOptions = TraceOptions.Default;
-                if (SampledValue.Equals(getter(carrier, XB3Sampled))
-                    || FlagsValue.Equals(getter(carrier, XB3Flags)))
+                if (SampledValue.Equals(getter(carrier, XB3Sampled)?.FirstOrDefault())
+                    || FlagsValue.Equals(getter(carrier, XB3Flags)?.FirstOrDefault()))
                 {
                     traceOptions = TraceOptions.Builder().SetIsSampled(true).Build();
                 }

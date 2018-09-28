@@ -19,6 +19,7 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
     using System.Diagnostics;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Http.Features;
+    using Microsoft.Extensions.Primitives;
     using OpenCensus.Collector.Implementation.Common;
     using OpenCensus.Trace;
     using OpenCensus.Trace.Propagation;
@@ -46,7 +47,10 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
 
             var request = context.Request;
 
-            var ctx = this.propagationComponent.TextFormat.Extract<HttpRequest>(request, (r, name) => r.Headers["name"].ToString());
+            var ctx = this.propagationComponent.TextFormat.Extract<HttpRequest>(
+                request, 
+                (r, name) => r.Headers[name]
+            );
 
             this.Tracer.SpanBuilderWithRemoteParent("HttpIn", ctx).SetSampler(this.Sampler).StartScopedSpan();
 
