@@ -38,6 +38,7 @@ namespace OpenCensus.Trace.Export.Test
         private static readonly IMessageEvent recvMessageEvent = MessageEvent.Builder(MessageEventType.RECEIVED, 1).Build();
         private static readonly IMessageEvent sentMessageEvent = MessageEvent.Builder(MessageEventType.SENT, 1).Build();
         private static readonly Status status = Status.DeadlineExceeded.WithDescription("TooSlow");
+        private static readonly SpanKind kind = SpanKind.Client;
         private static readonly int CHILD_SPAN_COUNT = 13;
         private readonly IRandomGenerator random = new RandomGenerator(1234);
         private readonly ISpanContext spanContext;
@@ -96,6 +97,7 @@ namespace OpenCensus.Trace.Export.Test
                     links,
                     CHILD_SPAN_COUNT,
                     status,
+                    kind,
                     endTimestamp);
             Assert.Equal(spanContext, spanData.Context);
             Assert.Equal(parentSpanId, spanData.ParentSpanId);
@@ -159,6 +161,7 @@ namespace OpenCensus.Trace.Export.Test
                     links,
                     null,
                     null,
+                    kind,
                     null);
             Assert.Equal(spanContext, spanData.Context);
             Assert.Null(spanData.ParentSpanId);
@@ -190,6 +193,7 @@ namespace OpenCensus.Trace.Export.Test
                     LinkList.Create(new List<ILink>(), 0),
                     0,
                     status,
+                    kind,
                     endTimestamp);
 
             Assert.Equal(spanContext, spanData.Context);
@@ -222,6 +226,7 @@ namespace OpenCensus.Trace.Export.Test
                     links,
                     CHILD_SPAN_COUNT,
                     status,
+                    kind,
                     endTimestamp);
             ISpanData allSpanData2 =
                 SpanData.Create(
@@ -236,6 +241,7 @@ namespace OpenCensus.Trace.Export.Test
                     links,
                     CHILD_SPAN_COUNT,
                     status,
+                    kind,
                     endTimestamp);
             ISpanData emptySpanData =
                 SpanData.Create(
@@ -250,6 +256,7 @@ namespace OpenCensus.Trace.Export.Test
                     LinkList.Create(new List<ILink>(), 0),
                     0,
                     status,
+                    kind,
                     endTimestamp);
 
             Assert.Equal(allSpanData1, allSpanData2);
@@ -274,6 +281,7 @@ namespace OpenCensus.Trace.Export.Test
                         links,
                         CHILD_SPAN_COUNT,
                         status,
+                        kind,
                         endTimestamp)
                     .ToString();
             Assert.Contains(spanContext.ToString(), spanDataString);

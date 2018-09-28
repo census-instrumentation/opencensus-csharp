@@ -17,6 +17,8 @@
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("OpenCensus.Tests" + AssemblyInfo.PublicKey)]
+[assembly: InternalsVisibleTo("OpenCensus.Collector.Dependencies.Tests" + AssemblyInfo.PublicKey)]
+[assembly: InternalsVisibleTo("OpenCensus.Collector.AspNetCore.Tests" + AssemblyInfo.PublicKey)]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2" + AssemblyInfo.MoqPublicKey)]
 
 #if SIGNED

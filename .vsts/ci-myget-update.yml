@@ -1,5 +1,8 @@
 # CI build with the upload to MyGet
 
+variables:
+  DotNetVersion: "2.1.402"
+
 trigger:
   branches:
     include:
@@ -11,7 +14,7 @@ steps:
 - task: DotNetCoreInstaller@0
   displayName: force use of desired dotnet version
   inputs:
-    version: "2.0.3"
+    version: $(DotNetVersion)
 
 - task: DotNetCoreCLI@2
   displayName: restore packages

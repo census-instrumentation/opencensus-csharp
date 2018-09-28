@@ -1,14 +1,18 @@
 # CI build. No publioshing of artifacts
 
+variables:
+  DotNetVersion: "2.1.402"
+
 phases:
 
 - phase: Windows
   queue: Hosted VS2017
   steps:
+  
   - task: DotNetCoreInstaller@0
     displayName: force use of desired dotnet version
     inputs:
-      version: "2.0.3"
+      version: $(DotNetVersion)
 
   - task: DotNetCoreCLI@2
     displayName: restore packages
@@ -28,7 +32,7 @@ phases:
     displayName: test
     inputs:
       command: "test"
-      projects: "test/**/*.csproj"
+      projects: "test/**/*.Tests.csproj"
       arguments: "--configuration Release"
 
   - task: PublishTestResults@2
@@ -39,7 +43,7 @@ phases:
   - task: DotNetCoreInstaller@0
     displayName: force use of desired dotnet version
     inputs:
-      version: "2.0.3"
+      version: $(DotNetVersion)
 
   - task: DotNetCoreCLI@2
     displayName: restore packages
@@ -58,7 +62,7 @@ phases:
     displayName: test
     inputs:
       command: "test"
-      projects: "test/**/*.csproj"
+      projects: "test/**/*.Tests.csproj"
       arguments: "--configuration Release"
 
   - task: PublishTestResults@2

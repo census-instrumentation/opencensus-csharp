@@ -54,10 +54,10 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             return span;
         }
 
-        public static AttributeValue ToAttributeValue(this IAttributeValue av)
+        public static Google.Cloud.Trace.V2.AttributeValue ToAttributeValue(this IAttributeValue av)
         {
             // TODO Currently we assume we store only strings.
-            return new AttributeValue
+            return new Google.Cloud.Trace.V2.AttributeValue
             {
                 StringValue = new TruncatableString
                 {
@@ -65,6 +65,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                     s => s,
                     b => b.ToString(),
                     l => l.ToString(),
+                    obj => obj.ToString(),
                     obj => obj.ToString())
                 }
             };

@@ -18,16 +18,9 @@ namespace OpenCensus.Trace
 {
     public static class SpanAttributeConstants
     {
-        public const string SpanKindKey = "span.kind";
-
-        public const string ServerSpanKind = "server";
-        public const string ClientSpanKind = "client";
-        public const string ProducerSpanKind = "producer";
-        public const string ConsumerSpanKind = "consumer";
-
-        public const string HttpUrlKey = "http.url";
         public const string HttpMethodKey = "http.method";
         public const string HttpStatusCodeKey = "http.status_code";
+        public const string HttpUserAgentKey = "http.user_agent";
         public const string HttpPathKey = "http.path";
         public const string HttpHostKey = "http.host";
         public const string HttpRequestSizeKey = "http.request.size";

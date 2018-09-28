@@ -23,9 +23,11 @@
                 Tracing.ExportComponent);
             exporter.Start();
 
-            var span = tracer.SpanBuilder("incoming request").SetSampler(Samplers.AlwaysSample).StartSpan();
+            var span = tracer.SpanBuilder("incoming request").SetSampler(Samplers.AlwaysSample).StartScopedSpan();
+
             Thread.Sleep(TimeSpan.FromSeconds(1));
-            span.End();
+            var span2 = tracer.CurrentSpan;
+            span2.End();
 
             Console.ReadLine();
         }

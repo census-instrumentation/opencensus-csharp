@@ -39,9 +39,8 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
             foreach (var span in spanDataList)
             {
                 OperationTelemetry result;
-                var kind = span.Attributes.AttributeMap[SpanAttributeConstants.SpanKindKey];
 
-                if (this.IsServerSpanKind(kind))
+                if (span.Kind == SpanKind.Server)
                 {
                     result = new RequestTelemetry();
                 }
@@ -65,6 +64,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                         (s) => { return s; },
                         (b) => { return b.ToString(); },
                         (l) => { return l.ToString(); },
+                        (d) => { return d.ToString(); },
                         (obj) => { return obj.ToString(); });
 
                     result.Properties.Add(attr.Key, value);
@@ -81,48 +81,6 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
 
                 this.telemetryClient.Track(result);
             }
-        }
-
-        private bool IsClientSpanKind(IAttributeValue value)
-        {
-            return value.Match(
-                (arg) =>
-                {
-                    return arg.Equals(SpanAttributeConstants.ClientSpanKind);
-                },
-                (arg) =>
-                {
-                    return false;
-                },
-                (arg) =>
-                {
-                    return false;
-                },
-                (arg) =>
-                {
-                    return false;
-                });
-        }
-
-        private bool IsServerSpanKind(IAttributeValue value)
-        {
-            return value.Match(
-                (arg) =>
-                {
-                    return arg.Equals(SpanAttributeConstants.ServerSpanKind);
-                },
-                (arg) =>
-                {
-                    return false;
-                },
-                (arg) =>
-                {
-                    return false;
-                },
-                (arg) =>
-                {
-                    return false;
-                });
         }
     }
 }

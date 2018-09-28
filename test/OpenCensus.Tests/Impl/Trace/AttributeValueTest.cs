@@ -54,22 +54,15 @@ namespace OpenCensus.Trace.Test
             });
         }
 
-
         [Fact]
-        public void AttributeValue_EqualsAndHashCode()
+        public void DoubleAttributeValue()
         {
-            // EqualsTester tester = new EqualsTester();
-            // tester.addEqualityGroup(
-            //    AttributeValue.stringAttributeValue("MyStringAttributeValue"),
-            //    AttributeValue.stringAttributeValue("MyStringAttributeValue"));
-            // tester.addEqualityGroup(AttributeValue.stringAttributeValue("MyStringAttributeDiffValue"));
-            // tester.addEqualityGroup(
-            //    AttributeValue.booleanAttributeValue(true), AttributeValue.booleanAttributeValue(true));
-            // tester.addEqualityGroup(AttributeValue.booleanAttributeValue(false));
-            // tester.addEqualityGroup(
-            //    AttributeValue.longAttributeValue(123456L), AttributeValue.longAttributeValue(123456L));
-            // tester.addEqualityGroup(AttributeValue.longAttributeValue(1234567L));
-            // tester.testEquals();
+            var attribute = AttributeValue<double>.Create(0.005);
+            attribute.Apply<object>((val) =>
+            {
+                Assert.Equal(0.005, val);
+                return null;
+            });
         }
 
         [Fact]

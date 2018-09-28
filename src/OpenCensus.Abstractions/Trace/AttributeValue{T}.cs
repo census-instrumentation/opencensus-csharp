@@ -47,6 +47,11 @@ namespace OpenCensus.Trace
             return new AttributeValue<bool>(booleanValue);
         }
 
+        public static IAttributeValue<double> Create(double doubleValue)
+        {
+            return new AttributeValue<double>(doubleValue);
+        }
+
         public TArg Apply<TArg>(Func<T, TArg> function)
         {
             return function(this.Value);
@@ -89,24 +94,28 @@ namespace OpenCensus.Trace
             Func<string, TReturn> stringFunction,
             Func<bool, TReturn> booleanFunction,
             Func<long, TReturn> longFunction,
+            Func<double, TReturn> doubleFunction,
             Func<object, TReturn> defaultFunction)
         {
             if (typeof(T) == typeof(string))
             {
                 string value = this.Value as string;
                 return stringFunction(value);
-            }
-
-            if (typeof(T) == typeof(long))
+            } 
+            else if (typeof(T) == typeof(long))
             {
                 long val = (long)(object)this.Value;
                 return longFunction(val);
             }
-
-            if (typeof(T) == typeof(bool))
+            else if (typeof(T) == typeof(bool))
             {
                 bool val = (bool)(object)this.Value;
                 return booleanFunction(val);
+            }
+            else if (typeof(T) == typeof(double))
+            {
+                double val = (double)(object)this.Value;
+                return doubleFunction(val);
             }
 
             return defaultFunction(this.Value);

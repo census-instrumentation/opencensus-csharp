@@ -15,10 +15,10 @@
         {
             Console.WriteLine("Uncomment test to run... ");
 
-            // TestZipkin.Run();
+            TestZipkin.Run();
             // TestApplicationInsights.Run();
-            TestStackdriver.Run();
-            //TestPrometheus.Run();
+            // TestPrometheus.Run();
+            // TestHttpClient.Run();
         }
     }
 }

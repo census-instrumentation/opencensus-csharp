@@ -42,6 +42,8 @@ namespace OpenCensus.Trace.Export
 
         Status Status { get; }
 
+        SpanKind Kind { get; }
+
         ITimestamp EndTimestamp { get; }
     }
 }

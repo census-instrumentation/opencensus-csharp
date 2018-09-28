@@ -39,6 +39,7 @@ namespace OpenCensus.Trace.Test
                 "MyStringAttributeKey", AttributeValue<string>.Create("MyStringAttributeValue"));
             multipleAttributes.Add("MyBooleanAttributeKey", AttributeValue<bool>.Create(true));
             multipleAttributes.Add("MyLongAttributeKey", AttributeValue<long>.Create(123));
+            multipleAttributes.Add("MyDoubleAttributeKey", AttributeValue<double>.Create(0.005));
             // Tests only that all the methods are not crashing/throwing errors.
             BlankSpan.Instance.PutAttribute(
                 "MyStringAttributeKey2", AttributeValue<string>.Create("MyStringAttributeValue2"));

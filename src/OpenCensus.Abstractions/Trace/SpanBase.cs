@@ -51,6 +51,8 @@ namespace OpenCensus.Trace
 
         public abstract Status Status { get; set; }
 
+        public abstract SpanKind? Kind { get; set; } 
+
         public abstract string Name { get; }
 
         public SpanBase Next { get; set; }

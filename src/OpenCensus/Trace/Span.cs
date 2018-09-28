@@ -60,7 +60,7 @@ namespace OpenCensus.Trace
             this.parentSpanId = parentSpanId;
             this.hasRemoteParent = hasRemoteParent;
             this.name = name;
-            this.traceParams = traceParams;
+            this.traceParams = traceParams ?? throw new ArgumentNullException(nameof(traceParams));
             this.startEndHandler = startEndHandler;
             this.clock = clock;
             this.hasBeenEnded = false;
@@ -113,6 +113,13 @@ namespace OpenCensus.Trace
                     this.status = value;
                 }
             }
+        }
+
+        public override SpanKind? Kind
+        {
+            get;
+
+            set; // TODO: do we need to notify when attempt to set on already closed Span?
         }
 
         public override long EndNanoTime
@@ -461,6 +468,7 @@ namespace OpenCensus.Trace
                 linksSpanData,
                 null, // Not supported yet.
                 this.hasBeenEnded ? this.StatusWithDefault : null,
+                this.Kind.HasValue ? this.Kind.Value : SpanKind.Client,
                 this.hasBeenEnded ? this.timestampConverter.ConvertNanoTime(this.endNanoTime) : null);
         }
 
