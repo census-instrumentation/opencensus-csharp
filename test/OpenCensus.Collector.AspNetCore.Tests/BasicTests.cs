@@ -29,6 +29,8 @@ namespace OpenCensus.Collector.AspNetCore.Tests
     using Microsoft.AspNetCore.TestHost;
     using System.Threading;
     using System;
+    using OpenCensus.Trace.Propagation;
+    using Microsoft.AspNetCore.Http;
 
     // See https://github.com/aspnet/Docs/tree/master/aspnetcore/test/integration-tests/samples/2.x/IntegrationTestsSample
     public class BasicTests
@@ -43,7 +45,7 @@ namespace OpenCensus.Collector.AspNetCore.Tests
         }
 
         [Fact]
-        public async Task Get_EndpointsReturnSuccessAndCorrectContentType()
+        public async Task SuccesfulTemplateControllerCallGeneratesASpan()
         {
             var startEndHandler = new Mock<IStartEndHandler>();
             var tracer = new Tracer(new RandomGenerator(), startEndHandler.Object, new DateTimeOffsetClock(), new TraceConfig());
@@ -74,5 +76,53 @@ namespace OpenCensus.Collector.AspNetCore.Tests
             Assert.Equal(AttributeValue.StringAttributeValue("/api/values"), spanData.Attributes.AttributeMap["http.path"]);
         }
 
+        [Fact]
+        public async Task SuccesfulTemplateControllerCallUsesRemoteParentContext()
+        {
+            var startEndHandler = new Mock<IStartEndHandler>();
+            var tracer = new Tracer(new RandomGenerator(), startEndHandler.Object, new DateTimeOffsetClock(), new TraceConfig());
+
+            var expectedTraceId = TraceId.GenerateRandomId(new RandomGenerator());
+            var expectedSpanId = SpanId.GenerateRandomId(new RandomGenerator());
+
+            var tf = new Mock<ITextFormat>();
+            tf.Setup(m => m.Extract<HttpRequest>(It.IsAny<HttpRequest>(), It.IsAny<Func<HttpRequest, string, string>>())).Returns(SpanContext.Create(
+                expectedTraceId,
+                expectedSpanId,
+                TraceOptions.Default
+                ));
+
+            var propagationComponent = new Mock<IPropagationComponent>();
+            propagationComponent.SetupGet(m => m.TextFormat).Returns(tf.Object);
+                
+
+            // Arrange
+            var client = this.factory
+                .WithWebHostBuilder(builder =>
+                    builder.ConfigureTestServices((services) => {
+                        services.AddSingleton<ITracer>(tracer);
+                        services.AddSingleton<IPropagationComponent>(propagationComponent.Object);
+                    }))
+                .CreateClient();
+
+            // Act
+            var response = await client.GetAsync("/api/values");
+
+            // Assert
+            response.EnsureSuccessStatusCode(); // Status Code 200-299
+
+            // TODO: this is needed as span generation happens after response is returned for some reason. 
+            // need to investigate
+            Thread.Sleep(TimeSpan.FromMilliseconds(1));
+
+            Assert.Equal(2, startEndHandler.Invocations.Count); // begin and end was called
+            var spanData = ((Span)startEndHandler.Invocations[1].Arguments[0]).ToSpanData();
+
+            Assert.Equal(SpanKind.Server, spanData.Kind);
+            Assert.Equal(AttributeValue.StringAttributeValue("/api/values"), spanData.Attributes.AttributeMap["http.path"]);
+
+            Assert.Equal(expectedTraceId, spanData.Context.TraceId);
+            Assert.Equal(expectedSpanId, spanData.ParentSpanId);
+        }
     }
 }

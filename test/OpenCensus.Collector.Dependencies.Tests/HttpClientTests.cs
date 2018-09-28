@@ -91,7 +91,7 @@ namespace OpenCensus.Collector.Dependencies.Tests
 
         [Theory]
         [MemberData(nameof(TestData))]
-        public void HttpOutCallsAreCollectedSuccesfully(HttpOutTestCase tc)
+        public async void HttpOutCallsAreCollectedSuccesfully(HttpOutTestCase tc)
         {
             var startEndHandler = new Mock<IStartEndHandler>();
 
@@ -164,7 +164,7 @@ namespace OpenCensus.Collector.Dependencies.Tests
                             var request = new HttpRequestMessage
                             {
                                 RequestUri = new Uri(tc.url),
-                                Method = new HttpMethod(tc.method)
+                                Method = new HttpMethod(tc.method),
                             };
 
                             if (tc.headers != null)
@@ -175,8 +175,7 @@ namespace OpenCensus.Collector.Dependencies.Tests
                                 }
                             }
 
-                            var t = c.SendAsync(request);
-                            t.Wait();
+                            await c.SendAsync(request);
                         }
                     }
                     catch (Exception)

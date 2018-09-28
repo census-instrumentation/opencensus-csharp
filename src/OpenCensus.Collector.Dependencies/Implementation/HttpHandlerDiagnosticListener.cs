@@ -17,6 +17,8 @@
 namespace OpenCensus.Collector.Dependencies.Implementation
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
     using System.Net;
@@ -60,7 +62,8 @@ namespace OpenCensus.Collector.Dependencies.Implementation
             span.PutHttpMethodAttribute(request.Method.ToString());
             span.PutHttpHostAttribute(request.RequestUri.Host, request.RequestUri.Port);
             span.PutHttpPathAttribute(request.RequestUri.AbsolutePath);
-            span.PutHttpUserAgentAttribute(request.Headers.GetValues("User-Agent").FirstOrDefault());
+            request.Headers.TryGetValues("User-Agent", out IEnumerable<string> userAgents);
+            span.PutHttpUserAgentAttribute(userAgents?.FirstOrDefault());
 
             this.propagationComponent.TextFormat.Inject<HttpRequestMessage>(span.Context, request, (r, k, v) => r.Headers.Add(k, v));
         }
