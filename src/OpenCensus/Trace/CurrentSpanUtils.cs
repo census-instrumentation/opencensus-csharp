@@ -16,16 +16,18 @@
 
 namespace OpenCensus.Trace
 {
+    using System.Threading;
     using OpenCensus.Common;
-    using OpenCensus.Trace.Unsafe;
 
     internal static class CurrentSpanUtils
     {
+        private static AsyncLocal<ISpan> asyncLocalContext = new AsyncLocal<ISpan>();
+
         public static ISpan CurrentSpan
         {
             get
             {
-                return AsyncLocalContext.CurrentSpan;
+                return asyncLocalContext.Value;
             }
         }
 
@@ -44,14 +46,14 @@ namespace OpenCensus.Trace
             {
                 this.span = span;
                 this.endSpan = endSpan;
-                this.origContext = AsyncLocalContext.CurrentSpan;
-                AsyncLocalContext.CurrentSpan = span;
+                this.origContext = asyncLocalContext.Value;
+                asyncLocalContext.Value = span;
             }
 
             public void Dispose()
             {
-                var current = AsyncLocalContext.CurrentSpan;
-                AsyncLocalContext.CurrentSpan = this.origContext;
+                var current = asyncLocalContext.Value;
+                asyncLocalContext.Value = this.origContext;
 
                 if (current != this.origContext)
                 {

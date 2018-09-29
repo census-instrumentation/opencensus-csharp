@@ -28,14 +28,12 @@ namespace OpenCensus.Collector.Dependencies.Tests
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Net;
     using System.Net.Http;
     using System.Reflection;
-    using System.Threading;
     using System.Threading.Tasks;
     using Xunit;
 
-    public class HttpClientTests
+    public partial class HttpClientTests
     {
         public class HttpOutTestCase
         {
@@ -91,69 +89,23 @@ namespace OpenCensus.Collector.Dependencies.Tests
 
         [Theory]
         [MemberData(nameof(TestData))]
-        public async void HttpOutCallsAreCollectedSuccesfully(HttpOutTestCase tc)
+        public async Task HttpOutCallsAreCollectedSuccesfullyAsync(HttpOutTestCase tc)
         {
+            var serverLifeTime = TestServer.RunServer(
+                (ctx) =>
+                {
+                    ctx.Response.StatusCode = tc.responseCode == 0 ? 200 : tc.responseCode;
+                    ctx.Response.OutputStream.Close();
+                },
+                out string host, 
+                out int port);
+
             var startEndHandler = new Mock<IStartEndHandler>();
-
-            var random = new Random();
-            random.Next();
-
-            var host = "localhost";
-            var port = random.Next(2000, 5000);
-
+            var tracer = new Tracer(new RandomGenerator(), startEndHandler.Object, new DateTimeOffsetClock(), new TraceConfig());
             tc.url = NormaizeValues(tc.url, host, port);
 
-            CancellationTokenSource cts = new CancellationTokenSource();
-            CancellationToken token = cts.Token;
-            var httpListener = new HttpListener();
-            Task httpListenerTask = null;
-
-            try
+            using (serverLifeTime)
             {
-                httpListener.Prefixes.Add($"http://{host}:{port}/");
-                httpListener.Start();
-
-                httpListenerTask = new Task(() =>
-                {
-                    var ctxTask = httpListener.GetContextAsync();
-
-                    try
-                    {
-                        ctxTask.Wait(token);
-
-                        if (ctxTask.Status == TaskStatus.RanToCompletion)
-                        {
-                            var ctx = ctxTask.Result;
-                            if (tc.responseCode != 0)
-                            {
-                                ctx.Response.StatusCode = tc.responseCode;
-                            }
-                            else
-                            {
-                                ctx.Response.StatusCode = 200;
-                            }
-
-                            using (var output = ctx.Response.OutputStream)
-                            {
-                                using (var writer = new StreamWriter(output))
-                                {
-                                    writer.WriteLine(DateTime.UtcNow.ToString());
-                                }
-                            }
-                        }
-                    }
-                    catch (OperationCanceledException)
-                    {
-                    }
-                    catch (Exception ex)
-                    {
-                        Assert.True(false, ex.ToString());
-                    }
-                });
-
-                httpListenerTask.Start();
-
-                var tracer = new Tracer(new RandomGenerator(), startEndHandler.Object, new DateTimeOffsetClock(), new TraceConfig());
                 using (var dc = new DependenciesCollector(new DependenciesCollectorOptions(), tracer, Samplers.AlwaysSample, PropagationComponentBase.NoopPropagationComponent))
                 {
 
@@ -169,7 +121,7 @@ namespace OpenCensus.Collector.Dependencies.Tests
 
                             if (tc.headers != null)
                             {
-                                foreach(var header in tc.headers)
+                                foreach (var header in tc.headers)
                                 {
                                     request.Headers.Add(header.Key, header.Value);
                                 }
@@ -184,19 +136,12 @@ namespace OpenCensus.Collector.Dependencies.Tests
                     }
                 }
             }
-            finally
-            {
-                httpListener?.Stop();
-                cts.Cancel();
-            }
-
 
             Assert.Equal(2, startEndHandler.Invocations.Count); // begin and end was called
             var spanData = ((Span)startEndHandler.Invocations[1].Arguments[0]).ToSpanData();
 
             Assert.Equal(tc.spanName, spanData.Name);
             Assert.Equal(tc.spanKind, spanData.Kind.ToString());
-
 
             var d = new Dictionary<CanonicalCode, string>()
             {
@@ -228,7 +173,7 @@ namespace OpenCensus.Collector.Dependencies.Tests
         }
 
         [Fact]
-        public void DebugIndividualTest()
+        public async Task DebugIndividualTestAsync()
         {
             var serializer = new JsonSerializer();
             var input = serializer.Deserialize<HttpOutTestCase[]>(new JsonTextReader(new StringReader(@"
@@ -250,7 +195,8 @@ namespace OpenCensus.Collector.Dependencies.Tests
 ]
 ")));
 
-            this.GetType().InvokeMember(nameof(HttpOutCallsAreCollectedSuccesfully), BindingFlags.InvokeMethod, null, this, getArgumentsFromTestCaseObject(input).First());
+            var t = (Task)this.GetType().InvokeMember(nameof(HttpOutCallsAreCollectedSuccesfullyAsync), BindingFlags.InvokeMethod, null, this, getArgumentsFromTestCaseObject(input).First());
+            await t;
         }
 
         private string AttributeToSimpleString(IAttributeValue value)
