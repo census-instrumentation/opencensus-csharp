@@ -114,7 +114,6 @@ namespace OpenCensus.Trace
             /// <returns>Tracestate builder for chained calls.</returns>
             public TracestateBuilder Set(string key, string value)
             {
-
                 // Initially create the Entry to validate input.
 
                 Entry entry = Entry.Create(key, value);
@@ -174,10 +173,8 @@ namespace OpenCensus.Trace
             /// <returns>Resulting tracestate.</returns>
             public Tracestate Build()
             {
-
                 if (this.entries == null)
                 {
-
                     return this.parent;
 
                 }
@@ -199,6 +196,16 @@ namespace OpenCensus.Trace
                 this.key = key;
                 this.value = value;
             }
+
+            /// <summary>
+            /// Gets the key of tracestate entry.
+            /// </summary>
+            public string Key { get => key; }
+
+            /// <summary>
+            /// Gets the value of tracestate entry.
+            /// </summary>
+            public string Value { get => value; }
 
             /// <summary>
             /// Creates a new Entry with the given name and value.
@@ -223,16 +230,6 @@ namespace OpenCensus.Trace
 
                 return new Entry(key, value);
             }
-
-            /// <summary>
-            /// Gets the key of tracestate entry.
-            /// </summary>
-            public string Key { get; }
-
-            /// <summary>
-            /// Gets the value of tracestate entry.
-            /// </summary>
-            public string Value { get; }
         }
 
         private static bool ValidateKey(string key)
@@ -279,7 +276,6 @@ namespace OpenCensus.Trace
 
             for (int i = 0; i < value.Length; i++)
             {
-
                 char c = value[i];
 
                 if (c == ',' || c == '=' || c < ' ' /* '\u0020' */ || c > '~' /* '\u007E' */)

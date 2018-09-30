@@ -16,9 +16,9 @@
 
 namespace OpenCensus.Trace.Propagation
 {
-    using OpenCensus.Trace.Propagation.Implementation;
     using System;
     using System.Collections.Generic;
+    using OpenCensus.Trace.Propagation.Implementation;
 
     /// <summary>
     /// Text format wire context propagator. Helps to extract and inject context from textual 

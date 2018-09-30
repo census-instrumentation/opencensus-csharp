@@ -111,11 +111,16 @@ namespace OpenCensus.Utils
             return result;
         }
 
-        internal static byte[] StringToByteArray(string src)
+        internal static byte[] StringToByteArray(string src, int start = 0, int len = -1)
         {
-            int size = src.Length / 2;
+            if (len == -1)
+            {
+                len = src.Length;
+            }
+
+            int size = len / 2;
             byte[] bytes = new byte[size];
-            for (int i = 0, j = 0; i < size; i++)
+            for (int i = 0, j = start; i < size; i++)
             {
                 int high = HexCharToInt(src[j++]);
                 int low = HexCharToInt(src[j++]);
