@@ -41,14 +41,14 @@ namespace OpenCensus.Trace.Propagation
         // "Debug" sampled value.
         internal const string FlagsValue = "1";
 
-        private static readonly List<string> FIELDS = new List<string>() { XB3TraceId, XB3SpanId, XB3ParentSpanId, XB3Sampled, XB3Flags };
+        private static readonly HashSet<string> AllFields = new HashSet<string>() { XB3TraceId, XB3SpanId, XB3ParentSpanId, XB3Sampled, XB3Flags };
 
         /// <inheritdoc/>
-        public override IList<string> Fields
+        public override ISet<string> Fields
         {
             get
             {
-                return FIELDS.AsReadOnly();
+                return AllFields;
             }
         }
 

@@ -28,7 +28,8 @@ namespace OpenCensus.Trace.Propagation
     {
         private static readonly NoopTextFormat NoopTextFormatInstance = new NoopTextFormat();
 
-        public abstract IList<string> Fields { get; }
+        /// <inheritdoc/>
+        public abstract ISet<string> Fields { get; }
 
         internal static ITextFormat NoopTextFormat
         {

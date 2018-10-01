@@ -18,11 +18,15 @@ namespace OpenCensus.Trace.Propagation
 {
     using OpenCensus.Trace.Propagation.Implementation;
 
+    /// <summary>
+    /// Default propagation used by Open Census.
+    /// </summary>
     public sealed class DefaultPropagationComponent : PropagationComponentBase
     {
         private readonly BinaryFormat binaryFormat = new BinaryFormat();
-        private readonly B3Format b3Format = new B3Format();
+        private readonly TraceContextFormat b3Format = new TraceContextFormat();
 
+        /// <inheritdoc/>
         public override IBinaryFormat BinaryFormat
         {
             get
@@ -31,6 +35,7 @@ namespace OpenCensus.Trace.Propagation
             }
         }
 
+        /// <inheritdoc/>
         public override ITextFormat TextFormat
         {
             get

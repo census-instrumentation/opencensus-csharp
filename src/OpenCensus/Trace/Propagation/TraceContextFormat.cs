@@ -28,7 +28,7 @@ namespace OpenCensus.Trace.Propagation
     public class TraceContextFormat : TextFormatBase
     {
         /// <inheritdoc/>
-        public override IList<string> Fields => new string[] { "tracestate", "traceparent" };
+        public override ISet<string> Fields => new HashSet<string> { "tracestate", "traceparent" };
 
         /// <inheritdoc/>
         public override ISpanContext Extract<T>(T carrier, Func<T, string, IEnumerable<string>> getter)

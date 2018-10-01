@@ -190,7 +190,7 @@ namespace OpenCensus.Trace.Propagation.Test
                 new List<string>() { B3Format.XB3TraceId, B3Format.XB3SpanId, B3Format.XB3ParentSpanId, B3Format.XB3Sampled, B3Format.XB3Flags });
         }
 
-        private void ContainsExactly(IList<string> list, List<string> items)
+        private void ContainsExactly(ISet<string> list, List<string> items)
         {
             Assert.Equal(items.Count, list.Count);
             foreach (var item in items)

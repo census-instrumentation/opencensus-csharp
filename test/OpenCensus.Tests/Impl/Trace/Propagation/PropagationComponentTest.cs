@@ -32,7 +32,7 @@ namespace OpenCensus.Trace.Propagation.Test
         [Fact]
         public void ImplementationOfB3Format()
         {
-            Assert.IsType<B3Format>(propagationComponent.TextFormat);
+            Assert.IsType<TraceContextFormat>(propagationComponent.TextFormat);
         }
     }
 }

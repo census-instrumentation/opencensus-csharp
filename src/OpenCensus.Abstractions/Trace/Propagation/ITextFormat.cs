@@ -30,7 +30,7 @@ namespace OpenCensus.Trace.Propagation
         ///   * allow pre-allocation of fields, especially in systems like gRPC Metadata
         ///   * allow a single-pass over an iterator (ex OpenTracing has no getter in TextMap).
         /// </summary>
-        IList<string> Fields { get; }
+        ISet<string> Fields { get; }
 
         /// <summary>
         /// Injects textual representation of span context to transmit over the wire.
