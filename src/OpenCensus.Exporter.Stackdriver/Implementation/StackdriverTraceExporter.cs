@@ -56,10 +56,21 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
 
         public static Google.Cloud.Trace.V2.AttributeValue ToAttributeValue(this IAttributeValue av)
         {
-            // TODO Currently we assume we store only strings.
-            return new Google.Cloud.Trace.V2.AttributeValue
+            var ret = new Google.Cloud.Trace.V2.AttributeValue();
+            var attributeType = av.GetType();
+
+            // Handle all primitive types
+            if (attributeType == typeof(AttributeValue<bool>))
             {
-                StringValue = new TruncatableString
+                ret.BoolValue = ((AttributeValue<bool>)av).Value;
+            }
+            else if (attributeType == typeof(AttributeValue<long>))
+            {
+                ret.IntValue = ((AttributeValue<long>)av).Value;
+            }
+            else // String or anything else is written as string
+            {
+                ret.StringValue = new TruncatableString
                 {
                     Value = av.Match(
                     s => s,
@@ -67,8 +78,10 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                     l => l.ToString(),
                     obj => obj.ToString(),
                     obj => obj.ToString())
-                }
-            };
+                };
+            }
+
+            return ret;
         }
     }
 
