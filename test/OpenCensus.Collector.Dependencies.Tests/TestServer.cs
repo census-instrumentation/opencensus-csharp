@@ -43,23 +43,27 @@ namespace OpenCensus.Collector.Dependencies.Tests
                 this.httpListenerTask = new Task(() =>
                 {
                     this.listener.Start();
-                    var ctxTask = this.listener.GetContextAsync();
 
-                    try
+                    while (!token.IsCancellationRequested)
                     {
-                        ctxTask.Wait(token);
+                        var ctxTask = this.listener.GetContextAsync();
 
-                        if (ctxTask.Status == TaskStatus.RanToCompletion)
+                        try
                         {
-                            action(ctxTask.Result);
+                            ctxTask.Wait(token);
+
+                            if (ctxTask.Status == TaskStatus.RanToCompletion)
+                            {
+                                action(ctxTask.Result);
+                            }
                         }
-                    }
-                    catch (OperationCanceledException)
-                    {
-                    }
-                    catch (Exception ex)
-                    {
-                        Assert.True(false, ex.ToString());
+                        catch (OperationCanceledException)
+                        {
+                        }
+                        catch (Exception ex)
+                        {
+                            Assert.True(false, ex.ToString());
+                        }
                     }
                 });
             }
@@ -71,8 +75,15 @@ namespace OpenCensus.Collector.Dependencies.Tests
 
             public void Dispose()
             {
-                this.listener?.Stop();
-                cts.Cancel();
+                try
+                {
+                    this.listener?.Stop();
+                    cts.Cancel();
+                }
+                catch (ObjectDisposedException)
+                {
+                    // swallow this exception just in case
+                }
             }
         }
 
