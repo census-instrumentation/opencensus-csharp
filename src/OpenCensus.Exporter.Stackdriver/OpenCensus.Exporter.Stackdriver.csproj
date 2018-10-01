@@ -1,14 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <!--
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), 'OpenCensus.sln'))\build\Common.prod.props" />
-  -->
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <IncludeSymbols>True</IncludeSymbols>
-  </PropertyGroup>
-
-  <PropertyGroup>
+    <TargetFrameworks>net46;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks Condition="$(OS) != 'Windows_NT'">netstandard2.0</TargetFrameworks>
     <Description>Stackdriver Exporter for OpenCensus.</Description>
+    <IncludeSymbols>True</IncludeSymbols>
     <PackageTags>Tracing;OpenCensus;Management;Monitoring;Stackdriver;Google;GCP;distributed-tracing</PackageTags>
     <PackageIconUrl>https://opencensus.io/images/opencensus-logo.png</PackageIconUrl>
     <PackageProjectUrl>https://opencensus.io</PackageProjectUrl>
@@ -16,7 +12,12 @@
     <Authors>OpenCensus authors</Authors>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
-
+  
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="Google.Cloud.Trace.V2" Version="1.0.0-beta02" />
   </ItemGroup>
