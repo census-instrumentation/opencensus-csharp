@@ -140,7 +140,7 @@ namespace OpenCensus.Trace
             }
 
             /// <summary>
-            /// Removes entry for the give key.
+            /// Removes entry for the given key.
             /// </summary>
             /// <param name="key">Key to remove from tracestate.</param>
             /// <returns>Tracestate builder for chained calls.</returns>
@@ -235,8 +235,8 @@ namespace OpenCensus.Trace
         private static bool ValidateKey(string key)
         {
             // Key is opaque string up to 256 characters printable. It MUST begin with a lowercase letter, and
-            // can only contain lowercase letters a-z, digits 0-9, underscores _, dashes -, asterisks *, and
-            // forward slashes /.
+            // can only contain lowercase letters a-z, digits 0-9, underscores _, dashes -, asterisks *, 
+            // forward slashes / and @
 
             if (string.IsNullOrEmpty(key)
                 || key.Length > KeyMaxSize
@@ -255,7 +255,8 @@ namespace OpenCensus.Trace
                     && c != '_'
                     && c != '-'
                     && c != '*'
-                    && c != '/')
+                    && c != '/'
+                    && c != '@')
                 {
                     return false;
                 }

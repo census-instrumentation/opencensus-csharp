@@ -24,7 +24,7 @@ namespace OpenCensus.Trace.Propagation
     public sealed class DefaultPropagationComponent : PropagationComponentBase
     {
         private readonly BinaryFormat binaryFormat = new BinaryFormat();
-        private readonly TraceContextFormat b3Format = new TraceContextFormat();
+        private readonly TraceContextFormat textFormat = new TraceContextFormat();
 
         /// <inheritdoc/>
         public override IBinaryFormat BinaryFormat
@@ -40,7 +40,7 @@ namespace OpenCensus.Trace.Propagation
         {
             get
             {
-                return this.b3Format;
+                return this.textFormat;
             }
         }
     }

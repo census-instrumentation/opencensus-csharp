@@ -33,84 +33,105 @@ namespace OpenCensus.Trace.Propagation
         /// <inheritdoc/>
         public override ISpanContext Extract<T>(T carrier, Func<T, string, IEnumerable<string>> getter)
         {
-            // from https://github.com/w3c/distributed-tracing/blob/master/trace_context/HTTP_HEADER_FORMAT.md
-            // traceparent: 00-0af7651916cd43dd8448eb211c80319c-00f067aa0ba902b7-01
-
-            var traceparent = getter(carrier, "traceparent")?.FirstOrDefault();
-            var tracestateCollection = getter(carrier, "tracestate");
-
-            if (traceparent == null)
+            try
             {
-                return null;
-            }
+                // from https://github.com/w3c/distributed-tracing/blob/master/trace_context/HTTP_HEADER_FORMAT.md
+                // traceparent: 00-0af7651916cd43dd8448eb211c80319c-00f067aa0ba902b7-01
 
-            // TODO: validate version prefix
-            var traceId = TraceId.FromBytes(Arrays.StringToByteArray(traceparent, "00-".Length, "0af7651916cd43dd8448eb211c80319c".Length));
+                var traceparent = getter(carrier, "traceparent")?.FirstOrDefault();
+                var tracestateCollection = getter(carrier, "tracestate");
 
-            // TODO: validate span delimeter
-            var spanId = SpanId.FromBytes(Arrays.StringToByteArray(traceparent, "00-0af7651916cd43dd8448eb211c80319c-".Length, "00f067aa0ba902b7".Length));
-
-            // TODO: validate options delimeter
-            var optionsArray = Arrays.StringToByteArray(traceparent, "00-0af7651916cd43dd8448eb211c80319c-00f067aa0ba902b7-".Length, 2);
-
-            var options = TraceOptions.Default;
-            if ((optionsArray[0] | 1) == 1)
-            {
-                options = TraceOptions.Builder().SetIsSampled(true).Build();
-            }
-
-            List<KeyValuePair<string, string>> entries = new List<KeyValuePair<string, string>>();
-            if (tracestateCollection != null)
-            {
-                foreach (var tracestate in tracestateCollection)
+                if (traceparent == null)
                 {
-                    // tracestate: rojo=00-0af7651916cd43dd8448eb211c80319c-00f067aa0ba902b7-01,congo=BleGNlZWRzIHRohbCBwbGVhc3VyZS4
-                    var keyStartIdx = 0;
-                    var length = tracestate.Length;
-                    while (keyStartIdx < length)
-                    {
-                        var keyEndIdx = tracestate.IndexOf("=", keyStartIdx);
-
-                        if (keyEndIdx == -1)
-                        {
-                            // error happened. Ignore this tracestate
-                            break;
-                        }
-
-                        var valueStartIdx = keyEndIdx + 1;
-
-                        var valueEndIdx = tracestate.IndexOf(",", valueStartIdx);
-                        valueEndIdx = valueEndIdx == -1 ? length : valueEndIdx;
-                        entries.Add(
-                            new KeyValuePair<string, string>(
-                                tracestate.Substring(keyStartIdx, keyEndIdx - keyStartIdx).Trim(), 
-                                tracestate.Substring(valueStartIdx, valueEndIdx - valueStartIdx).Trim()));
-                        keyStartIdx = valueEndIdx + 1;
-                    }
+                    return null;
                 }
+
+                // TODO: validate version prefix
+                var traceId = TraceId.FromBytes(Arrays.StringToByteArray(traceparent, "00-".Length, "0af7651916cd43dd8448eb211c80319c".Length));
+
+                // TODO: validate span delimeter
+                var spanId = SpanId.FromBytes(Arrays.StringToByteArray(traceparent, "00-0af7651916cd43dd8448eb211c80319c-".Length, "00f067aa0ba902b7".Length));
+
+                // TODO: validate options delimeter
+                var optionsArray = Arrays.StringToByteArray(traceparent, "00-0af7651916cd43dd8448eb211c80319c-00f067aa0ba902b7-".Length, 2);
+
+                var options = TraceOptions.Default;
+                if ((optionsArray[0] | 1) == 1)
+                {
+                    options = TraceOptions.Builder().SetIsSampled(true).Build();
+                }
+
+                var tracestateResult = Tracestate.Empty;
+                try
+                {
+                    List<KeyValuePair<string, string>> entries = new List<KeyValuePair<string, string>>();
+                    if (tracestateCollection != null)
+                    {
+                        foreach (var tracestate in tracestateCollection)
+                        {
+                            // tracestate: rojo=00-0af7651916cd43dd8448eb211c80319c-00f067aa0ba902b7-01,congo=BleGNlZWRzIHRohbCBwbGVhc3VyZS4
+                            var keyStartIdx = 0;
+                            var length = tracestate.Length;
+                            while (keyStartIdx < length)
+                            {
+                                var keyEndIdx = tracestate.IndexOf("=", keyStartIdx);
+
+                                if (keyEndIdx == -1)
+                                {
+                                    // error happened. Ignore this tracestate
+                                    // TODO: decide whether we need to parse other headers or just throw from here
+                                    break;
+                                }
+
+                                var valueStartIdx = keyEndIdx + 1;
+
+                                var valueEndIdx = tracestate.IndexOf(",", valueStartIdx);
+                                valueEndIdx = valueEndIdx == -1 ? length : valueEndIdx;
+                                entries.Add(
+                                    new KeyValuePair<string, string>(
+                                        tracestate.Substring(keyStartIdx, keyEndIdx - keyStartIdx).Trim(),
+                                        tracestate.Substring(valueStartIdx, valueEndIdx - valueStartIdx).Trim()));
+                                keyStartIdx = valueEndIdx + 1;
+                            }
+                        }
+                    }
+
+                    var tracestateBuilder = Tracestate.Builder;
+
+                    entries.Reverse();
+                    foreach (var entry in entries)
+                    {
+                        tracestateBuilder.Set(entry.Key, entry.Value);
+                    }
+
+                    tracestateResult = tracestateBuilder.Build();
+                }
+                catch (Exception ex)
+                {
+                    // failure to parse tracestate should not disregard traceparent
+                    // TODO: logging
+                }
+
+                return SpanContext.Create(traceId, spanId, options, tracestateResult);
             }
-
-            var tracestateBuilder = Tracestate.Builder;
-
-            entries.Reverse();
-            foreach (var entry in entries)
+            catch (Exception ex)
             {
-                tracestateBuilder.Set(entry.Key, entry.Value);
+                // TODO: logging
             }
 
-            return SpanContext.Create(traceId, spanId, options, tracestateBuilder.Build());
+            // in case of exception indicate to upstream that there is no parseable context from the top
+            return null;
         }
 
         /// <inheritdoc/>
         public override void Inject<T>(ISpanContext spanContext, T carrier, Action<T, string, string> setter)
         {
-            var sb = new StringBuilder();
-            sb.Append("00-").Append(spanContext.TraceId.ToLowerBase16());
-            sb.Append('-').Append(spanContext.SpanId.ToLowerBase16());
-            sb.Append('-').Append(spanContext.TraceOptions.IsSampled ? "01" : "00");
-            setter(carrier, "traceparent", sb.ToString());
+            var traceparent = string.Concat("00-", spanContext.TraceId.ToLowerBase16(), "-", spanContext.SpanId.ToLowerBase16());
+            traceparent = string.Concat(traceparent, spanContext.TraceOptions.IsSampled ? "-01" : "-00");
 
-            sb.Clear();
+            setter(carrier, "traceparent", traceparent);
+
+            StringBuilder sb = new StringBuilder();
             var isFirst = true;
 
             foreach (var entry in spanContext.Tracestate.Entries)
