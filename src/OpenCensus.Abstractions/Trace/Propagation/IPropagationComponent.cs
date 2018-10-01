@@ -16,10 +16,19 @@
 
 namespace OpenCensus.Trace.Propagation
 {
+    /// <summary>
+    /// Configuration of wire protocol to use to extract and inject span context from the wire.
+    /// </summary>
     public interface IPropagationComponent
     {
+        /// <summary>
+        /// Gets the binary format propagator.
+        /// </summary>
         IBinaryFormat BinaryFormat { get; }
 
+        /// <summary>
+        /// Gets the text format propagator.
+        /// </summary>
         ITextFormat TextFormat { get; }
     }
 }

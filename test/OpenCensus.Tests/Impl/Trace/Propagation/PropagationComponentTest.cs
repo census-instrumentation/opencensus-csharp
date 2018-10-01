@@ -16,11 +16,12 @@
 
 namespace OpenCensus.Trace.Propagation.Test
 {
+    using OpenCensus.Trace.Propagation.Implementation;
     using Xunit;
 
     public class PropagationComponentTest
     {
-        private readonly PropagationComponent propagationComponent = new PropagationComponent();
+        private readonly DefaultPropagationComponent propagationComponent = new DefaultPropagationComponent();
 
         [Fact]
         public void ImplementationOfBinary()

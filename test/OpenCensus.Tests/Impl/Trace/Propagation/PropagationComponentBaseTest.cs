@@ -16,6 +16,7 @@
 
 namespace OpenCensus.Trace.Propagation.Test
 {
+    using OpenCensus.Trace.Propagation.Implementation;
     using Xunit;
 
     public class PropagationComponentBaseTest

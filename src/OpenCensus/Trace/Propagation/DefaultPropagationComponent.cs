@@ -1,4 +1,4 @@
-﻿// <copyright file="PropagationComponent.cs" company="OpenCensus Authors">
+﻿// <copyright file="DefaultPropagationComponent.cs" company="OpenCensus Authors">
 // Copyright 2018, OpenCensus Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,9 @@
 
 namespace OpenCensus.Trace.Propagation
 {
-    public sealed class PropagationComponent : PropagationComponentBase
+    using OpenCensus.Trace.Propagation.Implementation;
+
+    public sealed class DefaultPropagationComponent : PropagationComponentBase
     {
         private readonly BinaryFormat binaryFormat = new BinaryFormat();
         private readonly B3Format b3Format = new B3Format();

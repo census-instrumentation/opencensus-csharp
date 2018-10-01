@@ -17,6 +17,7 @@
 namespace OpenCensus.Collector.Dependencies.Implementation
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
     using System.Net;
@@ -24,6 +25,7 @@ namespace OpenCensus.Collector.Dependencies.Implementation
     using System.Threading.Tasks;
     using OpenCensus.Collector.Implementation.Common;
     using OpenCensus.Trace;
+    using OpenCensus.Trace.Propagation;
 
     internal class HttpHandlerDiagnosticListener : ListenerHandler
     {
@@ -32,8 +34,11 @@ namespace OpenCensus.Collector.Dependencies.Implementation
         private readonly PropertyFetcher stopExceptionFetcher = new PropertyFetcher("Exception");
         private readonly PropertyFetcher stopRequestStatusFetcher = new PropertyFetcher("RequestTaskStatus");
 
-        public HttpHandlerDiagnosticListener(ITracer tracer, ISampler sampler) : base("HttpHandlerDiagnosticListener", tracer, sampler)
+        private readonly IPropagationComponent propagationComponent;
+
+        public HttpHandlerDiagnosticListener(ITracer tracer, ISampler sampler, IPropagationComponent propagationComponent) : base("HttpHandlerDiagnosticListener", tracer, sampler)
         {
+            this.propagationComponent = propagationComponent;
         }
 
         public override void OnStartActivity(Activity activity, object payload)
@@ -56,7 +61,10 @@ namespace OpenCensus.Collector.Dependencies.Implementation
             span.PutHttpMethodAttribute(request.Method.ToString());
             span.PutHttpHostAttribute(request.RequestUri.Host, request.RequestUri.Port);
             span.PutHttpPathAttribute(request.RequestUri.AbsolutePath);
-            span.PutHttpUserAgentAttribute(request.Headers.GetValues("User-Agent").FirstOrDefault());
+            request.Headers.TryGetValues("User-Agent", out IEnumerable<string> userAgents);
+            span.PutHttpUserAgentAttribute(userAgents?.FirstOrDefault());
+
+            this.propagationComponent.TextFormat.Inject<HttpRequestMessage>(span.Context, request, (r, k, v) => r.Headers.Add(k, v));
         }
 
         public override void OnStopActivity(Activity activity, object payload)

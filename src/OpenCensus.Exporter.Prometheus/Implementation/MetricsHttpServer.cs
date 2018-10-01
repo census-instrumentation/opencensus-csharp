@@ -17,12 +17,10 @@
 namespace OpenCensus.Exporter.Prometheus.Implementation
 {
     using System;
-    using System.Diagnostics;
     using System.IO;
     using System.Net;
     using System.Threading;
     using OpenCensus.Stats;
-    using OpenCensus.Stats.Aggregations;
 
     internal class MetricsHttpServer
     {

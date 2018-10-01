@@ -2,10 +2,10 @@
 {
     using System;
     using System.Net.Http;
-    using System.Threading;
     using OpenCensus.Collector.Dependencies;
     using OpenCensus.Exporter.Zipkin;
     using OpenCensus.Trace;
+    using OpenCensus.Trace.Propagation;
     using OpenCensus.Trace.Sampler;
 
     internal class TestHttpClient
@@ -16,7 +16,7 @@
         {
             Console.WriteLine("Hello World!");
 
-            var collector = new DependenciesCollector(new DependenciesCollectorOptions(), tracer, Samplers.AlwaysSample);
+            var collector = new DependenciesCollector(new DependenciesCollectorOptions(), tracer, Samplers.AlwaysSample, PropagationComponentBase.NoopPropagationComponent);
 
             var exporter = new ZipkinTraceExporter(
                 new ZipkinTraceExporterOptions()

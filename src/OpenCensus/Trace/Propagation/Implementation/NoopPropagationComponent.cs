@@ -1,4 +1,4 @@
-﻿// <copyright file="ISetter.cs" company="OpenCensus Authors">
+﻿// <copyright file="NoopPropagationComponent.cs" company="OpenCensus Authors">
 // Copyright 2018, OpenCensus Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,10 +14,24 @@
 // limitations under the License.
 // </copyright>
 
-namespace OpenCensus.Trace.Propagation
+namespace OpenCensus.Trace.Propagation.Implementation
 {
-    public interface ISetter<T>
+    internal class NoopPropagationComponent : IPropagationComponent
     {
-        void Put(T carrier, string key, string value);
+        public IBinaryFormat BinaryFormat
+        {
+            get
+            {
+                return Propagation.BinaryFormatBase.NoopBinaryFormat;
+            }
+        }
+
+        public ITextFormat TextFormat
+        {
+            get
+            {
+                return Propagation.TextFormatBase.NoopTextFormat;
+            }
+        }
     }
 }

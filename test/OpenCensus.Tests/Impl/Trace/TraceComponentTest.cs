@@ -36,7 +36,7 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void IplementationOfBinaryPropagationHandler()
         {
-            Assert.IsType<PropagationComponent>(traceComponent.PropagationComponent);
+            Assert.IsType<DefaultPropagationComponent>(traceComponent.PropagationComponent);
         }
 
 
