@@ -105,14 +105,6 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             else // String or anything else is written as string
             {
                 ret.StringValue = new TruncatableString
-                {
-                    Value = av.Match(
-                    s => s,
-                    b => b.ToString(),
-                    l => l.ToString(),
-                    obj => obj.ToString(),
-                    obj => obj.ToString())
-                };
             }
 
             return ret;
