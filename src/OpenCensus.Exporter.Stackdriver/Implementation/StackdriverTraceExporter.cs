@@ -20,6 +20,8 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         public static Span ToSpan(this ISpanData spanData, string projectId)
         {
             string spanId = spanData.Context.SpanId.ToLowerBase16();
+
+            // Base span settings
             var span = new Span
             {
                 SpanName = new SpanName(projectId, spanData.Context.TraceId.ToLowerBase16(), spanId),
@@ -29,7 +31,26 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                 EndTime = spanData.EndTimestamp.ToTimestamp(),
                 ChildSpanCount = spanData.ChildSpanCount,
             };
+            if (spanData.ParentSpanId != null)
+            {
+                string parentSpanId = spanData.ParentSpanId.ToLowerBase16();
+                if (!string.IsNullOrEmpty(parentSpanId))
+                {
+                    span.ParentSpanId = parentSpanId;
+                }
+            }
 
+            // Span Links
+            if (spanData.Links != null)
+            {
+                span.Links = new Span.Types.Links
+                {
+                    DroppedLinksCount = spanData.Links.DroppedLinksCount,
+                    Link = { spanData.Links.Links.Select(l => l.ToLink()) }
+                };
+            }
+
+            // Span Attributes
             if (spanData.Attributes != null)
             {
                 span.Attributes = new Span.Types.Attributes
@@ -42,16 +63,29 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                 };
             }
 
-            if (spanData.ParentSpanId != null)
+            return span;
+        }
+
+        public static Span.Types.Link ToLink(this ILink link)
+        {
+            var ret = new Span.Types.Link();
+            ret.SpanId = link.SpanId.ToLowerBase16();
+            ret.TraceId = link.TraceId.ToLowerBase16();
+            
+            if (link.Attributes != null)
             {
-                string parentSpanId = spanData.ParentSpanId.ToLowerBase16();
-                if (!string.IsNullOrEmpty(parentSpanId))
+                ret.Attributes = new Span.Types.Attributes
                 {
-                    span.ParentSpanId = parentSpanId;
-                }
+                    
+                    DroppedAttributesCount = OpenCensus.Trace.Config.TraceParams.DEFAULT.MaxNumberOfAttributes - link.Attributes.Count,
+
+                    AttributeMap = { link.Attributes.ToDictionary(
+                         att => att.Key,
+                         att => att.Value.ToAttributeValue()) }
+                };
             }
 
-            return span;
+            return ret;
         }
 
         public static Google.Cloud.Trace.V2.AttributeValue ToAttributeValue(this IAttributeValue av)
