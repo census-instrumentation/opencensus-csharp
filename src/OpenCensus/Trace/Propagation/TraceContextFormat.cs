@@ -44,8 +44,13 @@ namespace OpenCensus.Trace.Propagation
                 return null;
             }
 
+            // TODO: validate version prefix
             var traceId = TraceId.FromBytes(Arrays.StringToByteArray(traceparent, "00-".Length, "0af7651916cd43dd8448eb211c80319c".Length));
+
+            // TODO: validate span delimeter
             var spanId = SpanId.FromBytes(Arrays.StringToByteArray(traceparent, "00-0af7651916cd43dd8448eb211c80319c-".Length, "00f067aa0ba902b7".Length));
+
+            // TODO: validate options delimeter
             var optionsArray = Arrays.StringToByteArray(traceparent, "00-0af7651916cd43dd8448eb211c80319c-00f067aa0ba902b7-".Length, 2);
 
             var options = TraceOptions.Default;
@@ -78,8 +83,8 @@ namespace OpenCensus.Trace.Propagation
                         valueEndIdx = valueEndIdx == -1 ? length : valueEndIdx;
                         entries.Add(
                             new KeyValuePair<string, string>(
-                                tracestate.Substring(keyStartIdx, keyEndIdx - keyStartIdx), 
-                                tracestate.Substring(valueStartIdx, valueEndIdx - valueStartIdx)));
+                                tracestate.Substring(keyStartIdx, keyEndIdx - keyStartIdx).Trim(), 
+                                tracestate.Substring(valueStartIdx, valueEndIdx - valueStartIdx).Trim()));
                         keyStartIdx = valueEndIdx + 1;
                     }
                 }
@@ -122,7 +127,10 @@ namespace OpenCensus.Trace.Propagation
                 }
             }
 
-            setter(carrier, "tracestate", sb.ToString());
+            if (sb.Length > 0)
+            {
+                setter(carrier, "tracestate", sb.ToString());
+            }
         }
     }
 }
