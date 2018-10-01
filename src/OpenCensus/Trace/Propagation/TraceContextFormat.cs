@@ -27,6 +27,13 @@ namespace OpenCensus.Trace.Propagation
     /// </summary>
     public class TraceContextFormat : TextFormatBase
     {
+        private static readonly int VersionPrefixIdLength = "00-".Length;
+        private static readonly int TraceIdLength = "0af7651916cd43dd8448eb211c80319c".Length;
+        private static readonly int VersionAndTraceIdLength = "00-0af7651916cd43dd8448eb211c80319c-".Length;
+        private static readonly int SpanIdLength = "00f067aa0ba902b7".Length;
+        private static readonly int VersionAndTraceIdAndSpanIdLength = "00-0af7651916cd43dd8448eb211c80319c-00f067aa0ba902b7-".Length;
+        private static readonly int OptionsLength = "00".Length;
+
         /// <inheritdoc/>
         public override ISet<string> Fields => new HashSet<string> { "tracestate", "traceparent" };
 
@@ -47,13 +54,13 @@ namespace OpenCensus.Trace.Propagation
                 }
 
                 // TODO: validate version prefix
-                var traceId = TraceId.FromBytes(Arrays.StringToByteArray(traceparent, "00-".Length, "0af7651916cd43dd8448eb211c80319c".Length));
+                var traceId = TraceId.FromBytes(Arrays.StringToByteArray(traceparent, VersionPrefixIdLength, TraceIdLength));
 
                 // TODO: validate span delimeter
-                var spanId = SpanId.FromBytes(Arrays.StringToByteArray(traceparent, "00-0af7651916cd43dd8448eb211c80319c-".Length, "00f067aa0ba902b7".Length));
+                var spanId = SpanId.FromBytes(Arrays.StringToByteArray(traceparent, VersionAndTraceIdLength, SpanIdLength));
 
                 // TODO: validate options delimeter
-                var optionsArray = Arrays.StringToByteArray(traceparent, "00-0af7651916cd43dd8448eb211c80319c-00f067aa0ba902b7-".Length, 2);
+                var optionsArray = Arrays.StringToByteArray(traceparent, VersionAndTraceIdAndSpanIdLength, OptionsLength);
 
                 var options = TraceOptions.Default;
                 if ((optionsArray[0] | 1) == 1)
