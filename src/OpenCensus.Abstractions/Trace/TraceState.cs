@@ -238,15 +238,57 @@ namespace OpenCensus.Trace
             // can only contain lowercase letters a-z, digits 0-9, underscores _, dashes -, asterisks *, 
             // forward slashes / and @
 
+            int i = 0;
+
             if (string.IsNullOrEmpty(key)
                 || key.Length > KeyMaxSize
-                || key[0] < 'a'
-                || key[0] > 'z')
+                || key[i] < 'a'
+                || key[i] > 'z')
             {
                 return false;
             }
 
-            for (int i = 1; i < key.Length; i++)
+            // before 
+            for (i = 1; i < key.Length; i++)
+            {
+                char c = key[i];
+
+                if (c == '@')
+                {
+                    // vendor follows
+                    break;
+                }
+
+                if (!(c >= 'a' && c <= 'z')
+                    && !(c >= '0' && c <= '9')
+                    && c != '_'
+                    && c != '-'
+                    && c != '*'
+                    && c != '/')
+                {
+                    return false;
+                }
+            }
+
+            i++; // skip @ or increment further than key.Length
+
+            var vendorLength = key.Length - i;
+            if (vendorLength == 0 || vendorLength > 14)
+            {
+                // vendor name should be at least 1 to 14 character long
+                return false;
+            }
+
+            if (vendorLength > 0)
+            {
+                if (i > 242)
+                {
+                    // tenant section should be less than 241 characters long
+                    return false;
+                }
+            }
+
+            for (; i < key.Length; i++)
             {
                 char c = key[i];
 
@@ -255,8 +297,7 @@ namespace OpenCensus.Trace
                     && c != '_'
                     && c != '-'
                     && c != '*'
-                    && c != '/'
-                    && c != '@')
+                    && c != '/')
                 {
                     return false;
                 }
@@ -291,7 +332,9 @@ namespace OpenCensus.Trace
 
         private static Tracestate Create(List<Entry> entries)
         {
-            if (entries.Count >= MaxKeyValuePairsCount)
+            // TODO: discard last entries instead of throwing
+
+            if (entries.Count > MaxKeyValuePairsCount)
             {
                 throw new ArgumentException("Too many entries.", nameof(entries));
             }

@@ -53,27 +53,29 @@ namespace OpenCensus.Trace.Propagation
                 }
 
                 var traceparent = traceparentCollection?.FirstOrDefault();
-                var traceparentParsed = this.TryExtractTraceparent(traceparent, out ITraceId traceId, out ISpanId spanId, out TraceOptions traceoptions, out bool bestAttempt);
+                var traceparentParsed = this.TryExtractTraceparent(traceparent, out ITraceId traceId, out ISpanId spanId, out TraceOptions traceoptions);
 
                 if (!traceparentParsed)
                 {
                     return null;
                 }
 
-                if (bestAttempt)
-                {
-                    // should we fix up trace id, span id, etc.
-                    // or span builder will do it?
-                }
-
                 var tracestateResult = Tracestate.Empty;
                 try
                 {
                     List<KeyValuePair<string, string>> entries = new List<KeyValuePair<string, string>>();
+                    HashSet<string> names = new HashSet<string>();
+                    var discardTracestate = false;
                     if (tracestateCollection != null)
                     {
                         foreach (var tracestate in tracestateCollection)
                         {
+                            if (string.IsNullOrWhiteSpace(tracestate))
+                            {
+                                discardTracestate = true;
+                                break;
+                            }
+
                             // tracestate: rojo=00-0af7651916cd43dd8448eb211c80319c-00f067aa0ba902b7-01,congo=BleGNlZWRzIHRohbCBwbGVhc3VyZS4
                             var keyStartIdx = 0;
                             var length = tracestate.Length;
@@ -83,8 +85,7 @@ namespace OpenCensus.Trace.Propagation
 
                                 if (keyEndIdx == -1)
                                 {
-                                    // error happened. Ignore this tracestate
-                                    // TODO: decide whether we need to parse other headers or just throw from here
+                                    discardTracestate = true;
                                     break;
                                 }
 
@@ -92,24 +93,39 @@ namespace OpenCensus.Trace.Propagation
 
                                 var valueEndIdx = tracestate.IndexOf(",", valueStartIdx);
                                 valueEndIdx = valueEndIdx == -1 ? length : valueEndIdx;
-                                entries.Add(
-                                    new KeyValuePair<string, string>(
-                                        tracestate.Substring(keyStartIdx, keyEndIdx - keyStartIdx).TrimStart(),
-                                        tracestate.Substring(valueStartIdx, valueEndIdx - valueStartIdx).TrimEnd()));
+
+                                // this will throw for duplicated keys
+                                var key = tracestate.Substring(keyStartIdx, keyEndIdx - keyStartIdx).TrimStart();
+                                if (names.Add(key))
+                                {
+                                    entries.Add(
+                                        new KeyValuePair<string, string>(
+                                            key,
+                                            tracestate.Substring(valueStartIdx, valueEndIdx - valueStartIdx).TrimEnd()));
+                                }
+                                else
+                                {
+                                    discardTracestate = true;
+                                    break;
+                                }
+
                                 keyStartIdx = valueEndIdx + 1;
                             }
                         }
                     }
 
-                    var tracestateBuilder = Tracestate.Builder;
-
-                    entries.Reverse();
-                    foreach (var entry in entries)
+                    if (!discardTracestate)
                     {
-                        tracestateBuilder.Set(entry.Key, entry.Value);
-                    }
+                        var tracestateBuilder = Tracestate.Builder;
 
-                    tracestateResult = tracestateBuilder.Build();
+                        entries.Reverse();
+                        foreach (var entry in entries)
+                        {
+                            tracestateBuilder.Set(entry.Key, entry.Value);
+                        }
+
+                        tracestateResult = tracestateBuilder.Build();
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -159,7 +175,7 @@ namespace OpenCensus.Trace.Propagation
             }
         }
 
-        private bool TryExtractTraceparent(string traceparent, out ITraceId traceId, out ISpanId spanId, out TraceOptions traceoptions, out bool bestAttempt)
+        private bool TryExtractTraceparent(string traceparent, out ITraceId traceId, out ISpanId spanId, out TraceOptions traceoptions)
         {
             // from https://github.com/w3c/distributed-tracing/blob/master/trace_context/HTTP_HEADER_FORMAT.md
             // traceparent: 00-0af7651916cd43dd8448eb211c80319c-00f067aa0ba902b7-01
@@ -167,15 +183,15 @@ namespace OpenCensus.Trace.Propagation
             traceId = TraceId.Invalid;
             spanId = SpanId.Invalid;
             traceoptions = TraceOptions.Default;
-            bestAttempt = false;
+            var bestAttempt = false;
 
-            if (traceparent == null)
+            if (string.IsNullOrWhiteSpace(traceparent))
             {
                 return false;
             }
 
             // if version does not end with delimeter
-            if (traceparent[VersionPrefixIdLength -1] != '-')
+            if (traceparent.Length < VersionPrefixIdLength || traceparent[VersionPrefixIdLength - 1] != '-')
             {
                 return false;
             }
@@ -183,16 +199,21 @@ namespace OpenCensus.Trace.Propagation
             // or version is not a hex (will throw)
             var versionArray = Arrays.StringToByteArray(traceparent, 0, VersionLength);
 
-            if (versionArray[0] >= 1)
+            if (versionArray[0] == 255)
             {
-                // expected version is 01
+                return false;
+            }
+
+            if (versionArray[0] > 0)
+            {
+                // expected version is 00
                 // for higher versions - best attempt parsing of trace id, span id, etc.
                 bestAttempt = true;
             }
 
-            if (traceparent[VersionAndTraceIdLength - 1] != '-')
+            if (traceparent.Length < VersionAndTraceIdLength || traceparent[VersionAndTraceIdLength - 1] != '-')
             {
-                return bestAttempt;
+                return false;
             }
 
             try
@@ -202,12 +223,12 @@ namespace OpenCensus.Trace.Propagation
             catch (ArgumentOutOfRangeException)
             {
                 // it's ok to still parse tracestate
-                return bestAttempt;
+                return false;
             }
 
-            if (traceparent[VersionAndTraceIdAndSpanIdLength - 1] != '-')
+            if (traceparent.Length < VersionAndTraceIdAndSpanIdLength || traceparent[VersionAndTraceIdAndSpanIdLength - 1] != '-')
             {
-                return bestAttempt;
+                return false;
             }
 
             try
@@ -217,7 +238,12 @@ namespace OpenCensus.Trace.Propagation
             catch (ArgumentOutOfRangeException)
             {
                 // it's ok to still parse tracestate
-                return bestAttempt;
+                return false;
+            }
+
+            if (traceparent.Length < VersionAndTraceIdAndSpanIdLength + OptionsLength)
+            {
+                return false;
             }
 
             byte[] optionsArray;
@@ -229,7 +255,7 @@ namespace OpenCensus.Trace.Propagation
             catch (ArgumentOutOfRangeException)
             {
                 // it's ok to still parse tracestate
-                return bestAttempt;
+                return false;
             }
 
             if ((optionsArray[0] | 1) == 1)
@@ -237,9 +263,18 @@ namespace OpenCensus.Trace.Propagation
                 traceoptions = TraceOptions.Builder().SetIsSampled(true).Build();
             }
 
-            if (traceparent.Length != VersionAndTraceIdAndSpanIdLength + OptionsLength)
+            if ((!bestAttempt) && (traceparent.Length != VersionAndTraceIdAndSpanIdLength + OptionsLength))
             {
-                return bestAttempt;
+                return false;
+            }
+
+            if (bestAttempt)
+            {
+                if ((traceparent.Length > VersionAndTraceIdAndSpanIdLength + OptionsLength) && 
+                   (traceparent[VersionAndTraceIdAndSpanIdLength + OptionsLength] != '-'))
+                {
+                    return false;
+                }
             }
 
             return true;
