@@ -44,7 +44,7 @@ namespace OpenCensus.Collector.Implementation.Common
         {
             /// <summary>
             /// Create a property fetcher from a .NET Reflection PropertyInfo class that
-            /// represents a property of a particular type.  
+            /// represents a property of a particular type.
             /// </summary>
             public static PropertyFetch FetcherForProperty(PropertyInfo propertyInfo)
             {
@@ -61,7 +61,7 @@ namespace OpenCensus.Collector.Implementation.Common
             }
 
             /// <summary>
-            /// Given an object, fetch the property that this propertyFetch represents. 
+            /// Given an object, fetch the property that this propertyFetch represents.
             /// </summary>
             public virtual object Fetch(object obj)
             {

@@ -270,7 +270,7 @@ namespace OpenCensus.Trace.Propagation
 
             if (bestAttempt)
             {
-                if ((traceparent.Length > VersionAndTraceIdAndSpanIdLength + OptionsLength) && 
+                if ((traceparent.Length > VersionAndTraceIdAndSpanIdLength + OptionsLength) &&
                    (traceparent[VersionAndTraceIdAndSpanIdLength + OptionsLength] != '-'))
                 {
                     return false;

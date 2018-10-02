@@ -46,7 +46,8 @@ namespace OpenCensus.Exporter.ApplicationInsights
         private Task workerThread;
 
         /// <summary>
-        /// Instantiates a new instance of an exporter from Open Census to Azure Application Insights.
+        /// Initializes a new instance of the <see cref="ApplicationInsightsExporter"/> class.
+        /// This exporter allows to send Open Census data to Azure Application Insights.
         /// </summary>
         /// <param name="exportComponent">Exporter to get traces and metrics from.</param>
         /// <param name="viewManager">View manager to get stats from.</param>

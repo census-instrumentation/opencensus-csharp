@@ -29,7 +29,8 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
         private readonly PropertyFetcher stopContextFetcher = new PropertyFetcher("HttpContext");
         private readonly IPropagationComponent propagationComponent;
 
-        public HttpInListener(ITracer tracer, ISampler sampler, IPropagationComponent propagationComponent) : base("Microsoft.AspNetCore", tracer, sampler)
+        public HttpInListener(ITracer tracer, ISampler sampler, IPropagationComponent propagationComponent)
+            : base("Microsoft.AspNetCore", tracer, sampler)
         {
             this.propagationComponent = propagationComponent;
         }
@@ -47,9 +48,8 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
             var request = context.Request;
 
             var ctx = this.propagationComponent.TextFormat.Extract<HttpRequest>(
-                request, 
-                (r, name) => r.Headers[name]
-            );
+                request,
+                (r, name) => r.Headers[name]);
 
             this.Tracer.SpanBuilderWithRemoteParent("HttpIn", ctx).SetSampler(this.Sampler).StartScopedSpan();
 

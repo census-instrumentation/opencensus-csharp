@@ -106,7 +106,7 @@ namespace OpenCensus.Trace
             }
 
             /// <summary>
-            /// Adds or updates the entry for the given key. 
+            /// Adds or updates the entry for the given key.
             /// New or updated entry will be moved to the front of the list.
             /// </summary>
             /// <param name="key">Key to update value for.</param>
@@ -235,7 +235,7 @@ namespace OpenCensus.Trace
         private static bool ValidateKey(string key)
         {
             // Key is opaque string up to 256 characters printable. It MUST begin with a lowercase letter, and
-            // can only contain lowercase letters a-z, digits 0-9, underscores _, dashes -, asterisks *, 
+            // can only contain lowercase letters a-z, digits 0-9, underscores _, dashes -, asterisks *,
             // forward slashes / and @
 
             int i = 0;
@@ -248,7 +248,7 @@ namespace OpenCensus.Trace
                 return false;
             }
 
-            // before 
+            // before
             for (i = 1; i < key.Length; i++)
             {
                 char c = key[i];

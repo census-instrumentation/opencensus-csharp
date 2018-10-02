@@ -36,7 +36,8 @@ namespace OpenCensus.Collector.Dependencies.Implementation
 
         private readonly IPropagationComponent propagationComponent;
 
-        public HttpHandlerDiagnosticListener(ITracer tracer, ISampler sampler, IPropagationComponent propagationComponent) : base("HttpHandlerDiagnosticListener", tracer, sampler)
+        public HttpHandlerDiagnosticListener(ITracer tracer, ISampler sampler, IPropagationComponent propagationComponent)
+            : base("HttpHandlerDiagnosticListener", tracer, sampler)
         {
             this.propagationComponent = propagationComponent;
         }

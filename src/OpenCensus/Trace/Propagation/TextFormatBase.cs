@@ -21,7 +21,7 @@ namespace OpenCensus.Trace.Propagation
     using OpenCensus.Trace.Propagation.Implementation;
 
     /// <summary>
-    /// Text format wire context propagator. Helps to extract and inject context from textual 
+    /// Text format wire context propagator. Helps to extract and inject context from textual
     /// representation (typically http headers or metadata colleciton).
     /// </summary>
     public abstract class TextFormatBase : ITextFormat

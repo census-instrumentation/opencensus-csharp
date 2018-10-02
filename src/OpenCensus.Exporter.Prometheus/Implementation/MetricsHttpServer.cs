@@ -67,8 +67,8 @@ namespace OpenCensus.Exporter.Prometheus.Implementation
 
                                 builder = data.View.Aggregation.Match<PrometheusMetricBuilder>(
                                     (agg) => { return builder.WithType("gauge"); }, // Func<ISum, M> p0
-                                    (agg) => { return builder.WithType("counter"); }, // Func< ICount, M > p1, 
-                                    (agg) => { return builder.WithType("histogram"); }, // Func<IMean, M> p2, 
+                                    (agg) => { return builder.WithType("counter"); }, // Func< ICount, M > p1,
+                                    (agg) => { return builder.WithType("histogram"); }, // Func<IMean, M> p2,
                                     (agg) => { return builder.WithType("histogram"); }, // Func< IDistribution, M > p3,
                                     (agg) => { return builder.WithType("gauge"); }, // Func<ILastValue, M> p4,
                                     (agg) => { return builder.WithType("gauge"); }); // Func< IAggregation, M > p6);

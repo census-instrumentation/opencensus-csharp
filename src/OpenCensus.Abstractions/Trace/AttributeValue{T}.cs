@@ -101,7 +101,7 @@ namespace OpenCensus.Trace
             {
                 string value = this.Value as string;
                 return stringFunction(value);
-            } 
+            }
             else if (typeof(T) == typeof(long))
             {
                 long val = (long)(object)this.Value;
