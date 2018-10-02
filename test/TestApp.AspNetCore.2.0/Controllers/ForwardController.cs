@@ -37,7 +37,7 @@ namespace TestApp.AspNetCore._2._0.Controllers
             {
                 HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, url)
                 {
-                    Content = new StringContent(JsonConvert.SerializeObject(arguments), Encoding.UTF8, "application/json")
+                    Content = new StringContent(JsonConvert.SerializeObject(arguments), Encoding.UTF8, "application/json"),
                 };
                 var response = await httpClient.SendAsync(request);
                 return await response.Content.ReadAsStringAsync();

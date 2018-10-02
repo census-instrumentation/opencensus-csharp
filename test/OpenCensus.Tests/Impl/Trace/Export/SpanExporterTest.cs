@@ -43,8 +43,8 @@ namespace OpenCensus.Trace.Export.Test
 
         public SpanExporterTest()
         {
-            sampledSpanContext = SpanContext.Create(TraceId.GenerateRandomId(random), SpanId.GenerateRandomId(random), TraceOptions.Builder().SetIsSampled(true).Build());
-            notSampledSpanContext = SpanContext.Create(TraceId.GenerateRandomId(random), SpanId.GenerateRandomId(random), TraceOptions.Default);
+            sampledSpanContext = SpanContext.Create(TraceId.GenerateRandomId(random), SpanId.GenerateRandomId(random), TraceOptions.Builder().SetIsSampled(true).Build(), Tracestate.Empty);
+            notSampledSpanContext = SpanContext.Create(TraceId.GenerateRandomId(random), SpanId.GenerateRandomId(random), TraceOptions.Default, Tracestate.Empty);
             startEndHandler = new StartEndHandler(spanExporter, runningSpanStore, null, new SimpleEventQueue());
 
             spanExporter.RegisterHandler("test.service", serviceHandler);

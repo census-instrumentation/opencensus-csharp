@@ -90,7 +90,8 @@ namespace OpenCensus.Collector.AspNetCore.Tests
             tf.Setup(m => m.Extract<HttpRequest>(It.IsAny<HttpRequest>(), It.IsAny<Func<HttpRequest, string, IEnumerable<string>>>())).Returns(SpanContext.Create(
                 expectedTraceId,
                 expectedSpanId,
-                TraceOptions.Default
+                TraceOptions.Default,
+                Tracestate.Empty
                 ));
 
             var propagationComponent = new Mock<IPropagationComponent>();

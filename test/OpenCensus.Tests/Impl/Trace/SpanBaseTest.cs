@@ -36,12 +36,12 @@ namespace OpenCensus.Trace.Test
                 SpanContext.Create(
                     TraceId.GenerateRandomId(random),
                     SpanId.GenerateRandomId(random),
-                    TraceOptions.Builder().SetIsSampled(true).Build());
+                    TraceOptions.Builder().SetIsSampled(true).Build(), Tracestate.Empty);
             notSampledSpanContext =
                 SpanContext.Create(
                     TraceId.GenerateRandomId(random),
                     SpanId.GenerateRandomId(random),
-                    TraceOptions.Default);
+                    TraceOptions.Default, Tracestate.Empty);
             spanOptions = SpanOptions.RECORD_EVENTS;
         }
 

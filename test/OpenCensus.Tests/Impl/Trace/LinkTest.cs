@@ -30,7 +30,7 @@ namespace OpenCensus.Trace.Test
 
         public LinkTest()
         {
-            spanContext = SpanContext.Create(TraceId.GenerateRandomId(random), SpanId.GenerateRandomId(random), TraceOptions.Default); ;
+            spanContext = SpanContext.Create(TraceId.GenerateRandomId(random), SpanId.GenerateRandomId(random), TraceOptions.Default, Tracestate.Empty); ;
             attributesMap.Add("MyAttributeKey0", AttributeValue<string>.Create("MyStringAttribute"));
             attributesMap.Add("MyAttributeKey1", AttributeValue<long>.Create(10));
             attributesMap.Add("MyAttributeKey2", AttributeValue<bool>.Create(true));

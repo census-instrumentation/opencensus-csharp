@@ -31,6 +31,7 @@ namespace OpenCensus.Collector.Dependencies.Tests
             private readonly Task httpListenerTask;
             private readonly HttpListener listener;
             private readonly CancellationTokenSource cts;
+            private readonly AutoResetEvent initialized = new AutoResetEvent(false);
 
             public RunningServer(Action<HttpListenerContext> action, string host, int port)
             {
@@ -40,26 +41,32 @@ namespace OpenCensus.Collector.Dependencies.Tests
                 CancellationToken token = this.cts.Token;
 
                 this.listener.Prefixes.Add($"http://{host}:{port}/");
+                this.listener.Start();
+
                 this.httpListenerTask = new Task(() =>
                 {
-                    this.listener.Start();
-                    var ctxTask = this.listener.GetContextAsync();
-
-                    try
+                    while (!token.IsCancellationRequested)
                     {
-                        ctxTask.Wait(token);
+                        var ctxTask = this.listener.GetContextAsync();
 
-                        if (ctxTask.Status == TaskStatus.RanToCompletion)
+                        this.initialized.Set();
+
+                        try
                         {
-                            action(ctxTask.Result);
+                            ctxTask.Wait(token);
+
+                            if (ctxTask.Status == TaskStatus.RanToCompletion)
+                            {
+                                action(ctxTask.Result);
+                            }
                         }
-                    }
-                    catch (OperationCanceledException)
-                    {
-                    }
-                    catch (Exception ex)
-                    {
-                        Assert.True(false, ex.ToString());
+                        catch (OperationCanceledException)
+                        {
+                        }
+                        catch (Exception ex)
+                        {
+                            Assert.True(false, ex.ToString());
+                        }
                     }
                 });
             }
@@ -67,12 +74,20 @@ namespace OpenCensus.Collector.Dependencies.Tests
             public void Start()
             {
                 this.httpListenerTask.Start();
+                this.initialized.WaitOne();
             }
 
             public void Dispose()
             {
-                this.listener?.Stop();
-                cts.Cancel();
+                try
+                {
+                    this.listener?.Stop();
+                    cts.Cancel();
+                }
+                catch (ObjectDisposedException)
+                {
+                    // swallow this exception just in case
+                }
             }
         }
 

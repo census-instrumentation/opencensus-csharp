@@ -35,7 +35,8 @@ namespace OpenCensus.Trace.Test
                 SpanContext.Create(
                     TraceId.GenerateRandomId(random),
                     SpanId.GenerateRandomId(random),
-                    TraceOptions.Builder().SetIsSampled(true).Build());
+                    TraceOptions.Builder().SetIsSampled(true).Build(),
+                    Tracestate.Empty);
 
             spanOptions = SpanOptions.RECORD_EVENTS;
             var mockSpan = new Mock<NoopSpan>(spanContext, spanOptions) { CallBase = true };

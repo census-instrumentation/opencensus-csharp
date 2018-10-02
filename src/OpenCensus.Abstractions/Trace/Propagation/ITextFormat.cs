@@ -20,7 +20,7 @@ namespace OpenCensus.Trace.Propagation
     using System.Collections.Generic;
 
     /// <summary>
-    /// Text format wire context propagator. Helps to extract and inject context from textual 
+    /// Text format wire context propagator. Helps to extract and inject context from textual
     /// representation (typically http headers or metadata colleciton).
     /// </summary>
     public interface ITextFormat
@@ -30,7 +30,7 @@ namespace OpenCensus.Trace.Propagation
         ///   * allow pre-allocation of fields, especially in systems like gRPC Metadata
         ///   * allow a single-pass over an iterator (ex OpenTracing has no getter in TextMap).
         /// </summary>
-        IList<string> Fields { get; }
+        ISet<string> Fields { get; }
 
         /// <summary>
         /// Injects textual representation of span context to transmit over the wire.

@@ -61,6 +61,5 @@ namespace OpenCensus.Collector.Implementation.Common
 
             // TODO: gather exception information
         }
-
     }
 }

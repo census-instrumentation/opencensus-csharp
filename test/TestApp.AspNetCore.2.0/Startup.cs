@@ -19,9 +19,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OpenCensus.Collector.AspNetCore;
+using OpenCensus.Collector.Dependencies;
 using OpenCensus.Trace;
 using OpenCensus.Trace.Propagation;
 using OpenCensus.Trace.Sampler;
+using System.Net.Http;
 
 namespace TestApp.AspNetCore._2._0
 {
@@ -38,12 +40,15 @@ namespace TestApp.AspNetCore._2._0
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            
+            services.AddSingleton<HttpClient>();
+
             services.AddSingleton<ITracer>(Tracing.Tracer);
             services.AddSingleton<ISampler>(Samplers.AlwaysSample);
             services.AddSingleton<RequestsCollectorOptions>(new RequestsCollectorOptions());
             services.AddSingleton<RequestsCollector>();
-            services.AddSingleton<IPropagationComponent>(PropagationComponentBase.NoopPropagationComponent);
+            services.AddSingleton<DependenciesCollectorOptions>(new DependenciesCollectorOptions());
+            services.AddSingleton<DependenciesCollector>();
+            services.AddSingleton<IPropagationComponent>(new DefaultPropagationComponent());
 
         }
 
@@ -57,6 +62,7 @@ namespace TestApp.AspNetCore._2._0
 
             app.UseMvc();
             var collector = app.ApplicationServices.GetService<RequestsCollector>();
+            var depCollector = app.ApplicationServices.GetService<DependenciesCollector>();
         }
     }
 }

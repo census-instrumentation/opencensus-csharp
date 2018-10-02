@@ -38,7 +38,7 @@ namespace OpenCensus.Exporter.Prometheus
         private Task workerThread;
 
         /// <summary>
-        /// Instantiates a new instance of an exporter from Open Census to Prometheus.
+        /// Initializes a new instance of the <see cref="PrometheusExporter"/> class.
         /// </summary>
         /// <param name="options">Options for the exporter.</param>
         /// <param name="viewManager">View manager to get stats from.</param>

@@ -31,7 +31,7 @@ namespace OpenCensus.Collector.AspNetCore
         private readonly DiagnosticSourceSubscriber diagnosticSourceSubscriber;
 
         /// <summary>
-        /// Dependencies collector.
+        /// Initializes a new instance of the <see cref="RequestsCollector"/> class.
         /// </summary>
         /// <param name="options">Configuration options for dependencies collector.</param>
         /// <param name="tracer">Tracer to record traced with.</param>
@@ -41,8 +41,8 @@ namespace OpenCensus.Collector.AspNetCore
         {
             this.diagnosticSourceSubscriber = new DiagnosticSourceSubscriber(
                 new Dictionary<string, Func<ITracer, ISampler, ListenerHandler>>()
-                { {"Microsoft.AspNetCore", (t, s) => new HttpInListener(t, s, propagationComponent) } }, 
-                tracer, 
+                { { "Microsoft.AspNetCore", (t, s) => new HttpInListener(t, s, propagationComponent) } },
+                tracer,
                 sampler);
             this.diagnosticSourceSubscriber.Subscribe();
         }

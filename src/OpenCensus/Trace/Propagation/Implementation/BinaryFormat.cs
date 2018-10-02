@@ -72,7 +72,7 @@ namespace OpenCensus.Trace.Propagation.Implementation
                     traceOptions = TraceOptions.FromBytes(bytes, pos + IdSize);
                 }
 
-                return SpanContext.Create(traceId, spanId, traceOptions);
+                return SpanContext.Create(traceId, spanId, traceOptions, Tracestate.Empty);
             }
             catch (Exception e)
             {

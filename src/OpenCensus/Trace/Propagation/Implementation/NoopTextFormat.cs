@@ -25,10 +25,7 @@ namespace OpenCensus.Trace.Propagation.Implementation
         {
         }
 
-        public override IList<string> Fields
-        {
-            get { return new List<string>(); }
-        }
+        public override ISet<string> Fields => new HashSet<string>();
 
         public override void Inject<T>(ISpanContext spanContext, T carrier, Action<T, string, string> setter)
         {
