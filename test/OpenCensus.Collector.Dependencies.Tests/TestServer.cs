@@ -31,6 +31,7 @@ namespace OpenCensus.Collector.Dependencies.Tests
             private readonly Task httpListenerTask;
             private readonly HttpListener listener;
             private readonly CancellationTokenSource cts;
+            private readonly AutoResetEvent initialized = new AutoResetEvent(false);
 
             public RunningServer(Action<HttpListenerContext> action, string host, int port)
             {
@@ -40,13 +41,15 @@ namespace OpenCensus.Collector.Dependencies.Tests
                 CancellationToken token = this.cts.Token;
 
                 this.listener.Prefixes.Add($"http://{host}:{port}/");
+                this.listener.Start();
+
                 this.httpListenerTask = new Task(() =>
                 {
-                    this.listener.Start();
-
                     while (!token.IsCancellationRequested)
                     {
                         var ctxTask = this.listener.GetContextAsync();
+
+                        this.initialized.Set();
 
                         try
                         {
@@ -71,6 +74,7 @@ namespace OpenCensus.Collector.Dependencies.Tests
             public void Start()
             {
                 this.httpListenerTask.Start();
+                this.initialized.WaitOne();
             }
 
             public void Dispose()
