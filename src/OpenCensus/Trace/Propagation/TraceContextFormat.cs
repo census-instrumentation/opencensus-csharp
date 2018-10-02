@@ -27,6 +27,7 @@ namespace OpenCensus.Trace.Propagation
     /// </summary>
     public class TraceContextFormat : TextFormatBase
     {
+        private static readonly int VersionLength = "00".Length;
         private static readonly int VersionPrefixIdLength = "00-".Length;
         private static readonly int TraceIdLength = "0af7651916cd43dd8448eb211c80319c".Length;
         private static readonly int VersionAndTraceIdLength = "00-0af7651916cd43dd8448eb211c80319c-".Length;
@@ -42,30 +43,27 @@ namespace OpenCensus.Trace.Propagation
         {
             try
             {
-                // from https://github.com/w3c/distributed-tracing/blob/master/trace_context/HTTP_HEADER_FORMAT.md
-                // traceparent: 00-0af7651916cd43dd8448eb211c80319c-00f067aa0ba902b7-01
-
-                var traceparent = getter(carrier, "traceparent")?.FirstOrDefault();
+                var traceparentCollection = getter(carrier, "traceparent");
                 var tracestateCollection = getter(carrier, "tracestate");
 
-                if (traceparent == null)
+                if (traceparentCollection.Count() > 1)
+                {
+                    // multiple traceparent are not allowed
+                    return null;
+                }
+
+                var traceparent = traceparentCollection?.FirstOrDefault();
+                var traceparentParsed = this.TryExtractTraceparent(traceparent, out ITraceId traceId, out ISpanId spanId, out TraceOptions traceoptions, out bool bestAttempt);
+
+                if (!traceparentParsed)
                 {
                     return null;
                 }
 
-                // TODO: validate version prefix
-                var traceId = TraceId.FromBytes(Arrays.StringToByteArray(traceparent, VersionPrefixIdLength, TraceIdLength));
-
-                // TODO: validate span delimeter
-                var spanId = SpanId.FromBytes(Arrays.StringToByteArray(traceparent, VersionAndTraceIdLength, SpanIdLength));
-
-                // TODO: validate options delimeter
-                var optionsArray = Arrays.StringToByteArray(traceparent, VersionAndTraceIdAndSpanIdLength, OptionsLength);
-
-                var options = TraceOptions.Default;
-                if ((optionsArray[0] | 1) == 1)
+                if (bestAttempt)
                 {
-                    options = TraceOptions.Builder().SetIsSampled(true).Build();
+                    // should we fix up trace id, span id, etc.
+                    // or span builder will do it?
                 }
 
                 var tracestateResult = Tracestate.Empty;
@@ -96,8 +94,8 @@ namespace OpenCensus.Trace.Propagation
                                 valueEndIdx = valueEndIdx == -1 ? length : valueEndIdx;
                                 entries.Add(
                                     new KeyValuePair<string, string>(
-                                        tracestate.Substring(keyStartIdx, keyEndIdx - keyStartIdx).Trim(),
-                                        tracestate.Substring(valueStartIdx, valueEndIdx - valueStartIdx).Trim()));
+                                        tracestate.Substring(keyStartIdx, keyEndIdx - keyStartIdx).TrimStart(),
+                                        tracestate.Substring(valueStartIdx, valueEndIdx - valueStartIdx).TrimEnd()));
                                 keyStartIdx = valueEndIdx + 1;
                             }
                         }
@@ -119,7 +117,7 @@ namespace OpenCensus.Trace.Propagation
                     // TODO: logging
                 }
 
-                return SpanContext.Create(traceId, spanId, options, tracestateResult);
+                return SpanContext.Create(traceId, spanId, traceoptions, tracestateResult);
             }
             catch (Exception ex)
             {
@@ -143,8 +141,6 @@ namespace OpenCensus.Trace.Propagation
 
             foreach (var entry in spanContext.Tracestate.Entries)
             {
-                sb.Append(entry.Key).Append("=").Append(entry.Value);
-
                 if (isFirst)
                 {
                     isFirst = false;
@@ -153,12 +149,100 @@ namespace OpenCensus.Trace.Propagation
                 {
                     sb.Append(",");
                 }
+
+                sb.Append(entry.Key).Append("=").Append(entry.Value);
             }
 
             if (sb.Length > 0)
             {
                 setter(carrier, "tracestate", sb.ToString());
             }
+        }
+
+        private bool TryExtractTraceparent(string traceparent, out ITraceId traceId, out ISpanId spanId, out TraceOptions traceoptions, out bool bestAttempt)
+        {
+            // from https://github.com/w3c/distributed-tracing/blob/master/trace_context/HTTP_HEADER_FORMAT.md
+            // traceparent: 00-0af7651916cd43dd8448eb211c80319c-00f067aa0ba902b7-01
+
+            traceId = TraceId.Invalid;
+            spanId = SpanId.Invalid;
+            traceoptions = TraceOptions.Default;
+            bestAttempt = false;
+
+            if (traceparent == null)
+            {
+                return false;
+            }
+
+            // if version does not end with delimeter
+            if (traceparent[VersionPrefixIdLength -1] != '-')
+            {
+                return false;
+            }
+
+            // or version is not a hex (will throw)
+            var versionArray = Arrays.StringToByteArray(traceparent, 0, VersionLength);
+
+            if (versionArray[0] >= 1)
+            {
+                // expected version is 01
+                // for higher versions - best attempt parsing of trace id, span id, etc.
+                bestAttempt = true;
+            }
+
+            if (traceparent[VersionAndTraceIdLength - 1] != '-')
+            {
+                return bestAttempt;
+            }
+
+            try
+            {
+                traceId = TraceId.FromBytes(Arrays.StringToByteArray(traceparent, VersionPrefixIdLength, TraceIdLength));
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                // it's ok to still parse tracestate
+                return bestAttempt;
+            }
+
+            if (traceparent[VersionAndTraceIdAndSpanIdLength - 1] != '-')
+            {
+                return bestAttempt;
+            }
+
+            try
+            {
+                spanId = SpanId.FromBytes(Arrays.StringToByteArray(traceparent, VersionAndTraceIdLength, SpanIdLength));
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                // it's ok to still parse tracestate
+                return bestAttempt;
+            }
+
+            byte[] optionsArray;
+
+            try
+            {
+                optionsArray = Arrays.StringToByteArray(traceparent, VersionAndTraceIdAndSpanIdLength, OptionsLength);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                // it's ok to still parse tracestate
+                return bestAttempt;
+            }
+
+            if ((optionsArray[0] | 1) == 1)
+            {
+                traceoptions = TraceOptions.Builder().SetIsSampled(true).Build();
+            }
+
+            if (traceparent.Length != VersionAndTraceIdAndSpanIdLength + OptionsLength)
+            {
+                return bestAttempt;
+            }
+
+            return true;
         }
     }
 }

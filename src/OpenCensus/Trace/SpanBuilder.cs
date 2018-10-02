@@ -223,7 +223,7 @@ namespace OpenCensus.Trace
             }
 
             ISpan span = Span.StartSpan(
-                        SpanContext.Create(traceId, spanId, traceOptions, Tracestate.Empty),
+                        SpanContext.Create(traceId, spanId, traceOptions, parent.Tracestate),
                         spanOptions,
                         name,
                         parentSpanId,
