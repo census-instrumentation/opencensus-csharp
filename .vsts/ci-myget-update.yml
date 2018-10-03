@@ -41,7 +41,7 @@ steps:
   displayName: test
   inputs:
     command: "test"
-    projects: "test/**/*.csproj"
+    projects: "test/**/*.Tests.csproj"
     arguments: "--configuration Release"
 
 - task: PublishTestResults@2

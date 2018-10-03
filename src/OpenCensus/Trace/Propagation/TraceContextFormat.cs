@@ -72,8 +72,7 @@ namespace OpenCensus.Trace.Propagation
                         {
                             if (string.IsNullOrWhiteSpace(tracestate))
                             {
-                                discardTracestate = true;
-                                break;
+                                continue;
                             }
 
                             // tracestate: rojo=00-0af7651916cd43dd8448eb211c80319c-00f067aa0ba902b7-01,congo=BleGNlZWRzIHRohbCBwbGVhc3VyZS4
@@ -81,6 +80,24 @@ namespace OpenCensus.Trace.Propagation
                             var length = tracestate.Length;
                             while (keyStartIdx < length)
                             {
+                                // first skip any prefix commas and OWS
+                                var c = tracestate[keyStartIdx];
+                                while (c == ' ' || c == '\t' || c == ',')
+                                {
+                                    keyStartIdx++;
+                                    if (keyStartIdx == length)
+                                    {
+                                        break;
+                                    }
+
+                                    c = tracestate[keyStartIdx];
+                                }
+
+                                if (keyStartIdx == length)
+                                {
+                                    break;
+                                }
+
                                 var keyEndIdx = tracestate.IndexOf("=", keyStartIdx);
 
                                 if (keyEndIdx == -1)
