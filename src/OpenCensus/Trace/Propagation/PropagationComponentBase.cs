@@ -16,6 +16,8 @@
 
 namespace OpenCensus.Trace.Propagation
 {
+    using OpenCensus.Trace.Propagation.Implementation;
+
     public abstract class PropagationComponentBase : IPropagationComponent
     {
         private static readonly IPropagationComponent NoopPropagationComponentInstance = new NoopPropagationComponent();

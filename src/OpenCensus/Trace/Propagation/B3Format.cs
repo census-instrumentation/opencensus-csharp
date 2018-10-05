@@ -18,14 +18,18 @@ namespace OpenCensus.Trace.Propagation
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
+    /// <summary>
+    /// B3 text propagator. See https://github.com/openzipkin/b3-propagation for the specification.
+    /// </summary>
     public sealed class B3Format : TextFormatBase
     {
-        public const string XB3TraceId = "X-B3-TraceId";
-        public const string XB3SpanId = "X-B3-SpanId";
-        public const string XB3ParentSpanId = "X-B3-ParentSpanId";
-        public const string XB3Sampled = "X-B3-Sampled";
-        public const string XB3Flags = "X-B3-Flags";
+        internal const string XB3TraceId = "X-B3-TraceId";
+        internal const string XB3SpanId = "X-B3-SpanId";
+        internal const string XB3ParentSpanId = "X-B3-ParentSpanId";
+        internal const string XB3Sampled = "X-B3-Sampled";
+        internal const string XB3Flags = "X-B3-Flags";
 
         // Used as the upper TraceId.SIZE hex characters of the traceID. B3-propagation used to send
         // TraceId.SIZE hex characters (8-bytes traceId) in the past.
@@ -37,17 +41,19 @@ namespace OpenCensus.Trace.Propagation
         // "Debug" sampled value.
         internal const string FlagsValue = "1";
 
-        private static readonly List<string> FIELDS = new List<string>() { XB3TraceId, XB3SpanId, XB3ParentSpanId, XB3Sampled, XB3Flags };
+        private static readonly HashSet<string> AllFields = new HashSet<string>() { XB3TraceId, XB3SpanId, XB3ParentSpanId, XB3Sampled, XB3Flags };
 
-        public override IList<string> Fields
+        /// <inheritdoc/>
+        public override ISet<string> Fields
         {
             get
             {
-                return FIELDS.AsReadOnly();
+                return AllFields;
             }
         }
 
-        public override ISpanContext Extract<T>(T carrier, IGetter<T> getter)
+        /// <inheritdoc/>
+        public override ISpanContext Extract<T>(T carrier, Func<T, string, IEnumerable<string>> getter)
         {
             if (carrier == null)
             {
@@ -62,7 +68,7 @@ namespace OpenCensus.Trace.Propagation
             try
             {
                 ITraceId traceId;
-                string traceIdStr = getter.Get(carrier, XB3TraceId);
+                string traceIdStr = getter(carrier, XB3TraceId)?.FirstOrDefault();
                 if (traceIdStr != null)
                 {
                     if (traceIdStr.Length == TraceId.Size)
@@ -79,7 +85,7 @@ namespace OpenCensus.Trace.Propagation
                 }
 
                 ISpanId spanId;
-                string spanIdStr = getter.Get(carrier, XB3SpanId);
+                string spanIdStr = getter(carrier, XB3SpanId)?.FirstOrDefault();
                 if (spanIdStr != null)
                 {
                     spanId = SpanId.FromLowerBase16(spanIdStr);
@@ -90,13 +96,13 @@ namespace OpenCensus.Trace.Propagation
                 }
 
                 TraceOptions traceOptions = TraceOptions.Default;
-                if (SampledValue.Equals(getter.Get(carrier, XB3Sampled))
-                    || FlagsValue.Equals(getter.Get(carrier, XB3Flags)))
+                if (SampledValue.Equals(getter(carrier, XB3Sampled)?.FirstOrDefault())
+                    || FlagsValue.Equals(getter(carrier, XB3Flags)?.FirstOrDefault()))
                 {
                     traceOptions = TraceOptions.Builder().SetIsSampled(true).Build();
                 }
 
-                return SpanContext.Create(traceId, spanId, traceOptions);
+                return SpanContext.Create(traceId, spanId, traceOptions, Tracestate.Empty);
             }
             catch (Exception e)
             {
@@ -104,7 +110,8 @@ namespace OpenCensus.Trace.Propagation
             }
         }
 
-        public override void Inject<T>(ISpanContext spanContext, T carrier, ISetter<T> setter)
+        /// <inheritdoc/>
+        public override void Inject<T>(ISpanContext spanContext, T carrier, Action<T, string, string> setter)
         {
             if (spanContext == null)
             {
@@ -121,11 +128,11 @@ namespace OpenCensus.Trace.Propagation
                 throw new ArgumentNullException(nameof(setter));
             }
 
-            setter.Put(carrier, XB3TraceId, spanContext.TraceId.ToLowerBase16());
-            setter.Put(carrier, XB3SpanId, spanContext.SpanId.ToLowerBase16());
+            setter(carrier, XB3TraceId, spanContext.TraceId.ToLowerBase16());
+            setter(carrier, XB3SpanId, spanContext.SpanId.ToLowerBase16());
             if (spanContext.TraceOptions.IsSampled)
             {
-                setter.Put(carrier, XB3Sampled, SampledValue);
+                setter(carrier, XB3Sampled, SampledValue);
             }
         }
     }

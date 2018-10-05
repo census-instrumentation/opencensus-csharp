@@ -38,12 +38,13 @@ namespace OpenCensus.Exporter.Zipkin
         private TraceExporterHandler handler;
 
         /// <summary>
-        /// Constructs an exporter from Open Census traces to Zipkin.
+        /// Initializes a new instance of the <see cref="ZipkinTraceExporter"/> class.
+        /// This exporter sends Open Census traces to Zipkin.
         /// </summary>
         /// <param name="options">Zipkin exporter configuration options.</param>
         /// <param name="exportComponent">Exporter to get traces from.</param>
         /// <param name="client">Http client to use to upload telemetry.
-        /// For local development with invalid certificates use code like this: 
+        /// For local development with invalid certificates use code like this:
         /// new HttpClient(new HttpClientHandler() { ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator }).
         /// </param>
         public ZipkinTraceExporter(ZipkinTraceExporterOptions options, IExportComponent exportComponent, HttpClient client = null)

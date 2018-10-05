@@ -16,11 +16,12 @@
 
 namespace OpenCensus.Trace.Propagation.Test
 {
+    using OpenCensus.Trace.Propagation.Implementation;
     using Xunit;
 
     public class PropagationComponentTest
     {
-        private readonly PropagationComponent propagationComponent = new PropagationComponent();
+        private readonly DefaultPropagationComponent propagationComponent = new DefaultPropagationComponent();
 
         [Fact]
         public void ImplementationOfBinary()
@@ -31,7 +32,7 @@ namespace OpenCensus.Trace.Propagation.Test
         [Fact]
         public void ImplementationOfB3Format()
         {
-            Assert.IsType<B3Format>(propagationComponent.TextFormat);
+            Assert.IsType<TraceContextFormat>(propagationComponent.TextFormat);
         }
     }
 }

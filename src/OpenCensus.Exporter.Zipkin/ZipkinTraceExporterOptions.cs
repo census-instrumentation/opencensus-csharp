@@ -24,7 +24,7 @@ namespace OpenCensus.Exporter.Zipkin
     public sealed class ZipkinTraceExporterOptions
     {
         /// <summary>
-        /// Gets or sets Zipkin endpoint address. See https://zipkin.io/zipkin-api/#/default/post_spans. 
+        /// Gets or sets Zipkin endpoint address. See https://zipkin.io/zipkin-api/#/default/post_spans.
         /// Typically https://zipkin-server-name:9411/api/v2/spans.
         /// </summary>
         public Uri Endpoint { get; set; } = new Uri("http://localhost:9411/api/v2/spans");

@@ -6,10 +6,8 @@
     using OpenCensus.Stats.Measures;
     using OpenCensus.Tags;
     using OpenCensus.Trace;
-    using OpenCensus.Trace.Sampler;
     using System;
     using System.Collections.Generic;
-    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
 

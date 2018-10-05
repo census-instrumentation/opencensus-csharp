@@ -403,38 +403,6 @@ namespace OpenCensus.Trace
             this.startEndHandler.OnEnd(this);
         }
 
-        internal static ISpan StartSpan(
-                ISpanContext context,
-                SpanOptions options,
-                string name,
-                ISpanId parentSpanId,
-                bool? hasRemoteParent,
-                ITraceParams traceParams,
-                IStartEndHandler startEndHandler,
-                ITimestampConverter timestampConverter,
-                IClock clock)
-        {
-            var span = new Span(
-               context,
-               options,
-               name,
-               parentSpanId,
-               hasRemoteParent,
-               traceParams,
-               startEndHandler,
-               timestampConverter,
-               clock);
-
-            // Call onStart here instead of calling in the constructor to make sure the span is completely
-            // initialized.
-            if (span.Options.HasFlag(SpanOptions.RECORD_EVENTS))
-            {
-                startEndHandler.OnStart(span);
-            }
-
-            return span;
-        }
-
         // public virtual void AddMessageEvent(MessageEventBase messageEvent)
         // {
         // Default implementation by invoking addNetworkEvent() so that any existing derived classes,
@@ -470,6 +438,38 @@ namespace OpenCensus.Trace
                 this.hasBeenEnded ? this.StatusWithDefault : null,
                 this.Kind.HasValue ? this.Kind.Value : SpanKind.Client,
                 this.hasBeenEnded ? this.timestampConverter.ConvertNanoTime(this.endNanoTime) : null);
+        }
+
+        internal static ISpan StartSpan(
+                        ISpanContext context,
+                        SpanOptions options,
+                        string name,
+                        ISpanId parentSpanId,
+                        bool? hasRemoteParent,
+                        ITraceParams traceParams,
+                        IStartEndHandler startEndHandler,
+                        ITimestampConverter timestampConverter,
+                        IClock clock)
+        {
+            var span = new Span(
+               context,
+               options,
+               name,
+               parentSpanId,
+               hasRemoteParent,
+               traceParams,
+               startEndHandler,
+               timestampConverter,
+               clock);
+
+            // Call onStart here instead of calling in the constructor to make sure the span is completely
+            // initialized.
+            if (span.Options.HasFlag(SpanOptions.RECORD_EVENTS))
+            {
+                startEndHandler.OnStart(span);
+            }
+
+            return span;
         }
 
         // public abstract void AddLink(LinkBase link);

@@ -1,4 +1,4 @@
-﻿// <copyright file="NoopBinaryFormat.cs" company="OpenCensus Authors">
+﻿// <copyright file="DefaultPropagationComponent.cs" company="OpenCensus Authors">
 // Copyright 2018, OpenCensus Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,28 +16,32 @@
 
 namespace OpenCensus.Trace.Propagation
 {
-    using System;
+    using OpenCensus.Trace.Propagation.Implementation;
 
-    internal class NoopBinaryFormat : IBinaryFormat
+    /// <summary>
+    /// Default propagation used by Open Census.
+    /// </summary>
+    public sealed class DefaultPropagationComponent : PropagationComponentBase
     {
-        public ISpanContext FromByteArray(byte[] bytes)
-        {
-            if (bytes == null)
-            {
-                throw new ArgumentNullException(nameof(bytes));
-            }
+        private readonly BinaryFormat binaryFormat = new BinaryFormat();
+        private readonly TraceContextFormat textFormat = new TraceContextFormat();
 
-            return SpanContext.Invalid;
+        /// <inheritdoc/>
+        public override IBinaryFormat BinaryFormat
+        {
+            get
+            {
+                return this.binaryFormat;
+            }
         }
 
-        public byte[] ToByteArray(ISpanContext spanContext)
+        /// <inheritdoc/>
+        public override ITextFormat TextFormat
         {
-            if (spanContext == null)
+            get
             {
-                throw new ArgumentNullException(nameof(spanContext));
+                return this.textFormat;
             }
-
-            return new byte[0];
         }
     }
 }

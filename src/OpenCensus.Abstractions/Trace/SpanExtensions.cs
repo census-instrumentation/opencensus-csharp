@@ -44,7 +44,7 @@ namespace OpenCensus.Trace
         }
 
         /// <summary>
-        /// Helper method that populates span properties from http method according 
+        /// Helper method that populates span properties from http method according
         /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md
         /// </summary>
         /// <param name="span">Span to fill out.</param>
@@ -57,7 +57,7 @@ namespace OpenCensus.Trace
         }
 
         /// <summary>
-        /// Helper method that populates span properties from http status code according 
+        /// Helper method that populates span properties from http status code according
         /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md
         /// </summary>
         /// <param name="span">Span to fill out.</param>
@@ -70,7 +70,7 @@ namespace OpenCensus.Trace
         }
 
         /// <summary>
-        /// Helper method that populates span properties from http user agent according 
+        /// Helper method that populates span properties from http user agent according
         /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md
         /// </summary>
         /// <param name="span">Span to fill out.</param>
@@ -109,7 +109,7 @@ namespace OpenCensus.Trace
         }
 
         /// <summary>
-        /// Helper method that populates span properties from url path according 
+        /// Helper method that populates span properties from url path according
         /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md
         /// </summary>
         /// <param name="span">Span to fill out.</param>
@@ -122,7 +122,7 @@ namespace OpenCensus.Trace
         }
 
         /// <summary>
-        /// Helper method that populates span properties from size according 
+        /// Helper method that populates span properties from size according
         /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md
         /// </summary>
         /// <param name="span">Span to fill out.</param>
@@ -135,7 +135,7 @@ namespace OpenCensus.Trace
         }
 
         /// <summary>
-        /// Helper method that populates span properties from request size according 
+        /// Helper method that populates span properties from request size according
         /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md
         /// </summary>
         /// <param name="span">Span to fill out.</param>
@@ -217,7 +217,7 @@ namespace OpenCensus.Trace
         }
 
         /// <summary>
-        /// Helper method that populates span properties from http status code according 
+        /// Helper method that populates span properties from http status code according
         /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md
         /// </summary>
         /// <param name="span">Span to fill out.</param>

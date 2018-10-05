@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-namespace OpenCensus.Trace.Propagation
+namespace OpenCensus.Trace.Propagation.Implementation
 {
     using System;
 
@@ -72,7 +72,7 @@ namespace OpenCensus.Trace.Propagation
                     traceOptions = TraceOptions.FromBytes(bytes, pos + IdSize);
                 }
 
-                return SpanContext.Create(traceId, spanId, traceOptions);
+                return SpanContext.Create(traceId, spanId, traceOptions, Tracestate.Empty);
             }
             catch (Exception e)
             {

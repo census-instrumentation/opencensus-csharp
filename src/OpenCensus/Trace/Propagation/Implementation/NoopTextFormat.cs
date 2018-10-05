@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-namespace OpenCensus.Trace.Propagation
+namespace OpenCensus.Trace.Propagation.Implementation
 {
     using System;
     using System.Collections.Generic;
@@ -25,12 +25,9 @@ namespace OpenCensus.Trace.Propagation
         {
         }
 
-        public override IList<string> Fields
-        {
-            get { return new List<string>(); }
-        }
+        public override ISet<string> Fields => new HashSet<string>();
 
-        public override void Inject<T>(ISpanContext spanContext, T carrier, ISetter<T> setter)
+        public override void Inject<T>(ISpanContext spanContext, T carrier, Action<T, string, string> setter)
         {
             if (spanContext == null)
             {
@@ -48,7 +45,7 @@ namespace OpenCensus.Trace.Propagation
             }
         }
 
-        public override ISpanContext Extract<T>(T carrier, IGetter<T> getter)
+        public override ISpanContext Extract<T>(T carrier, Func<T, string, IEnumerable<string>> getter)
         {
             if (carrier == null)
             {

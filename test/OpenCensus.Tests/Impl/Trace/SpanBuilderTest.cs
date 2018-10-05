@@ -141,7 +141,7 @@ namespace OpenCensus.Trace.Test
                 SpanContext.Create(
                     TraceId.GenerateRandomId(randomHandler),
                     SpanId.GenerateRandomId(randomHandler),
-                    TraceOptions.Default);
+                    TraceOptions.Default, Tracestate.Empty);
             ISpan span =
                 SpanBuilder.CreateWithRemoteParent(SPAN_NAME, spanContext, spanBuilderOptions)
                     .StartSpan();
@@ -306,7 +306,7 @@ namespace OpenCensus.Trace.Test
                         SpanContext.Create(
                             traceId,
                             SpanId.GenerateRandomId(randomHandler),
-                            TraceOptions.Builder().SetIsSampled(true).Build()),
+                            TraceOptions.Builder().SetIsSampled(true).Build(), Tracestate.Empty),
                         spanBuilderOptions)
                     .StartSpan();
             Assert.True(childSpan.Context.IsValid);
@@ -323,7 +323,7 @@ namespace OpenCensus.Trace.Test
                         SpanContext.Create(
                             traceId,
                             SpanId.GenerateRandomId(randomHandler),
-                            TraceOptions.Default),
+                            TraceOptions.Default, Tracestate.Empty),
                         spanBuilderOptions)
                     .StartSpan();
             Assert.True(childSpan.Context.IsValid);

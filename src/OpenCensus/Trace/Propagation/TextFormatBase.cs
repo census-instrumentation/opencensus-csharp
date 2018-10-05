@@ -16,13 +16,20 @@
 
 namespace OpenCensus.Trace.Propagation
 {
+    using System;
     using System.Collections.Generic;
+    using OpenCensus.Trace.Propagation.Implementation;
 
+    /// <summary>
+    /// Text format wire context propagator. Helps to extract and inject context from textual
+    /// representation (typically http headers or metadata colleciton).
+    /// </summary>
     public abstract class TextFormatBase : ITextFormat
     {
         private static readonly NoopTextFormat NoopTextFormatInstance = new NoopTextFormat();
 
-        public abstract IList<string> Fields { get; }
+        /// <inheritdoc/>
+        public abstract ISet<string> Fields { get; }
 
         internal static ITextFormat NoopTextFormat
         {
@@ -32,8 +39,10 @@ namespace OpenCensus.Trace.Propagation
             }
         }
 
-        public abstract ISpanContext Extract<T>(T carrier, IGetter<T> getter);
+        /// <inheritdoc/>
+        public abstract ISpanContext Extract<T>(T carrier, Func<T, string, IEnumerable<string>> getter);
 
-        public abstract void Inject<T>(ISpanContext spanContext, T carrier, ISetter<T> setter);
+        /// <inheritdoc/>
+        public abstract void Inject<T>(ISpanContext spanContext, T carrier, Action<T, string, string> setter);
     }
 }

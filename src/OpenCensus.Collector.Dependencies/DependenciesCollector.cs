@@ -21,6 +21,7 @@ namespace OpenCensus.Collector.Dependencies
     using OpenCensus.Collector.Dependencies.Implementation;
     using OpenCensus.Collector.Implementation.Common;
     using OpenCensus.Trace;
+    using OpenCensus.Trace.Propagation;
 
     /// <summary>
     /// Dependencies collector.
@@ -30,17 +31,18 @@ namespace OpenCensus.Collector.Dependencies
         private readonly DiagnosticSourceSubscriber diagnosticSourceSubscriber;
 
         /// <summary>
-        /// Dependencies collector.
+        /// Initializes a new instance of the <see cref="DependenciesCollector"/> class.
         /// </summary>
         /// <param name="options">Configuration options for dependencies collector.</param>
         /// <param name="tracer">Tracer to record traced with.</param>
         /// <param name="sampler">Sampler to use to sample dependnecy calls.</param>
-        public DependenciesCollector(DependenciesCollectorOptions options, ITracer tracer, ISampler sampler)
+        /// <param name="propagationComponent">Propagation component to use to encode span context to the wire.</param>
+        public DependenciesCollector(DependenciesCollectorOptions options, ITracer tracer, ISampler sampler, IPropagationComponent propagationComponent)
         {
             this.diagnosticSourceSubscriber = new DiagnosticSourceSubscriber(
                 new Dictionary<string, Func<ITracer, ISampler, ListenerHandler>>()
-                { {"HttpHandlerDiagnosticListener", (t, s) => new HttpHandlerDiagnosticListener(t, s) } },
-                tracer, 
+                { { "HttpHandlerDiagnosticListener", (t, s) => new HttpHandlerDiagnosticListener(t, s, propagationComponent) } },
+                tracer,
                 sampler);
             this.diagnosticSourceSubscriber.Subscribe();
         }

@@ -19,8 +19,6 @@ namespace OpenCensus.Exporter.Stackdriver
 {
     using OpenCensus.Exporter.Stackdriver.Implementation;
     using OpenCensus.Trace.Export;
-    using System;
-    using System.Threading;
 
     public class StackdriverExporter
     {

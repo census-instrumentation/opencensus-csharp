@@ -98,7 +98,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                     }
 
                     // Now those propertis needs to be populated.
-                    // 
+                    //
                     // metricTelemetry.Sum
                     // metricTelemetry.Count
                     // metricTelemetry.Max

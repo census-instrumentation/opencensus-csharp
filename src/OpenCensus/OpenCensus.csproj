@@ -19,6 +19,11 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), 'OpenCensus.sln'))/build/OpenCensus.prod.loose.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+
   <ItemGroup>
     <ProjectReference Include="..\OpenCensus.Abstractions\OpenCensus.Abstractions.csproj" />
     <PackageReference Include="System.Collections.Immutable" Version="1.4.0" />
@@ -31,6 +36,5 @@
     <Folder Include="Internal\" />
     <Folder Include="Stats\" />
     <Folder Include="Tags\" />
-    <Folder Include="Trace\" />
   </ItemGroup>
 </Project>

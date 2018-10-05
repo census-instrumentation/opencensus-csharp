@@ -40,8 +40,8 @@ namespace OpenCensus.Trace.Sampler.Test
             traceId = TraceId.GenerateRandomId(random);
             parentSpanId = SpanId.GenerateRandomId(random);
             spanId = SpanId.GenerateRandomId(random);
-            sampledSpanContext = SpanContext.Create(traceId, parentSpanId, TraceOptions.Builder().SetIsSampled(true).Build());
-            notSampledSpanContext = SpanContext.Create(traceId, parentSpanId, TraceOptions.Default);
+            sampledSpanContext = SpanContext.Create(traceId, parentSpanId, TraceOptions.Builder().SetIsSampled(true).Build(), Tracestate.Empty);
+            notSampledSpanContext = SpanContext.Create(traceId, parentSpanId, TraceOptions.Default, Tracestate.Empty);
             sampledSpan = new NoopSpan(sampledSpanContext, SpanOptions.RECORD_EVENTS);
         }
 
