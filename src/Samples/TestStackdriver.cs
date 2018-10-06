@@ -31,10 +31,9 @@
             Distribution.Create(BucketBoundaries.Create(new List<double>() { 0.0, 16.0 * MiB, 256.0 * MiB })),
             new List<ITagKey>() { FrontendKey });
 
-        internal static void Run()
+        internal static object Run(string projectId)
         {
-            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"C:\Users\zeltser\Downloads\aspnetcoreissue-1af8a0ca869b.json");
-            var exporter = new StackdriverExporter("aspnetcoreissue", Tracing.ExportComponent);
+            var exporter = new StackdriverExporter(projectId, Tracing.ExportComponent);
             exporter.Start();
 
             ITagContextBuilder tagContextBuilder = tagger.CurrentBuilder.Put(FrontendKey, TagValue.Create("mobile-ios9.3.5"));
