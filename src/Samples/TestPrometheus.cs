@@ -31,7 +31,7 @@
             Distribution.Create(BucketBoundaries.Create(new List<double>() { 0.0, 16.0 * MiB, 256.0 * MiB })),
             new List<ITagKey>() { FrontendKey });
 
-        internal static void Run()
+        internal static object Run()
         {
             var exporter = new PrometheusExporter(
                 new PrometheusExporterOptions()
@@ -72,6 +72,8 @@
             {
                 exporter.Stop();
             }
+
+            return null;
         }
     }
 }

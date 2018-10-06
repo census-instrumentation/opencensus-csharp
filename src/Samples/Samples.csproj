@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\OpenCensus.Collector.Dependencies\OpenCensus.Collector.Dependencies.csproj" />
     <ProjectReference Include="..\OpenCensus.Exporter.Stackdriver\OpenCensus.Exporter.Stackdriver.csproj" />
     <ProjectReference Include="..\OpenCensus.Exporter.Prometheus\OpenCensus.Exporter.Prometheus.csproj" />

@@ -10,7 +10,7 @@
     {
         private static ITracer tracer = Tracing.Tracer;
 
-        internal static void Run()
+        internal static object Run()
         {
             Console.WriteLine("Hello World!");
 
@@ -30,6 +30,8 @@
             span2.End();
 
             Console.ReadLine();
+
+            return null;
         }
     }
 }
