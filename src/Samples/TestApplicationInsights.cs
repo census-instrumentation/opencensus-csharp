@@ -32,7 +32,7 @@
             Distribution.Create(BucketBoundaries.Create(new List<double>() { 0.0, 16.0 * MiB, 256.0 * MiB })),
             new List<ITagKey>() { FrontendKey });
 
-        internal static void Run()
+        internal static object Run()
         {
             TelemetryConfiguration.Active.InstrumentationKey = "instrumentation-key";
             var exporter = new ApplicationInsightsExporter(Tracing.ExportComponent, Stats.ViewManager, TelemetryConfiguration.Active);
@@ -66,6 +66,8 @@
 
             Console.WriteLine("Done... wait for events to arrive to backend!");
             Console.ReadLine();
+
+            return null;
         }
     }
 }

@@ -12,7 +12,7 @@
     {
         private static ITracer tracer = Tracing.Tracer;
 
-        internal static void Run()
+        internal static object Run()
         {
             Console.WriteLine("Hello World!");
 
@@ -38,6 +38,8 @@
             scope.Dispose();
 
             Console.ReadLine();
+
+            return null;
         }
     }
 }

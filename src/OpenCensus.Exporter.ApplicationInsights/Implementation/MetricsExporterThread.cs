@@ -97,7 +97,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                         metricTelemetry.Properties.Add(name, val);
                     }
 
-                    // Now those propertis needs to be populated.
+                    // Now those properties needs to be populated.
                     //
                     // metricTelemetry.Sum
                     // metricTelemetry.Count

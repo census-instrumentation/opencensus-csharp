@@ -24,6 +24,8 @@ using OpenCensus.Trace;
 using OpenCensus.Trace.Propagation;
 using OpenCensus.Trace.Sampler;
 using System.Net.Http;
+using OpenCensus.Exporter.Ocagent;
+using OpenCensus.Trace.Export;
 
 namespace TestApp.AspNetCore._2._0
 {
@@ -49,11 +51,16 @@ namespace TestApp.AspNetCore._2._0
             services.AddSingleton<DependenciesCollectorOptions>(new DependenciesCollectorOptions());
             services.AddSingleton<DependenciesCollector>();
             services.AddSingleton<IPropagationComponent>(new DefaultPropagationComponent());
-
+            services.AddSingleton<IExportComponent>(Tracing.ExportComponent);
+            services.AddSingleton<OcagentExporter>((p) =>
+            {
+                var exportComponent = p.GetService<IExportComponent>();
+                return new OcagentExporter(exportComponent, "localhost:55678", "test-app");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, OcagentExporter agentExporter, IApplicationLifetime applicationLifetime)
         {
             if (env.IsDevelopment())
             {
@@ -63,6 +70,10 @@ namespace TestApp.AspNetCore._2._0
             app.UseMvc();
             var collector = app.ApplicationServices.GetService<RequestsCollector>();
             var depCollector = app.ApplicationServices.GetService<DependenciesCollector>();
+
+            agentExporter.Start();
+
+            applicationLifetime.ApplicationStopping.Register(agentExporter.Stop);
         }
     }
 }

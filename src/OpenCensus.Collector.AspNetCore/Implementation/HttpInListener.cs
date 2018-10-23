@@ -59,7 +59,7 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
             {
                 span.PutServerSpanKindAttribute();
                 span.PutHttpMethodAttribute(request.Method);
-                span.PutHttpHostAttribute(request.Host.Value, request.Host.Port ?? 80);
+                span.PutHttpHostAttribute(request.Host.Host, request.Host.Port ?? 80);
                 span.PutHttpPathAttribute(request.Path);
             }
         }
