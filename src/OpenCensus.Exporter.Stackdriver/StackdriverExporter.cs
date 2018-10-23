@@ -20,6 +20,9 @@ namespace OpenCensus.Exporter.Stackdriver
     using OpenCensus.Exporter.Stackdriver.Implementation;
     using OpenCensus.Trace.Export;
 
+    /// <summary>
+    /// Implementation of the exporter to Stackdriver
+    /// </summary>
     public class StackdriverExporter
     {
         private const string ExporterName = "StackdriverTraceExporter";
@@ -35,6 +38,9 @@ namespace OpenCensus.Exporter.Stackdriver
             this.exportComponent = exportComponent;
         }
 
+        /// <summary>
+        /// Starts the exporter
+        /// </summary>
         public void Start()
         {
             lock (locker)
@@ -46,11 +52,14 @@ namespace OpenCensus.Exporter.Stackdriver
 
                 var traceExporter = new StackdriverTraceExporter(projectId);
                 exportComponent.SpanExporter.RegisterHandler(ExporterName, traceExporter);
-
+                
                 isInitialized = true;
             }
         }
 
+        /// <summary>
+        /// Stops the exporter
+        /// </summary>
         public void Stop()
         {
             lock (locker)
