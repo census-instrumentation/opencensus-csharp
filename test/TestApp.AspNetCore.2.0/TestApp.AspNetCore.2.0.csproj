@@ -24,6 +24,7 @@
     <ProjectReference Include="..\..\src\OpenCensus.Abstractions\OpenCensus.Abstractions.csproj" />
     <ProjectReference Include="..\..\src\OpenCensus.Collector.AspNetCore\OpenCensus.Collector.AspNetCore.csproj" />
     <ProjectReference Include="..\..\src\OpenCensus.Collector.Dependencies\OpenCensus.Collector.Dependencies.csproj" />
+    <ProjectReference Include="..\..\src\OpenCensus.Exporter.Ocagent\OpenCensus.Exporter.Ocagent.csproj" />
     <ProjectReference Include="..\..\src\OpenCensus\OpenCensus.csproj" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.0-beta008">
       <PrivateAssets>All</PrivateAssets>
