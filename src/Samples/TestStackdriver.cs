@@ -33,7 +33,7 @@
 
         internal static object Run(string projectId)
         {
-            var exporter = new StackdriverExporter(projectId, Tracing.ExportComponent);
+            var exporter = new StackdriverExporter(projectId, Tracing.ExportComponent, Stats.ViewManager);
             exporter.Start();
 
             ITagContextBuilder tagContextBuilder = tagger.CurrentBuilder.Put(FrontendKey, TagValue.Create("mobile-ios9.3.5"));
