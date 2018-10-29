@@ -64,13 +64,17 @@ namespace OpenCensus.Exporter.Stackdriver
                 }
 
                 // Register trace exporter
-                var traceExporter = new StackdriverTraceExporter(projectId);
-                exportComponent.SpanExporter.RegisterHandler(ExporterName, traceExporter);
+                if (exportComponent != null)
+                {
+                    var traceExporter = new StackdriverTraceExporter(projectId);
+                    exportComponent.SpanExporter.RegisterHandler(ExporterName, traceExporter);
+                }
 
                 // Register metrics exporter
                 if (viewManager != null)
                 {
                     StackdriverStatsConfiguration statsConfig = StackdriverStatsConfiguration.Default;
+                    statsConfig.ProjectId = projectId;
 
                     metricsExporter = new StackdriverMetricsExporterWorker(viewManager, statsConfig);
                     metricsExporter.Start();
@@ -93,7 +97,10 @@ namespace OpenCensus.Exporter.Stackdriver
                 }
 
                 // Stop tracing exporter
-                exportComponent.SpanExporter.UnregisterHandler(ExporterName);
+                if (exportComponent != null)
+                {
+                    exportComponent.SpanExporter.UnregisterHandler(ExporterName);
+                }
 
                 // Stop metrics exporter
                 if (metricsExporter != null)

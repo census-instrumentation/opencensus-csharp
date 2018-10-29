@@ -37,7 +37,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         public static StackdriverStatsConfiguration Default { get; } = new StackdriverStatsConfiguration
         {
             ExportInterval = DEFAULT_INTERVAL,
-            ProjectId = MetricsConversions.GetProjectId(),
+            ProjectId = MetricsUtils.GetProjectId(),
             MetricNamePrefix = "",
         };
     }
