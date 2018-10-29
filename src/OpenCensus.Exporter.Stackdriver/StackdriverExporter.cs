@@ -74,11 +74,15 @@ namespace OpenCensus.Exporter.Stackdriver
                 if (viewManager != null)
                 {
                     StackdriverStatsConfiguration statsConfig = StackdriverStatsConfiguration.Default;
+<<<<<<< HEAD
                     if (statsConfig.ProjectId != projectId)
                     {
                         statsConfig.ProjectId = projectId;
                         statsConfig.MonitoredResource = GoogleCloudResourceUtils.GetDefaultResource(projectId);
                     }
+=======
+                    statsConfig.ProjectId = projectId;
+>>>>>>> Fixing a few bugs in Stackdriver metrics exporter
 
                     statsExporter = new StackdriverStatsExporter(viewManager, statsConfig);
                     statsExporter.Start();

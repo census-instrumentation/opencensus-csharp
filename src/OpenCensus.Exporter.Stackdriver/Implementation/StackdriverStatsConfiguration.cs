@@ -54,6 +54,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         /// </summary>
         public static StackdriverStatsConfiguration Default
         {
+<<<<<<< HEAD
             get
             {
                 var defaultConfig = new StackdriverStatsConfiguration
@@ -67,5 +68,11 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                 return defaultConfig;
             }
         }
+=======
+            ExportInterval = DEFAULT_INTERVAL,
+            ProjectId = MetricsUtils.GetProjectId(),
+            MetricNamePrefix = "",
+        };
+>>>>>>> Fixing a few bugs in Stackdriver metrics exporter
     }
 }

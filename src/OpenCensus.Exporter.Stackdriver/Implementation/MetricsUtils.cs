@@ -17,6 +17,7 @@
 namespace OpenCensus.Exporter.Stackdriver.Implementation
 {
     using Google.Api;
+    using Google.Apis.Auth.OAuth2;
     using Google.Cloud.Monitoring.V3;
     using OpenCensus.Exporter.Stackdriver.Utils;
     using OpenCensus.Stats;
@@ -27,22 +28,18 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
     using static Google.Api.Distribution.Types;
     using static Google.Api.MetricDescriptor.Types;
 
-    internal class Constants
-    {
-        public const string LABEL_DESCRIPTION = "OpenCensus TagKey";
-        public const string OPENCENSUS_TASK = "opencensus_task";
-        public const string OPENCENSUS_TASK_DESCRIPTION = "Opencensus task identifier";
-        public const string GCP_GKE_CONTAINER = "k8s_container";
-        public const string GCP_GCE_INSTANCE = "gce_instance";
-        public const string AWS_EC2_INSTANCE = "aws_ec2_instance";
-        public const string GLOBAL = "global";
-        public const string PROJECT_ID_LABEL_KEY = "project_id";
-        public static readonly string OPENCENSUS_TASK_VALUE_DEFAULT = generateDefaultTaskValue();
 
-        private static string generateDefaultTaskValue()
+    /// <summary>
+    /// Utility methods for metrics
+    /// </summary>
+    public static class MetricsUtils
+    {
+        public static string GetProjectId()
         {
-            // Something like '<pid>@<hostname>', at least in Oracle and OpenJdk JVMs
-            return $"dotnet-{System.Diagnostics.Process.GetCurrentProcess().Id}@{Environment.MachineName}";
+            var instance = Google.Api.Gax.Platform.Instance();
+            var projectId = instance?.ProjectId;
+
+            return projectId;
         }
     }
 
@@ -304,19 +301,12 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         {
             var builder = new MonitoredResource();
             builder.Type = Constants.GLOBAL;
-            builder.Labels.Add(Constants.PROJECT_ID_LABEL_KEY, GetProjectId());
+            builder.Labels.Add(Constants.PROJECT_ID_LABEL_KEY, MetricsUtils.GetProjectId());
 
             // TODO - zeltser - setting monitored resource labels for detected resource
             // along with all the other metadata
 
             return builder;
-        }
-
-        public static string GetProjectId()
-        {
-            var instance = Google.Api.Gax.Platform.Instance();
-            var projectId = instance?.ProjectId;
-            return projectId;
         }
 
         private static String GenerateTypeName(string viewName, string domain)

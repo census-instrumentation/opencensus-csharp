@@ -17,6 +17,7 @@
 namespace OpenCensus.Exporter.Stackdriver.Implementation
 {
     using Google.Api;
+    using Google.Api.Gax;
     using Google.Cloud.Monitoring.V3;
     using OpenCensus.Exporter.Stackdriver.Utils;
     using OpenCensus.Stats;
@@ -48,13 +49,13 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         /// <summary>
         /// Interval between two subsequent metrics collection operations
         /// </summary>
-        private TimeSpan collectionInterval;
+        private readonly TimeSpan collectionInterval = TimeSpan.FromSeconds(15);
 
         /// <summary>
         /// Interval within which the cancellation should be honored
         /// from the point it was requested
         /// </summary>
-        private TimeSpan cancellationInterval;
+        private readonly TimeSpan cancellationInterval = TimeSpan.FromSeconds(3);
 
         private object locker = new object();
 
@@ -62,6 +63,9 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
            IViewManager viewManager,
            StackdriverStatsConfiguration configuration)
         {
+            GaxPreconditions.CheckNotNull(configuration, "configuration");
+            GaxPreconditions.CheckNotNullOrEmpty(configuration.ProjectId, "configuration.ProjectId");
+
             this.viewManager = viewManager;
             monitoredResource = configuration.MonitoredResource;
             project = new ProjectName(configuration.ProjectId);
@@ -121,6 +125,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
 
                     // Adjust the wait time - reduce export operation duration
                     sleepTime = collectionInterval.Subtract(stopWatch.Elapsed);
+                    sleepTime = sleepTime.Duration();
 
                     // If the cancellation was requested, we should honor
                     // that within the cancellation interval, so we wait in 
@@ -142,8 +147,8 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
 
         private bool RegisterView(IView view)
         {
-            IView existing = registeredViews[view.Name];
-            if (existing != null)
+            IView existing = null;
+            if (registeredViews.TryGetValue(view.Name, out existing))
             {
                 if (existing.Equals(view))
                 {
