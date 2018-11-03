@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -55,7 +56,11 @@ namespace TestApp.AspNetCore._2._0
             services.AddSingleton<OcagentExporter>((p) =>
             {
                 var exportComponent = p.GetService<IExportComponent>();
-                return new OcagentExporter(exportComponent, "localhost:55678", "test-app");
+                return new OcagentExporter(
+                    exportComponent,
+                    "localhost:55678",
+                    Environment.MachineName,
+                    "test-app");
             });
         }
 

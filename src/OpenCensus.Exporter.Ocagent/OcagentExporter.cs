@@ -32,8 +32,9 @@ namespace OpenCensus.Exporter.Ocagent
 
         private readonly object lck = new object();
 
-        private readonly string endpoint;
-        private readonly string hostname;
+        private readonly string agentEndpoint;
+        private readonly string hostName;
+        private readonly string serviceName;
         private TraceExporterHandler handler;
 
         /// <summary>
@@ -42,12 +43,18 @@ namespace OpenCensus.Exporter.Ocagent
         /// </summary>
         /// <param name="exportComponent">Exporter to get traces from.</param>
         /// <param name="agentEndpoint">Agent endpoint in the host:port format.</param>
-        /// <param name="hostName">Name of the application.</param>
-        public OcagentExporter(IExportComponent exportComponent, string agentEndpoint, string hostName)
+        /// <param name="hostName">Name of the host.</param>
+        /// <param name="serviceName">Name of the application.</param>
+        public OcagentExporter(
+            IExportComponent exportComponent,
+            string agentEndpoint,
+            string hostName,
+            string serviceName)
         {
             this.exportComponent = exportComponent;
-            this.endpoint = agentEndpoint;
-            this.hostname = hostName;
+            this.agentEndpoint = agentEndpoint;
+            this.hostName = hostName;
+            this.serviceName = serviceName;
         }
 
         /// <summary>
@@ -62,7 +69,11 @@ namespace OpenCensus.Exporter.Ocagent
                     return;
                 }
 
-                this.handler = new TraceExporterHandler(this.endpoint, this.hostname, ChannelCredentials.Insecure);
+                this.handler = new TraceExporterHandler(
+                    this.agentEndpoint,
+                    this.hostName,
+                    this.serviceName,
+                    ChannelCredentials.Insecure);
 
                 this.exportComponent.SpanExporter.RegisterHandler(TraceExporterName, this.handler);
             }

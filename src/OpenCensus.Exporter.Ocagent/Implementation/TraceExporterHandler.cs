@@ -35,25 +35,24 @@ namespace OpenCensus.Exporter.Ocagent.Implementation
 
     internal class TraceExporterHandler : IHandler, IDisposable
     {
-        private readonly CancellationTokenSource cts;
         private readonly Channel channel;
         private readonly Opencensus.Proto.Agent.Trace.V1.TraceService.TraceServiceClient traceClient;
         private readonly ConcurrentQueue<ISpanData> spans = new ConcurrentQueue<ISpanData>();
-        private readonly Task runTask;
         private readonly Node node;
 
-        public TraceExporterHandler(string endpoint, string hostname, ChannelCredentials credentials)
+        private CancellationTokenSource cts;
+        private Task runTask;
+
+        public TraceExporterHandler(string agentEndpoint, string hostName, string serviceName, ChannelCredentials credentials)
         {
-            this.cts = new CancellationTokenSource();
-            this.channel = new Channel(endpoint, credentials);
+            this.channel = new Channel(agentEndpoint, credentials);
             this.traceClient = new TraceService.TraceServiceClient(this.channel);
 
-            this.runTask = this.RunAsync(this.cts.Token);
             this.node = new Node
             {
                 Identifier = new ProcessIdentifier
                 {
-                    HostName = hostname,
+                    HostName = hostName,
                     Pid = (uint)Process.GetCurrentProcess().Id,
                     StartTimestamp = Timestamp.FromDateTime(DateTime.UtcNow),
                 },
@@ -65,61 +64,101 @@ namespace OpenCensus.Exporter.Ocagent.Implementation
                 },
                 ServiceInfo = new ServiceInfo
                 {
-                    Name = hostname,
+                    Name = serviceName,
                 },
             };
+
+            this.Start();
         }
 
         public void Export(IList<ISpanData> spanDataList)
         {
+            if (this.cts == null || this.cts.IsCancellationRequested)
+            {
+                return;
+            }
+
             foreach (var spanData in spanDataList)
             {
                 this.spans.Enqueue(spanData);
             }
         }
 
-        public async Task RunAsync(CancellationToken cancellationToken)
-        {
-            bool firstSpan = true;
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                // TODO Config
-                // TODO handle connection errors
-                // TODO backpressure on the queue
-
-                // Spans
-                if (this.spans.TryDequeue(out var spanData))
-                {
-                    var spanExport = new ExportTraceServiceRequest();
-
-                    if (firstSpan)
-                    {
-                        spanExport.Node = this.node;
-                    }
-
-                    spanExport.Spans.Add(spanData.ToProtoSpan());
-                    var reply = this.traceClient.Export();
-                    await reply.RequestStream.WriteAllAsync(new[] { spanExport }).ConfigureAwait(false);
-                    firstSpan = false;
-                }
-                else
-                {
-                    await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken).ConfigureAwait(false);
-                }
-            }
-        }
-
         public void Dispose()
         {
-            this.cts.Cancel(false);
-            this.runTask.Wait();
-            this.cts.Dispose();
+            this.Stop().Wait();
         }
 
         private static string GetAssemblyVersion(Assembly assembly)
         {
             AssemblyFileVersionAttribute fileVersionAttr = assembly.GetCustomAttribute<AssemblyFileVersionAttribute>();
             return fileVersionAttr?.Version ?? "0.0.0";
+        }
+
+        private void Start()
+        {
+            // TODO Config
+            // TODO handle connection errors & retries
+
+            this.cts = new CancellationTokenSource();
+            this.runTask = this.RunAsync(this.cts.Token);
+        }
+
+        private async Task Stop()
+        {
+            if (this.cts != null)
+            {
+                this.cts.Cancel(false);
+
+                // ignore all exceptions
+                await this.runTask.ContinueWith(t => { }).ConfigureAwait(false);
+
+                this.cts.Dispose();
+                this.cts = null;
+                this.runTask = null;
+            }
+        }
+
+        private async Task RunAsync(CancellationToken cancellationToken)
+        {
+            try
+            {
+                // TODO backpressure on the queue
+
+                while (!cancellationToken.IsCancellationRequested)
+                {
+                    // Spans
+                    if (this.spans.TryDequeue(out var spanData))
+                    {
+                        var protoSpan = spanData.ToProtoSpan();
+                        if (protoSpan == null)
+                        {
+                            continue;
+                        }
+
+                        var spanExport = new ExportTraceServiceRequest();
+                        spanExport.Node = this.node;
+                        spanExport.Spans.Add(protoSpan);
+
+                        // TODO:
+                        // write stream and read response stream (do not close)
+                        // add node to the first request only
+                        // workaround for https://github.com/Microsoft/ApplicationInsights-LocalForwarder/issues/31
+                        var duplexCall = this.traceClient.Export();
+                        await duplexCall.RequestStream.WriteAllAsync(new ExportTraceServiceRequest[] { spanExport }).ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken).ConfigureAwait(false);
+                    }
+                }
+            }
+            catch (RpcException)
+            {
+                // TODO: log
+
+                throw;
+            }
         }
     }
 }
