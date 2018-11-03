@@ -21,6 +21,8 @@ namespace OpenCensus.Utils
 
     internal static class Arrays
     {
+        private static readonly uint[] ByteToHexLookupTable = CreateLookupTable();
+
         public static bool Equals(byte[] array1, byte[] array2)
         {
             if (array1 == array2)
@@ -85,28 +87,27 @@ namespace OpenCensus.Utils
             throw new ArgumentOutOfRangeException("Invalid character: " + c);
         }
 
-        internal static char[] ByteToHexCharArray(byte b)
+        // https://stackoverflow.com/a/24343727
+        internal static uint[] CreateLookupTable()
         {
-            int low = b & 0x0f;
-            int high = (b & 0xf0) >> 4;
-            char[] result = new char[2];
-            if (high > 9)
+            uint[] table = new uint[256];
+            for (int i = 0; i < 256; i++)
             {
-                result[0] = (char)(high - 10 + 'a');
-            }
-            else
-            {
-                result[0] = (char)(high + '0');
+                string s = i.ToString("x2");
+                table[i] = (uint)s[0];
+                table[i] += (uint)s[1] << 16;
             }
 
-            if (low > 9)
-            {
-                result[1] = (char)(low - 10 + 'a');
-            }
-            else
-            {
-                result[1] = (char)(low + '0');
-            }
+            return table;
+        }
+
+        // https://stackoverflow.com/a/24343727
+        internal static char[] ByteToHexCharArray(byte b)
+        {
+            char[] result = new char[2];
+
+            result[0] = (char)ByteToHexLookupTable[b];
+            result[1] = (char)(ByteToHexLookupTable[b] >> 16);
 
             return result;
         }
