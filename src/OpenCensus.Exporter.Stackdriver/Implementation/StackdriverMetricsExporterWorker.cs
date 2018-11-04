@@ -65,6 +65,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         {
             GaxPreconditions.CheckNotNull(configuration, "configuration");
             GaxPreconditions.CheckNotNullOrEmpty(configuration.ProjectId, "configuration.ProjectId");
+            GaxPreconditions.CheckNotNull(configuration.MonitoredResource, "configuration.MonitoredResource");
 
             this.viewManager = viewManager;
             monitoredResource = configuration.MonitoredResource;

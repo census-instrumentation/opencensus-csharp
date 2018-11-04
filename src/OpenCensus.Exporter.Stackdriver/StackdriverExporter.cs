@@ -75,6 +75,7 @@ namespace OpenCensus.Exporter.Stackdriver
                 {
                     StackdriverStatsConfiguration statsConfig = StackdriverStatsConfiguration.Default;
                     statsConfig.ProjectId = projectId;
+                    statsConfig.MonitoredResource = MetricsUtils.GetDefaultResource(projectId);
 
                     metricsExporter = new StackdriverMetricsExporterWorker(viewManager, statsConfig);
                     metricsExporter.Start();

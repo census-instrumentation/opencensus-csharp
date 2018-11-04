@@ -17,12 +17,12 @@
         private static ITagger tagger = Tags.Tagger;
 
         private static IStatsRecorder statsRecorder = Stats.StatsRecorder;
-        private static readonly IMeasureLong VideoSize = MeasureLong.Create("my.org/measure/video_size", "size of processed videos", "By");
-        private static readonly ITagKey FrontendKey = TagKey.Create("my.org/keys/frontend");
+        private static readonly IMeasureLong VideoSize = MeasureLong.Create("my_org/measure/video_size", "size of processed videos", "By");
+        private static readonly ITagKey FrontendKey = TagKey.Create("my_org/keys/frontend");
 
         private static long MiB = 1 << 20;
 
-        private static readonly IViewName VideoSizeViewName = ViewName.Create("my.org/views/video_size");
+        private static readonly IViewName VideoSizeViewName = ViewName.Create("my_org/views/video_size");
 
         private static readonly IView VideoSizeView = View.Create(
             VideoSizeViewName,

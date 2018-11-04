@@ -32,7 +32,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
 
         private static string generateDefaultTaskValue()
         {
-            // Something like '<pid>@<hostname>', at least in Oracle and OpenJdk JVMs
+            // Something like '<pid>@<hostname>'
             return $"dotnet-{System.Diagnostics.Process.GetCurrentProcess().Id}@{Environment.MachineName}";
         }
     }
