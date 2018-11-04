@@ -56,8 +56,12 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
 
         private static string generateDefaultTaskValue()
         {
+<<<<<<< HEAD
             // Something like '<pid>@<hostname>', at least in Oracle and OpenJdk JVMs
 >>>>>>> Fixing a few bugs in Stackdriver metrics exporter
+=======
+            // Something like '<pid>@<hostname>'
+>>>>>>> - Fixing a few bugs around metric creation and labels
             return $"dotnet-{System.Diagnostics.Process.GetCurrentProcess().Id}@{Environment.MachineName}";
         }
     }

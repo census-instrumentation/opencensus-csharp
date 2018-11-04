@@ -82,7 +82,11 @@ namespace OpenCensus.Exporter.Stackdriver
                     }
 =======
                     statsConfig.ProjectId = projectId;
+<<<<<<< HEAD
 >>>>>>> Fixing a few bugs in Stackdriver metrics exporter
+=======
+                    statsConfig.MonitoredResource = MetricsUtils.GetDefaultResource(projectId);
+>>>>>>> - Fixing a few bugs around metric creation and labels
 
                     statsExporter = new StackdriverStatsExporter(viewManager, statsConfig);
                     statsExporter.Start();
