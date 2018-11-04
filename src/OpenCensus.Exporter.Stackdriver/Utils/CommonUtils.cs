@@ -16,23 +16,20 @@
 
 namespace OpenCensus.Exporter.Stackdriver.Utils
 {
-    using Google.Protobuf.WellKnownTypes;
-    using OpenCensus.Common;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
 
-    /// <summary>
-    /// Translation methods from Opencensus structures to common
-    /// Protobuf structures
-    /// </summary>
-    public static class ProtoExtensions
+    public static class CommonUtils
     {
-        /// <summary>
-        /// Translates Opencensus Timestamp to Protobuf's timestamp
-        /// </summary>
-        /// <param name="timestamp">Opencensus timestamp</param>
-        /// <returns>Protobuf's timestamp</returns>
-        public static Timestamp ToTimestamp(this ITimestamp timestamp)
+        public static IEnumerable<List<T>> Partition<T>(this IList<T> source, Int32 size)
         {
-            return new Timestamp { Seconds = timestamp.Seconds, Nanos = timestamp.Nanos };
+            for (int i = 0; i < Math.Ceiling(source.Count / (Double)size); i++)
+            {
+                yield return new List<T>(source.Skip(size * i).Take(size));
+            }
         }
     }
 }
