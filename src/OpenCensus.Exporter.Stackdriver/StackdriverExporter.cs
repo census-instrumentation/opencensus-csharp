@@ -18,6 +18,7 @@
 namespace OpenCensus.Exporter.Stackdriver
 {
     using OpenCensus.Exporter.Stackdriver.Implementation;
+    using OpenCensus.Stats;
     using OpenCensus.Trace.Export;
 
     /// <summary>
@@ -28,14 +29,26 @@ namespace OpenCensus.Exporter.Stackdriver
         private const string ExporterName = "StackdriverTraceExporter";
 
         private readonly IExportComponent exportComponent;
+        private readonly IViewManager viewManager;
         private readonly string projectId;
+        private StackdriverMetricsExporterWorker metricsExporter;
         private object locker = new object();
         private bool isInitialized = false;
 
-        public StackdriverExporter(string projectId, IExportComponent exportComponent)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StackdriverExporter"/> class.
+        /// </summary>
+        /// <param name="projectId">Google Cloud ProjectId that is used to send data to Stackdriver</param>
+        /// <param name="exportComponent">Exporter to get traces from</param>
+        /// <param name="viewManager">View manager to get the stats from</param>
+        public StackdriverExporter(
+            string projectId,
+            IExportComponent exportComponent,
+            IViewManager viewManager)
         {
             this.projectId = projectId;
             this.exportComponent = exportComponent;
+            this.viewManager = viewManager;
         }
 
         /// <summary>
@@ -50,9 +63,24 @@ namespace OpenCensus.Exporter.Stackdriver
                     return;
                 }
 
-                var traceExporter = new StackdriverTraceExporter(projectId);
-                exportComponent.SpanExporter.RegisterHandler(ExporterName, traceExporter);
-                
+                // Register trace exporter
+                if (exportComponent != null)
+                {
+                    var traceExporter = new StackdriverTraceExporter(projectId);
+                    exportComponent.SpanExporter.RegisterHandler(ExporterName, traceExporter);
+                }
+
+                // Register metrics exporter
+                if (viewManager != null)
+                {
+                    StackdriverStatsConfiguration statsConfig = StackdriverStatsConfiguration.Default;
+                    statsConfig.ProjectId = projectId;
+                    statsConfig.MonitoredResource = MetricsUtils.GetDefaultResource(projectId);
+
+                    metricsExporter = new StackdriverMetricsExporterWorker(viewManager, statsConfig);
+                    metricsExporter.Start();
+                }
+
                 isInitialized = true;
             }
         }
@@ -69,7 +97,18 @@ namespace OpenCensus.Exporter.Stackdriver
                     return;
                 }
 
-                exportComponent.SpanExporter.UnregisterHandler(ExporterName);
+                // Stop tracing exporter
+                if (exportComponent != null)
+                {
+                    exportComponent.SpanExporter.UnregisterHandler(ExporterName);
+                }
+
+                // Stop metrics exporter
+                if (metricsExporter != null)
+                {
+                    metricsExporter.Stop();
+                }
+
                 isInitialized = false;
             }
         }
