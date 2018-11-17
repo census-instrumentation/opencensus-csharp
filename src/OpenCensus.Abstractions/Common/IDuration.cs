@@ -18,10 +18,19 @@ namespace OpenCensus.Common
 {
     using System;
 
+    /// <summary>
+    /// Represents duration with the nanoseconds precition.
+    /// </summary>
     public interface IDuration : IComparable<IDuration>
     {
+        /// <summary>
+        /// Gets the number of second in duration.
+        /// </summary>
         long Seconds { get; }
 
+        /// <summary>
+        /// Gets the number of nanoseconds in duration.
+        /// </summary>
         int Nanos { get; }
     }
 }

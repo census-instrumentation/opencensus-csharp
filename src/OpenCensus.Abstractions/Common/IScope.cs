@@ -18,6 +18,10 @@ namespace OpenCensus.Common
 {
     using System;
 
+    /// <summary>
+    /// Scope marker. Used as a syntactic sugar in methods like StartScopedSpan so it can be
+    /// wrapped in "using" block with automatic scope completion.
+    /// </summary>
     public interface IScope : IDisposable
     {
     }

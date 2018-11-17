@@ -16,8 +16,15 @@
 
 namespace OpenCensus.Internal
 {
+    /// <summary>
+    /// Event queue abstraction.
+    /// </summary>
     public interface IEventQueue
     {
+        /// <summary>
+        /// Queues a single entry.
+        /// </summary>
+        /// <param name="entry">Entry to be queued.</param>
         void Enqueue(IEventQueueEntry entry);
     }
 }
