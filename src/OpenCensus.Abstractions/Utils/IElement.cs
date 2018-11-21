@@ -20,7 +20,7 @@ namespace OpenCensus.Utils
     /// Element of double linked list.
     /// </summary>
     /// <typeparam name="T">Type of a stored value.</typeparam>
-    public interface IElement<T> 
+    public interface IElement<T>
         where T : IElement<T>
     {
         /// <summary>
