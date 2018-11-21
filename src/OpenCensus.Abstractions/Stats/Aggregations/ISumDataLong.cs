@@ -16,8 +16,14 @@
 
 namespace OpenCensus.Stats.Aggregations
 {
+    /// <summary>
+    /// Data aggregated by sum aggregator amongst long values.
+    /// </summary>
     public interface ISumDataLong : IAggregationData
     {
+        /// <summary>
+        /// Gets the sum of values as a long.
+        /// </summary>
         long Sum { get; }
     }
 }

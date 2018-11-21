@@ -18,18 +18,39 @@ namespace OpenCensus.Stats.Aggregations
 {
     using System.Collections.Generic;
 
+    /// <summary>
+    /// Data accumulated by distributed aggregation.
+    /// </summary>
     public interface IDistributionData : IAggregationData
     {
+        /// <summary>
+        /// Gets the mean of values.
+        /// </summary>
         double Mean { get; }
 
+        /// <summary>
+        /// Gets the number of samples.
+        /// </summary>
         long Count { get; }
 
+        /// <summary>
+        /// Gets the minimum of values.
+        /// </summary>
         double Min { get; }
 
+        /// <summary>
+        /// Gets the maximum of values.
+        /// </summary>
         double Max { get; }
 
+        /// <summary>
+        /// Gets the sum of squares of values.
+        /// </summary>
         double SumOfSquaredDeviations { get; }
 
+        /// <summary>
+        /// Gets the counts in buckets.
+        /// </summary>
         IList<long> BucketCounts { get; }
     }
 }

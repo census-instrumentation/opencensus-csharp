@@ -18,8 +18,14 @@ namespace OpenCensus.Stats
 {
     using System.Collections.Generic;
 
+    /// <summary>
+    /// Bucket boundaries for the distribution aggregator.
+    /// </summary>
     public interface IBucketBoundaries
     {
+        /// <summary>
+        /// List of boundaries for the distribution aggregator.
+        /// </summary>
         IList<double> Boundaries { get; }
     }
 }

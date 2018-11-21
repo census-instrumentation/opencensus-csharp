@@ -16,6 +16,9 @@
 
 namespace OpenCensus.Stats.Aggregations
 {
+    /// <summary>
+    /// Count aggregation.
+    /// </summary>
     public interface ICount : IAggregation
     {
     }

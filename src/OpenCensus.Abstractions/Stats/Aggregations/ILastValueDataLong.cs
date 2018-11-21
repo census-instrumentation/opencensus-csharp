@@ -16,8 +16,14 @@
 
 namespace OpenCensus.Stats.Aggregations
 {
+    /// <summary>
+    /// Data accumulated by the last value aggregator amongst long values.
+    /// </summary>
     public interface ILastValueDataLong : IAggregationData
     {
+        /// <summary>
+        /// Last value as a long value.
+        /// </summary>
         long LastValue { get; }
     }
 }

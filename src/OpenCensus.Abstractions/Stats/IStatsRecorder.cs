@@ -16,8 +16,15 @@
 
 namespace OpenCensus.Stats
 {
+    /// <summary>
+    /// Stats recorder. Used to supply and record new measurements.
+    /// </summary>
     public interface IStatsRecorder
     {
+        /// <summary>
+        /// Returns the measure map to record values to.
+        /// </summary>
+        /// <returns>Measure maps to record values to.</returns>
         IMeasureMap NewMeasureMap();
     }
 }

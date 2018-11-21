@@ -19,6 +19,9 @@ namespace OpenCensus.Stats
     using System;
     using OpenCensus.Stats.Aggregations;
 
+    /// <summary>
+    /// Gets the 
+    /// </summary>
     public interface IAggregationData
     {
         T Match<T>(

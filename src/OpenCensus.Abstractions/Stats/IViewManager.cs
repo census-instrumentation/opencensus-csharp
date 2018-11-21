@@ -18,12 +18,27 @@ namespace OpenCensus.Stats
 {
     using System.Collections.Generic;
 
+    /// <summary>
+    /// View manager that holds all configured views.
+    /// </summary>
     public interface IViewManager
     {
+        /// <summary>
+        /// Gets all configured views.
+        /// </summary>
         ISet<IView> AllExportedViews { get; }
 
+        /// <summary>
+        /// Returns the view with specified view name.
+        /// </summary>
+        /// <param name="view">View name.</param>
+        /// <returns>The view with the specified name.</returns>
         IViewData GetView(IViewName view);
 
+        /// <summary>
+        /// Registers a new view to be tracked.
+        /// </summary>
+        /// <param name="view">View to be registered.</param>
         void RegisterView(IView view);
     }
 }

@@ -16,12 +16,24 @@
 
 namespace OpenCensus.Stats
 {
+    /// <summary>
+    /// Stats recording configuration.
+    /// </summary>
     public interface IStatsComponent
     {
+        /// <summary>
+        /// Gets the view manager that holds current set of aggregators.
+        /// </summary>
         IViewManager ViewManager { get; }
 
+        /// <summary>
+        /// Gets the stats recorder to record values to.
+        /// </summary>
         IStatsRecorder StatsRecorder { get; }
 
+        /// <summary>
+        /// Gets the state of the state collection.
+        /// </summary>
         StatsCollectionState State { get; }
     }
 }

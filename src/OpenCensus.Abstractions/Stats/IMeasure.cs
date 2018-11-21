@@ -19,14 +19,34 @@ namespace OpenCensus.Stats
     using System;
     using OpenCensus.Stats.Measures;
 
+    /// <summary>
+    /// A single measure to track.
+    /// </summary>
     public interface IMeasure
     {
+        /// <summary>
+        /// Gets the name of the measure.
+        /// </summary>
         string Name { get; }
 
+        /// <summary>
+        /// Gets the description of the measure.
+        /// </summary>
         string Description { get; }
 
+        /// <summary>
+        /// Gets the unit of the measure.
+        /// </summary>
         string Unit { get; }
 
+        /// <summary>
+        /// Execute callback with the specific measure type without type casting.
+        /// </summary>
+        /// <typeparam name="T">The result type of a callback.</typeparam>
+        /// <param name="p0">Callback to be called for the double measure.</param>
+        /// <param name="p1">Callback to be called for the long measure.</param>
+        /// <param name="defaultFunction">Callback to be called for any other measure.</param>
+        /// <returns>The result of measure type specific callback execution.</returns>
         T Match<T>(
             Func<IMeasureDouble, T> p0,
             Func<IMeasureLong, T> p1,

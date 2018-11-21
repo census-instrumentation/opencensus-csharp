@@ -16,6 +16,9 @@
 
 namespace OpenCensus.Stats.Aggregations
 {
+    /// <summary>
+    /// Last value aggregation.
+    /// </summary>
     public interface ILastValue : IAggregation
     {
     }
