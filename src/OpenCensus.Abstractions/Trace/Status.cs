@@ -50,7 +50,7 @@ namespace OpenCensus.Trace
         {
             get
             {
-                return CanonicalCode.Ok == this.CanonicalCode;
+                return this.CanonicalCode == CanonicalCode.Ok;
             }
         }
 

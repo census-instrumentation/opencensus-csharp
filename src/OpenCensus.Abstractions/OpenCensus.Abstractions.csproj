@@ -14,7 +14,7 @@
     <RootNamespace>OpenCensus</RootNamespace>
   </PropertyGroup>
   <PropertyGroup>
-    <CodeAnalysisRuleSet>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), 'OpenCensus.sln'))/build/OpenCensus.prod.loose.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), 'OpenCensus.sln'))/build/OpenCensus.prod.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <DebugType>full</DebugType>

@@ -16,10 +16,20 @@
 
 namespace OpenCensus.Trace.Config
 {
+    /// <summary>
+    /// Trace configuration.
+    /// </summary>
     public interface ITraceConfig
     {
+        /// <summary>
+        /// Gets ths active trace parameters that can be updated in runtime.
+        /// </summary>
         ITraceParams ActiveTraceParams { get; }
 
+        /// <summary>
+        /// Updates the active trace parameters.
+        /// </summary>
+        /// <param name="traceParams">New trace parameters to use.</param>
         void UpdateActiveTraceParams(ITraceParams traceParams);
     }
 }

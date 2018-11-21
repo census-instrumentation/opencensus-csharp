@@ -35,8 +35,8 @@ namespace OpenCensus.Trace.Export.Test
         //    NetworkEvent.Builder(NetworkEvent.Type.RECV, 1).build();
         //      private static readonly NetworkEvent sentNetworkEvent =
         //    NetworkEvent.Builder(NetworkEvent.Type.SENT, 1).build();
-        private static readonly IMessageEvent recvMessageEvent = MessageEvent.Builder(MessageEventType.RECEIVED, 1).Build();
-        private static readonly IMessageEvent sentMessageEvent = MessageEvent.Builder(MessageEventType.SENT, 1).Build();
+        private static readonly IMessageEvent recvMessageEvent = MessageEvent.Builder(MessageEventType.Recieved, 1).Build();
+        private static readonly IMessageEvent sentMessageEvent = MessageEvent.Builder(MessageEventType.Sent, 1).Build();
         private static readonly Status status = Status.DeadlineExceeded.WithDescription("TooSlow");
         private static readonly SpanKind kind = SpanKind.Client;
         private static readonly int CHILD_SPAN_COUNT = 13;
@@ -77,7 +77,7 @@ namespace OpenCensus.Trace.Export.Test
             messageEventsList.Add(TimedEvent<IMessageEvent>.Create(eventTimestamp2, sentMessageEvent));
             messageEvents = TimedEvents<IMessageEvent>.Create(messageEventsList, 3);
 
-            linksList.Add(Link.FromSpanContext(spanContext, LinkType.CHILD_LINKED_SPAN));
+            linksList.Add(Link.FromSpanContext(spanContext, LinkType.ChildLinkedSpan));
             links = LinkList.Create(linksList, 0);
         }
 

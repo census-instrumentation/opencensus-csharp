@@ -30,7 +30,7 @@ namespace OpenCensus.Trace.Test
     {
         private static readonly String SPAN_NAME = "MySpanName";
         private SpanBuilderOptions spanBuilderOptions;
-        private TraceParams alwaysSampleTraceParams = TraceParams.DEFAULT.ToBuilder().SetSampler(Samplers.AlwaysSample).Build();
+        private TraceParams alwaysSampleTraceParams = TraceParams.Default.ToBuilder().SetSampler(Samplers.AlwaysSample).Build();
         private readonly TestClock testClock = TestClock.Create();
         private readonly IRandomGenerator randomHandler = new FakeRandomHandler();
         private IStartEndHandler startEndHandler = Mock.Of<IStartEndHandler>();
@@ -52,7 +52,7 @@ namespace OpenCensus.Trace.Test
             ISpan span =
                 SpanBuilder.CreateWithParent(SPAN_NAME, null, spanBuilderOptions).StartSpan();
             Assert.True(span.Context.IsValid);
-            Assert.True(span.Options.HasFlag(SpanOptions.RECORD_EVENTS));
+            Assert.True(span.Options.HasFlag(SpanOptions.RecordEvents));
             Assert.True(span.Context.TraceOptions.IsSampled);
             ISpanData spanData = ((Span)span).ToSpanData();
             Assert.Null(spanData.ParentSpanId);
@@ -70,7 +70,7 @@ namespace OpenCensus.Trace.Test
                     .SetRecordEvents(true)
                     .StartSpan();
             Assert.True(span.Context.IsValid);
-            Assert.True(span.Options.HasFlag(SpanOptions.RECORD_EVENTS));
+            Assert.True(span.Options.HasFlag(SpanOptions.RecordEvents));
             Assert.False(span.Context.TraceOptions.IsSampled);
             ISpanData spanData = ((Span)span).ToSpanData();
             Assert.Null(spanData.ParentSpanId);
@@ -85,7 +85,7 @@ namespace OpenCensus.Trace.Test
                     .SetSampler(Samplers.NeverSample)
                     .StartSpan();
             Assert.True(span.Context.IsValid);
-            Assert.False(span.Options.HasFlag(SpanOptions.RECORD_EVENTS));
+            Assert.False(span.Options.HasFlag(SpanOptions.RecordEvents));
             Assert.False(span.Context.TraceOptions.IsSampled);
         }
 
@@ -95,7 +95,7 @@ namespace OpenCensus.Trace.Test
             ISpan rootSpan =
                 SpanBuilder.CreateWithParent(SPAN_NAME, null, spanBuilderOptions).StartSpan();
             Assert.True(rootSpan.Context.IsValid);
-            Assert.True(rootSpan.Options.HasFlag(SpanOptions.RECORD_EVENTS));
+            Assert.True(rootSpan.Options.HasFlag(SpanOptions.RecordEvents));
             Assert.True(rootSpan.Context.TraceOptions.IsSampled);
             Assert.False(((Span)rootSpan).ToSpanData().HasRemoteParent);
             ISpan childSpan =
@@ -113,7 +113,7 @@ namespace OpenCensus.Trace.Test
             ISpan span =
                 SpanBuilder.CreateWithRemoteParent(SPAN_NAME, null, spanBuilderOptions).StartSpan();
             Assert.True(span.Context.IsValid);
-            Assert.True(span.Options.HasFlag(SpanOptions.RECORD_EVENTS));
+            Assert.True(span.Options.HasFlag(SpanOptions.RecordEvents));
             Assert.True(span.Context.TraceOptions.IsSampled);
             ISpanData spanData = ((Span)span).ToSpanData();
             Assert.Null(spanData.ParentSpanId);
@@ -127,7 +127,7 @@ namespace OpenCensus.Trace.Test
                 SpanBuilder.CreateWithRemoteParent(SPAN_NAME, SpanContext.Invalid, spanBuilderOptions)
                     .StartSpan();
             Assert.True(span.Context.IsValid);
-            Assert.True(span.Options.HasFlag(SpanOptions.RECORD_EVENTS));
+            Assert.True(span.Options.HasFlag(SpanOptions.RecordEvents));
             Assert.True(span.Context.TraceOptions.IsSampled);
             ISpanData spanData = ((Span)span).ToSpanData();
             Assert.Null(spanData.ParentSpanId);
@@ -275,7 +275,7 @@ namespace OpenCensus.Trace.Test
         public void StartRemoteChildSpan_WithProbabilitySamplerDefaultSampler()
         {
             var configMock = Mock.Get<ITraceConfig>(traceConfig);
-            configMock.Setup((c) => c.ActiveTraceParams).Returns(TraceParams.DEFAULT);
+            configMock.Setup((c) => c.ActiveTraceParams).Returns(TraceParams.Default);
             // This traceId will not be sampled by the ProbabilitySampler because the first 8 bytes as long
             // is not less than probability * Long.MAX_VALUE;
             ITraceId traceId =
@@ -314,7 +314,7 @@ namespace OpenCensus.Trace.Test
             Assert.True(childSpan.Context.TraceOptions.IsSampled);
             childSpan.End();
 
-            Assert.Equal(TraceParams.DEFAULT, traceConfig.ActiveTraceParams);
+            Assert.Equal(TraceParams.Default, traceConfig.ActiveTraceParams);
 
             // If parent is not sampled then the remote child must be not sampled.
             childSpan =

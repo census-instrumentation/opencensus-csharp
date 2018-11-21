@@ -25,7 +25,7 @@ namespace OpenCensus.Trace.Test
         public void HasInvalidContextAndDefaultSpanOptions()
         {
             Assert.Equal(SpanContext.Invalid, BlankSpan.Instance.Context);
-            Assert.True(BlankSpan.Instance.Options.HasFlag(SpanOptions.NONE));
+            Assert.True(BlankSpan.Instance.Options.HasFlag(SpanOptions.None));
         }
 
         [Fact]
@@ -50,9 +50,9 @@ namespace OpenCensus.Trace.Test
             BlankSpan.Instance.AddAnnotation("MyAnnotation", multipleAttributes);
             BlankSpan.Instance.AddAnnotation(Annotation.FromDescription("MyAnnotation"));
             // BlankSpan.Instance.addNetworkEvent(NetworkEvent.builder(NetworkEvent.Type.SENT, 1L).build());
-            BlankSpan.Instance.AddMessageEvent(MessageEvent.Builder(MessageEventType.SENT, 1L).Build());
+            BlankSpan.Instance.AddMessageEvent(MessageEvent.Builder(MessageEventType.Sent, 1L).Build());
             BlankSpan.Instance.AddLink(
-                Link.FromSpanContext(SpanContext.Invalid, LinkType.CHILD_LINKED_SPAN));
+                Link.FromSpanContext(SpanContext.Invalid, LinkType.ChildLinkedSpan));
             BlankSpan.Instance.Status = Status.Ok;
             BlankSpan.Instance.End(EndSpanOptions.DEFAULT);
             BlankSpan.Instance.End();

@@ -26,49 +26,49 @@ namespace OpenCensus.Trace.Config.Test
         [Fact]
         public void DefaultTraceParams()
         {
-            Assert.Equal(Samplers.GetProbabilitySampler(1e-4), TraceParams.DEFAULT.Sampler);
-            Assert.Equal(32, TraceParams.DEFAULT.MaxNumberOfAttributes);
-            Assert.Equal(32, TraceParams.DEFAULT.MaxNumberOfAnnotations);
-            Assert.Equal(128, TraceParams.DEFAULT.MaxNumberOfMessageEvents);
-            Assert.Equal(128, TraceParams.DEFAULT.MaxNumberOfLinks);
+            Assert.Equal(Samplers.GetProbabilitySampler(1e-4), TraceParams.Default.Sampler);
+            Assert.Equal(32, TraceParams.Default.MaxNumberOfAttributes);
+            Assert.Equal(32, TraceParams.Default.MaxNumberOfAnnotations);
+            Assert.Equal(128, TraceParams.Default.MaxNumberOfMessageEvents);
+            Assert.Equal(128, TraceParams.Default.MaxNumberOfLinks);
         }
 
         [Fact]
         public void UpdateTraceParams_NullSampler()
         {
-            Assert.Throws<ArgumentNullException>(() => TraceParams.DEFAULT.ToBuilder().SetSampler(null));
+            Assert.Throws<ArgumentNullException>(() => TraceParams.Default.ToBuilder().SetSampler(null));
         }
 
         [Fact]
         public void UpdateTraceParams_NonPositiveMaxNumberOfAttributes()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => TraceParams.DEFAULT.ToBuilder().SetMaxNumberOfAttributes(0).Build());
+            Assert.Throws<ArgumentOutOfRangeException>(() => TraceParams.Default.ToBuilder().SetMaxNumberOfAttributes(0).Build());
         }
 
         [Fact]
         public void UpdateTraceParams_NonPositiveMaxNumberOfAnnotations()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => TraceParams.DEFAULT.ToBuilder().SetMaxNumberOfAnnotations(0).Build()); 
+            Assert.Throws<ArgumentOutOfRangeException>(() => TraceParams.Default.ToBuilder().SetMaxNumberOfAnnotations(0).Build()); 
         }
 
 
         [Fact]
         public void updateTraceParams_NonPositiveMaxNumberOfMessageEvents()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => TraceParams.DEFAULT.ToBuilder().SetMaxNumberOfMessageEvents(0).Build());
+            Assert.Throws<ArgumentOutOfRangeException>(() => TraceParams.Default.ToBuilder().SetMaxNumberOfMessageEvents(0).Build());
         }
 
         [Fact]
         public void updateTraceParams_NonPositiveMaxNumberOfLinks()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => TraceParams.DEFAULT.ToBuilder().SetMaxNumberOfLinks(0).Build());
+            Assert.Throws<ArgumentOutOfRangeException>(() => TraceParams.Default.ToBuilder().SetMaxNumberOfLinks(0).Build());
         }
 
         [Fact]
         public void UpdateTraceParams_All()
         {
             TraceParams traceParams =
-              TraceParams.DEFAULT
+              TraceParams.Default
                   .ToBuilder()
                   .SetSampler(Samplers.AlwaysSample)
                   .SetMaxNumberOfAttributes(8)

@@ -29,14 +29,14 @@ namespace OpenCensus.Trace
         {
         }
 
-        protected SpanBase(ISpanContext context, SpanOptions options = SpanOptions.NONE)
+        protected SpanBase(ISpanContext context, SpanOptions options = SpanOptions.None)
         {
             if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
 
-            if (context.TraceOptions.IsSampled && !options.HasFlag(SpanOptions.RECORD_EVENTS))
+            if (context.TraceOptions.IsSampled && !options.HasFlag(SpanOptions.RecordEvents))
             {
                 throw new ArgumentOutOfRangeException("Span is sampled, but does not have RECORD_EVENTS set.");
             }

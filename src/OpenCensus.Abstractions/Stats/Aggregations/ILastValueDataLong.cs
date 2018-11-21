@@ -22,7 +22,7 @@ namespace OpenCensus.Stats.Aggregations
     public interface ILastValueDataLong : IAggregationData
     {
         /// <summary>
-        /// Last value as a long value.
+        /// Gets the last value as a long value.
         /// </summary>
         long LastValue { get; }
     }

@@ -22,7 +22,7 @@ namespace OpenCensus.Tags
     public interface ITagKey
     {
         /// <summary>
-        /// Name of the key.
+        /// Gets the name of the key.
         /// </summary>
         string Name { get; }
     }

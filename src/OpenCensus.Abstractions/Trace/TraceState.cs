@@ -25,14 +25,14 @@ namespace OpenCensus.Trace
     /// </summary>
     public sealed class Tracestate
     {
-        private const int KeyMaxSize = 256;
-        private const int ValueMaxSize = 256;
-        private const int MaxKeyValuePairsCount = 32;
-
         /// <summary>
         /// An instance of empty tracestate.
         /// </summary>
         public static readonly Tracestate Empty = new Tracestate(new List<Entry>());
+
+        private const int KeyMaxSize = 256;
+        private const int ValueMaxSize = 256;
+        private const int MaxKeyValuePairsCount = 32;
 
         private readonly IEnumerable<Entry> entries;
 
@@ -61,7 +61,7 @@ namespace OpenCensus.Trace
         /// Returns the value to which the specified key is mapped, or null if this map contains no mapping
         /// for the key.
         /// </summary>
-        /// <param name="key">Key with which the specified value is to be associated</param>
+        /// <param name="key">Key with which the specified value is to be associated.</param>
         /// <returns>
         /// the value to which the specified key is mapped, or null if this map contains no mapping
         /// for the key.
@@ -86,150 +86,6 @@ namespace OpenCensus.Trace
         public TracestateBuilder ToBuilder()
         {
             return new TracestateBuilder(this);
-        }
-
-        /// <summary>
-        /// Tracestate builder.
-        /// </summary>
-        public sealed class TracestateBuilder
-        {
-            private readonly Tracestate parent;
-
-            private List<Entry> entries;
-
-            internal TracestateBuilder(Tracestate parent)
-            {
-                parent = parent ?? throw new ArgumentNullException(nameof(parent));
-
-                this.parent = parent;
-                this.entries = null;
-            }
-
-            /// <summary>
-            /// Adds or updates the entry for the given key.
-            /// New or updated entry will be moved to the front of the list.
-            /// </summary>
-            /// <param name="key">Key to update value for.</param>
-            /// <param name="value">Value set for the key.</param>
-            /// <returns>Tracestate builder for chained calls.</returns>
-            public TracestateBuilder Set(string key, string value)
-            {
-                // Initially create the Entry to validate input.
-
-                Entry entry = Entry.Create(key, value);
-
-                if (this.entries == null)
-                {
-                    // Copy entries from the parent.
-                    this.entries = new List<Entry>(this.parent.Entries);
-                }
-
-                for (int i = 0; i < this.entries.Count; i++)
-                {
-                    if (this.entries[i].Key.Equals(entry.Key))
-                    {
-                        this.entries.RemoveAt(i);
-                        // Exit now because the entries list cannot contain duplicates.
-                        break;
-                    }
-                }
-
-                // Inserts the element at the front of this list.
-                this.entries.Insert(0, entry);
-                return this;
-            }
-
-            /// <summary>
-            /// Removes entry for the given key.
-            /// </summary>
-            /// <param name="key">Key to remove from tracestate.</param>
-            /// <returns>Tracestate builder for chained calls.</returns>
-            public TracestateBuilder Remove(string key)
-            {
-                key = key ?? throw new ArgumentNullException(nameof(key));
-
-                if (this.entries == null)
-                {
-                    // Copy entries from the parent.
-                    this.entries = new List<Entry>(this.parent.Entries);
-                }
-
-                for (int i = 0; i < this.entries.Count; i++)
-                {
-                    if (this.entries[i].Key.Equals(key))
-                    {
-                        this.entries.RemoveAt(i);
-                        // Exit now because the entries list cannot contain duplicates.
-                        break;
-                    }
-                }
-
-                return this;
-            }
-
-            /// <summary>
-            /// Builds the tracestate.
-            /// </summary>
-            /// <returns>Resulting tracestate.</returns>
-            public Tracestate Build()
-            {
-                if (this.entries == null)
-                {
-                    return this.parent;
-
-                }
-
-                return Tracestate.Create(this.entries);
-            }
-        }
-
-        /// <summary>
-        /// Immutable tracestate entry.
-        /// </summary>
-        public sealed class Entry
-        {
-            private readonly string key;
-            private readonly string value;
-
-            private Entry(string key, string value)
-            {
-                this.key = key;
-                this.value = value;
-            }
-
-            /// <summary>
-            /// Gets the key of tracestate entry.
-            /// </summary>
-            public string Key { get => key; }
-
-            /// <summary>
-            /// Gets the value of tracestate entry.
-            /// </summary>
-            public string Value { get => value; }
-
-            /// <summary>
-            /// Creates a new Entry with the given name and value.
-            /// </summary>
-            /// <param name="key">Key of tracestate entry.</param>
-            /// <param name="value">Value of thacestate entry.</param>
-            /// <returns>The new tracestate entry.</returns>
-            public static Entry Create(string key, string value)
-            {
-                key = key ?? throw new ArgumentNullException(nameof(key));
-                value = value ?? throw new ArgumentNullException(nameof(value));
-
-                if (!ValidateKey(key))
-                {
-                    throw new ArgumentException("Doesn't comply to spec", nameof(key));
-                }
-
-                if (!ValidateValue(value))
-                {
-                    throw new ArgumentException("Doesn't comply to spec", nameof(value));
-                }
-
-                return new Entry(key, value);
-            }
         }
 
         private static bool ValidateKey(string key)
@@ -327,7 +183,6 @@ namespace OpenCensus.Trace
             }
 
             return true;
-
         }
 
         private static Tracestate Create(List<Entry> entries)
@@ -340,6 +195,151 @@ namespace OpenCensus.Trace
             }
 
             return new Tracestate(entries);
+        }
+
+        /// <summary>
+        /// Immutable tracestate entry.
+        /// </summary>
+        public sealed class Entry
+        {
+            private readonly string key;
+            private readonly string value;
+
+            private Entry(string key, string value)
+            {
+                this.key = key;
+                this.value = value;
+            }
+
+            /// <summary>
+            /// Gets the key of tracestate entry.
+            /// </summary>
+            public string Key { get => this.key; }
+
+            /// <summary>
+            /// Gets the value of tracestate entry.
+            /// </summary>
+            public string Value { get => this.value; }
+
+            /// <summary>
+            /// Creates a new Entry with the given name and value.
+            /// </summary>
+            /// <param name="key">Key of tracestate entry.</param>
+            /// <param name="value">Value of thacestate entry.</param>
+            /// <returns>The new tracestate entry.</returns>
+            public static Entry Create(string key, string value)
+            {
+                key = key ?? throw new ArgumentNullException(nameof(key));
+                value = value ?? throw new ArgumentNullException(nameof(value));
+
+                if (!ValidateKey(key))
+                {
+                    throw new ArgumentException("Doesn't comply to spec", nameof(key));
+                }
+
+                if (!ValidateValue(value))
+                {
+                    throw new ArgumentException("Doesn't comply to spec", nameof(value));
+                }
+
+                return new Entry(key, value);
+            }
+        }
+
+        /// <summary>
+        /// Tracestate builder.
+        /// </summary>
+        public sealed class TracestateBuilder
+        {
+            private readonly Tracestate parent;
+
+            private List<Entry> entries;
+
+            internal TracestateBuilder(Tracestate parent)
+            {
+                parent = parent ?? throw new ArgumentNullException(nameof(parent));
+
+                this.parent = parent;
+                this.entries = null;
+            }
+
+            /// <summary>
+            /// Adds or updates the entry for the given key.
+            /// New or updated entry will be moved to the front of the list.
+            /// </summary>
+            /// <param name="key">Key to update value for.</param>
+            /// <param name="value">Value set for the key.</param>
+            /// <returns>Tracestate builder for chained calls.</returns>
+            public TracestateBuilder Set(string key, string value)
+            {
+                // Initially create the Entry to validate input.
+
+                Entry entry = Entry.Create(key, value);
+
+                if (this.entries == null)
+                {
+                    // Copy entries from the parent.
+                    this.entries = new List<Entry>(this.parent.Entries);
+                }
+
+                for (int i = 0; i < this.entries.Count; i++)
+                {
+                    if (this.entries[i].Key.Equals(entry.Key))
+                    {
+                        this.entries.RemoveAt(i);
+
+                        // Exit now because the entries list cannot contain duplicates.
+                        break;
+                    }
+                }
+
+                // Inserts the element at the front of this list.
+                this.entries.Insert(0, entry);
+                return this;
+            }
+
+            /// <summary>
+            /// Removes entry for the given key.
+            /// </summary>
+            /// <param name="key">Key to remove from tracestate.</param>
+            /// <returns>Tracestate builder for chained calls.</returns>
+            public TracestateBuilder Remove(string key)
+            {
+                key = key ?? throw new ArgumentNullException(nameof(key));
+
+                if (this.entries == null)
+                {
+                    // Copy entries from the parent.
+                    this.entries = new List<Entry>(this.parent.Entries);
+                }
+
+                for (int i = 0; i < this.entries.Count; i++)
+                {
+                    if (this.entries[i].Key.Equals(key))
+                    {
+                        this.entries.RemoveAt(i);
+
+                        // Exit now because the entries list cannot contain duplicates.
+                        break;
+                    }
+                }
+
+                return this;
+            }
+
+            /// <summary>
+            /// Builds the tracestate.
+            /// </summary>
+            /// <returns>Resulting tracestate.</returns>
+            public Tracestate Build()
+            {
+                if (this.entries == null)
+                {
+                    return this.parent;
+                }
+
+                return Tracestate.Create(this.entries);
+            }
         }
     }
 }

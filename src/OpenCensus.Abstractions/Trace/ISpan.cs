@@ -26,7 +26,7 @@ namespace OpenCensus.Trace
 
         Status Status { get; set; }
 
-        SpanKind? Kind {get; set; }
+        SpanKind? Kind { get; set; }
 
         void PutAttribute(string key, IAttributeValue value);
 

@@ -45,7 +45,7 @@ namespace OpenCensus.Trace
 
         /// <summary>
         /// Helper method that populates span properties from http method according
-        /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md
+        /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md.
         /// </summary>
         /// <param name="span">Span to fill out.</param>
         /// <param name="method">Http method.</param>
@@ -58,7 +58,7 @@ namespace OpenCensus.Trace
 
         /// <summary>
         /// Helper method that populates span properties from http status code according
-        /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md
+        /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md.
         /// </summary>
         /// <param name="span">Span to fill out.</param>
         /// <param name="statusCode">Http status code.</param>
@@ -71,7 +71,7 @@ namespace OpenCensus.Trace
 
         /// <summary>
         /// Helper method that populates span properties from http user agent according
-        /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md
+        /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md.
         /// </summary>
         /// <param name="span">Span to fill out.</param>
         /// <param name="userAgent">Http status code.</param>
@@ -88,7 +88,7 @@ namespace OpenCensus.Trace
 
         /// <summary>
         /// Helper method that populates span properties from host and port
-        /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md
+        /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md.
         /// </summary>
         /// <param name="span">Span to fill out.</param>
         /// <param name="hostName">Hostr name.</param>
@@ -110,7 +110,7 @@ namespace OpenCensus.Trace
 
         /// <summary>
         /// Helper method that populates span properties from url path according
-        /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md
+        /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md.
         /// </summary>
         /// <param name="span">Span to fill out.</param>
         /// <param name="path">Url path.</param>
@@ -123,7 +123,7 @@ namespace OpenCensus.Trace
 
         /// <summary>
         /// Helper method that populates span properties from size according
-        /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md
+        /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md.
         /// </summary>
         /// <param name="span">Span to fill out.</param>
         /// <param name="size">Response size.</param>
@@ -136,7 +136,7 @@ namespace OpenCensus.Trace
 
         /// <summary>
         /// Helper method that populates span properties from request size according
-        /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md
+        /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md.
         /// </summary>
         /// <param name="span">Span to fill out.</param>
         /// <param name="size">Request size.</param>
@@ -218,7 +218,7 @@ namespace OpenCensus.Trace
 
         /// <summary>
         /// Helper method that populates span properties from http status code according
-        /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md
+        /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md.
         /// </summary>
         /// <param name="span">Span to fill out.</param>
         /// <param name="statusCode">Http status code.</param>
@@ -231,7 +231,8 @@ namespace OpenCensus.Trace
             if ((int)statusCode < 200)
             {
                 span.Status = Status.Unknown;
-            } else if ((int)statusCode >= 200 && (int)statusCode <= 399)
+            }
+            else if ((int)statusCode >= 200 && (int)statusCode <= 399)
             {
                 span.Status = Status.Ok;
             }

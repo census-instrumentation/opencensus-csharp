@@ -42,7 +42,7 @@ namespace OpenCensus.Trace.Sampler.Test
             spanId = SpanId.GenerateRandomId(random);
             sampledSpanContext = SpanContext.Create(traceId, parentSpanId, TraceOptions.Builder().SetIsSampled(true).Build(), Tracestate.Empty);
             notSampledSpanContext = SpanContext.Create(traceId, parentSpanId, TraceOptions.Default, Tracestate.Empty);
-            sampledSpan = new NoopSpan(sampledSpanContext, SpanOptions.RECORD_EVENTS);
+            sampledSpan = new NoopSpan(sampledSpanContext, SpanOptions.RecordEvents);
         }
 
         [Fact]

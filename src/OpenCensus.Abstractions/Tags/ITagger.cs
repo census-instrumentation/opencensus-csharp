@@ -46,7 +46,7 @@ namespace OpenCensus.Tags
         /// <summary>
         /// Enters the scope of code where the given tag context is in the current context and
         /// returns an object that represents that scope.The scope is exited when the returned object is
-        /// closed.        
+        /// closed.
         /// </summary>
         /// <param name="tags">Tags to set as current.</param>
         /// <returns>Scope object. Dispose to dissassociate tags context from the current context.</returns>

@@ -22,7 +22,7 @@ namespace OpenCensus.Stats.Aggregations
     public interface ICountData : IAggregationData
     {
         /// <summary>
-        /// Counter representing the result of an aggregation.
+        /// Gets the counter representing the result of an aggregation.
         /// </summary>
         long Count { get; }
     }

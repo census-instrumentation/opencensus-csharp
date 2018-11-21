@@ -41,7 +41,7 @@ namespace OpenCensus.Trace
 
         public void OnEnd(SpanBase span)
         {
-            if ((span.Options.HasFlag(SpanOptions.RECORD_EVENTS) && this.enqueueEventForNonSampledSpans)
+            if ((span.Options.HasFlag(SpanOptions.RecordEvents) && this.enqueueEventForNonSampledSpans)
                 || span.Context.TraceOptions.IsSampled)
             {
                 this.eventQueue.Enqueue(new SpanEndEvent(span, this.spanExporter, this.runningSpanStore, this.sampledSpanStore));
@@ -50,7 +50,7 @@ namespace OpenCensus.Trace
 
         public void OnStart(SpanBase span)
         {
-            if (span.Options.HasFlag(SpanOptions.RECORD_EVENTS) && this.enqueueEventForNonSampledSpans)
+            if (span.Options.HasFlag(SpanOptions.RecordEvents) && this.enqueueEventForNonSampledSpans)
             {
                 this.eventQueue.Enqueue(new SpanStartEvent(span, this.runningSpanStore));
             }

@@ -27,7 +27,7 @@ namespace OpenCensus.Stats.Aggregations
         double Mean { get; }
 
         /// <summary>
-        /// Gets the count of samples
+        /// Gets the count of samples.
         /// </summary>
         long Count { get; }
 

@@ -65,7 +65,7 @@ namespace OpenCensus.Trace
             this.clock = clock;
             this.hasBeenEnded = false;
             this.sampleToLocalSpanStore = false;
-            if (options.HasFlag(SpanOptions.RECORD_EVENTS))
+            if (options.HasFlag(SpanOptions.RecordEvents))
             {
                 this.timestampConverter = timestampConverter ?? OpenCensus.Internal.TimestampConverter.Now(clock);
                 this.startNanoTime = clock.NowNanos;
@@ -97,7 +97,7 @@ namespace OpenCensus.Trace
 
             set
             {
-                if (!this.Options.HasFlag(SpanOptions.RECORD_EVENTS))
+                if (!this.Options.HasFlag(SpanOptions.RecordEvents))
                 {
                     return;
                 }
@@ -248,7 +248,7 @@ namespace OpenCensus.Trace
 
         public override void PutAttribute(string key, IAttributeValue value)
         {
-            if (!this.Options.HasFlag(SpanOptions.RECORD_EVENTS))
+            if (!this.Options.HasFlag(SpanOptions.RecordEvents))
             {
                 return;
             }
@@ -267,7 +267,7 @@ namespace OpenCensus.Trace
 
         public override void PutAttributes(IDictionary<string, IAttributeValue> attributes)
         {
-            if (!this.Options.HasFlag(SpanOptions.RECORD_EVENTS))
+            if (!this.Options.HasFlag(SpanOptions.RecordEvents))
             {
                 return;
             }
@@ -286,7 +286,7 @@ namespace OpenCensus.Trace
 
         public override void AddAnnotation(string description, IDictionary<string, IAttributeValue> attributes)
         {
-            if (!this.Options.HasFlag(SpanOptions.RECORD_EVENTS))
+            if (!this.Options.HasFlag(SpanOptions.RecordEvents))
             {
                 return;
             }
@@ -305,7 +305,7 @@ namespace OpenCensus.Trace
 
         public override void AddAnnotation(IAnnotation annotation)
         {
-            if (!this.Options.HasFlag(SpanOptions.RECORD_EVENTS))
+            if (!this.Options.HasFlag(SpanOptions.RecordEvents))
             {
                 return;
             }
@@ -329,7 +329,7 @@ namespace OpenCensus.Trace
 
         public override void AddLink(ILink link)
         {
-            if (!this.Options.HasFlag(SpanOptions.RECORD_EVENTS))
+            if (!this.Options.HasFlag(SpanOptions.RecordEvents))
             {
                 return;
             }
@@ -353,7 +353,7 @@ namespace OpenCensus.Trace
 
         public override void AddMessageEvent(IMessageEvent messageEvent)
         {
-            if (!this.Options.HasFlag(SpanOptions.RECORD_EVENTS))
+            if (!this.Options.HasFlag(SpanOptions.RecordEvents))
             {
                 return;
             }
@@ -377,7 +377,7 @@ namespace OpenCensus.Trace
 
         public override void End(EndSpanOptions options)
         {
-            if (!this.Options.HasFlag(SpanOptions.RECORD_EVENTS))
+            if (!this.Options.HasFlag(SpanOptions.RecordEvents))
             {
                 return;
             }
@@ -412,7 +412,7 @@ namespace OpenCensus.Trace
 
         public override ISpanData ToSpanData()
         {
-            if (!this.Options.HasFlag(SpanOptions.RECORD_EVENTS))
+            if (!this.Options.HasFlag(SpanOptions.RecordEvents))
             {
                 throw new InvalidOperationException("Getting SpanData for a Span without RECORD_EVENTS option.");
             }
@@ -464,7 +464,7 @@ namespace OpenCensus.Trace
 
             // Call onStart here instead of calling in the constructor to make sure the span is completely
             // initialized.
-            if (span.Options.HasFlag(SpanOptions.RECORD_EVENTS))
+            if (span.Options.HasFlag(SpanOptions.RecordEvents))
             {
                 startEndHandler.OnStart(span);
             }
