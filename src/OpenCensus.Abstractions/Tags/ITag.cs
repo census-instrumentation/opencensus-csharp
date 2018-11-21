@@ -16,10 +16,19 @@
 
 namespace OpenCensus.Tags
 {
+    /// <summary>
+    /// Tag with the key and value.
+    /// </summary>
     public interface ITag
     {
+        /// <summary>
+        /// Gets the tag key.
+        /// </summary>
         ITagKey Key { get; }
 
+        /// <summary>
+        /// Gets the tag value.
+        /// </summary>
         ITagValue Value { get; }
     }
 }

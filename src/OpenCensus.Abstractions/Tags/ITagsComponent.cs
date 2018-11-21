@@ -18,12 +18,24 @@ namespace OpenCensus.Tags
 {
     using OpenCensus.Tags.Propagation;
 
+    /// <summary>
+    /// Tagger configuration.
+    /// </summary>
     public interface ITagsComponent
     {
+        /// <summary>
+        /// Tagger to operate with tags.
+        /// </summary>
         ITagger Tagger { get; }
 
+        /// <summary>
+        /// Propagation component to use to serialize and deserialize tags on the wire.
+        /// </summary>
         ITagPropagationComponent TagPropagationComponent { get; }
 
+        /// <summary>
+        /// State of tagging API - enabled or disabled.
+        /// </summary>
         TaggingState State { get; }
     }
 }
