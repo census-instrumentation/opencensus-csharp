@@ -18,10 +18,19 @@ namespace OpenCensus.Trace.Export
 {
     using System.Collections.Generic;
 
+    /// <summary>
+    /// Summary of sampled spans.
+    /// </summary>
     public interface ISampledPerSpanNameSummary
     {
+        /// <summary>
+        /// Gets the number of sampled spans by latency boundary.
+        /// </summary>
         IDictionary<ISampledLatencyBucketBoundaries, int> NumbersOfLatencySampledSpans { get; }
 
+        /// <summary>
+        /// Gets the number of error sampled spans by error code.
+        /// </summary>
         IDictionary<CanonicalCode, int> NumbersOfErrorSampledSpans { get; }
     }
 }

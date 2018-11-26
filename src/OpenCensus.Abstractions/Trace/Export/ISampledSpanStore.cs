@@ -23,18 +23,46 @@ namespace OpenCensus.Trace.Export
     /// </summary>
     public interface ISampledSpanStore
     {
+        /// <summary>
+        /// Gets the summary of sampled spans.
+        /// </summary>
         ISampledSpanStoreSummary Summary { get; }
 
+        /// <summary>
+        /// Gets all registered span names.
+        /// </summary>
         ISet<string> RegisteredSpanNamesForCollection { get; }
 
+        /// <summary>
+        /// Gets the list of sampled spans using the provided filter.
+        /// </summary>
+        /// <param name="filter">Filter to use to query sampled store.</param>
+        /// <returns>List of spans satisfying filtering criteria.</returns>
         IList<ISpanData> GetLatencySampledSpans(ISampledSpanStoreLatencyFilter filter);
 
+        /// <summary>
+        /// Gets the list of error spans using provided error filter.
+        /// </summary>
+        /// <param name="filter">Filter to use to query store.</param>
+        /// <returns>List of sampled spans satisfying filtering criteria.</returns>
         IList<ISpanData> GetErrorSampledSpans(ISampledSpanStoreErrorFilter filter);
 
+        /// <summary>
+        /// Registers span names for collection.
+        /// </summary>
+        /// <param name="spanNames">List of span names.</param>
         void RegisterSpanNamesForCollection(IList<string> spanNames);
 
+        /// <summary>
+        /// Unregister span names for the collection.
+        /// </summary>
+        /// <param name="spanNames">Span names to unregister.</param>
         void UnregisterSpanNamesForCollection(IList<string> spanNames);
 
+        /// <summary>
+        /// Consider span for sampling.
+        /// </summary>
+        /// <param name="span">Span to consider.</param>
         void ConsiderForSampling(ISpan span);
     }
 }

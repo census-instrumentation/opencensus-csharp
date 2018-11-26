@@ -22,6 +22,9 @@ namespace OpenCensus.Trace.Config
     /// <inheritdoc/>
     public sealed class TraceParams : ITraceParams
     {
+        /// <summary>
+        /// Default trace parameters.
+        /// </summary>
         public static readonly ITraceParams Default =
             new TraceParams(Samplers.GetProbabilitySampler(DefaultProbability), DefaultSpanMaxNumAttributes, DefaultSpanMaxNumAnnotations, DefaultSpanMaxNumMessageEvents, DefaultSpanMaxNumLinks);
 

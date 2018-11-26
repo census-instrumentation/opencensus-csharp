@@ -79,7 +79,7 @@ namespace OpenCensus.Trace.Test
                 ss.Dispose();
             }
             Assert.Null(CurrentSpanUtils.CurrentSpan);
-            Mock.Get<ISpan>(span).Verify((s) => s.End(EndSpanOptions.DEFAULT));
+            Mock.Get<ISpan>(span).Verify((s) => s.End(EndSpanOptions.Default));
         }
     }
 }

@@ -18,32 +18,74 @@ namespace OpenCensus.Trace.Export
 {
     using OpenCensus.Common;
 
+    /// <summary>
+    /// Span data with read-only properties.
+    /// </summary>
     public interface ISpanData
     {
+        /// <summary>
+        /// Gets the span context.
+        /// </summary>
         ISpanContext Context { get; }
 
+        /// <summary>
+        /// Gets the parent span id.
+        /// </summary>
         ISpanId ParentSpanId { get; }
 
+        /// <summary>
+        /// Gets a value indicating whether span has a remote parent.
+        /// </summary>
         bool? HasRemoteParent { get; }
 
+        /// <summary>
+        /// Gets the span name.
+        /// </summary>
         string Name { get; }
 
+        /// <summary>
+        /// Gets the start timestamp.
+        /// </summary>
         ITimestamp StartTimestamp { get; }
 
+        /// <summary>
+        /// Gets the collection of attributes.
+        /// </summary>
         IAttributes Attributes { get; }
 
+        /// <summary>
+        /// Gets the collection of annotations.
+        /// </summary>
         ITimedEvents<IAnnotation> Annotations { get; }
 
+        /// <summary>
+        /// Gets the collection of message events.
+        /// </summary>
         ITimedEvents<IMessageEvent> MessageEvents { get; }
 
+        /// <summary>
+        /// Gets the links collection.
+        /// </summary>
         ILinks Links { get; }
 
+        /// <summary>
+        /// Gets the childer span count.
+        /// </summary>
         int? ChildSpanCount { get; }
 
+        /// <summary>
+        /// Gets the span result status.
+        /// </summary>
         Status Status { get; }
 
+        /// <summary>
+        /// Gets the span kind.
+        /// </summary>
         SpanKind Kind { get; }
 
+        /// <summary>
+        /// Gets the end timestamp.
+        /// </summary>
         ITimestamp EndTimestamp { get; }
     }
 }

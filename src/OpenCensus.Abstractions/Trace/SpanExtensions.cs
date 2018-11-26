@@ -16,9 +16,9 @@
 
 namespace OpenCensus.Trace
 {
-    using System.Collections.Generic;
-    using System.Collections.Specialized;
-
+    /// <summary>
+    /// Helper class to populate well-known span attributes.
+    /// </summary>
     public static class SpanExtensions
     {
         /// <summary>
@@ -160,59 +160,51 @@ namespace OpenCensus.Trace
             return span;
         }
 
+        /// <summary>
+        /// Stores error stack trace into the span as an attribute.
+        /// </summary>
+        /// <param name="span">Span to store attribute on.</param>
+        /// <param name="errorStackTrace">Error stack trace to store.</param>
+        /// <returns>Span with the populated error stack trace attribute.</returns>
         public static ISpan PutErrorStackTraceAttribute(this ISpan span, string errorStackTrace)
         {
             span.PutAttribute(SpanAttributeConstants.ErrorStackTrace, AttributeValue.StringAttributeValue(errorStackTrace));
             return span;
         }
 
+        /// <summary>
+        /// Populates MVC controller class attribute.
+        /// </summary>
+        /// <param name="span">Span to store attribute on.</param>
+        /// <param name="className">MVC controller class name.</param>
+        /// <returns>Span with the populated MVC controller class attribute.</returns>
         public static ISpan PutMvcControllerClass(this ISpan span,  string className)
         {
             span.PutAttribute(SpanAttributeConstants.MvcControllerClass, AttributeValue.StringAttributeValue(className));
             return span;
         }
 
+        /// <summary>
+        /// Populates MVC controller action attribute.
+        /// </summary>
+        /// <param name="span">Span to store attribute on.</param>
+        /// <param name="actionName">MVC controller action name.</param>
+        /// <returns>Span with the populated MVC controller action attribute.</returns>
         public static ISpan PutMvcControllerAction(this ISpan span, string actionName)
         {
             span.PutAttribute(SpanAttributeConstants.MvcControllerMethod, AttributeValue.StringAttributeValue(actionName));
             return span;
         }
 
-        public static ISpan PutMvcViewExecutingFilePath(this ISpan span, string actionName)
+        /// <summary>
+        /// Populates MVC view attribute on the span.
+        /// </summary>
+        /// <param name="span">Span to store attribute on.</param>
+        /// <param name="viewExecutingFilePath">View executing file path.</param>
+        /// <returns>Span with the populated view executing file path.</returns>
+        public static ISpan PutMvcViewExecutingFilePath(this ISpan span, string viewExecutingFilePath)
         {
-            span.PutAttribute(SpanAttributeConstants.MvcViewFilePath, AttributeValue.StringAttributeValue(actionName));
-            return span;
-        }
-
-        public static ISpan PutHttpRequestHeadersAttribute(this ISpan span, List<KeyValuePair<string, IEnumerable<string>>> headers)
-        {
-            PutHeadersAttribute(span, "http.request.", headers);
-            return span;
-        }
-
-        public static ISpan PutHttpResponseHeadersAttribute(this ISpan span, List<KeyValuePair<string, IEnumerable<string>>> headers)
-        {
-            PutHeadersAttribute(span, "http.response.", headers);
-            return span;
-        }
-
-        public static void PutHeadersAttribute(ISpan span, string key, List<KeyValuePair<string, IEnumerable<string>>> headers)
-        {
-            foreach (var header in headers)
-            {
-                span.PutAttribute(key + header.Key, ToCommaDelimitedStringAttribute(header.Value));
-            }
-        }
-
-        public static ISpan PutHttpRequestHeadersAttribute(this ISpan span, NameValueCollection headers)
-        {
-            PutHeadersAttribute(span, "http.request.", headers);
-            return span;
-        }
-
-        public static ISpan PutHttpResponseHeadersAttribute(this ISpan span, NameValueCollection headers)
-        {
-            PutHeadersAttribute(span, "http.response.", headers);
+            span.PutAttribute(SpanAttributeConstants.MvcViewFilePath, AttributeValue.StringAttributeValue(viewExecutingFilePath));
             return span;
         }
 
@@ -276,21 +268,6 @@ namespace OpenCensus.Trace
             span.Status = span.Status.WithDescription(reasonPhrase);
 
             return span;
-        }
-
-        private static void PutHeadersAttribute(ISpan span, string key, NameValueCollection headers)
-        {
-            foreach (var header in headers.AllKeys)
-            {
-                IAttributeValue values = ToCommaDelimitedStringAttribute(headers.GetValues(header));
-                span.PutAttribute(key + header, values);
-            }
-        }
-
-        private static IAttributeValue ToCommaDelimitedStringAttribute(IEnumerable<string> values)
-        {
-            var list = string.Join(",", values);
-            return AttributeValue.StringAttributeValue(list);
         }
     }
 }

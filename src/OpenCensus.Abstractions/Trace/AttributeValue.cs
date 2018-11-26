@@ -72,16 +72,7 @@ namespace OpenCensus.Trace
             return new AttributeValue<double>(doubleValue);
         }
 
-        /// <summary>
-        /// Executes type-specific callback without type casting.
-        /// </summary>
-        /// <typeparam name="T">Callback return value.</typeparam>
-        /// <param name="stringFunction">Callback to call for string.</param>
-        /// <param name="booleanFunction">Callback to call for boolean.</param>
-        /// <param name="longFunction">Callback to call for long.</param>
-        /// <param name="doubleFunction">Callback to call for double.</param>
-        /// <param name="defaultFunction">Callback to call for any other type.</param>
-        /// <returns>Callback execution result.</returns>
+        /// <inheritdoc/>
         public abstract T Match<T>(
             Func<string, T> stringFunction,
             Func<bool, T> booleanFunction,

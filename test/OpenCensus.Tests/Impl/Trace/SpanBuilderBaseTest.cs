@@ -45,7 +45,7 @@ namespace OpenCensus.Trace.Test
             {
                 scope.Dispose();
             }
-            span.Verify(s => s.End(EndSpanOptions.DEFAULT));
+            span.Verify(s => s.End(EndSpanOptions.Default));
             Assert.Same(BlankSpan.Instance, tracer.CurrentSpan);
         }
     }

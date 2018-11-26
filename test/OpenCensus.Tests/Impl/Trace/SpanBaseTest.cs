@@ -85,7 +85,7 @@ namespace OpenCensus.Trace.Test
             var mockSpan = new Mock<NoopSpan>(spanContext, spanOptions) { CallBase = true };
             var span = mockSpan.Object;
             span.End();
-            mockSpan.Verify((s) => s.End(EndSpanOptions.DEFAULT));
+            mockSpan.Verify((s) => s.End(EndSpanOptions.Default));
         }
 
         [Fact]

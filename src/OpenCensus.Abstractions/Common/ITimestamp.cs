@@ -18,6 +18,9 @@ namespace OpenCensus.Common
 {
     using System;
 
+    /// <summary>
+    /// Timestamp with the nanoseconds precision.
+    /// </summary>
     public interface ITimestamp : IComparable<ITimestamp>
     {
         /// <summary>

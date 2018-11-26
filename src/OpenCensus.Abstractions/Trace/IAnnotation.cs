@@ -18,10 +18,19 @@ namespace OpenCensus.Trace
 {
     using System.Collections.Generic;
 
+    /// <summary>
+    /// Annotation associated with the span.
+    /// </summary>
     public interface IAnnotation
     {
+        /// <summary>
+        /// Gets the annotation description.
+        /// </summary>
         string Description { get; }
 
+        /// <summary>
+        /// Gets the collection of attributes associated with the annotation.
+        /// </summary>
         IDictionary<string, IAttributeValue> Attributes { get; }
     }
 }

@@ -16,14 +16,29 @@
 
 namespace OpenCensus.Trace.Export
 {
+    /// <summary>
+    /// Sampled span store latency filter.
+    /// </summary>
     public interface ISampledSpanStoreLatencyFilter
     {
+        /// <summary>
+        /// Gets the span name to filter by.
+        /// </summary>
         string SpanName { get; }
 
+        /// <summary>
+        /// Gets the latency lower boundery as nanoseconds to filter by.
+        /// </summary>
         long LatencyLowerNs { get; }
 
+        /// <summary>
+        /// Gets the latency upper boundary as a nanosecond to filter by.
+        /// </summary>
         long LatencyUpperNs { get; }
 
+        /// <summary>
+        /// Gets the maximum number of spans to return.
+        /// </summary>
         int MaxSpansToReturn { get; }
     }
 }

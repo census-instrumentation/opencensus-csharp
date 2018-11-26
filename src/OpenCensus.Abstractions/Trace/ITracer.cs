@@ -18,18 +18,44 @@ namespace OpenCensus.Trace
 {
     using OpenCensus.Common;
 
+    /// <summary>
+    /// Tracer to record distributed tracing informaiton.
+    /// </summary>
     public interface ITracer
     {
+        /// <summary>
+        /// Gets the current span from the context.
+        /// </summary>
         ISpan CurrentSpan { get; }
 
+        /// <summary>
+        /// Associates the span with the current context.
+        /// </summary>
+        /// <param name="span">Span to associate with the current context.</param>
+        /// <returns>Scope object to control span to current context association.</returns>
         IScope WithSpan(ISpan span);
 
-        // <C> Callable<C> withSpan(Span span, final Callable<C> callable)
-        // Runnable withSpan(Span span, Runnable runnable)
+        /// <summary>
+        /// Gets the span builder for the span with the given name.
+        /// </summary>
+        /// <param name="spanName">Span name.</param>
+        /// <returns>Span builder for the span with the given name.</returns>
         ISpanBuilder SpanBuilder(string spanName);
 
+        /// <summary>
+        /// Gets the span builder for the span with the given name and parent.
+        /// </summary>
+        /// <param name="spanName">Span name.</param>
+        /// <param name="parent">Parent of the span.</param>
+        /// <returns>Span builder for the span with the given name and specified parent.</returns>
         ISpanBuilder SpanBuilderWithExplicitParent(string spanName, ISpan parent = null);
 
+        /// <summary>
+        /// Gets the span builder for the span with the give name and remote parent context.
+        /// </summary>
+        /// <param name="spanName">Span name.</param>
+        /// <param name="remoteParentSpanContext">Remote parent context extracted from the wire.</param>
+        /// <returns>Span builder for the span with the given name and specified parent span context.</returns>
         ISpanBuilder SpanBuilderWithRemoteParent(string spanName, ISpanContext remoteParentSpanContext = null);
     }
 }

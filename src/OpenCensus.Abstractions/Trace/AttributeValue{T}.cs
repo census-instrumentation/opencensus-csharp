@@ -18,6 +18,10 @@ namespace OpenCensus.Trace
 {
     using System;
 
+    /// <summary>
+    /// Generic attribute value.
+    /// </summary>
+    /// <typeparam name="T">Type of the value carried by this attribute value.</typeparam>
     public sealed class AttributeValue<T> : AttributeValue, IAttributeValue<T>
     {
         internal AttributeValue(T value)
@@ -25,8 +29,14 @@ namespace OpenCensus.Trace
             this.Value = value;
         }
 
+        /// <inheritdoc/>
         public T Value { get; }
 
+        /// <summary>
+        /// Creates an attribute value from string.
+        /// </summary>
+        /// <param name="stringValue">Value to populate attribute value with.</param>
+        /// <returns>Attribute value with the given value.</returns>
         public static IAttributeValue<string> Create(string stringValue)
         {
             if (stringValue == null)
@@ -37,21 +47,37 @@ namespace OpenCensus.Trace
             return new AttributeValue<string>(stringValue);
         }
 
+        /// <summary>
+        /// Creates an attribute value from long.
+        /// </summary>
+        /// <param name="longValue">Value to populate attribute value with.</param>
+        /// <returns>Attribute value with the given value.</returns>
         public static IAttributeValue<long> Create(long longValue)
         {
             return new AttributeValue<long>(longValue);
         }
 
+        /// <summary>
+        /// Creates an attribute value from bool.
+        /// </summary>
+        /// <param name="booleanValue">Value to populate attribute value with.</param>
+        /// <returns>Attribute value with the given value.</returns>
         public static IAttributeValue<bool> Create(bool booleanValue)
         {
             return new AttributeValue<bool>(booleanValue);
         }
 
+        /// <summary>
+        /// Creates an attribute value from double.
+        /// </summary>
+        /// <param name="doubleValue">Value to populate attribute value with.</param>
+        /// <returns>Attribute value with the given value.</returns>
         public static IAttributeValue<double> Create(double doubleValue)
         {
             return new AttributeValue<double>(doubleValue);
         }
 
+        /// <inheritdoc/>
         public TArg Apply<TArg>(Func<T, TArg> function)
         {
             return function(this.Value);
@@ -90,6 +116,7 @@ namespace OpenCensus.Trace
                 + "}";
         }
 
+        /// <inheritdoc/>
         public override TReturn Match<TReturn>(
             Func<string, TReturn> stringFunction,
             Func<bool, TReturn> booleanFunction,

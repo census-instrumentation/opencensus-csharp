@@ -18,16 +18,37 @@ namespace OpenCensus.Trace
 {
     using System;
 
+    /// <summary>
+    /// Trace ID.
+    /// </summary>
     public interface ITraceId : IComparable<ITraceId>
     {
+        /// <summary>
+        /// Gets the bytes representation of a trace id.
+        /// </summary>
         byte[] Bytes { get; }
 
+        /// <summary>
+        /// Gets a value indicating whether trace if is valid.
+        /// </summary>
         bool IsValid { get; }
 
+        /// <summary>
+        /// Gets the lower long of the trace ID.
+        /// </summary>
         long LowerLong { get; }
 
+        /// <summary>
+        /// Copy trace ID as bytes into the destination bytes array at a given offset.
+        /// </summary>
+        /// <param name="dest">Destination bytes array.</param>
+        /// <param name="destOffset">Desitnation bytes array offset.</param>
         void CopyBytesTo(byte[] dest, int destOffset);
 
+        /// <summary>
+        /// Gets the lower base 16 representaiton of the trace id.
+        /// </summary>
+        /// <returns>Canonical string representation of a trace id.</returns>
         string ToLowerBase16();
     }
 }

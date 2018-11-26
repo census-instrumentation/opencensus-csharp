@@ -16,9 +16,15 @@
 
 namespace OpenCensus.Trace
 {
+    /// <summary>
+    /// End span options.
+    /// </summary>
     public class EndSpanOptions
     {
-        public static readonly EndSpanOptions DEFAULT = new EndSpanOptions(false);
+        /// <summary>
+        /// Default span completion options.
+        /// </summary>
+        public static readonly EndSpanOptions Default = new EndSpanOptions(false);
 
         internal EndSpanOptions()
         {
@@ -30,10 +36,20 @@ namespace OpenCensus.Trace
             this.Status = status;
         }
 
+        /// <summary>
+        /// Gets a value indicating whether span needs to be stored into local store.
+        /// </summary>
         public bool SampleToLocalSpanStore { get; }
 
+        /// <summary>
+        /// Gets the span status.
+        /// </summary>
         public Status Status { get; }
 
+        /// <summary>
+        /// Gets the span builder.
+        /// </summary>
+        /// <returns>Returns builder to build span options.</returns>
         public static EndSpanOptionsBuilder Builder()
         {
             return new EndSpanOptionsBuilder().SetSampleToLocalSpanStore(false);

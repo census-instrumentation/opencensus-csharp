@@ -54,7 +54,7 @@ namespace OpenCensus.Trace.Test
             BlankSpan.Instance.AddLink(
                 Link.FromSpanContext(SpanContext.Invalid, LinkType.ChildLinkedSpan));
             BlankSpan.Instance.Status = Status.Ok;
-            BlankSpan.Instance.End(EndSpanOptions.DEFAULT);
+            BlankSpan.Instance.End(EndSpanOptions.Default);
             BlankSpan.Instance.End();
         }
     }
