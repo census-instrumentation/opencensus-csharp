@@ -102,12 +102,12 @@ namespace OpenCensus.Trace.Test
             ILink link = Link.FromSpanContext(spanContext, LinkType.ChildLinkedSpan, attributesMap);
             Assert.Contains(spanContext.TraceId.ToString(), link.ToString());
             Assert.Contains(spanContext.SpanId.ToString(), link.ToString());
-            Assert.Contains("CHILD_LINKED_SPAN", link.ToString());
+            Assert.Contains("ChildLinkedSpan", link.ToString());
             Assert.Contains(Collections.ToString(attributesMap), link.ToString());
             link = Link.FromSpanContext(spanContext, LinkType.ParentLinkedSpan, attributesMap);
             Assert.Contains(spanContext.TraceId.ToString(), link.ToString());
             Assert.Contains(spanContext.SpanId.ToString(), spanContext.SpanId.ToString());
-            Assert.Contains("PARENT_LINKED_SPAN", link.ToString());
+            Assert.Contains("ParentLinkedSpan", link.ToString());
             Assert.Contains(Collections.ToString(attributesMap), link.ToString());
         }
     }

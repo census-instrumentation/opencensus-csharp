@@ -16,8 +16,14 @@
 
 namespace OpenCensus.Trace.Export
 {
+    /// <summary>
+    /// Running spans summary.
+    /// </summary>
     public interface IRunningPerSpanNameSummary
     {
+        /// <summary>
+        /// Gets the number of the running span.
+        /// </summary>
         int NumRunningSpans { get; }
     }
 }

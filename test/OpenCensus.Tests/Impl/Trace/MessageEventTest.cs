@@ -72,7 +72,7 @@ namespace OpenCensus.Trace.Test
                     .SetUncompressedMessageSize(123L)
                     .SetCompressedMessageSize(63L)
                     .Build();
-            Assert.Contains("type=SENT", messageEvent.ToString());
+            Assert.Contains("type=Sent", messageEvent.ToString());
             Assert.Contains("messageId=1", messageEvent.ToString());
             Assert.Contains("compressedMessageSize=63", messageEvent.ToString());
             Assert.Contains("uncompressedMessageSize=123", messageEvent.ToString());

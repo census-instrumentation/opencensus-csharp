@@ -18,10 +18,19 @@ namespace OpenCensus.Trace.Export
 {
     using System.Collections.Generic;
 
+    /// <summary>
+    /// Collection of links.
+    /// </summary>
     public interface ILinks
     {
+        /// <summary>
+        /// Gets the list of links.
+        /// </summary>
         IList<ILink> Links { get; }
 
+        /// <summary>
+        /// Gets the number of dropped links due to exceeding the maximum links count limit.
+        /// </summary>
         int DroppedLinksCount { get; }
     }
 }

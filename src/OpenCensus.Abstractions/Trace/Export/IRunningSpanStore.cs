@@ -18,14 +18,33 @@ namespace OpenCensus.Trace.Export
 {
     using System.Collections.Generic;
 
+    /// <summary>
+    /// Running spans store.
+    /// </summary>
     public interface IRunningSpanStore
     {
+        /// <summary>
+        /// Gets the summary of this store.
+        /// </summary>
         IRunningSpanStoreSummary Summary { get; }
 
+        /// <summary>
+        /// Gets the list of all running spans with the applied filter.
+        /// </summary>
+        /// <param name="filter">Filter to apply to query running spans.</param>
+        /// <returns>List of currently running spans.</returns>
         IList<ISpanData> GetRunningSpans(IRunningSpanStoreFilter filter);
 
+        /// <summary>
+        /// Called when span got started.
+        /// </summary>
+        /// <param name="span">Span that was just started.</param>
         void OnStart(ISpan span);
 
+        /// <summary>
+        /// Called when span just ended.
+        /// </summary>
+        /// <param name="span">Span that just ended.</param>
         void OnEnd(ISpan span);
     }
 }
