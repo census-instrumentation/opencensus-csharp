@@ -70,8 +70,8 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         }
 =======
             ExportInterval = DEFAULT_INTERVAL,
-            ProjectId = MetricsUtils.GetProjectId(),
-            MetricNamePrefix = "",
+            ProjectId = GoogleCloudResourceUtils.GetProjectId(),
+            MetricNamePrefix = string.Empty,
         };
 >>>>>>> Fixing a few bugs in Stackdriver metrics exporter
     }

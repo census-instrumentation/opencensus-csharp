@@ -17,6 +17,8 @@
 namespace OpenCensus.Exporter.Stackdriver.Implementation
 {
     using System;
+    using System.Collections.Generic;
+    using System.Collections.Specialized;
 
     internal class Constants
     {
@@ -24,13 +26,18 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         public const string OPENCENSUS_TASK = "opencensus_task";
         public const string OPENCENSUS_TASK_DESCRIPTION = "Opencensus task identifier";
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> Fixing a few bugs in Stackdriver metrics exporter
+=======
+
+>>>>>>> First working version of Stackdriver Stats Exporter.
         public const string GCP_GKE_CONTAINER = "k8s_container";
         public const string GCP_GCE_INSTANCE = "gce_instance";
         public const string AWS_EC2_INSTANCE = "aws_ec2_instance";
         public const string GLOBAL = "global";
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         public const string PROJECT_ID_LABEL_KEY = "project_id";
@@ -51,6 +58,9 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         {
             // Something like '<pid>@<hostname>'
 =======
+=======
+
+>>>>>>> First working version of Stackdriver Stats Exporter.
         public const string PROJECT_ID_LABEL_KEY = "project_id";
         public static readonly string OPENCENSUS_TASK_VALUE_DEFAULT = generateDefaultTaskValue();
 

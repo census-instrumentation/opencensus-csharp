@@ -18,7 +18,6 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
 {
     using Google.Api;
     using Google.Api.Gax;
-    using Google.Api.Gax.Grpc;
     using Google.Cloud.Monitoring.V3;
     using Grpc.Core;
     using OpenCensus.Exporter.Stackdriver.Utils;
@@ -45,19 +44,15 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         private const string CUSTOM_METRIC_DOMAIN = "custom.googleapis.com/";
         private const string CUSTOM_OPENCENSUS_DOMAIN = CUSTOM_METRIC_DOMAIN + "opencensus/";
 
-        // TODO - zeltser - figure out how to extract OpenCensus package version
-        private const string USER_AGENT = "opencensus-csharp [0.0]";
-        private const string USER_AGENT_KEY = "user-agent";
-
         private readonly string domain;
         private readonly string displayNamePrefix;
 
         private bool isStarted;
 
         /// <summary>
-        /// Interval between two subsequent stats collection operations
+        /// Interval between two subsequent metrics collection operations
         /// </summary>
-        private TimeSpan collectionInterval = TimeSpan.FromMinutes(1);
+        private readonly TimeSpan collectionInterval = TimeSpan.FromSeconds(15);
 
         /// <summary>
         /// Interval within which the cancellation should be honored
@@ -74,16 +69,11 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             GaxPreconditions.CheckNotNull(configuration, "configuration");
             GaxPreconditions.CheckNotNullOrEmpty(configuration.ProjectId, "configuration.ProjectId");
             GaxPreconditions.CheckNotNull(configuration.MonitoredResource, "configuration.MonitoredResource");
-            GaxPreconditions.CheckArgument(
-                configuration.ExportInterval != TimeSpan.Zero,
-                paramName: "configuration.ExportInterval", 
-                message: "Export interval can't be zero. Typically it's 1 minute");
 
             this.viewManager = viewManager;
             monitoredResource = configuration.MonitoredResource;
-            collectionInterval = configuration.ExportInterval;
             project = new ProjectName(configuration.ProjectId);
-
+            metricServiceClient = MetricServiceClient.Create();
             domain = GetDomain(configuration.MetricNamePrefix);
             displayNamePrefix = GetDisplayNamePrefix(configuration.MetricNamePrefix);
         }
@@ -95,7 +85,6 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                 if (!isStarted)
                 {
                     tokenSource = new CancellationTokenSource();
-                    metricServiceClient = CreateMetricServiceClient(tokenSource);
 
                     Task.Factory.StartNew(DoWork, tokenSource.Token);
 
@@ -257,25 +246,6 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                     Console.WriteLine(e);
                 }
             }
-        }
-
-        private static MetricServiceClient CreateMetricServiceClient(CancellationTokenSource tokenSource)
-        {
-            // Make sure to add Opencensus header to every outgoing call to Stackdriver APIs
-            Action<Metadata> addOpencensusHeader = m => m.Add(USER_AGENT_KEY, USER_AGENT);
-            var callSettings = new CallSettings(
-                cancellationToken: tokenSource.Token,
-                credentials: null,
-                timing: null,
-                headerMutation: addOpencensusHeader,
-                writeOptions: WriteOptions.Default,
-                propagationToken: null);
-            var metricServiceSettings = new MetricServiceSettings()
-            {
-                CallSettings = callSettings
-            };
-
-            return MetricServiceClient.Create(settings: metricServiceSettings);
         }
 
         private static string GetDomain(string metricNamePrefix)
