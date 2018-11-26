@@ -17,16 +17,20 @@
 namespace OpenCensus.Exporter.Stackdriver.Implementation
 {
     using System;
+    using System.Collections.Generic;
+    using System.Collections.Specialized;
 
     internal class Constants
     {
         public const string LABEL_DESCRIPTION = "OpenCensus TagKey";
         public const string OPENCENSUS_TASK = "opencensus_task";
         public const string OPENCENSUS_TASK_DESCRIPTION = "Opencensus task identifier";
+
         public const string GCP_GKE_CONTAINER = "k8s_container";
         public const string GCP_GCE_INSTANCE = "gce_instance";
         public const string AWS_EC2_INSTANCE = "aws_ec2_instance";
         public const string GLOBAL = "global";
+
         public const string PROJECT_ID_LABEL_KEY = "project_id";
         public static readonly string OPENCENSUS_TASK_VALUE_DEFAULT = generateDefaultTaskValue();
 

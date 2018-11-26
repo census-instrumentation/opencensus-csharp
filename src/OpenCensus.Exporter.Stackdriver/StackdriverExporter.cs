@@ -31,7 +31,7 @@ namespace OpenCensus.Exporter.Stackdriver
         private readonly IExportComponent exportComponent;
         private readonly IViewManager viewManager;
         private readonly string projectId;
-        private StackdriverMetricsExporterWorker metricsExporter;
+        private StackdriverStatsExporter metricsExporter;
         private object locker = new object();
         private bool isInitialized = false;
 
@@ -75,9 +75,9 @@ namespace OpenCensus.Exporter.Stackdriver
                 {
                     StackdriverStatsConfiguration statsConfig = StackdriverStatsConfiguration.Default;
                     statsConfig.ProjectId = projectId;
-                    statsConfig.MonitoredResource = MetricsUtils.GetDefaultResource(projectId);
+                    statsConfig.MonitoredResource = GoogleCloudResourceUtils.GetDefaultResource(projectId);
 
-                    metricsExporter = new StackdriverMetricsExporterWorker(viewManager, statsConfig);
+                    metricsExporter = new StackdriverStatsExporter(viewManager, statsConfig);
                     metricsExporter.Start();
                 }
 

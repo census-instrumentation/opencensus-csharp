@@ -19,16 +19,34 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
     using Google.Api;
     using System;
 
+    /// <summary>
+    /// Configuration for exporting stats into Stackdriver
+    /// </summary>
     public class StackdriverStatsConfiguration
     {
         private static readonly TimeSpan DEFAULT_INTERVAL = TimeSpan.FromMinutes(1);
 
+        /// <summary>
+        /// Frequency of the export operation
+        /// </summary>
         public TimeSpan ExportInterval { get; set; }
 
+        /// <summary>
+        /// The prefix to append to every OpenCensus metric name in Stackdriver
+        /// </summary>
         public string MetricNamePrefix { get; set; }
 
+        /// <summary>
+        /// Google Cloud Project Id
+        /// </summary>
         public string ProjectId { get; set; }
 
+        /// <summary>
+        /// Monitored Resource associated with metrics collection.
+        /// By default, the exporter detects the environment where the export is happening,
+        /// such as GKE/AWS/GCE. If the exporter is running on a different environment,
+        /// monitored resource will be identified as "general".
+        /// </summary>
         public MonitoredResource MonitoredResource { get; set; }
 
         /// <summary>
@@ -37,8 +55,8 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         public static StackdriverStatsConfiguration Default { get; } = new StackdriverStatsConfiguration
         {
             ExportInterval = DEFAULT_INTERVAL,
-            ProjectId = MetricsUtils.GetProjectId(),
-            MetricNamePrefix = "",
+            ProjectId = GoogleCloudResourceUtils.GetProjectId(),
+            MetricNamePrefix = string.Empty,
         };
     }
 }
