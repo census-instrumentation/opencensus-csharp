@@ -24,7 +24,7 @@ namespace OpenCensus.Stats
     public interface IBucketBoundaries
     {
         /// <summary>
-        /// List of boundaries for the distribution aggregator.
+        /// Gets the list of boundaries for the distribution aggregator.
         /// </summary>
         IList<double> Boundaries { get; }
     }

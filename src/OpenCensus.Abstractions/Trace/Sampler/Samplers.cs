@@ -16,11 +16,17 @@
 
 namespace OpenCensus.Trace.Sampler
 {
+    /// <summary>
+    /// Factory of well-known samplers.
+    /// </summary>
     public sealed class Samplers
     {
         private static readonly ISampler AlwaysSampleInstance = new AlwaysSampleSampler();
         private static readonly ISampler NeverSampleInstance = new NeverSampleSampler();
 
+        /// <summary>
+        /// Gets the sampler that always sample.
+        /// </summary>
         public static ISampler AlwaysSample
         {
             get
@@ -29,6 +35,9 @@ namespace OpenCensus.Trace.Sampler
             }
         }
 
+        /// <summary>
+        /// Gets the sampler than never samples.
+        /// </summary>
         public static ISampler NeverSample
         {
             get
@@ -37,6 +46,11 @@ namespace OpenCensus.Trace.Sampler
             }
         }
 
+        /// <summary>
+        /// Gets the probability sampler.
+        /// </summary>
+        /// <param name="probability">Probability to use.</param>
+        /// <returns>Sampler that samples with the given probability.</returns>
         public static ISampler GetProbabilitySampler(double probability)
         {
             return ProbabilitySampler.Create(probability);

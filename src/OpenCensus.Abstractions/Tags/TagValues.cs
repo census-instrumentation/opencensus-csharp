@@ -30,7 +30,7 @@ namespace OpenCensus.Tags
         }
 
         /// <summary>
-        /// Collection of tag values.
+        /// Gets the collection of tag values.
         /// </summary>
         public IList<ITagValue> Values { get; }
 

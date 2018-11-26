@@ -31,7 +31,7 @@ namespace OpenCensus.Stats
         IView View { get; }
 
         /// <summary>
-        /// The aggregation data grouped by combination of tag values associated with this view data.
+        /// Gets the aggregation data grouped by combination of tag values associated with this view data.
         /// </summary>
         IDictionary<TagValues, IAggregationData> AggregationMap { get; }
 
