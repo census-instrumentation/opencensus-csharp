@@ -16,14 +16,29 @@
 
 namespace OpenCensus.Trace
 {
+    /// <summary>
+    /// Message event happoened during the span execution.
+    /// </summary>
     public interface IMessageEvent
     {
+        /// <summary>
+        /// Gets ths type of the event.
+        /// </summary>
         MessageEventType Type { get; }
 
+        /// <summary>
+        /// Gets the message identitifer associated with the event.
+        /// </summary>
         long MessageId { get; }
 
+        /// <summary>
+        /// Gets the uncompressed message size.
+        /// </summary>
         long UncompressedMessageSize { get; }
 
+        /// <summary>
+        /// Gets the compressed message size.
+        /// </summary>
         long CompressedMessageSize { get; }
     }
 }

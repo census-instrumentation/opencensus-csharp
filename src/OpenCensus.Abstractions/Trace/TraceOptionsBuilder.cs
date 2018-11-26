@@ -16,6 +16,9 @@
 
 namespace OpenCensus.Trace
 {
+    /// <summary>
+    /// Trace options builder.
+    /// </summary>
     public class TraceOptionsBuilder
     {
         private byte options;
@@ -30,6 +33,11 @@ namespace OpenCensus.Trace
             this.options = options;
         }
 
+        /// <summary>
+        /// Sets is sampled flag.
+        /// </summary>
+        /// <param name="isSampled">New value for the isSampled flag.</param>
+        /// <returns>This builder for operations chaining.</returns>
         public TraceOptionsBuilder SetIsSampled(bool isSampled)
         {
             if (isSampled)
@@ -44,6 +52,10 @@ namespace OpenCensus.Trace
             return this;
         }
 
+        /// <summary>
+        /// Builds span options from the values provided.
+        /// </summary>
+        /// <returns>Span options built by this builder.</returns>
         public TraceOptions Build()
         {
             return new TraceOptions(this.options);

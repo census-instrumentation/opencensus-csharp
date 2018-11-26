@@ -18,8 +18,16 @@ namespace OpenCensus.Internal
 {
     using OpenCensus.Common;
 
+    /// <summary>
+    /// Converts nanoseconds into timestamp.
+    /// </summary>
     public interface ITimestampConverter
     {
+        /// <summary>
+        /// Converts nanoseconds to the timestamp.
+        /// </summary>
+        /// <param name="nanoTime">Nanoseconds time.</param>
+        /// <returns>Timestamp from the nanoseconds.</returns>
         ITimestamp ConvertNanoTime(long nanoTime);
     }
 }

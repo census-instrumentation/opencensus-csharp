@@ -23,16 +23,14 @@ namespace OpenCensus.Trace
     using OpenCensus.Trace.Internal;
     using OpenCensus.Trace.Propagation;
 
+    /// <summary>
+    /// Helper class that provides easy to use static constructor of the default tracer component.
+    /// </summary>
     public sealed class Tracing
     {
         private static Tracing tracing = new Tracing(true);
 
         private ITraceComponent traceComponent = null;
-
-        internal Tracing()
-            : this(false)
-        {
-        }
 
         internal Tracing(bool enabled)
         {
@@ -42,40 +40,28 @@ namespace OpenCensus.Trace
             }
             else
             {
-                this.traceComponent = TraceComponent.NewNoopTraceComponent;
+                this.traceComponent = new NoopTraceComponent();
             }
         }
 
-        public static ITracer Tracer
-        {
-            get
-            {
-                return tracing.traceComponent.Tracer;
-            }
-        }
+        /// <summary>
+        /// Gets the tracer to record spans.
+        /// </summary>
+        public static ITracer Tracer => tracing.traceComponent.Tracer;
 
-        public static IPropagationComponent PropagationComponent
-        {
-            get
-            {
-                return tracing.traceComponent.PropagationComponent;
-            }
-        }
+        /// <summary>
+        /// Gets the propagation component that defines how to extract and inject span context from the wire protocols.
+        /// </summary>
+        public static IPropagationComponent PropagationComponent => tracing.traceComponent.PropagationComponent;
 
-        public static IExportComponent ExportComponent
-        {
-            get
-            {
-                return tracing.traceComponent.ExportComponent;
-            }
-        }
+        /// <summary>
+        /// Gets the export component to upload spans to.
+        /// </summary>
+        public static IExportComponent ExportComponent => tracing.traceComponent.ExportComponent;
 
-        public static ITraceConfig TraceConfig
-        {
-            get
-            {
-                return tracing.traceComponent.TraceConfig;
-            }
-        }
+        /// <summary>
+        /// Gets the tracer configuration.
+        /// </summary>
+        public static ITraceConfig TraceConfig => tracing.traceComponent.TraceConfig;
     }
 }

@@ -16,8 +16,14 @@
 
 namespace OpenCensus.Tags.Propagation
 {
+    /// <summary>
+    /// Stores configuration of various propagation serializers for tags.
+    /// </summary>
     public interface ITagPropagationComponent
     {
+        /// <summary>
+        /// Gets binary serializer/deserializer for tags.
+        /// </summary>
         ITagContextBinarySerializer BinarySerializer { get; }
     }
 }

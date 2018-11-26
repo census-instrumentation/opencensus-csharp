@@ -16,9 +16,19 @@
 
 namespace OpenCensus.Tags
 {
+    /// <summary>
+    /// State of tagging API.
+    /// </summary>
     public enum TaggingState
     {
+        /// <summary>
+        /// Tagging enabled.
+        /// </summary>
         ENABLED,
+
+        /// <summary>
+        /// Tagging disabled.
+        /// </summary>
         DISABLED,
     }
 }

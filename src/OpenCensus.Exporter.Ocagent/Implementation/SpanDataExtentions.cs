@@ -114,7 +114,7 @@ namespace OpenCensus.Exporter.Ocagent.Implementation
                 },
                 MessageEvent = new Span.Types.TimeEvent.Types.MessageEvent
                 {
-                    Type = source.Event.Type == MessageEventType.SENT ? Span.Types.TimeEvent.Types.MessageEvent.Types.Type.Sent : Span.Types.TimeEvent.Types.MessageEvent.Types.Type.Received,
+                    Type = source.Event.Type == MessageEventType.Sent ? Span.Types.TimeEvent.Types.MessageEvent.Types.Type.Sent : Span.Types.TimeEvent.Types.MessageEvent.Types.Type.Received,
                     CompressedSize = (ulong)source.Event.CompressedMessageSize,
                     UncompressedSize = (ulong)source.Event.UncompressedMessageSize,
                     Id = (ulong)source.Event.MessageId,
@@ -142,7 +142,7 @@ namespace OpenCensus.Exporter.Ocagent.Implementation
             {
                 TraceId = ByteString.CopyFrom(source.TraceId.Bytes),
                 SpanId = ByteString.CopyFrom(source.SpanId.Bytes),
-                Type = source.Type == LinkType.CHILD_LINKED_SPAN ? Span.Types.Link.Types.Type.ChildLinkedSpan : Span.Types.Link.Types.Type.ParentLinkedSpan,
+                Type = source.Type == LinkType.ChildLinkedSpan ? Span.Types.Link.Types.Type.ChildLinkedSpan : Span.Types.Link.Types.Type.ParentLinkedSpan,
                 Attributes = FromIAttributeMap(source.Attributes),
             };
         }

@@ -19,8 +19,24 @@ namespace OpenCensus.Stats
     using System;
     using OpenCensus.Stats.Aggregations;
 
+    /// <summary>
+    /// Gets the aggregation data.
+    /// </summary>
     public interface IAggregationData
     {
+        /// <summary>
+        /// Executes aggregation data specific callback without type casting.
+        /// </summary>
+        /// <typeparam name="T">Callback result type.</typeparam>
+        /// <param name="p0">Callback for the double sum data.</param>
+        /// <param name="p1">Callback for the long sum data.</param>
+        /// <param name="p2">Callback for the count data.</param>
+        /// <param name="p3">Callback for the mean data.</param>
+        /// <param name="p4">Callback for the distribution data.</param>
+        /// <param name="p5">Callback for the double last value data.</param>
+        /// <param name="p6">Callback for the long last value data.</param>
+        /// <param name="defaultFunction">Callback for any other data.</param>
+        /// <returns>Callback executuion result.</returns>
         T Match<T>(
              Func<ISumDataDouble, T> p0,
              Func<ISumDataLong, T> p1,

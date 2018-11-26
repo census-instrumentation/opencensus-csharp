@@ -18,10 +18,20 @@ namespace OpenCensus.Trace.Export
 {
     using OpenCensus.Common;
 
+    /// <summary>
+    /// Timed event.
+    /// </summary>
+    /// <typeparam name="T">Type of the timed event.</typeparam>
     public interface ITimedEvent<T>
     {
+        /// <summary>
+        /// Gets the timestamp associated with this timed event.
+        /// </summary>
         ITimestamp Timestamp { get; }
 
+        /// <summary>
+        /// Gets the typed event content.
+        /// </summary>
         T Event { get; }
     }
 }

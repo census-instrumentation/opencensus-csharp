@@ -16,9 +16,19 @@
 
 namespace OpenCensus.Trace
 {
-public enum SpanKind {
-    Server,
+    /// <summary>
+    /// Span kind.
+    /// </summary>
+    public enum SpanKind
+    {
+        /// <summary>
+        /// Server span represents request incoming from external component.
+        /// </summary>
+        Server,
 
-    Client
-}
+        /// <summary>
+        /// Client span represents outgoing request to the external component.
+        /// </summary>
+        Client,
+    }
 }

@@ -19,8 +19,22 @@ namespace OpenCensus.Stats
     using System;
     using OpenCensus.Stats.Aggregations;
 
+    /// <summary>
+    /// Represents the type of aggregation.
+    /// </summary>
     public interface IAggregation
     {
+        /// <summary>
+        /// Executed callback specific to aggregation without type casting.
+        /// </summary>
+        /// <typeparam name="T">Expected return value.</typeparam>
+        /// <param name="p0">Callback to be called by sum aggregation.</param>
+        /// <param name="p1">Callback to be called by count aggregation.</param>
+        /// <param name="p2">Callback to be called by mean aggregation.</param>
+        /// <param name="p3">Callback to be called by distribution aggregation.</param>
+        /// <param name="p4">Callback to be called by last value aggregation.</param>
+        /// <param name="p6">Callback to be called for any other aggregation.</param>
+        /// <returns>The result of the aggregator-specific callback execution.</returns>
         T Match<T>(
              Func<ISum, T> p0,
              Func<ICount, T> p1,

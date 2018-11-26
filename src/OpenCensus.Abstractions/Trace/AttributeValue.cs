@@ -18,12 +18,20 @@ namespace OpenCensus.Trace
 {
     using System;
 
+    /// <summary>
+    /// Attribute value.
+    /// </summary>
     public abstract class AttributeValue : IAttributeValue
     {
         internal AttributeValue()
         {
         }
 
+        /// <summary>
+        /// Creates string attribute value from value provided.
+        /// </summary>
+        /// <param name="stringValue">String value.</param>
+        /// <returns>Attribute value encapsulating the provided string value.</returns>
         public static IAttributeValue<string> StringAttributeValue(string stringValue)
         {
             if (stringValue == null)
@@ -34,21 +42,37 @@ namespace OpenCensus.Trace
             return new AttributeValue<string>(stringValue);
         }
 
+        /// <summary>
+        /// Creates long attribute value from value provided.
+        /// </summary>
+        /// <param name="longValue">Long value.</param>
+        /// <returns>Attribute value encapsulating the provided long value.</returns>
         public static IAttributeValue<long> LongAttributeValue(long longValue)
         {
             return new AttributeValue<long>(longValue);
         }
 
+        /// <summary>
+        /// Creates boolean attribute value from value provided.
+        /// </summary>
+        /// <param name="booleanValue">Boolean value.</param>
+        /// <returns>Attribute value encapsulating the provided boolean value.</returns>
         public static IAttributeValue<bool> BooleanAttributeValue(bool booleanValue)
         {
             return new AttributeValue<bool>(booleanValue);
         }
 
+        /// <summary>
+        /// Creates double attribute value from value provided.
+        /// </summary>
+        /// <param name="doubleValue">Double value.</param>
+        /// <returns>Attribute value encapsulating the provided double value.</returns>
         public static IAttributeValue<double> DoubleAttributeValue(double doubleValue)
         {
             return new AttributeValue<double>(doubleValue);
         }
 
+        /// <inheritdoc/>
         public abstract T Match<T>(
             Func<string, T> stringFunction,
             Func<bool, T> booleanFunction,

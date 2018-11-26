@@ -18,14 +18,32 @@ namespace OpenCensus.Trace
 {
     using System;
 
+    /// <summary>
+    /// Span identifier.
+    /// </summary>
     public interface ISpanId : IComparable<ISpanId>
     {
+        /// <summary>
+        /// Gets the span identifier as bytes.
+        /// </summary>
         byte[] Bytes { get; }
 
+        /// <summary>
+        /// Gets a value indicating whether span identifier is valid.
+        /// </summary>
         bool IsValid { get; }
 
+        /// <summary>
+        /// Copy span id as bytes into destination byte array.
+        /// </summary>
+        /// <param name="dest">Destination byte array.</param>
+        /// <param name="destOffset">Offset to start writing from.</param>
         void CopyBytesTo(byte[] dest, int destOffset);
 
+        /// <summary>
+        /// Gets the span identifier as a string.
+        /// </summary>
+        /// <returns>String representation of Span identifier.</returns>
         string ToLowerBase16();
     }
 }

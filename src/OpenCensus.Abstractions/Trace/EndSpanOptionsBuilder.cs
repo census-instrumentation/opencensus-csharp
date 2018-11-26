@@ -18,6 +18,9 @@ namespace OpenCensus.Trace
 {
     using System;
 
+    /// <summary>
+    /// End span options builder.
+    /// </summary>
     public class EndSpanOptionsBuilder
     {
         private bool? sampleToLocalSpanStore;
@@ -27,18 +30,32 @@ namespace OpenCensus.Trace
         {
         }
 
+        /// <summary>
+        /// Indicate whether span is intended for local spans store.
+        /// </summary>
+        /// <param name="sampleToLocalSpanStore">Value indicating whether span is intended for local span store.</param>
+        /// <returns>Span options builder for operations chaining.</returns>
         public EndSpanOptionsBuilder SetSampleToLocalSpanStore(bool sampleToLocalSpanStore)
         {
             this.sampleToLocalSpanStore = sampleToLocalSpanStore;
             return this;
         }
 
+        /// <summary>
+        /// Sets the span status.
+        /// </summary>
+        /// <param name="status">Span status.</param>
+        /// <returns>Span options builder for the operations chaining.</returns>
         public EndSpanOptionsBuilder SetStatus(Status status)
         {
             this.status = status;
             return this;
         }
 
+        /// <summary>
+        /// Builds the span options.
+        /// </summary>
+        /// <returns>Span options instance.</returns>
         public EndSpanOptions Build()
         {
             string missing = string.Empty;

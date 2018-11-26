@@ -16,18 +16,40 @@
 
 namespace OpenCensus.Trace.Config
 {
+    /// <summary>
+    /// Trace parameters that can be updates in runtime.
+    /// </summary>
     public interface ITraceParams
     {
+        /// <summary>
+        /// Gets the sampler.
+        /// </summary>
         ISampler Sampler { get; }
 
+        /// <summary>
+        /// Gets the maximum number of attributes on span.
+        /// </summary>
         int MaxNumberOfAttributes { get; }
 
+        /// <summary>
+        /// Gets that maximum Number of annotations on span.
+        /// </summary>
         int MaxNumberOfAnnotations { get; }
 
+        /// <summary>
+        /// Gets the maximum number of messages on span.
+        /// </summary>
         int MaxNumberOfMessageEvents { get; }
 
+        /// <summary>
+        /// Gets the maximum number of links on span.
+        /// </summary>
         int MaxNumberOfLinks { get; }
 
+        /// <summary>
+        /// Creates params builder preinitialized with the trace parameters supplied.
+        /// </summary>
+        /// <returns>Trace parameters builder.</returns>
         TraceParamsBuilder ToBuilder();
     }
 }

@@ -16,6 +16,9 @@
 
 namespace OpenCensus.Stats.Measures
 {
+    /// <summary>
+    /// Represents a measure to use in aggregations for double values.
+    /// </summary>
     public interface IMeasureDouble : IMeasure
     {
     }

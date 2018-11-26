@@ -38,7 +38,7 @@ namespace OpenCensus.Trace.Test
                     TraceOptions.Builder().SetIsSampled(true).Build(),
                     Tracestate.Empty);
 
-            spanOptions = SpanOptions.RECORD_EVENTS;
+            spanOptions = SpanOptions.RecordEvents;
             var mockSpan = new Mock<NoopSpan>(spanContext, spanOptions) { CallBase = true };
             span = mockSpan.Object;
         }
@@ -79,7 +79,7 @@ namespace OpenCensus.Trace.Test
                 ss.Dispose();
             }
             Assert.Null(CurrentSpanUtils.CurrentSpan);
-            Mock.Get<ISpan>(span).Verify((s) => s.End(EndSpanOptions.DEFAULT));
+            Mock.Get<ISpan>(span).Verify((s) => s.End(EndSpanOptions.Default));
         }
     }
 }

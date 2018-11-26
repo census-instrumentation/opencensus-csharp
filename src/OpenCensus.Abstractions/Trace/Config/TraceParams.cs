@@ -19,9 +19,13 @@ namespace OpenCensus.Trace.Config
     using System;
     using OpenCensus.Trace.Sampler;
 
+    /// <inheritdoc/>
     public sealed class TraceParams : ITraceParams
     {
-        public static readonly ITraceParams DEFAULT =
+        /// <summary>
+        /// Default trace parameters.
+        /// </summary>
+        public static readonly ITraceParams Default =
             new TraceParams(Samplers.GetProbabilitySampler(DefaultProbability), DefaultSpanMaxNumAttributes, DefaultSpanMaxNumAnnotations, DefaultSpanMaxNumMessageEvents, DefaultSpanMaxNumLinks);
 
         private const double DefaultProbability = 1e-4;
@@ -59,16 +63,22 @@ namespace OpenCensus.Trace.Config
             this.MaxNumberOfLinks = maxNumberOfLinks;
         }
 
+        /// <inheritdoc/>
         public ISampler Sampler { get; }
 
+        /// <inheritdoc/>
         public int MaxNumberOfAttributes { get; }
 
+        /// <inheritdoc/>
         public int MaxNumberOfAnnotations { get; }
 
+        /// <inheritdoc/>
         public int MaxNumberOfMessageEvents { get; }
 
+        /// <inheritdoc/>
         public int MaxNumberOfLinks { get; }
 
+        /// <inheritdoc/>
         public TraceParamsBuilder ToBuilder()
         {
             return new TraceParamsBuilder(this);
@@ -86,7 +96,7 @@ namespace OpenCensus.Trace.Config
                 + "}";
         }
 
-    /// <inheritdoc/>
+        /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -106,7 +116,7 @@ namespace OpenCensus.Trace.Config
             return false;
         }
 
-    /// <inheritdoc/>
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             int h = 1;

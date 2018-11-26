@@ -19,16 +19,43 @@ namespace OpenCensus.Trace
     using System.Collections.Generic;
     using OpenCensus.Common;
 
+    /// <summary>
+    /// Span builder.
+    /// </summary>
     public interface ISpanBuilder
     {
+        /// <summary>
+        /// Set the sampler for the span.
+        /// </summary>
+        /// <param name="sampler">Sampler to use to build span.</param>
+        /// <returns>This span builder for chaining.</returns>
         ISpanBuilder SetSampler(ISampler sampler);
 
+        /// <summary>
+        /// Set the parent links on the span.
+        /// </summary>
+        /// <param name="parentLinks">Parent links to set on span.</param>
+        /// <returns>This span builder for chaining.</returns>
         ISpanBuilder SetParentLinks(IList<ISpan> parentLinks);
 
+        /// <summary>
+        /// Set the record events value.
+        /// </summary>
+        /// <param name="recordEvents">Value indicating whether to record span.</param>
+        /// <returns>This span builder for chaining.</returns>
         ISpanBuilder SetRecordEvents(bool recordEvents);
 
+        /// <summary>
+        /// Starts the span.
+        /// </summary>
+        /// <returns>Span that was just started.</returns>
         ISpan StartSpan();
 
+        /// <summary>
+        /// Starts the span and set it as a current on the current context.
+        /// </summary>
+        /// <returns>Scoped event to control the scope of span in the context.
+        /// Dispose to stop the span and disassiciate it from the current context.</returns>
         IScope StartScopedSpan();
     }
 }

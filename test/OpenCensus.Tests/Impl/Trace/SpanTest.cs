@@ -37,8 +37,8 @@ namespace OpenCensus.Trace.Test
         private readonly ITimestamp timestamp = Timestamp.Create(1234, 5678);
         private readonly TestClock testClock;
         private readonly ITimestampConverter timestampConverter;
-        private readonly SpanOptions noRecordSpanOptions = SpanOptions.NONE;
-        private readonly SpanOptions recordSpanOptions = SpanOptions.RECORD_EVENTS;
+        private readonly SpanOptions noRecordSpanOptions = SpanOptions.None;
+        private readonly SpanOptions recordSpanOptions = SpanOptions.RecordEvents;
         private readonly IDictionary<String, IAttributeValue> attributes = new Dictionary<String, IAttributeValue>();
         private readonly IDictionary<String, IAttributeValue> expectedAttributes;
         private IStartEndHandler startEndHandler = Mock.Of<IStartEndHandler>();
@@ -71,7 +71,7 @@ namespace OpenCensus.Trace.Test
                     SPAN_NAME,
                     parentSpanId,
                     false,
-                    TraceParams.DEFAULT,
+                    TraceParams.Default,
                     startEndHandler,
                     timestampConverter,
                     testClock);
@@ -80,8 +80,8 @@ namespace OpenCensus.Trace.Test
             span.AddAnnotation(Annotation.FromDescription(ANNOTATION_DESCRIPTION));
             span.AddAnnotation(ANNOTATION_DESCRIPTION, attributes);
             span.AddMessageEvent(
-                MessageEvent.Builder(MessageEventType.RECEIVED, 1).SetUncompressedMessageSize(3).Build());
-            span.AddLink(Link.FromSpanContext(spanContext, LinkType.CHILD_LINKED_SPAN));
+                MessageEvent.Builder(MessageEventType.Recieved, 1).SetUncompressedMessageSize(3).Build());
+            span.AddLink(Link.FromSpanContext(spanContext, LinkType.ChildLinkedSpan));
             span.End();
             // exception.expect(IllegalStateException);
             Assert.Throws<InvalidOperationException>(() => ((Span)span).ToSpanData());
@@ -97,7 +97,7 @@ namespace OpenCensus.Trace.Test
                     SPAN_NAME,
                     parentSpanId,
                     false,
-                    TraceParams.DEFAULT,
+                    TraceParams.Default,
                     startEndHandler,
                     timestampConverter,
                     testClock);
@@ -111,8 +111,8 @@ namespace OpenCensus.Trace.Test
             span.AddAnnotation(Annotation.FromDescription(ANNOTATION_DESCRIPTION));
             span.AddAnnotation(ANNOTATION_DESCRIPTION, attributes);
             span.AddMessageEvent(
-                MessageEvent.Builder(MessageEventType.RECEIVED, 1).SetUncompressedMessageSize(3).Build());
-            span.AddLink(Link.FromSpanContext(spanContext, LinkType.CHILD_LINKED_SPAN));
+                MessageEvent.Builder(MessageEventType.Recieved, 1).SetUncompressedMessageSize(3).Build());
+            span.AddLink(Link.FromSpanContext(spanContext, LinkType.ChildLinkedSpan));
             ISpanData spanData = ((Span)span).ToSpanData();
             Assert.Equal(timestamp, spanData.StartTimestamp);
             Assert.Empty(spanData.Attributes.AttributeMap);
@@ -153,7 +153,7 @@ namespace OpenCensus.Trace.Test
                     SPAN_NAME,
                     parentSpanId,
                     true,
-                    TraceParams.DEFAULT,
+                    TraceParams.Default,
                     startEndHandler,
                     timestampConverter,
                     testClock);
@@ -168,10 +168,10 @@ namespace OpenCensus.Trace.Test
             span.AddAnnotation(ANNOTATION_DESCRIPTION, attributes);
             testClock.AdvanceTime(Duration.Create(0, 100));
             IMessageEvent networkEvent =
-                MessageEvent.Builder(MessageEventType.RECEIVED, 1).SetUncompressedMessageSize(3).Build();
+                MessageEvent.Builder(MessageEventType.Recieved, 1).SetUncompressedMessageSize(3).Build();
             span.AddMessageEvent(networkEvent);
             testClock.AdvanceTime(Duration.Create(0, 100));
-            ILink link = Link.FromSpanContext(spanContext, LinkType.CHILD_LINKED_SPAN);
+            ILink link = Link.FromSpanContext(spanContext, LinkType.ChildLinkedSpan);
             span.AddLink(link);
             ISpanData spanData = ((Span)span).ToSpanData();
             Assert.Equal(spanContext, spanData.Context);
@@ -212,7 +212,7 @@ namespace OpenCensus.Trace.Test
                     SPAN_NAME,
                     parentSpanId,
                     false,
-                    TraceParams.DEFAULT,
+                    TraceParams.Default,
                     startEndHandler,
                     timestampConverter,
                     testClock);
@@ -227,9 +227,9 @@ namespace OpenCensus.Trace.Test
             span.AddAnnotation(ANNOTATION_DESCRIPTION, attributes);
             testClock.AdvanceTime(Duration.Create(0, 100));
             IMessageEvent networkEvent =
-                MessageEvent.Builder(MessageEventType.RECEIVED, 1).SetUncompressedMessageSize(3).Build();
+                MessageEvent.Builder(MessageEventType.Recieved, 1).SetUncompressedMessageSize(3).Build();
             span.AddMessageEvent(networkEvent);
-            ILink link = Link.FromSpanContext(spanContext, LinkType.CHILD_LINKED_SPAN);
+            ILink link = Link.FromSpanContext(spanContext, LinkType.ChildLinkedSpan);
             span.AddLink(link);
             testClock.AdvanceTime(Duration.Create(0, 100));
             span.End(EndSpanOptions.Builder().SetStatus(Status.Cancelled).Build());
@@ -274,7 +274,7 @@ namespace OpenCensus.Trace.Test
                     SPAN_NAME,
                     parentSpanId,
                     false,
-                    TraceParams.DEFAULT,
+                    TraceParams.Default,
                     startEndHandler,
                     timestampConverter,
                     testClock);
@@ -300,7 +300,7 @@ namespace OpenCensus.Trace.Test
                     SPAN_NAME,
                     parentSpanId,
                     false,
-                    TraceParams.DEFAULT,
+                    TraceParams.Default,
                     startEndHandler,
                     timestampConverter,
                     testClock);
@@ -321,7 +321,7 @@ namespace OpenCensus.Trace.Test
         {
             int maxNumberOfAttributes = 8;
             TraceParams traceParams =
-                TraceParams.DEFAULT.ToBuilder().SetMaxNumberOfAttributes(maxNumberOfAttributes).Build();
+                TraceParams.Default.ToBuilder().SetMaxNumberOfAttributes(maxNumberOfAttributes).Build();
             ISpan span =
                 Span.StartSpan(
                     spanContext,
@@ -369,7 +369,7 @@ namespace OpenCensus.Trace.Test
         {
             int maxNumberOfAttributes = 8;
             TraceParams traceParams =
-                TraceParams.DEFAULT.ToBuilder().SetMaxNumberOfAttributes(maxNumberOfAttributes).Build();
+                TraceParams.Default.ToBuilder().SetMaxNumberOfAttributes(maxNumberOfAttributes).Build();
             ISpan span =
                 Span.StartSpan(
                     spanContext,
@@ -428,7 +428,7 @@ namespace OpenCensus.Trace.Test
         {
             int maxNumberOfAnnotations = 8;
             TraceParams traceParams =
-                TraceParams.DEFAULT.ToBuilder().SetMaxNumberOfAnnotations(maxNumberOfAnnotations).Build();
+                TraceParams.Default.ToBuilder().SetMaxNumberOfAnnotations(maxNumberOfAnnotations).Build();
             ISpan span =
                 Span.StartSpan(
                     spanContext,
@@ -470,7 +470,7 @@ namespace OpenCensus.Trace.Test
         {
             int maxNumberOfNetworkEvents = 8;
             TraceParams traceParams =
-                TraceParams.DEFAULT
+                TraceParams.Default
                     .ToBuilder()
                     .SetMaxNumberOfMessageEvents(maxNumberOfNetworkEvents)
                     .Build();
@@ -486,7 +486,7 @@ namespace OpenCensus.Trace.Test
                     timestampConverter,
                     testClock);
             IMessageEvent networkEvent =
-                MessageEvent.Builder(MessageEventType.RECEIVED, 1).SetUncompressedMessageSize(3).Build();
+                MessageEvent.Builder(MessageEventType.Recieved, 1).SetUncompressedMessageSize(3).Build();
             for (int i = 0; i < 2 * maxNumberOfNetworkEvents; i++)
             {
                 span.AddMessageEvent(networkEvent);
@@ -516,7 +516,7 @@ namespace OpenCensus.Trace.Test
         {
             int maxNumberOfLinks = 8;
             TraceParams traceParams =
-                TraceParams.DEFAULT.ToBuilder().SetMaxNumberOfLinks(maxNumberOfLinks).Build();
+                TraceParams.Default.ToBuilder().SetMaxNumberOfLinks(maxNumberOfLinks).Build();
             ISpan span =
                 Span.StartSpan(
                     spanContext,
@@ -528,7 +528,7 @@ namespace OpenCensus.Trace.Test
                     startEndHandler,
                     timestampConverter,
                     testClock);
-            ILink link = Link.FromSpanContext(spanContext, LinkType.CHILD_LINKED_SPAN);
+            ILink link = Link.FromSpanContext(spanContext, LinkType.ChildLinkedSpan);
             for (int i = 0; i < 2 * maxNumberOfLinks; i++)
             {
                 span.AddLink(link);
@@ -560,7 +560,7 @@ namespace OpenCensus.Trace.Test
                     SPAN_NAME,
                     parentSpanId,
                     false,
-                    TraceParams.DEFAULT,
+                    TraceParams.Default,
                     startEndHandler,
                     timestampConverter,
                     testClock);
@@ -574,7 +574,7 @@ namespace OpenCensus.Trace.Test
                     SPAN_NAME,
                     parentSpanId,
                     false,
-                    TraceParams.DEFAULT,
+                    TraceParams.Default,
                     startEndHandler,
                     timestampConverter,
                     testClock);
@@ -599,7 +599,7 @@ namespace OpenCensus.Trace.Test
                     SPAN_NAME,
                     parentSpanId,
                     false,
-                    TraceParams.DEFAULT,
+                    TraceParams.Default,
                     startEndHandler,
                     timestampConverter,
                     testClock);

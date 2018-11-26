@@ -18,10 +18,20 @@ namespace OpenCensus.Trace
 {
     using System;
 
+    /// <summary>
+    /// Span recording options.
+    /// </summary>
     [Flags]
     public enum SpanOptions
     {
-        NONE = 0x0,
-        RECORD_EVENTS = 0x1,
+        /// <summary>
+        /// None
+        /// </summary>
+        None = 0x0,
+
+        /// <summary>
+        /// Record events.
+        /// </summary>
+        RecordEvents = 0x1,
     }
 }

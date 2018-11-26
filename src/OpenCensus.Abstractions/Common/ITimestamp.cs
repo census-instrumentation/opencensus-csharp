@@ -18,16 +18,41 @@ namespace OpenCensus.Common
 {
     using System;
 
+    /// <summary>
+    /// Timestamp with the nanoseconds precision.
+    /// </summary>
     public interface ITimestamp : IComparable<ITimestamp>
     {
+        /// <summary>
+        /// Gets the number of seconds since the Unix Epoch represented by this timestamp.
+        /// </summary>
         long Seconds { get; }
 
+        /// <summary>
+        /// Gets the the number of nanoseconds after the number of seconds since the Unix Epoch represented
+        /// by this timestamp.
+        /// </summary>
         int Nanos { get; }
 
+        /// <summary>
+        /// Adds nanosToAdd nanosecond to the current timestamp.
+        /// </summary>
+        /// <param name="nanosToAdd">Number of nanoseconds to add.</param>
+        /// <returns>Returns the timstemp with added nanoseconds.</returns>
         ITimestamp AddNanos(long nanosToAdd);
 
+        /// <summary>
+        /// Adds duration to the timestamp.
+        /// </summary>
+        /// <param name="duration">Duration to add to the timestamp.</param>
+        /// <returns>Returns the timestamp with added duration.</returns>
         ITimestamp AddDuration(IDuration duration);
 
+        /// <summary>
+        /// Substructs timestamp from the current timestamp. Typically to calculate duration.
+        /// </summary>
+        /// <param name="timestamp">Timestamp to substruct.</param>
+        /// <returns>Returns the timestamp with the substructed duration.</returns>
         IDuration SubtractTimestamp(ITimestamp timestamp);
     }
 }

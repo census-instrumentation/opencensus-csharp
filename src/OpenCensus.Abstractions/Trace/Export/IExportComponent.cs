@@ -16,12 +16,24 @@
 
 namespace OpenCensus.Trace.Export
 {
+    /// <summary>
+    /// Component that exports spans.
+    /// </summary>
     public interface IExportComponent
     {
+        /// <summary>
+        /// Gets the span exoprter.
+        /// </summary>
         ISpanExporter SpanExporter { get; }
 
+        /// <summary>
+        /// Gets the running span store.
+        /// </summary>
         IRunningSpanStore RunningSpanStore { get; }
 
+        /// <summary>
+        /// Gets the sampled span store.
+        /// </summary>
         ISampledSpanStore SampledSpanStore { get; }
     }
 }

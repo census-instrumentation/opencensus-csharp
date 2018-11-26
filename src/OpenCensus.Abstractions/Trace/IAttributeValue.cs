@@ -18,9 +18,22 @@ namespace OpenCensus.Trace
 {
     using System;
 
+    /// <summary>
+    /// Attribute value.
+    /// </summary>
     public interface IAttributeValue
     {
-         T Match<T>(
+        /// <summary>
+        /// Executes type-specific callback without type casting.
+        /// </summary>
+        /// <typeparam name="T">Callback return value.</typeparam>
+        /// <param name="stringFunction">Callback to call for string.</param>
+        /// <param name="booleanFunction">Callback to call for boolean.</param>
+        /// <param name="longFunction">Callback to call for long.</param>
+        /// <param name="doubleFunction">Callback to call for double.</param>
+        /// <param name="defaultFunction">Callback to call for any other type.</param>
+        /// <returns>Callback execution result.</returns>
+        T Match<T>(
              Func<string, T> stringFunction,
              Func<bool, T> booleanFunction,
              Func<long, T> longFunction,
@@ -28,10 +41,23 @@ namespace OpenCensus.Trace
              Func<object, T> defaultFunction);
     }
 
+    /// <summary>
+    /// Generic attribute value interface.
+    /// </summary>
+    /// <typeparam name="TAttr">Type of the attribute.</typeparam>
     public interface IAttributeValue<TAttr> : IAttributeValue
     {
+        /// <summary>
+        /// Gets the attribute value.
+        /// </summary>
         TAttr Value { get; }
 
+        /// <summary>
+        /// Executes type specific callback.
+        /// </summary>
+        /// <typeparam name="T">Callback result type.</typeparam>
+        /// <param name="function">Callback to execute.</param>
+        /// <returns>Result of callback execution.</returns>
         T Apply<T>(Func<TAttr, T> function);
     }
 }

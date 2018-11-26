@@ -16,8 +16,14 @@
 
 namespace OpenCensus.Stats
 {
+    /// <summary>
+    /// View name.
+    /// </summary>
     public interface IViewName
     {
+        /// <summary>
+        /// Gets the string representation of the view name.
+        /// </summary>
         string AsString { get; }
     }
 }

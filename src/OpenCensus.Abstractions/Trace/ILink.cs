@@ -18,14 +18,29 @@ namespace OpenCensus.Trace
 {
     using System.Collections.Generic;
 
+    /// <summary>
+    /// Link associated with the span.
+    /// </summary>
     public interface ILink
     {
+        /// <summary>
+        /// Gets the trace ID of the linked span.
+        /// </summary>
         ITraceId TraceId { get; }
 
+        /// <summary>
+        /// Gets the span ID of the linked span.
+        /// </summary>
         ISpanId SpanId { get; }
 
+        /// <summary>
+        /// Gets the type of the link.
+        /// </summary>
         LinkType Type { get; }
 
+        /// <summary>
+        /// Gets the collection of attributes associated with the link.
+        /// </summary>
         IDictionary<string, IAttributeValue> Attributes { get; }
     }
 }

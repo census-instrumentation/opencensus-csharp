@@ -16,8 +16,14 @@
 
 namespace OpenCensus.Stats.Aggregations
 {
+    /// <summary>
+    /// Data accumulated by the last value aggregation amongst double values.
+    /// </summary>
     public interface ILastValueDataDouble : IAggregationData
     {
+        /// <summary>
+        /// Gets the last value as a double.
+        /// </summary>
         double LastValue { get; }
     }
 }

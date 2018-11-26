@@ -16,9 +16,19 @@
 
 namespace OpenCensus.Trace
 {
+    /// <summary>
+    /// Link type.
+    /// </summary>
     public enum LinkType
     {
-        CHILD_LINKED_SPAN,
-        PARENT_LINKED_SPAN,
+        /// <summary>
+        /// Child link.
+        /// </summary>
+        ChildLinkedSpan,
+
+        /// <summary>
+        /// Parent link.
+        /// </summary>
+        ParentLinkedSpan,
     }
 }

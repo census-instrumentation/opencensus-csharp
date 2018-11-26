@@ -16,6 +16,9 @@
 
 namespace OpenCensus.Stats.Aggregations
 {
+    /// <summary>
+    /// Mean aggregation.
+    /// </summary>
     public interface IMean : IAggregation
     {
     }

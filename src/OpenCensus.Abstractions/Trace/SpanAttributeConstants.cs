@@ -16,7 +16,7 @@
 
 namespace OpenCensus.Trace
 {
-    public static class SpanAttributeConstants
+    internal static class SpanAttributeConstants
     {
         public const string HttpMethodKey = "http.method";
         public const string HttpStatusCodeKey = "http.status_code";
