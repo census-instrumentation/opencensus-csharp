@@ -18,6 +18,8 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
 {
     using Google.Api;
     using Google.Cloud.Monitoring.V3;
+    using Google.Protobuf.WellKnownTypes;
+    using OpenCensus.Common;
     using OpenCensus.Exporter.Stackdriver.Utils;
     using OpenCensus.Stats;
     using OpenCensus.Stats.Aggregations;
@@ -40,11 +42,6 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         public static MetricKind ToMetricKind(
             this IAggregation aggregation)
         {
-            if (aggregation is ILastValue)
-            {
-                return MetricKind.Gauge;
-            }
-
             return aggregation.Match(
                 v => MetricKind.Cumulative, // Sum
                 v => MetricKind.Cumulative, // Count
@@ -54,20 +51,11 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                 v => MetricKind.Unspecified); // Default
         }
 
-        public static MetricDescriptor.Types.ValueType ToValueType(
-            this IAggregationData aggregationData)
-        {
-            return aggregationData.Match(
-                v => MetricDescriptor.Types.ValueType.Double,        // Sum Double
-                v => MetricDescriptor.Types.ValueType.Int64,         // Sum Long
-                v => MetricDescriptor.Types.ValueType.Int64,         // Count
-                v => MetricDescriptor.Types.ValueType.Unspecified,   // Mean - this measure should be deprecated
-                v => MetricDescriptor.Types.ValueType.Distribution,  // Distribution
-                v => MetricDescriptor.Types.ValueType.Double,        // LastValue Double
-                v => MetricDescriptor.Types.ValueType.Int64,         // LastValue Long
-                v => MetricDescriptor.Types.ValueType.Unspecified);  // Unrecognized
-        }
-
+        /// <summary>
+        /// Converts from Opencensus Measure to Stackdriver ValueType
+        /// </summary>
+        /// <param name="measure"></param>
+        /// <returns></returns>
         public static MetricDescriptor.Types.ValueType ToValueType(
             this IMeasure measure)
         {
@@ -80,9 +68,8 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         public static LabelDescriptor ToLabelDescriptor(this ITagKey tagKey)
         {
             var labelDescriptor = new LabelDescriptor();
-
-            // TODO - zeltser - looks like we don't support / and . in the label key. Need to confirm with Stackdriver team
-            labelDescriptor.Key = MetricsUtils.GetLabelKey(tagKey.Name);
+            
+            labelDescriptor.Key = GetStackdriverLabelKey(tagKey.Name);
             labelDescriptor.Description = Constants.LABEL_DESCRIPTION;
 
             // TODO - zeltser - Now we only support string tags
@@ -94,11 +81,11 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             IDistributionData distributionData,
             IBucketBoundaries bucketBoundaries)
         {
-            var bucketOptions = CreateBucketOptions(bucketBoundaries);
+            var bucketOptions = bucketBoundaries.ToBucketOptions();
             var distribution = new Distribution
             {
                 BucketOptions = bucketOptions,
-                BucketCounts = { distributionData.BucketCounts },
+                BucketCounts = { CreateBucketCounts(distributionData.BucketCounts) },
                 Count = distributionData.Count,
                 Mean = distributionData.Mean,
                 SumOfSquaredDeviation = distributionData.SumOfSquaredDeviations,
@@ -108,8 +95,17 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             return distribution;
         }
 
-        // Construct a MetricDescriptor using a View.
+        /// <summary>
+        /// Creates Stackdriver MetricDescriptor from Opencensus View
+        /// </summary>
+        /// <param name="metricDescriptorTypeName">Metric Descriptor full type name</param>
+        /// <param name="view">Opencensus View</param>
+        /// <param name="project">Google Cloud Project Name</param>
+        /// <param name="domain"></param>
+        /// <param name="displayNamePrefix"></param>
+        /// <returns></returns>
         public static MetricDescriptor CreateMetricDescriptor(
+            string metricDescriptorTypeName,
             IView view,
             ProjectName project,
             string domain,
@@ -117,12 +113,11 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         {
             var metricDescriptor = new MetricDescriptor();
             string viewName = view.Name.AsString;
-            string type = MetricsUtils.GenerateTypeName(viewName, domain);
 
-            metricDescriptor.Name = string.Format($"projects/{project.ProjectId}/metricDescriptors/{type}");
-            metricDescriptor.Type = type;
+            metricDescriptor.Name = string.Format($"projects/{project.ProjectId}/metricDescriptors/{metricDescriptorTypeName}");
+            metricDescriptor.Type = metricDescriptorTypeName;
             metricDescriptor.Description = view.Description;
-            metricDescriptor.DisplayName = MetricsUtils.GetDisplayName(viewName, displayNamePrefix);
+            metricDescriptor.DisplayName = GetDisplayName(viewName, displayNamePrefix);
 
             foreach (ITagKey tagKey in view.Columns)
             {
@@ -137,11 +132,11 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                     ValueType = LabelDescriptor.Types.ValueType.String,
                 });
 
-            var unit = CreateUnit(view.Aggregation, view.Measure);
+            var unit = GetUnit(view.Aggregation, view.Measure);
             metricDescriptor.Unit = unit;
             metricDescriptor.MetricKind = view.Aggregation.ToMetricKind();
             metricDescriptor.ValueType = view.Measure.ToValueType();
-
+            
             return metricDescriptor;
         }
 
@@ -160,64 +155,61 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                 v => new TypedValue { BoolValue = false }); // Default
         }
 
-        public static Point CreatePoint(
-            IAggregationData aggregationData,
-            IViewData windowData,
-            IAggregation aggregation)
+        /// <summary>
+        /// Create a list of counts for Stackdriver from the list of counts in OpenCensus
+        /// </summary>
+        /// <param name="bucketCounts">Opencensus list of counts</param>
+        /// <returns></returns>
+        private static IList<long> CreateBucketCounts(IList<long> bucketCounts)
         {
-            return new Point
-            {
-                Interval = CreateTimeInterval(windowData, aggregation),
-                Value = CreateTypedValue(aggregation, aggregationData)
-            };
+            // The first bucket (underflow bucket) should always be 0 count because the Metrics first bucket
+            // is [0, first_bound) but StackDriver distribution consists of an underflow bucket (number 0).
+            var ret = new List<long>();
+            ret.Add(0L);
+            ret.AddRange(bucketCounts);
+            return ret;
         }
 
-        private static BucketOptions CreateBucketOptions(IBucketBoundaries bucketBoundaries)
+        /// <summary>
+        /// Converts <see cref="IBucketBoundaries"/> to Stackdriver's <see cref="BucketOptions"/>
+        /// </summary>
+        /// <param name="bucketBoundaries"></param>
+        /// <returns></returns>
+        private static BucketOptions ToBucketOptions(this IBucketBoundaries bucketBoundaries)
         {
-            return new BucketOptions
+            // The first bucket bound should be 0.0 because the Metrics first bucket is
+            // [0, first_bound) but Stackdriver monitoring bucket bounds begin with -infinity
+            // (first bucket is (-infinity, 0))
+            var bucketOptions = new BucketOptions
             {
                 ExplicitBuckets = new BucketOptions.Types.Explicit
                 {
-                    Bounds = { bucketBoundaries.Boundaries }
+                    Bounds = { 0.0 }
                 }
             };
-        }
+            bucketOptions.ExplicitBuckets.Bounds.AddRange(bucketBoundaries.Boundaries);
 
-        private static TimeInterval CreateTimeInterval(
-            IViewData windowData,
-            IAggregation aggregation)
-        {
-            return windowData.View.Measure.Match(
-                v =>
-                {
-                    var interval = new TimeInterval { EndTime = windowData.End.ToTimestamp() };
-                    if (!(windowData.View.Aggregation is ILastValue))
-                    {
-                        interval.StartTime = windowData.Start.ToTimestamp();
-                    }
-                    return interval;
-                },
-                v =>
-                {
-                    // TODO - zeltser - figure out why this is called (long variant)
-                    var interval = new TimeInterval { EndTime = windowData.End.ToTimestamp() };
-                    if (!(windowData.View.Aggregation is ILastValue))
-                    {
-                        interval.StartTime = windowData.Start.ToTimestamp();
-                    }
-                    return interval;
-                },
-                v => throw new InvalidOperationException());
+            return bucketOptions;
         }
 
         // Create a Metric using the TagKeys and TagValues.
-        public static Metric CreateMetric(
+
+        /// <summary>
+        /// Generate Stackdriver Metric from Opencensus View
+        /// </summary>
+        /// <param name="view"></param>
+        /// <param name="tagValues"></param>
+        /// <param name="metricDescriptor">Stackdriver Metric Descriptor</param>
+        /// <param name="domain"></param>
+        /// <returns></returns>
+        public static Metric GetMetric(
             IView view,
             IList<ITagValue> tagValues,
+            MetricDescriptor metricDescriptor,
             string domain)
         {
             var metric = new Metric();
-            metric.Type = MetricsUtils.GenerateTypeName(view.Name.AsString, domain);
+            metric.Type = metricDescriptor.Name;
 
             IList<ITagKey> columns = view.Columns;
 
@@ -231,11 +223,12 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                     continue;
                 }
 
-                string labelKey = MetricsUtils.GetLabelKey(key.Name);
+                string labelKey = GetStackdriverLabelKey(key.Name);
                 metric.Labels.Add(labelKey, value.AsString);
             }
             metric.Labels.Add(Constants.OPENCENSUS_TASK, Constants.OPENCENSUS_TASK_VALUE_DEFAULT);
 
+            // TODO - zeltser - make sure all the labels from the metric descriptor were fulfilled
             return metric;
         }
 
@@ -249,6 +242,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         public static List<TimeSeries> CreateTimeSeriesList(
             IViewData viewData,
             MonitoredResource monitoredResource,
+            MetricDescriptor metricDescriptor,
             string domain)
         {
             var timeSeriesList = new List<TimeSeries>();
@@ -258,28 +252,69 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             }
 
             IView view = viewData.View;
+            Timestamp startTime = viewData.Start.ToTimestamp();
 
             // Each entry in AggregationMap will be converted into an independent TimeSeries object
             foreach (var entry in viewData.AggregationMap)
             {
                 var timeSeries = new TimeSeries();
-
-                timeSeries.Metric = CreateMetric(view, entry.Key.Values, domain);
-
+                IList<ITagValue> labels = entry.Key.Values;
+                IAggregationData points = entry.Value;
+                
                 timeSeries.Resource = monitoredResource;
+                timeSeries.ValueType = view.Measure.ToValueType();
+                timeSeries.MetricKind = view.Aggregation.ToMetricKind();
 
-                //timeSeries.MetricKind = view.Aggregation.ToMetricKind();
-                //timeSeries.ValueType = entry.Value.ToValueType();
+                timeSeries.Metric = GetMetric(view, labels, metricDescriptor, domain);
 
-                var point = CreatePoint(entry.Value, viewData, view.Aggregation);
-                timeSeries.Points.Add(point);
+                Point point = ExtractPointInInterval(viewData.Start, viewData.End, view.Aggregation, points);
+                var timeSeriesPoints = new List<Point> { point };
+                timeSeries.Points.AddRange(timeSeriesPoints);
+
                 timeSeriesList.Add(timeSeries);
             }
 
             return timeSeriesList;
         }
 
-        internal static string CreateUnit(IAggregation aggregation, IMeasure measure)
+        private static Point ExtractPointInInterval(
+            ITimestamp startTime,
+            ITimestamp endTime, 
+            IAggregation aggregation, 
+            IAggregationData points)
+        {
+            return new Point
+            {
+                Value = CreateTypedValue(aggregation, points),
+                Interval = CreateTimeInterval(startTime, endTime)
+            };
+            /*
+            var ret = points.Match(
+                v => new Point { Value = new TypedValue { DoubleValue = v.Sum }, Interval = CreateTimeInterval(startTime, endTime) }, // ISumDataDouble
+                v => new Point { Value = new TypedValue { Int64Value = v.Sum }, Interval = CreateTimeInterval(startTime, endTime) }, // ISumDataLong
+                v => new Point { Value = new TypedValue { Int64Value = v.Count }, Interval = CreateTimeInterval(startTime, endTime) }, // ICountData
+                v => new Point { Value = new TypedValue { DoubleValue = v.Mean }, Interval = CreateTimeInterval(startTime, endTime) }, // IMeanData
+                v => new Point {
+                    Value = new TypedValue
+                    {
+                        DistributionValue = CreateDistribution(v, ((IDistribution)aggregation).BucketBoundaries),
+                    },
+                    Interval = CreateTimeInterval(startTime, endTime)
+                }, // IDistributionData
+                v => new Point { Value = new TypedValue { DoubleValue = v.LastValue }, Interval = CreateTimeInterval(startTime, endTime) }, // ILastValueDataDouble
+                v => new Point { Value = new TypedValue { Int64Value = v.LastValue }, Interval = CreateTimeInterval(startTime, endTime) }, // ILastValueDataLong
+                v => throw new InvalidOperationException());
+
+            return ret;
+            */
+        }
+
+        private static TimeInterval CreateTimeInterval(ITimestamp start, ITimestamp end)
+        {
+            return new TimeInterval { StartTime = start.ToTimestamp(), EndTime = end.ToTimestamp() };
+        }
+
+        internal static string GetUnit(IAggregation aggregation, IMeasure measure)
         {
             if (aggregation is ICount)
             {
@@ -287,6 +322,21 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             }
 
             return measure.Unit;
+        }
+
+        internal static string GetDisplayName(string viewName, string displayNamePrefix)
+        {
+            return displayNamePrefix + viewName;
+        }
+
+        /// <summary>
+        /// Creates Stackdriver Label name
+        /// </summary>
+        /// <param name="label">Opencensus label</param>
+        /// <returns>Label name that complies with Stackdriver label naming rules</returns>
+        internal static string GetStackdriverLabelKey(string label)
+        {
+            return label.Replace('/', '_');
         }
     }
 }

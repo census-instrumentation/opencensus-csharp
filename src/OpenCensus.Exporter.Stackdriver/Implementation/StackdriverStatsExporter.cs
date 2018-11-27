@@ -19,6 +19,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
     using Google.Api;
     using Google.Api.Gax;
     using Google.Cloud.Monitoring.V3;
+    using Grpc.Core;
     using OpenCensus.Exporter.Stackdriver.Utils;
     using OpenCensus.Stats;
     using System;
@@ -27,11 +28,13 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
     using System.Threading;
     using System.Threading.Tasks;
 
-    internal class StackdriverMetricsExporterWorker
+    internal class StackdriverStatsExporter
     {
         private readonly MonitoredResource monitoredResource;
         private readonly IViewManager viewManager;
         private readonly Dictionary<IViewName, IView> registeredViews = new Dictionary<IViewName, IView>();
+
+        private readonly Dictionary<IView, MetricDescriptor> metricDescriptors = new Dictionary<IView, MetricDescriptor>(new ViewNameComparer());
         private readonly ProjectName project;
         private MetricServiceClient metricServiceClient;
         private CancellationTokenSource tokenSource;
@@ -59,7 +62,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
 
         private object locker = new object();
 
-        public StackdriverMetricsExporterWorker(
+        public StackdriverStatsExporter(
            IViewManager viewManager,
            StackdriverStatsConfiguration configuration)
         {
@@ -151,22 +154,18 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             IView existing = null;
             if (registeredViews.TryGetValue(view.Name, out existing))
             {
-                if (existing.Equals(view))
-                {
-                    // Ignore views that are already registered.
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                // Ignore views that are already registered.
+                return existing.Equals(view);
             }
             registeredViews.Add(view.Name, view);
+
+            string metricDescriptorTypeName = GenerateMetricDescriptorTypeName(view.Name, domain);
 
             // TODO - zeltser: don't need to create MetricDescriptor for RpcViewConstants once we defined
             // canonical metrics. Registration is required only for custom view definitions. Canonical
             // views should be pre-registered.
             MetricDescriptor metricDescriptor = MetricsConversions.CreateMetricDescriptor(
+                metricDescriptorTypeName,
                 view,
                 project,
                 domain,
@@ -178,16 +177,31 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                 return false;
             }
 
-            var request = new CreateMetricDescriptorRequest();
-            request.ProjectName = project;
-            request.MetricDescriptor = metricDescriptor;
-                    
+            // Cache metric descriptor and ensure it exists in Stackdriver
+            if (!metricDescriptors.ContainsKey(view))
+            {
+                metricDescriptors.Add(view, metricDescriptor);
+            }
+            return EnsureMetricDescriptorExists(metricDescriptor);
+        }
+
+        private bool EnsureMetricDescriptorExists(MetricDescriptor metricDescriptor)
+        {
             try
             {
+                var request = new CreateMetricDescriptorRequest();
+                request.ProjectName = project;
+                request.MetricDescriptor = metricDescriptor;
                 metricServiceClient.CreateMetricDescriptor(request);
             }
-            catch (Exception e)
+            catch (RpcException e)
             {
+                // Metric already exists
+                if (e.StatusCode == StatusCode.AlreadyExists)
+                {
+                    return true;
+                }
+
                 return false;
             }
 
@@ -206,10 +220,13 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                 }
             }
 
+            // Add time series from all the views that need exporting
             var timeSeriesList = new List<TimeSeries>();
             foreach (var viewData in viewDataList)
             {
-                timeSeriesList.AddRange(MetricsConversions.CreateTimeSeriesList(viewData, monitoredResource, domain));
+                MetricDescriptor metricDescriptor = metricDescriptors[viewData.View];
+                List<TimeSeries> timeSeries = MetricsConversions.CreateTimeSeriesList(viewData, monitoredResource, metricDescriptor, domain);
+                timeSeriesList.AddRange(timeSeries);
             }
 
             // Perform the operation in batches of MAX_BATCH_EXPORT_SIZE
@@ -218,7 +235,16 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                 var request = new CreateTimeSeriesRequest();
                 request.ProjectName = project;
                 request.TimeSeries.AddRange(batchedTimeSeries);
-                metricServiceClient.CreateTimeSeries(request);
+
+                try
+                {
+                    metricServiceClient.CreateTimeSeries(request);
+                }
+                catch (RpcException e)
+                {
+                    // TODO - zeltser - figure out where to send the error from exception
+                    Console.WriteLine(e);
+                }
             }
         }
 
@@ -256,6 +282,34 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                     metricNamePrefix += '/';
                 }
                 return metricNamePrefix;
+            }
+        }
+
+        private static string GenerateMetricDescriptorTypeName(IViewName viewName, string domain)
+        {
+            return domain + viewName.AsString;
+        }
+
+        /// <summary>
+        /// Comparison between two OpenCensus Views
+        /// </summary>
+        private class ViewNameComparer : IEqualityComparer<IView>
+        {
+            public bool Equals(IView x, IView y)
+            {
+                if (x == null && y == null)
+                    return true;
+                else if (x == null || y == null)
+                    return false;
+                else if (x.Name.AsString.Equals(y.Name.AsString))
+                    return true;
+                else
+                    return false;
+            }
+
+            public int GetHashCode(IView obj)
+            {
+                return obj.Name.GetHashCode();
             }
         }
     }

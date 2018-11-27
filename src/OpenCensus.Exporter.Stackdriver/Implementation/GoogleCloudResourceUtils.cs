@@ -17,12 +17,27 @@
 namespace OpenCensus.Exporter.Stackdriver.Implementation
 {
     using Google.Api;
+    using System.Collections.Generic;
 
     /// <summary>
-    /// Utility methods for metrics
+    /// Utility methods for working with Google Cloud Resources
     /// </summary>
-    public static class MetricsUtils
+    public static class GoogleCloudResourceUtils
     {
+        private static Dictionary<string, string> gcpResourceLabelMappings = new Dictionary<string, string>()
+        {
+            { "project_id", Constants.PROJECT_ID_LABEL_KEY },
+            { "instance_id", Constants.GCP_GCE_INSTANCE },
+            { "zone", null }
+        };
+
+        /// <summary>
+        /// Detects Google Cloud ProjectId based on the environment on which the code runs.
+        /// Supports GCE/GKE/GAE
+        /// In case the code runs in a different environment,
+        /// the method returns null
+        /// </summary>
+        /// <returns>Google Cloud Project ID</returns>
         public static string GetProjectId()
         {
             var instance = Google.Api.Gax.Platform.Instance();
@@ -37,29 +52,14 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         /// <returns>Stackdriver Monitored Resource</returns>
         public static MonitoredResource GetDefaultResource(string projectId)
         {
-            var builder = new MonitoredResource();
-            builder.Type = Constants.GLOBAL;
-            builder.Labels.Add(Constants.PROJECT_ID_LABEL_KEY, projectId);
+            var resource = new MonitoredResource();
+            resource.Type = Constants.GLOBAL;
+            resource.Labels.Add(Constants.PROJECT_ID_LABEL_KEY, projectId);
 
             // TODO - zeltser - setting monitored resource labels for detected resource
             // along with all the other metadata
 
-            return builder;
-        }
-
-        public static string GetLabelKey(string label)
-        {
-            return label.Replace('/', '_');
-        }
-
-        public static string GenerateTypeName(string viewName, string domain)
-        {
-            return domain + viewName;
-        }
-
-        public static string GetDisplayName(string viewName, string displayNamePrefix)
-        {
-            return displayNamePrefix + viewName;
+            return resource;
         }
     }
 }
