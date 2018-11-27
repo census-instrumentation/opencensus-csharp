@@ -17,42 +17,24 @@
 namespace OpenCensus.Exporter.Stackdriver.Implementation
 {
     using Google.Api;
-<<<<<<< HEAD
     using System;
     using System.Collections.Generic;
     using System.IO;
-=======
-    using System.Collections.Generic;
->>>>>>> First working version of Stackdriver Stats Exporter.
 
     /// <summary>
     /// Utility methods for working with Google Cloud Resources
     /// </summary>
     public static class GoogleCloudResourceUtils
     {
-<<<<<<< HEAD
         /// <summary>
         /// Detects Google Cloud ProjectId based on the environment on which the code runs.
         /// Supports GCE/GKE/GAE and projectId tied to service account
-=======
-        private static Dictionary<string, string> gcpResourceLabelMappings = new Dictionary<string, string>()
-        {
-            { "project_id", Constants.PROJECT_ID_LABEL_KEY },
-            { "instance_id", Constants.GCP_GCE_INSTANCE },
-            { "zone", null }
-        };
-
-        /// <summary>
-        /// Detects Google Cloud ProjectId based on the environment on which the code runs.
-        /// Supports GCE/GKE/GAE
->>>>>>> First working version of Stackdriver Stats Exporter.
         /// In case the code runs in a different environment,
         /// the method returns null
         /// </summary>
         /// <returns>Google Cloud Project ID</returns>
         public static string GetProjectId()
         {
-<<<<<<< HEAD
             // Try to detect projectId from the environment where the code is running
             var instance = Google.Api.Gax.Platform.Instance();
             var projectId = instance?.ProjectId;
@@ -73,11 +55,6 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             }
 
             projectId = Environment.GetEnvironmentVariable("GOOGLE_PROJECT_ID");
-=======
-            var instance = Google.Api.Gax.Platform.Instance();
-            var projectId = instance?.ProjectId;
-
->>>>>>> First working version of Stackdriver Stats Exporter.
             return projectId;
         }
 
@@ -96,31 +73,5 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
 
             return resource;
         }
-<<<<<<< HEAD
-=======
-
-        /*
-        public static Resource detectResource()
-        {
-            List<Resource> resourceList = new ArrayList<Resource>();
-            resourceList.add(Resource.createFromEnvironmentVariables());
-
-            if (System.getenv("KUBERNETES_SERVICE_HOST") != null)
-            {
-                resourceList.add(GcpGkeContainerMonitoredResource.createResource());
-            }
-            else if (GcpMetadataConfig.getInstanceId() != null)
-            {
-                resourceList.add(GcpGceInstanceMonitoredResource.createResource());
-            }
-
-            if (AwsIdentityDocUtils.isRunningOnAwsEc2())
-            {
-                resourceList.add(AwsEc2InstanceMonitoredResource.createResource());
-            }
-            return Resource.mergeResources(resourceList);
-        }*/
-
->>>>>>> First working version of Stackdriver Stats Exporter.
     }
 }

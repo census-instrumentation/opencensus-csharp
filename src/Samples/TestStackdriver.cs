@@ -29,15 +29,13 @@
             "processed video size over time",
             VideoSize,
             Sum.Create(),
-            //Distribution.Create(BucketBoundaries.Create(new List<double>() { 0.0, 16.0 * MiB, 256.0 * MiB })),
             new List<ITagKey>() { FrontendKey });
 
         internal static object Run(string projectId)
         {
             var exporter = new StackdriverExporter(
                 projectId, 
-                null,
-                //Tracing.ExportComponent,
+                Tracing.ExportComponent,
                 Stats.ViewManager);
             exporter.Start();
 
