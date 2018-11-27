@@ -61,28 +61,5 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
 
             return resource;
         }
-
-        /*
-        public static Resource detectResource()
-        {
-            List<Resource> resourceList = new ArrayList<Resource>();
-            resourceList.add(Resource.createFromEnvironmentVariables());
-
-            if (System.getenv("KUBERNETES_SERVICE_HOST") != null)
-            {
-                resourceList.add(GcpGkeContainerMonitoredResource.createResource());
-            }
-            else if (GcpMetadataConfig.getInstanceId() != null)
-            {
-                resourceList.add(GcpGceInstanceMonitoredResource.createResource());
-            }
-
-            if (AwsIdentityDocUtils.isRunningOnAwsEc2())
-            {
-                resourceList.add(AwsEc2InstanceMonitoredResource.createResource());
-            }
-            return Resource.mergeResources(resourceList);
-        }*/
-
     }
 }
