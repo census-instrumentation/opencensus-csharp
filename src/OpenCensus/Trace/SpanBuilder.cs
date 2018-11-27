@@ -133,11 +133,11 @@ namespace OpenCensus.Trace
         {
             if (parentLinks.Count > 0)
             {
-                ILink childLink = Link.FromSpanContext(span.Context, LinkType.CHILD_LINKED_SPAN);
+                ILink childLink = Link.FromSpanContext(span.Context, LinkType.ChildLinkedSpan);
                 foreach (ISpan linkedSpan in parentLinks)
                 {
                     linkedSpan.AddLink(childLink);
-                    span.AddLink(Link.FromSpanContext(linkedSpan.Context, LinkType.PARENT_LINKED_SPAN));
+                    span.AddLink(Link.FromSpanContext(linkedSpan.Context, LinkType.ParentLinkedSpan));
                 }
             }
         }
@@ -215,11 +215,11 @@ namespace OpenCensus.Trace
                     spanId,
                     activeTraceParams));
             TraceOptions traceOptions = traceOptionsBuilder.Build();
-            SpanOptions spanOptions = SpanOptions.NONE;
+            SpanOptions spanOptions = SpanOptions.None;
 
             if (traceOptions.IsSampled || recordEvents)
             {
-                spanOptions = SpanOptions.RECORD_EVENTS;
+                spanOptions = SpanOptions.RecordEvents;
             }
 
             ISpan span = Span.StartSpan(

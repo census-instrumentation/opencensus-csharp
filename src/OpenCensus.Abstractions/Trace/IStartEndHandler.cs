@@ -16,10 +16,21 @@
 
 namespace OpenCensus.Trace
 {
+    /// <summary>
+    /// Start event handler.
+    /// </summary>
     public interface IStartEndHandler
     {
+        /// <summary>
+        /// Called when span is being started.
+        /// </summary>
+        /// <param name="span">Span that just started.</param>
         void OnStart(SpanBase span);
 
+        /// <summary>
+        /// Called when span is just ended.
+        /// </summary>
+        /// <param name="span">Span that was just ended.</param>
         void OnEnd(SpanBase span);
     }
 }

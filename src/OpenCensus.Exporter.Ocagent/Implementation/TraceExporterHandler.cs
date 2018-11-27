@@ -27,7 +27,6 @@ namespace OpenCensus.Exporter.Ocagent.Implementation
     using Google.Protobuf.WellKnownTypes;
 
     using Grpc.Core;
-    using Grpc.Core.Utils;
 
     using Opencensus.Proto.Agent.Common.V1;
     using Opencensus.Proto.Agent.Trace.V1;
@@ -35,18 +34,20 @@ namespace OpenCensus.Exporter.Ocagent.Implementation
 
     internal class TraceExporterHandler : IHandler, IDisposable
     {
+        private const uint MaxSpanBatchSize = 32;
         private readonly Channel channel;
         private readonly Opencensus.Proto.Agent.Trace.V1.TraceService.TraceServiceClient traceClient;
         private readonly ConcurrentQueue<ISpanData> spans = new ConcurrentQueue<ISpanData>();
         private readonly Node node;
-
+        private readonly uint spanBatchSize;
         private CancellationTokenSource cts;
         private Task runTask;
 
-        public TraceExporterHandler(string agentEndpoint, string hostName, string serviceName, ChannelCredentials credentials)
+        public TraceExporterHandler(string agentEndpoint, string hostName, string serviceName, ChannelCredentials credentials, uint spanBatchSize = MaxSpanBatchSize)
         {
             this.channel = new Channel(agentEndpoint, credentials);
             this.traceClient = new TraceService.TraceServiceClient(this.channel);
+            this.spanBatchSize = spanBatchSize;
 
             this.node = new Node
             {
@@ -80,13 +81,14 @@ namespace OpenCensus.Exporter.Ocagent.Implementation
 
             foreach (var spanData in spanDataList)
             {
+                // TODO back-pressure on the queue
                 this.spans.Enqueue(spanData);
             }
         }
 
         public void Dispose()
         {
-            this.Stop().Wait();
+            this.StopAsync().Wait();
         }
 
         private static string GetAssemblyVersion(Assembly assembly)
@@ -104,7 +106,7 @@ namespace OpenCensus.Exporter.Ocagent.Implementation
             this.runTask = this.RunAsync(this.cts.Token);
         }
 
-        private async Task Stop()
+        private async Task StopAsync()
         {
             if (this.cts != null)
             {
@@ -121,42 +123,54 @@ namespace OpenCensus.Exporter.Ocagent.Implementation
 
         private async Task RunAsync(CancellationToken cancellationToken)
         {
+            var duplexCall = this.traceClient.Export();
             try
             {
-                // TODO backpressure on the queue
-
+                bool firstRequest = true;
                 while (!cancellationToken.IsCancellationRequested)
                 {
-                    // Spans
-                    if (this.spans.TryDequeue(out var spanData))
+                    var spanExportRequest = new ExportTraceServiceRequest();
+                    if (firstRequest)
                     {
+                        spanExportRequest.Node = this.node;
+                    }
+
+                    // Spans
+                    bool hasSpans = false;
+
+                    while (spanExportRequest.Spans.Count < this.spanBatchSize)
+                    {
+                        if (!this.spans.TryDequeue(out var spanData))
+                        {
+                            break;
+                        }
+
                         var protoSpan = spanData.ToProtoSpan();
                         if (protoSpan == null)
                         {
                             continue;
                         }
 
-                        var spanExport = new ExportTraceServiceRequest();
-                        spanExport.Node = this.node;
-                        spanExport.Spans.Add(protoSpan);
+                        spanExportRequest.Spans.Add(protoSpan);
+                        hasSpans = true;
+                    }
 
-                        // TODO:
-                        // write stream and read response stream (do not close)
-                        // add node to the first request only
-                        // workaround for https://github.com/Microsoft/ApplicationInsights-LocalForwarder/issues/31
-                        var duplexCall = this.traceClient.Export();
-                        await duplexCall.RequestStream.WriteAllAsync(new ExportTraceServiceRequest[] { spanExport }).ConfigureAwait(false);
+                    if (hasSpans)
+                    {
+                        await duplexCall.RequestStream.WriteAsync(spanExportRequest).ConfigureAwait(false);
+                        firstRequest = false;
                     }
                     else
                     {
                         await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken).ConfigureAwait(false);
                     }
                 }
+
+                await duplexCall.RequestStream.CompleteAsync().ConfigureAwait(false);
             }
             catch (RpcException)
             {
                 // TODO: log
-
                 throw;
             }
         }

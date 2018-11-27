@@ -18,6 +18,9 @@ namespace OpenCensus.Tags
 {
     using System.Collections.Generic;
 
+    /// <summary>
+    /// Collection of tags representing the tags context.
+    /// </summary>
     public interface ITagContext : IEnumerable<ITag>
     {
     }

@@ -16,9 +16,19 @@
 
 namespace OpenCensus.Trace
 {
+    /// <summary>
+    /// Messages event type.
+    /// </summary>
     public enum MessageEventType
     {
-        SENT,
-        RECEIVED,
+        /// <summary>
+        /// Represent message that was sent from client.
+        /// </summary>
+        Sent,
+
+        /// <summary>
+        /// Represents message that was recieved by the client.
+        /// </summary>
+        Recieved,
     }
 }

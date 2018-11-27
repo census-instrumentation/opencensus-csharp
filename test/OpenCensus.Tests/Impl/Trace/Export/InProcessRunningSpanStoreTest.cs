@@ -31,7 +31,7 @@ namespace OpenCensus.Trace.Export.Test
         private readonly ISpanExporter sampledSpansServiceExporter = SpanExporter.Create(4, Duration.Create(1, 0));
         private readonly InProcessRunningSpanStore activeSpansExporter = new InProcessRunningSpanStore();
         private readonly StartEndHandler startEndHandler;
-        private SpanOptions recordSpanOptions = SpanOptions.RECORD_EVENTS;
+        private SpanOptions recordSpanOptions = SpanOptions.RecordEvents;
 
         public InProcessRunningSpanStoreTest()
         {
@@ -51,7 +51,7 @@ namespace OpenCensus.Trace.Export.Test
                 spanName,
                 SpanId.GenerateRandomId(random),
                 false,
-                TraceParams.DEFAULT,
+                TraceParams.Default,
                 startEndHandler,
                 null,
                 DateTimeOffsetClock.GetInstance());

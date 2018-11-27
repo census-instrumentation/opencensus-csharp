@@ -18,6 +18,9 @@ namespace OpenCensus.Trace.Config
 {
     using System;
 
+    /// <summary>
+    /// Trace parameters builder.
+    /// </summary>
     public sealed class TraceParamsBuilder
     {
         private ISampler sampler;
@@ -35,36 +38,65 @@ namespace OpenCensus.Trace.Config
             this.maxNumberOfLinks = source.MaxNumberOfLinks;
         }
 
+        /// <summary>
+        /// Sets sempler to use.
+        /// </summary>
+        /// <param name="sampler">Sampler to use.</param>
+        /// <returns>Builder to chain operations.</returns>
         public TraceParamsBuilder SetSampler(ISampler sampler)
         {
             this.sampler = sampler ?? throw new ArgumentNullException("Null sampler");
             return this;
         }
 
+        /// <summary>
+        /// Sets the maximum number of attributes.
+        /// </summary>
+        /// <param name="maxNumberOfAttributes">Maximum number of attributes per span.</param>
+        /// <returns>Builder to chain operations.</returns>
         public TraceParamsBuilder SetMaxNumberOfAttributes(int maxNumberOfAttributes)
         {
             this.maxNumberOfAttributes = maxNumberOfAttributes;
             return this;
         }
 
+        /// <summary>
+        /// Sets the maximum number of annotations.
+        /// </summary>
+        /// <param name="maxNumberOfAnnotations">Maximum number of annotations per span.</param>
+        /// <returns>Builder to chain operations.</returns>
         public TraceParamsBuilder SetMaxNumberOfAnnotations(int maxNumberOfAnnotations)
         {
             this.maxNumberOfAnnotations = maxNumberOfAnnotations;
             return this;
         }
 
+        /// <summary>
+        /// Sets the maximum number of message events on span.
+        /// </summary>
+        /// <param name="maxNumberOfMessageEvents">Maximum number of message events per span.</param>
+        /// <returns>Builder to chain operations.</returns>
         public TraceParamsBuilder SetMaxNumberOfMessageEvents(int maxNumberOfMessageEvents)
         {
             this.maxNumberOfMessageEvents = maxNumberOfMessageEvents;
             return this;
         }
 
+        /// <summary>
+        /// Sets the maximum number of links on span.
+        /// </summary>
+        /// <param name="maxNumberOfLinks">Maximum number of links on span.</param>
+        /// <returns>Builder to chain operations.</returns>
         public TraceParamsBuilder SetMaxNumberOfLinks(int maxNumberOfLinks)
         {
             this.maxNumberOfLinks = maxNumberOfLinks;
             return this;
         }
 
+        /// <summary>
+        /// Builds trace parameters from provided arguments.
+        /// </summary>
+        /// <returns>Builder to chain operations.</returns>
         public TraceParams Build()
         {
             string missing = string.Empty;

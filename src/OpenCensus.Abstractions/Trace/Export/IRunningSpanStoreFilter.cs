@@ -16,10 +16,19 @@
 
 namespace OpenCensus.Trace.Export
 {
+    /// <summary>
+    /// Filter to query spans from the running spans store.
+    /// </summary>
     public interface IRunningSpanStoreFilter
     {
+        /// <summary>
+        /// Gets the name of the span to query.
+        /// </summary>
         string SpanName { get; }
 
+        /// <summary>
+        /// Gets the maximum number of spans to return.
+        /// </summary>
         int MaxSpansToReturn { get; }
     }
 }

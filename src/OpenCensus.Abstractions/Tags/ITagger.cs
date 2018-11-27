@@ -18,18 +18,45 @@ namespace OpenCensus.Tags
 {
     using OpenCensus.Common;
 
+    /// <summary>
+    /// Tags API configuraiton.
+    /// </summary>
     public interface ITagger
     {
+        /// <summary>
+        /// Gets the empty tags context.
+        /// </summary>
         ITagContext Empty { get; }
 
+        /// <summary>
+        /// Gets the current tags context.
+        /// </summary>
         ITagContext CurrentTagContext { get; }
 
+        /// <summary>
+        /// Gets the empty tags builder.
+        /// </summary>
         ITagContextBuilder EmptyBuilder { get; }
 
+        /// <summary>
+        /// Gets the builder out of current context.
+        /// </summary>
         ITagContextBuilder CurrentBuilder { get; }
 
+        /// <summary>
+        /// Enters the scope of code where the given tag context is in the current context and
+        /// returns an object that represents that scope.The scope is exited when the returned object is
+        /// closed.
+        /// </summary>
+        /// <param name="tags">Tags to set as current.</param>
+        /// <returns>Scope object. Dispose to dissassociate tags context from the current context.</returns>
         IScope WithTagContext(ITagContext tags);
 
+        /// <summary>
+        /// Gets the builder from the tags context.
+        /// </summary>
+        /// <param name="tags">Tags to pre-initialize builder with.</param>
+        /// <returns>Tags context builder preinitialized with the given tags.</returns>
         ITagContextBuilder ToBuilder(ITagContext tags);
     }
 }

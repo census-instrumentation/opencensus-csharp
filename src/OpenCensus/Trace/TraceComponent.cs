@@ -23,13 +23,25 @@ namespace OpenCensus.Trace
     using OpenCensus.Trace.Internal;
     using OpenCensus.Trace.Propagation;
 
-    public sealed class TraceComponent : TraceComponentBase
+    /// <summary>
+    /// Trace component holds all the extensibility points required for distributed tracing.
+    /// </summary>
+    public sealed class TraceComponent : ITraceComponent
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TraceComponent"/> class.
+        /// </summary>
         public TraceComponent()
             : this(DateTimeOffsetClock.Instance, new RandomGenerator(), new SimpleEventQueue())
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TraceComponent"/> class.
+        /// </summary>
+        /// <param name="clock">Clock to use to get the current time.</param>
+        /// <param name="randomHandler">Random numbers generator.</param>
+        /// <param name="eventQueue">Event queue to use before the exporter.</param>
         public TraceComponent(IClock clock, IRandomGenerator randomHandler, IEventQueue eventQueue)
         {
             this.Clock = clock;
@@ -55,14 +67,19 @@ namespace OpenCensus.Trace
             this.Tracer = new Tracer(randomHandler, startEndHandler, clock, this.TraceConfig);
         }
 
-        public override ITracer Tracer { get; }
+        /// <inheritdoc/>
+        public ITracer Tracer { get; }
 
-        public override IPropagationComponent PropagationComponent { get; }
+        /// <inheritdoc/>
+        public IPropagationComponent PropagationComponent { get; }
 
-        public override IClock Clock { get; }
+        /// <inheritdoc/>
+        public IClock Clock { get; }
 
-        public override IExportComponent ExportComponent { get; }
+        /// <inheritdoc/>
+        public IExportComponent ExportComponent { get; }
 
-        public override ITraceConfig TraceConfig { get; }
+        /// <inheritdoc/>
+        public ITraceConfig TraceConfig { get; }
     }
 }

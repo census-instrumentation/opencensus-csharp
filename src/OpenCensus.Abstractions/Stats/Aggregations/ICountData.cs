@@ -16,8 +16,14 @@
 
 namespace OpenCensus.Stats.Aggregations
 {
+    /// <summary>
+    /// Data accumulated by Count aggregation.
+    /// </summary>
     public interface ICountData : IAggregationData
     {
+        /// <summary>
+        /// Gets the counter representing the result of an aggregation.
+        /// </summary>
         long Count { get; }
     }
 }

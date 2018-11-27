@@ -92,7 +92,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                 ret.Attributes = new Span.Types.Attributes
                 {
                     
-                    DroppedAttributesCount = OpenCensus.Trace.Config.TraceParams.DEFAULT.MaxNumberOfAttributes - link.Attributes.Count,
+                    DroppedAttributesCount = OpenCensus.Trace.Config.TraceParams.Default.MaxNumberOfAttributes - link.Attributes.Count,
 
                     AttributeMap = { link.Attributes.ToDictionary(
                          att => att.Key,

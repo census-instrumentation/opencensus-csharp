@@ -42,7 +42,7 @@ namespace OpenCensus.Trace.Test
                     TraceId.GenerateRandomId(random),
                     SpanId.GenerateRandomId(random),
                     TraceOptions.Default, Tracestate.Empty);
-            spanOptions = SpanOptions.RECORD_EVENTS;
+            spanOptions = SpanOptions.RecordEvents;
         }
 
         [Fact]
@@ -56,7 +56,7 @@ namespace OpenCensus.Trace.Test
         public void GetOptions_WhenNullOptions()
         {
             ISpan span = new NoopSpan(notSampledSpanContext, default(SpanOptions));
-            Assert.Equal(SpanOptions.NONE, span.Options);
+            Assert.Equal(SpanOptions.None, span.Options);
         }
 
         [Fact]
@@ -85,7 +85,7 @@ namespace OpenCensus.Trace.Test
             var mockSpan = new Mock<NoopSpan>(spanContext, spanOptions) { CallBase = true };
             var span = mockSpan.Object;
             span.End();
-            mockSpan.Verify((s) => s.End(EndSpanOptions.DEFAULT));
+            mockSpan.Verify((s) => s.End(EndSpanOptions.Default));
         }
 
         [Fact]
@@ -95,7 +95,7 @@ namespace OpenCensus.Trace.Test
             var span = mockSpan.Object;
 
             IMessageEvent messageEvent =
-                MessageEvent.Builder(MessageEventType.SENT, 123)
+                MessageEvent.Builder(MessageEventType.Sent, 123)
                     .SetUncompressedMessageSize(456)
                     .SetCompressedMessageSize(789)
                     .Build();

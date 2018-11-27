@@ -44,4 +44,19 @@
     <VersionSuffix>$(PreReleaseMilestone)-$(PreReleaseVersion)</VersionSuffix>
     <FileVersion Condition="'$(PreReleaseVersion)' != ''">$(SemanticVersionMajor).$(SemanticVersionMinor).$(SemanticVersionPatch).$(PreReleaseVersion)</FileVersion>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Optional: Declare that the Repository URL can be published to NuSpec -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+    <!-- Optional: Embed source files that are not tracked by the source control manager to the PDB -->
+    <!-- This is useful if you generate files during the build -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Required -->
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-*" PrivateAssets="All"/>
+  </ItemGroup>
+
 </Project>

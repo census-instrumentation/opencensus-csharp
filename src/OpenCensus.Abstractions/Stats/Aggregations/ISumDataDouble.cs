@@ -16,8 +16,14 @@
 
 namespace OpenCensus.Stats.Aggregations
 {
+    /// <summary>
+    /// Data accumulated by the sum aggregator amongst double values.
+    /// </summary>
     public interface ISumDataDouble : IAggregationData
     {
+        /// <summary>
+        /// Gets the sum of values as double.
+        /// </summary>
         double Sum { get; }
     }
 }

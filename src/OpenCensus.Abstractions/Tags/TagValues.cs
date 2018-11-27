@@ -19,6 +19,9 @@ namespace OpenCensus.Tags
     using System.Collections.Generic;
     using OpenCensus.Utils.Abstractions;
 
+    /// <summary>
+    /// Collection of tags.
+    /// </summary>
     public sealed class TagValues
     {
         private TagValues(IList<ITagValue> values)
@@ -26,8 +29,16 @@ namespace OpenCensus.Tags
             this.Values = values;
         }
 
+        /// <summary>
+        /// Gets the collection of tag values.
+        /// </summary>
         public IList<ITagValue> Values { get; }
 
+        /// <summary>
+        /// Create tag values out of list of tags.
+        /// </summary>
+        /// <param name="values">Values to create tag values from.</param>
+        /// <returns>Resulting tag values collection.</returns>
         public static TagValues Create(IList<ITagValue> values)
         {
             return new TagValues(values);

@@ -16,12 +16,24 @@
 
 namespace OpenCensus.Trace.Export
 {
+    /// <summary>
+    /// Sampled spans store error filter.
+    /// </summary>
     public interface ISampledSpanStoreErrorFilter
     {
+        /// <summary>
+        /// Gets the span name to use to filter.
+        /// </summary>
         string SpanName { get; }
 
+        /// <summary>
+        /// Gets the cannonical code to use to filter.
+        /// </summary>
         CanonicalCode? CanonicalCode { get; }
 
+        /// <summary>
+        /// Gets the maximum number of spans to return.
+        /// </summary>
         int MaxSpansToReturn { get; }
     }
 }

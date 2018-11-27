@@ -16,8 +16,14 @@
 
 namespace OpenCensus.Tags
 {
+    /// <summary>
+    /// Tag value.
+    /// </summary>
     public interface ITagValue
     {
+        /// <summary>
+        /// Gets tag value as string.
+        /// </summary>
         string AsString { get; }
     }
 }

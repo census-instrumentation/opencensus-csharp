@@ -16,6 +16,9 @@
 
 namespace OpenCensus.Stats.Aggregations
 {
+    /// <summary>
+    /// Sum aggregation.
+    /// </summary>
     public interface ISum : IAggregation
     {
     }

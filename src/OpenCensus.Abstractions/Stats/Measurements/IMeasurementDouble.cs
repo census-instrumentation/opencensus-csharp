@@ -16,8 +16,14 @@
 
 namespace OpenCensus.Stats.Measurements
 {
+    /// <summary>
+    /// Represents a single measurment for aggregation as double.
+    /// </summary>
     public interface IMeasurementDouble : IMeasurement
     {
+        /// <summary>
+        /// Gets the long value for aggregation as double.
+        /// </summary>
         double Value { get; }
     }
 }

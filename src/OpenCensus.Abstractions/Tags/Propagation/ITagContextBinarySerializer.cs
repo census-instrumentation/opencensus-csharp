@@ -16,10 +16,23 @@
 
 namespace OpenCensus.Tags.Propagation
 {
+    /// <summary>
+    /// Binary serializer and deserializer of tags.
+    /// </summary>
     public interface ITagContextBinarySerializer
     {
+        /// <summary>
+        /// Converts tags into byte array.
+        /// </summary>
+        /// <param name="tags">Tags to serialize.</param>
+        /// <returns>Binary representation of tags.</returns>
         byte[] ToByteArray(ITagContext tags);
 
+        /// <summary>
+        /// Deserialize tags from byte array.
+        /// </summary>
+        /// <param name="bytes">Bytes to deserialize.</param>
+        /// <returns>Tags deserialized from bytes.</returns>
         ITagContext FromByteArray(byte[] bytes);
     }
 }

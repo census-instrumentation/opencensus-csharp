@@ -22,7 +22,7 @@ namespace OpenCensus.Trace.Config
 
         public TraceConfig()
         {
-            this.activeTraceParams = TraceParams.DEFAULT;
+            this.activeTraceParams = TraceParams.Default;
         }
 
         public override ITraceParams ActiveTraceParams

@@ -18,12 +18,28 @@ namespace OpenCensus.Trace.Export
 {
     using System;
 
+    /// <summary>
+    /// Span exporter.
+    /// </summary>
     public interface ISpanExporter : IDisposable
     {
+        /// <summary>
+        /// Adds a single span to the exporter.
+        /// </summary>
+        /// <param name="span">Span to export.</param>
         void AddSpan(ISpan span);
 
+        /// <summary>
+        /// Registers the exporter handler.
+        /// </summary>
+        /// <param name="name">Name of the handler.</param>
+        /// <param name="handler">Handler instance.</param>
         void RegisterHandler(string name, IHandler handler);
 
+        /// <summary>
+        /// Unregister handler by it's name.
+        /// </summary>
+        /// <param name="name">Name of the handler to unregister.</param>
         void UnregisterHandler(string name);
     }
 }

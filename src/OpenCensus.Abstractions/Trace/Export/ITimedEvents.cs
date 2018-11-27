@@ -18,10 +18,20 @@ namespace OpenCensus.Trace.Export
 {
     using System.Collections.Generic;
 
+    /// <summary>
+    /// Collection of timed events associated with the span.
+    /// </summary>
+    /// <typeparam name="T">Type of an event.</typeparam>
     public interface ITimedEvents<T>
     {
+        /// <summary>
+        /// Gets ths list of timed events.
+        /// </summary>
         IList<ITimedEvent<T>> Events { get; }
 
+        /// <summary>
+        /// Gets the number of dropped events due to active limits.
+        /// </summary>
         int DroppedEventsCount { get; }
     }
 }

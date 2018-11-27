@@ -20,14 +20,29 @@ namespace OpenCensus.Stats
     using OpenCensus.Common;
     using OpenCensus.Tags;
 
+    /// <summary>
+    /// Result data of the view aggregation.
+    /// </summary>
     public interface IViewData
     {
+        /// <summary>
+        /// Gets the view this data calculated for.
+        /// </summary>
         IView View { get; }
 
+        /// <summary>
+        /// Gets the aggregation data grouped by combination of tag values associated with this view data.
+        /// </summary>
         IDictionary<TagValues, IAggregationData> AggregationMap { get; }
 
+        /// <summary>
+        /// Gets the timestamp of a start of this aggregation.
+        /// </summary>
         ITimestamp Start { get; }
 
+        /// <summary>
+        /// Gets the timestamp of the end of this aggregation.
+        /// </summary>
         ITimestamp End { get; }
     }
 }

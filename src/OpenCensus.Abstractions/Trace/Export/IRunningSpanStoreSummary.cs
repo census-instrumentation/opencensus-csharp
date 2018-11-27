@@ -18,8 +18,14 @@ namespace OpenCensus.Trace.Export
 {
     using System.Collections.Generic;
 
+    /// <summary>
+    /// Summary of all running spans.
+    /// </summary>
     public interface IRunningSpanStoreSummary
     {
+        /// <summary>
+        /// Gets the summary of running spans per span name.
+        /// </summary>
         IDictionary<string, IRunningPerSpanNameSummary> PerSpanNameSummary { get; }
     }
 }

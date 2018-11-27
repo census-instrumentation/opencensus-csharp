@@ -19,16 +19,34 @@ namespace OpenCensus.Stats
     using System.Collections.Generic;
     using OpenCensus.Tags;
 
+    /// <summary>
+    /// Stats recording view.
+    /// </summary>
     public interface IView
     {
+        /// <summary>
+        /// Gets the name of the view.
+        /// </summary>
         IViewName Name { get; }
 
+        /// <summary>
+        /// Gets the description of the view.
+        /// </summary>
         string Description { get; }
 
+        /// <summary>
+        /// Gets the measure this view record values for.
+        /// </summary>
         IMeasure Measure { get; }
 
+        /// <summary>
+        /// Gets the aggregation is used by this view.
+        /// </summary>
         IAggregation Aggregation { get; }
 
+        /// <summary>
+        /// Gets the columns (dimensions) recorded by this view.
+        /// </summary>
         IList<ITagKey> Columns { get; }
     }
 }

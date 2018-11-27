@@ -16,8 +16,14 @@
 
 namespace OpenCensus.Internal
 {
+    /// <summary>
+    /// Queue entry abstraction.
+    /// </summary>
     public interface IEventQueueEntry
     {
+        /// <summary>
+        /// Method process will be called when queue entry needs to be processed.
+        /// </summary>
         void Process();
     }
 }

@@ -16,14 +16,29 @@
 
 namespace OpenCensus.Stats.Aggregations
 {
+    /// <summary>
+    /// Data accumulated by mean value aggregator.
+    /// </summary>
     public interface IMeanData : IAggregationData
     {
+        /// <summary>
+        /// Gets the mean value.
+        /// </summary>
         double Mean { get; }
 
+        /// <summary>
+        /// Gets the count of samples.
+        /// </summary>
         long Count { get; }
 
+        /// <summary>
+        /// Gets the maximum value.
+        /// </summary>
         double Max { get; }
 
+        /// <summary>
+        /// Gets the minimum value.
+        /// </summary>
         double Min { get; }
     }
 }

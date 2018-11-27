@@ -18,14 +18,36 @@ namespace OpenCensus.Tags
 {
     using OpenCensus.Common;
 
+    /// <summary>
+    /// Tags context builder.
+    /// </summary>
     public interface ITagContextBuilder
     {
+        /// <summary>
+        /// Puts a new tag into context.
+        /// </summary>
+        /// <param name="key">Key of the tag to add.</param>
+        /// <param name="value">Value of the tag to add.</param>
+        /// <returns>Tag context builder for operations chaining.</returns>
         ITagContextBuilder Put(ITagKey key, ITagValue value);
 
+        /// <summary>
+        /// Removes tag with the given key from the context.
+        /// </summary>
+        /// <param name="key">Key of the tag to remove.</param>
+        /// <returns>Tag context builder for operations chaining.</returns>
         ITagContextBuilder Remove(ITagKey key);
 
+        /// <summary>
+        /// Builds the tags context.
+        /// </summary>
+        /// <returns>Resulting tag context.</returns>
         ITagContext Build();
 
+        /// <summary>
+        /// Builds tag context and save it as current.
+        /// </summary>
+        /// <returns>Scope control object. Dispose it to close a scope.</returns>
         IScope BuildScoped();
     }
 }

@@ -16,8 +16,14 @@
 
 namespace OpenCensus.Stats.Aggregations
 {
+    /// <summary>
+    /// Distribution aggregation.
+    /// </summary>
     public interface IDistribution : IAggregation
     {
+        /// <summary>
+        /// Gets the configuration for distribution aggregation - distribution bucket boundaries.
+        /// </summary>
         IBucketBoundaries BucketBoundaries { get; }
     }
 }

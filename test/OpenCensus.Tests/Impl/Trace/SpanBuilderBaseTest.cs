@@ -45,44 +45,8 @@ namespace OpenCensus.Trace.Test
             {
                 scope.Dispose();
             }
-            span.Verify(s => s.End(EndSpanOptions.DEFAULT));
+            span.Verify(s => s.End(EndSpanOptions.Default));
             Assert.Same(BlankSpan.Instance, tracer.CurrentSpan);
         }
-
-        // [Fact]
-        // public void StartSpanAndRun()
-        //      {
-        //          assertThat(tracer.getCurrentSpan()).isSameAs(BlankSpan.Instance);
-        //          spanBuilder.startSpanAndRun(
-        //              new Runnable() {
-        //        @Override
-        //                public void run()
-        //          {
-        //              assertThat(tracer.getCurrentSpan()).isSameAs(span);
-        //          }
-        //      });
-        //  verify(span).end(EndSpanOptions.DEFAULT);
-        //      assertThat(tracer.getCurrentSpan()).isSameAs(BlankSpan.Instance);
-        //  }
-
-        // [Fact]
-        //  public void StartSpanAndCall() throws Exception
-        //    {
-        //        final Object ret = new Object();
-        //    assertThat(tracer.getCurrentSpan()).isSameAs(BlankSpan.Instance);
-        //    assertThat(
-        //            spanBuilder.startSpanAndCall(
-        //                new Callable<Object>() {
-        //                  @Override
-        //                  public Object call() throws Exception
-        //    {
-        //        assertThat(tracer.getCurrentSpan()).isSameAs(span);
-        //                    return ret;
-        //    }
-        // }))
-        //        .isEqualTo(ret);
-        // verify(span).end(EndSpanOptions.DEFAULT);
-        // assertThat(tracer.getCurrentSpan()).isSameAs(BlankSpan.Instance);
-        //  }
     }
 }

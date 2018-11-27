@@ -26,14 +26,14 @@ namespace OpenCensus.Trace.Config.Test
         [Fact]
         public void ActiveTraceParams_NoOpImplementation()
         {
-            Assert.Equal(TraceParams.DEFAULT, traceConfig.ActiveTraceParams);
+            Assert.Equal(TraceParams.Default, traceConfig.ActiveTraceParams);
         }
 
         [Fact]
         public void UpdateActiveTraceParams_NoOpImplementation()
         {
             TraceParams traceParams =
-                TraceParams.DEFAULT
+                TraceParams.Default
                     .ToBuilder()
                     .SetSampler(Samplers.AlwaysSample)
                     .SetMaxNumberOfAttributes(8)
@@ -42,7 +42,7 @@ namespace OpenCensus.Trace.Config.Test
                     .SetMaxNumberOfLinks(11)
                     .Build();
             traceConfig.UpdateActiveTraceParams(traceParams);
-            Assert.Equal(TraceParams.DEFAULT, traceConfig.ActiveTraceParams);
+            Assert.Equal(TraceParams.Default, traceConfig.ActiveTraceParams);
         }
     }
 }

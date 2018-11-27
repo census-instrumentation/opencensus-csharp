@@ -19,14 +19,36 @@ namespace OpenCensus.Stats
     using OpenCensus.Stats.Measures;
     using OpenCensus.Tags;
 
+    /// <summary>
+    /// Measure map. Holds the mapping of measures and values.
+    /// </summary>
     public interface IMeasureMap
     {
+        /// <summary>
+        /// Associates the measure with the given value. Subsequent updates to the same measure will overwrite the previous value.
+        /// </summary>
+        /// <param name="measure">Measure to associate the value with.</param>
+        /// <param name="value">Value to associate with the measure.</param>
+        /// <returns>Measure map for calls chaining.</returns>
         IMeasureMap Put(IMeasureDouble measure, double value);
 
+        /// <summary>
+        /// Associates the measure with the given value. Subsequent updates to the same measure will overwrite the previous value.
+        /// </summary>
+        /// <param name="measure">Measure to associate the value with.</param>
+        /// <param name="value">Value to associate with the measure.</param>
+        /// <returns>Measure map for calls chaining.</returns>
         IMeasureMap Put(IMeasureLong measure, long value);
 
+        /// <summary>
+        /// Records all of the measures at the same time with the current tag context.
+        /// </summary>
         void Record();
 
+        /// <summary>
+        /// Records all of the measures at the same time with the explicit tag context.
+        /// </summary>
+        /// <param name="tags">Tags to associate with the measure.</param>
         void Record(ITagContext tags);
     }
 }

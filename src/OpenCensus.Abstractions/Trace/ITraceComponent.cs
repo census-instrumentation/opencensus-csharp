@@ -21,16 +21,34 @@ namespace OpenCensus.Trace
     using OpenCensus.Trace.Export;
     using OpenCensus.Trace.Propagation;
 
+    /// <summary>
+    /// Trace component holds all the extensibility points required for distributed tracing.
+    /// </summary>
     public interface ITraceComponent
     {
+        /// <summary>
+        /// Gets the tracer to record Spans.
+        /// </summary>
         ITracer Tracer { get; }
 
+        /// <summary>
+        /// Gets the propagation component that defines how to extract and inject the context from the wire protocols.
+        /// </summary>
         IPropagationComponent PropagationComponent { get; }
 
+        /// <summary>
+        /// Gets the clock implementation to use.
+        /// </summary>
         IClock Clock { get; }
 
+        /// <summary>
+        /// Gets the exporter to use to upload spans.
+        /// </summary>
         IExportComponent ExportComponent { get; }
 
+        /// <summary>
+        /// Gets the tracer configuration. Include sampling definition and limits.
+        /// </summary>
         ITraceConfig TraceConfig { get; }
     }
 }

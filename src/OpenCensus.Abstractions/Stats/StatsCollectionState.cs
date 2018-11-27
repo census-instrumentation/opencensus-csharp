@@ -16,9 +16,19 @@
 
 namespace OpenCensus.Stats
 {
+    /// <summary>
+    /// Stats collection state.
+    /// </summary>
     public enum StatsCollectionState
     {
+        /// <summary>
+        /// Collection is enabled.
+        /// </summary>
         ENABLED,
+
+        /// <summary>
+        /// Collection is disabled.
+        /// </summary>
         DISABLED,
     }
 }

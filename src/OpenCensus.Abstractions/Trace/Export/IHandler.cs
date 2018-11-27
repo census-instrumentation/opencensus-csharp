@@ -18,8 +18,15 @@ namespace OpenCensus.Trace.Export
 {
     using System.Collections.Generic;
 
+    /// <summary>
+    /// Exporter handler.
+    /// </summary>
     public interface IHandler
     {
+        /// <summary>
+        /// Exports the list of spans to the backend.
+        /// </summary>
+        /// <param name="spanDataList">Collection of spans to export.</param>
         void Export(IList<ISpanData> spanDataList);
     }
 }

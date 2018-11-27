@@ -23,8 +23,8 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void EndSpanOptions_DefaultOptions()
         {
-            Assert.Null(EndSpanOptions.DEFAULT.Status);
-            Assert.False(EndSpanOptions.DEFAULT.SampleToLocalSpanStore);
+            Assert.Null(EndSpanOptions.Default.Status);
+            Assert.False(EndSpanOptions.Default.SampleToLocalSpanStore);
         }
 
         [Fact]
