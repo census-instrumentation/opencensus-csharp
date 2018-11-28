@@ -22,12 +22,15 @@ namespace OpenCensus.Exporter.Stackriver.Tests
 
     public class StackdriverStatsConfigurationTests
     {
+<<<<<<< HEAD
         public StackdriverStatsConfigurationTests()
         {
             // Setting this for unit testing purposes, so we don't need credentials for real Google Cloud Account
             Environment.SetEnvironmentVariable("GOOGLE_PROJECT_ID", "test", EnvironmentVariableTarget.Process);
         }
 
+=======
+>>>>>>> - Added test project for Stackdriver Exporter
         [Fact]
         public void StatsConfiguration_ByDefault_MetricNamePrefixEmpty()
         {
@@ -53,12 +56,17 @@ namespace OpenCensus.Exporter.Stackriver.Tests
         public void StatsConfiguration_ByDefault_MonitoredResourceIsGlobal()
         {
             Assert.NotNull(StackdriverStatsConfiguration.Default.MonitoredResource);
+<<<<<<< HEAD
 
             Assert.Equal(Constants.GLOBAL, StackdriverStatsConfiguration.Default.MonitoredResource.Type);
 
             Assert.NotNull(StackdriverStatsConfiguration.Default.MonitoredResource.Labels);
 
             Assert.True(StackdriverStatsConfiguration.Default.MonitoredResource.Labels.ContainsKey("project_id"));
+=======
+            Assert.Equal(Constants.GLOBAL, StackdriverStatsConfiguration.Default.MonitoredResource.Type);
+            Assert.NotNull(StackdriverStatsConfiguration.Default.MonitoredResource.Labels);
+>>>>>>> - Added test project for Stackdriver Exporter
             Assert.True(StackdriverStatsConfiguration.Default.MonitoredResource.Labels.ContainsKey(Constants.PROJECT_ID_LABEL_KEY));
             Assert.Equal(
                 StackdriverStatsConfiguration.Default.ProjectId,

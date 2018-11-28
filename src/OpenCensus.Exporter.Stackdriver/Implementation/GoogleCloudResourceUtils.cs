@@ -42,6 +42,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             {
                 return projectId;
             }
+<<<<<<< HEAD
 
             // Try to detect projectId from service account credential if it exists
             string serviceAccountFilePath = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS");
@@ -56,6 +57,21 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
 
             projectId = Environment.GetEnvironmentVariable("GOOGLE_PROJECT_ID");
             return projectId;
+=======
+
+            // Try to detect projectId from service account credential if it exists
+            string serviceAccountFilePath = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS");
+            if (!string.IsNullOrEmpty(serviceAccountFilePath) && File.Exists(serviceAccountFilePath))
+            {
+                using (var stream = new FileStream(serviceAccountFilePath, FileMode.Open))
+                {
+                    var credential = Google.Apis.Auth.OAuth2.ServiceAccountCredential.FromServiceAccountData(stream);
+                    return credential.ProjectId;
+                }
+            }
+
+            return null;
+>>>>>>> - Added test project for Stackdriver Exporter
         }
 
         /// <summary>
