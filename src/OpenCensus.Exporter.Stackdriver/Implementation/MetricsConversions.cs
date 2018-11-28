@@ -24,7 +24,6 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
     using OpenCensus.Stats;
     using OpenCensus.Stats.Aggregations;
     using OpenCensus.Tags;
-    using System;
     using System.Collections.Generic;
     using static Google.Api.Distribution.Types;
     using static Google.Api.MetricDescriptor.Types;
@@ -236,6 +235,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         /// Convert ViewData to a list of TimeSeries, so that ViewData can be uploaded to Stackdriver.
         /// </summary>
         /// <param name="viewData">OpenCensus View</param>
+        /// <param name="metricDescriptor">Stackdriver Metric Descriptor</param>
         /// <param name="monitoredResource">Stackdriver Resource to which the metrics belong</param>
         /// <param name="domain">The metrics domain (namespace)</param>
         /// <returns></returns>
@@ -288,25 +288,6 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                 Value = CreateTypedValue(aggregation, points),
                 Interval = CreateTimeInterval(startTime, endTime)
             };
-            /*
-            var ret = points.Match(
-                v => new Point { Value = new TypedValue { DoubleValue = v.Sum }, Interval = CreateTimeInterval(startTime, endTime) }, // ISumDataDouble
-                v => new Point { Value = new TypedValue { Int64Value = v.Sum }, Interval = CreateTimeInterval(startTime, endTime) }, // ISumDataLong
-                v => new Point { Value = new TypedValue { Int64Value = v.Count }, Interval = CreateTimeInterval(startTime, endTime) }, // ICountData
-                v => new Point { Value = new TypedValue { DoubleValue = v.Mean }, Interval = CreateTimeInterval(startTime, endTime) }, // IMeanData
-                v => new Point {
-                    Value = new TypedValue
-                    {
-                        DistributionValue = CreateDistribution(v, ((IDistribution)aggregation).BucketBoundaries),
-                    },
-                    Interval = CreateTimeInterval(startTime, endTime)
-                }, // IDistributionData
-                v => new Point { Value = new TypedValue { DoubleValue = v.LastValue }, Interval = CreateTimeInterval(startTime, endTime) }, // ILastValueDataDouble
-                v => new Point { Value = new TypedValue { Int64Value = v.LastValue }, Interval = CreateTimeInterval(startTime, endTime) }, // ILastValueDataLong
-                v => throw new InvalidOperationException());
-
-            return ret;
-            */
         }
 
         private static TimeInterval CreateTimeInterval(ITimestamp start, ITimestamp end)
