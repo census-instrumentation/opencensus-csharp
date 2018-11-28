@@ -32,10 +32,14 @@ namespace OpenCensus.Exporter.Stackdriver
         private readonly IViewManager viewManager;
         private readonly string projectId;
 <<<<<<< HEAD
+<<<<<<< HEAD
         private StackdriverStatsExporter statsExporter;
 =======
         private StackdriverStatsExporter metricsExporter;
 >>>>>>> First working version of Stackdriver Stats Exporter.
+=======
+        private StackdriverStatsExporter statsExporter;
+>>>>>>> Fixed Stackdriver export interval propagation
         private object locker = new object();
         private bool isInitialized = false;
 
@@ -79,11 +83,15 @@ namespace OpenCensus.Exporter.Stackdriver
                 {
                     StackdriverStatsConfiguration statsConfig = StackdriverStatsConfiguration.Default;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Fixed Stackdriver export interval propagation
                     if (statsConfig.ProjectId != projectId)
                     {
                         statsConfig.ProjectId = projectId;
                         statsConfig.MonitoredResource = GoogleCloudResourceUtils.GetDefaultResource(projectId);
                     }
+<<<<<<< HEAD
 =======
                     statsConfig.ProjectId = projectId;
 <<<<<<< HEAD
@@ -101,6 +109,11 @@ namespace OpenCensus.Exporter.Stackdriver
                     metricsExporter = new StackdriverStatsExporter(viewManager, statsConfig);
                     metricsExporter.Start();
 >>>>>>> First working version of Stackdriver Stats Exporter.
+=======
+
+                    statsExporter = new StackdriverStatsExporter(viewManager, statsConfig);
+                    statsExporter.Start();
+>>>>>>> Fixed Stackdriver export interval propagation
                 }
 
                 isInitialized = true;
