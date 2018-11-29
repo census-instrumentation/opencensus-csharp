@@ -22,6 +22,12 @@ namespace OpenCensus.Exporter.Stackriver.Tests
 
     public class StackdriverStatsConfigurationTests
     {
+        public StackdriverStatsConfigurationTests()
+        {
+            // Setting this for unit testing purposes, so we don't need credentials for real Google Cloud Account
+            Environment.SetEnvironmentVariable("GOOGLE_PROJECT_ID", "test", EnvironmentVariableTarget.Process);
+        }
+
         [Fact]
         public void StatsConfiguration_ByDefault_MetricNamePrefixEmpty()
         {

@@ -26,13 +26,6 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
     /// </summary>
     public static class GoogleCloudResourceUtils
     {
-        private static Dictionary<string, string> gcpResourceLabelMappings = new Dictionary<string, string>()
-        {
-            { "project_id", Constants.PROJECT_ID_LABEL_KEY },
-            { "instance_id", Constants.GCP_GCE_INSTANCE },
-            { "zone", null }
-        };
-
         /// <summary>
         /// Detects Google Cloud ProjectId based on the environment on which the code runs.
         /// Supports GCE/GKE/GAE and projectId tied to service account
@@ -61,7 +54,8 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                 }
             }
 
-            return null;
+            projectId = Environment.GetEnvironmentVariable("GOOGLE_PROJECT_ID");
+            return projectId;
         }
 
         /// <summary>
