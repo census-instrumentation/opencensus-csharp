@@ -23,14 +23,20 @@ namespace OpenCensus.Exporter.Stackriver.Tests
     public class StackdriverStatsConfigurationTests
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Adding an option to set google cloud projectId in environment variable for testing purposes(Stackdriver exporter).
         public StackdriverStatsConfigurationTests()
         {
             // Setting this for unit testing purposes, so we don't need credentials for real Google Cloud Account
             Environment.SetEnvironmentVariable("GOOGLE_PROJECT_ID", "test", EnvironmentVariableTarget.Process);
         }
 
+<<<<<<< HEAD
 =======
 >>>>>>> - Added test project for Stackdriver Exporter
+=======
+>>>>>>> Adding an option to set google cloud projectId in environment variable for testing purposes(Stackdriver exporter).
         [Fact]
         public void StatsConfiguration_ByDefault_MetricNamePrefixEmpty()
         {

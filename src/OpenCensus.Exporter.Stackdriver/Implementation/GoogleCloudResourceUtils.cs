@@ -70,8 +70,13 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                 }
             }
 
+<<<<<<< HEAD
             return null;
 >>>>>>> - Added test project for Stackdriver Exporter
+=======
+            projectId = Environment.GetEnvironmentVariable("GOOGLE_PROJECT_ID");
+            return projectId;
+>>>>>>> Adding an option to set google cloud projectId in environment variable for testing purposes(Stackdriver exporter).
         }
 
         /// <summary>
