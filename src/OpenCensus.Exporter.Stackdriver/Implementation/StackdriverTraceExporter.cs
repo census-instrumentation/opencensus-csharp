@@ -27,7 +27,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
     {
         /// <summary>
         /// Translating <see cref="ISpanData"/> to Stackdriver's Span
-        /// According to <see cref="https://cloud.google.com/trace/docs/reference/v2/rpc/google.devtools.cloudtrace.v2"/> specifications
+        /// According to <see href="https://cloud.google.com/trace/docs/reference/v2/rpc/google.devtools.cloudtrace.v2"/> specifications
         /// </summary>
         /// <param name="spanData">Span in OpenCensus format</param>
         /// <param name="projectId">Google Cloud Platform Project Id</param>
