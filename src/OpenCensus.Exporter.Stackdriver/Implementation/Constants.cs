@@ -14,12 +14,17 @@
 // limitations under the License.
 // </copyright>
 
+#if SIGNED
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("OpenCensus.Exporter.Stackdriver.Tests, PublicKey=002400000480000094" +
                                                                 "000000060200000024000052534131000400000100010051c1562a090fb0" +
                                                                 "c9f391012a32198b5e5d9a60e9b80fa2d7b434c9e5ccb7259bd606e66f9660676afc6692b8cdc6" +
                                                                 "793d190904551d2103b7b22fa636dcbb8208839785ba402ea08fc00c8f1500ccef28bbf599aa64" +
                                                                 "ffb1e1d5dc1bf3420a3777badfe697856e9d52070a50c3ea5821c80bef17ca3acffa28f89dd413" +
                                                                 "f096f898")]
+
+#else
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("OpenCensus.Exporter.Stackdriver.Tests, PublicKey=null")]
+#endif
 
 namespace OpenCensus.Exporter.Stackdriver.Implementation
 {
