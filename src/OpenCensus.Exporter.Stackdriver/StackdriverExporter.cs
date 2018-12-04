@@ -31,7 +31,7 @@ namespace OpenCensus.Exporter.Stackdriver
         private readonly IExportComponent exportComponent;
         private readonly IViewManager viewManager;
         private readonly string projectId;
-        private StackdriverStatsExporter metricsExporter;
+        private StackdriverStatsExporter statsExporter;
         private object locker = new object();
         private bool isInitialized = false;
 
@@ -70,15 +70,18 @@ namespace OpenCensus.Exporter.Stackdriver
                     exportComponent.SpanExporter.RegisterHandler(ExporterName, traceExporter);
                 }
 
-                // Register metrics exporter
+                // Register stats(metrics) exporter
                 if (viewManager != null)
                 {
                     StackdriverStatsConfiguration statsConfig = StackdriverStatsConfiguration.Default;
-                    statsConfig.ProjectId = projectId;
-                    statsConfig.MonitoredResource = GoogleCloudResourceUtils.GetDefaultResource(projectId);
+                    if (statsConfig.ProjectId != projectId)
+                    {
+                        statsConfig.ProjectId = projectId;
+                        statsConfig.MonitoredResource = GoogleCloudResourceUtils.GetDefaultResource(projectId);
+                    }
 
-                    metricsExporter = new StackdriverStatsExporter(viewManager, statsConfig);
-                    metricsExporter.Start();
+                    statsExporter = new StackdriverStatsExporter(viewManager, statsConfig);
+                    statsExporter.Start();
                 }
 
                 isInitialized = true;
@@ -104,9 +107,9 @@ namespace OpenCensus.Exporter.Stackdriver
                 }
 
                 // Stop metrics exporter
-                if (metricsExporter != null)
+                if (statsExporter != null)
                 {
-                    metricsExporter.Stop();
+                    statsExporter.Stop();
                 }
 
                 isInitialized = false;

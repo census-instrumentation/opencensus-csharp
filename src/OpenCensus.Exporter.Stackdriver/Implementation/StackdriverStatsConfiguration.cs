@@ -52,11 +52,20 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         /// <summary>
         /// Default Stats Configuration for Stackdriver
         /// </summary>
-        public static StackdriverStatsConfiguration Default { get; } = new StackdriverStatsConfiguration
+        public static StackdriverStatsConfiguration Default
         {
-            ExportInterval = DEFAULT_INTERVAL,
-            ProjectId = GoogleCloudResourceUtils.GetProjectId(),
-            MetricNamePrefix = string.Empty,
-        };
+            get
+            {
+                var defaultConfig = new StackdriverStatsConfiguration
+                {
+                    ExportInterval = DEFAULT_INTERVAL,
+                    ProjectId = GoogleCloudResourceUtils.GetProjectId(),
+                    MetricNamePrefix = string.Empty,
+                };
+
+                defaultConfig.MonitoredResource = GoogleCloudResourceUtils.GetDefaultResource(defaultConfig.ProjectId);
+                return defaultConfig;
+            }
+        }
     }
 }

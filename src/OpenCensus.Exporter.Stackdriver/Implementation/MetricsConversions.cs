@@ -23,8 +23,8 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
     using OpenCensus.Exporter.Stackdriver.Utils;
     using OpenCensus.Stats;
     using OpenCensus.Stats.Aggregations;
+    using OpenCensus.Stats.Measures;
     using OpenCensus.Tags;
-    using System;
     using System.Collections.Generic;
     using static Google.Api.Distribution.Types;
     using static Google.Api.MetricDescriptor.Types;
@@ -52,17 +52,30 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         }
 
         /// <summary>
-        /// Converts from Opencensus Measure to Stackdriver ValueType
+        /// Converts from Opencensus Measure+Aggregation to Stackdriver's ValueType
         /// </summary>
-        /// <param name="measure"></param>
+        /// <param name="measure">Opencensus Measure definition</param>
+        /// <param name="aggregation">Opencensus Aggregation definition</param>
         /// <returns></returns>
-        public static MetricDescriptor.Types.ValueType ToValueType(
-            this IMeasure measure)
+        public static ValueType ToValueType(
+            this IMeasure measure, IAggregation aggregation)
         {
-            return measure.Match(
-                v => MetricDescriptor.Types.ValueType.Double,        // Double
-                v => MetricDescriptor.Types.ValueType.Int64,         // Long
-                v => MetricDescriptor.Types.ValueType.Unspecified);  // Unrecognized
+            MetricKind metricKind = aggregation.ToMetricKind();
+            if (aggregation is IDistribution && (metricKind == MetricKind.Cumulative || metricKind == MetricKind.Gauge))
+                return ValueType.Distribution;
+
+            if (measure is IMeasureDouble && (metricKind == MetricKind.Cumulative || metricKind == MetricKind.Gauge))
+            {
+                return ValueType.Double;
+            }
+
+            if (measure is IMeasureLong && (metricKind == MetricKind.Cumulative || metricKind == MetricKind.Gauge))
+            {
+                return ValueType.Int64;
+            }
+
+            // TODO - zeltser - we currently don't support money and string as Opencensus doesn't support them yet
+            return ValueType.Unspecified;
         }
 
         public static LabelDescriptor ToLabelDescriptor(this ITagKey tagKey)
@@ -135,8 +148,8 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             var unit = GetUnit(view.Aggregation, view.Measure);
             metricDescriptor.Unit = unit;
             metricDescriptor.MetricKind = view.Aggregation.ToMetricKind();
-            metricDescriptor.ValueType = view.Measure.ToValueType();
-            
+            metricDescriptor.ValueType = view.Measure.ToValueType(view.Aggregation);
+
             return metricDescriptor;
         }
 
@@ -236,6 +249,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         /// Convert ViewData to a list of TimeSeries, so that ViewData can be uploaded to Stackdriver.
         /// </summary>
         /// <param name="viewData">OpenCensus View</param>
+        /// <param name="metricDescriptor">Stackdriver Metric Descriptor</param>
         /// <param name="monitoredResource">Stackdriver Resource to which the metrics belong</param>
         /// <param name="domain">The metrics domain (namespace)</param>
         /// <returns></returns>
@@ -262,7 +276,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                 IAggregationData points = entry.Value;
                 
                 timeSeries.Resource = monitoredResource;
-                timeSeries.ValueType = view.Measure.ToValueType();
+                timeSeries.ValueType = view.Measure.ToValueType(view.Aggregation);
                 timeSeries.MetricKind = view.Aggregation.ToMetricKind();
 
                 timeSeries.Metric = GetMetric(view, labels, metricDescriptor, domain);
@@ -288,25 +302,6 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                 Value = CreateTypedValue(aggregation, points),
                 Interval = CreateTimeInterval(startTime, endTime)
             };
-            /*
-            var ret = points.Match(
-                v => new Point { Value = new TypedValue { DoubleValue = v.Sum }, Interval = CreateTimeInterval(startTime, endTime) }, // ISumDataDouble
-                v => new Point { Value = new TypedValue { Int64Value = v.Sum }, Interval = CreateTimeInterval(startTime, endTime) }, // ISumDataLong
-                v => new Point { Value = new TypedValue { Int64Value = v.Count }, Interval = CreateTimeInterval(startTime, endTime) }, // ICountData
-                v => new Point { Value = new TypedValue { DoubleValue = v.Mean }, Interval = CreateTimeInterval(startTime, endTime) }, // IMeanData
-                v => new Point {
-                    Value = new TypedValue
-                    {
-                        DistributionValue = CreateDistribution(v, ((IDistribution)aggregation).BucketBoundaries),
-                    },
-                    Interval = CreateTimeInterval(startTime, endTime)
-                }, // IDistributionData
-                v => new Point { Value = new TypedValue { DoubleValue = v.LastValue }, Interval = CreateTimeInterval(startTime, endTime) }, // ILastValueDataDouble
-                v => new Point { Value = new TypedValue { Int64Value = v.LastValue }, Interval = CreateTimeInterval(startTime, endTime) }, // ILastValueDataLong
-                v => throw new InvalidOperationException());
-
-            return ret;
-            */
         }
 
         private static TimeInterval CreateTimeInterval(ITimestamp start, ITimestamp end)

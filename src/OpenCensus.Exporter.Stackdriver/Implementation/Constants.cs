@@ -17,8 +17,6 @@
 namespace OpenCensus.Exporter.Stackdriver.Implementation
 {
     using System;
-    using System.Collections.Generic;
-    using System.Collections.Specialized;
 
     internal class Constants
     {
@@ -33,6 +31,17 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
 
         public const string PROJECT_ID_LABEL_KEY = "project_id";
         public static readonly string OPENCENSUS_TASK_VALUE_DEFAULT = generateDefaultTaskValue();
+
+        public const string GCP_GCE_INSTANCE_TYPE = "cloud.google.com/gce/instance";
+        public const string GCP_INSTANCE_ID_KEY = "cloud.google.com/gce/instance_id";
+        public const string GCP_ACCOUNT_ID_KEY = "cloud.google.com/gce/project_id";
+        public const string GCP_ZONE_KEY = "cloud.google.com/gce/zone";
+
+        public const string K8S_CONTAINER_TYPE = "k8s.io/container";
+        public const string K8S_CLUSTER_NAME_KEY = "k8s.io/cluster/name";
+        public const string K8S_CONTAINER_NAME_KEY = "k8s.io/container/name";
+        public const string K8S_NAMESPACE_NAME_KEY = "k8s.io/namespace/name";
+        public const string K8S_POD_NAME_KEY = "k8s.io/pod/name";
 
         private static string generateDefaultTaskValue()
         {

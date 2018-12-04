@@ -19,14 +19,22 @@ namespace OpenCensus.Exporter.Stackdriver.Utils
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
+    /// <summary>
+    /// Common Utility Methods that are not metrics/trace specific
+    /// </summary>
     public static class CommonUtils
     {
+        /// <summary>
+        /// Divide the source list into batches of lists of given size
+        /// </summary>
+        /// <typeparam name="T">The type of the list</typeparam>
+        /// <param name="source">The list</param>
+        /// <param name="size">Size of the batch</param>
+        /// <returns></returns>
         public static IEnumerable<List<T>> Partition<T>(this IList<T> source, Int32 size)
         {
-            for (int i = 0; i < Math.Ceiling(source.Count / (Double)size); i++)
+            for (int i = 0; i < Math.Ceiling(source.Count / (double)size); i++)
             {
                 yield return new List<T>(source.Skip(size * i).Take(size));
             }
