@@ -54,21 +54,15 @@ namespace OpenCensus.Exporter.Stackriver.Tests
         {
             Assert.NotNull(StackdriverStatsConfiguration.Default.MonitoredResource);
 
-            // TODO - zelser - current temporarily disabled a line that reads internal variable from "friend" assembly
-            Assert.Equal("global", StackdriverStatsConfiguration.Default.MonitoredResource.Type);
-            //Assert.Equal(Constants.GLOBAL, StackdriverStatsConfiguration.Default.MonitoredResource.Type);
+            Assert.Equal(Constants.GLOBAL, StackdriverStatsConfiguration.Default.MonitoredResource.Type);
 
             Assert.NotNull(StackdriverStatsConfiguration.Default.MonitoredResource.Labels);
 
-            // TODO - zelser - current temporarily disabled 2 lines that read internal variable from "friend" assembly
             Assert.True(StackdriverStatsConfiguration.Default.MonitoredResource.Labels.ContainsKey("project_id"));
+            Assert.True(StackdriverStatsConfiguration.Default.MonitoredResource.Labels.ContainsKey(Constants.PROJECT_ID_LABEL_KEY));
             Assert.Equal(
                 StackdriverStatsConfiguration.Default.ProjectId,
-                StackdriverStatsConfiguration.Default.MonitoredResource.Labels["project_id"]);
-            //Assert.True(StackdriverStatsConfiguration.Default.MonitoredResource.Labels.ContainsKey(Constants.PROJECT_ID_LABEL_KEY));
-            //Assert.Equal(
-            //    StackdriverStatsConfiguration.Default.ProjectId,
-            //    StackdriverStatsConfiguration.Default.MonitoredResource.Labels[Constants.PROJECT_ID_LABEL_KEY]);
+                StackdriverStatsConfiguration.Default.MonitoredResource.Labels[Constants.PROJECT_ID_LABEL_KEY]);
         }
     }
 }

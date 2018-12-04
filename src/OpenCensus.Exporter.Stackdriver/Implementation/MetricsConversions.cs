@@ -23,6 +23,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
     using OpenCensus.Exporter.Stackdriver.Utils;
     using OpenCensus.Stats;
     using OpenCensus.Stats.Aggregations;
+    using OpenCensus.Stats.Measures;
     using OpenCensus.Tags;
     using System.Collections.Generic;
     using static Google.Api.Distribution.Types;
@@ -51,17 +52,30 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         }
 
         /// <summary>
-        /// Converts from Opencensus Measure to Stackdriver ValueType
+        /// Converts from Opencensus Measure+Aggregation to Stackdriver's ValueType
         /// </summary>
-        /// <param name="measure"></param>
+        /// <param name="measure">Opencensus Measure definition</param>
+        /// <param name="aggregation">Opencensus Aggregation definition</param>
         /// <returns></returns>
-        public static MetricDescriptor.Types.ValueType ToValueType(
-            this IMeasure measure)
+        public static ValueType ToValueType(
+            this IMeasure measure, IAggregation aggregation)
         {
-            return measure.Match(
-                v => MetricDescriptor.Types.ValueType.Double,        // Double
-                v => MetricDescriptor.Types.ValueType.Int64,         // Long
-                v => MetricDescriptor.Types.ValueType.Unspecified);  // Unrecognized
+            MetricKind metricKind = aggregation.ToMetricKind();
+            if (aggregation is IDistribution && (metricKind == MetricKind.Cumulative || metricKind == MetricKind.Gauge))
+                return ValueType.Distribution;
+
+            if (measure is IMeasureDouble && (metricKind == MetricKind.Cumulative || metricKind == MetricKind.Gauge))
+            {
+                return ValueType.Double;
+            }
+
+            if (measure is IMeasureLong && (metricKind == MetricKind.Cumulative || metricKind == MetricKind.Gauge))
+            {
+                return ValueType.Int64;
+            }
+
+            // TODO - zeltser - we currently don't support money and string as Opencensus doesn't support them yet
+            return ValueType.Unspecified;
         }
 
         public static LabelDescriptor ToLabelDescriptor(this ITagKey tagKey)
@@ -134,8 +148,8 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             var unit = GetUnit(view.Aggregation, view.Measure);
             metricDescriptor.Unit = unit;
             metricDescriptor.MetricKind = view.Aggregation.ToMetricKind();
-            metricDescriptor.ValueType = view.Measure.ToValueType();
-            
+            metricDescriptor.ValueType = view.Measure.ToValueType(view.Aggregation);
+
             return metricDescriptor;
         }
 
@@ -262,7 +276,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                 IAggregationData points = entry.Value;
                 
                 timeSeries.Resource = monitoredResource;
-                timeSeries.ValueType = view.Measure.ToValueType();
+                timeSeries.ValueType = view.Measure.ToValueType(view.Aggregation);
                 timeSeries.MetricKind = view.Aggregation.ToMetricKind();
 
                 timeSeries.Metric = GetMetric(view, labels, metricDescriptor, domain);
