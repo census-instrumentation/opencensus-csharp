@@ -77,22 +77,19 @@ namespace OpenCensus.Exporter.Stackriver.Tests
             Assert.True(StackdriverStatsConfiguration.Default.MonitoredResource.Labels.ContainsKey(Constants.PROJECT_ID_LABEL_KEY));
 =======
 
-            // TODO - zelser - current temporarily disabled a line that reads internal variable from "friend" assembly
-            Assert.Equal("global", StackdriverStatsConfiguration.Default.MonitoredResource.Type);
-            //Assert.Equal(Constants.GLOBAL, StackdriverStatsConfiguration.Default.MonitoredResource.Type);
+            Assert.Equal(Constants.GLOBAL, StackdriverStatsConfiguration.Default.MonitoredResource.Type);
 
             Assert.NotNull(StackdriverStatsConfiguration.Default.MonitoredResource.Labels);
 
-            // TODO - zelser - current temporarily disabled 2 lines that read internal variable from "friend" assembly
             Assert.True(StackdriverStatsConfiguration.Default.MonitoredResource.Labels.ContainsKey("project_id"));
+<<<<<<< HEAD
 >>>>>>> Temporarily commenting out lines that read from a friend assembly as it doesn't work on a build server
+=======
+            Assert.True(StackdriverStatsConfiguration.Default.MonitoredResource.Labels.ContainsKey(Constants.PROJECT_ID_LABEL_KEY));
+>>>>>>> Added AssemblyInfo.cs into Stackdriver Exporter, so it's visible to tests on both signed and unsigned builds
             Assert.Equal(
                 StackdriverStatsConfiguration.Default.ProjectId,
-                StackdriverStatsConfiguration.Default.MonitoredResource.Labels["project_id"]);
-            //Assert.True(StackdriverStatsConfiguration.Default.MonitoredResource.Labels.ContainsKey(Constants.PROJECT_ID_LABEL_KEY));
-            //Assert.Equal(
-            //    StackdriverStatsConfiguration.Default.ProjectId,
-            //    StackdriverStatsConfiguration.Default.MonitoredResource.Labels[Constants.PROJECT_ID_LABEL_KEY]);
+                StackdriverStatsConfiguration.Default.MonitoredResource.Labels[Constants.PROJECT_ID_LABEL_KEY]);
         }
     }
 }
