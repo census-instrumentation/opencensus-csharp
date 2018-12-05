@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OpenCensus.Collector.Dependencies\OpenCensus.Collector.Dependencies.csproj" />
+    <ProjectReference Include="..\OpenCensus.Exporter.Ocagent\OpenCensus.Exporter.Ocagent.csproj" />
     <ProjectReference Include="..\OpenCensus.Exporter.Stackdriver\OpenCensus.Exporter.Stackdriver.csproj" />
     <ProjectReference Include="..\OpenCensus.Exporter.Prometheus\OpenCensus.Exporter.Prometheus.csproj" />
     <ProjectReference Include="..\OpenCensus\OpenCensus.csproj" />

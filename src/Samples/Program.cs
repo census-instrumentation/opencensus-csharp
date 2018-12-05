@@ -30,6 +30,10 @@
     {
     }
 
+    [Verb("instrumentation", HelpText = "Specify the options required to test instrumentation")]
+    class InstrumentationOptions
+    {
+    }
     /// <summary>
     /// Main samples entry point.
     /// </summary>
@@ -46,13 +50,14 @@
         /// <param name="args">Arguments from command line.</param>
         public static void Main(string[] args)
         {
-            Parser.Default.ParseArguments<ZipkinOptions, ApplicationInsightsOptions, PrometheusOptions, HttpClientOptions, StackdriverOptions>(args)
+            Parser.Default.ParseArguments<ZipkinOptions, ApplicationInsightsOptions, PrometheusOptions, HttpClientOptions, StackdriverOptions, InstrumentationOptions>(args)
                 .MapResult(
                     (ZipkinOptions options) => TestZipkin.Run(),
                     (ApplicationInsightsOptions options) => TestApplicationInsights.Run(),
                     (PrometheusOptions options) => TestPrometheus.Run(),
                     (HttpClientOptions options) => TestHttpClient.Run(),
                     (StackdriverOptions options) => TestStackdriver.Run(options.ProjectId),
+                    (InstrumentationOptions options) => TestInstrumentation.Run(),
                     errs => 1);
                     
             // TestZipkin.Run();
