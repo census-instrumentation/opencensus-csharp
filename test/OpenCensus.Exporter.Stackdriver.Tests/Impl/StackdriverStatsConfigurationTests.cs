@@ -22,21 +22,12 @@ namespace OpenCensus.Exporter.Stackriver.Tests
 
     public class StackdriverStatsConfigurationTests
     {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> Adding an option to set google cloud projectId in environment variable for testing purposes(Stackdriver exporter).
         public StackdriverStatsConfigurationTests()
         {
             // Setting this for unit testing purposes, so we don't need credentials for real Google Cloud Account
             Environment.SetEnvironmentVariable("GOOGLE_PROJECT_ID", "test", EnvironmentVariableTarget.Process);
         }
 
-<<<<<<< HEAD
-=======
->>>>>>> - Added test project for Stackdriver Exporter
-=======
->>>>>>> Adding an option to set google cloud projectId in environment variable for testing purposes(Stackdriver exporter).
         [Fact]
         public void StatsConfiguration_ByDefault_MetricNamePrefixEmpty()
         {
@@ -62,31 +53,13 @@ namespace OpenCensus.Exporter.Stackriver.Tests
         public void StatsConfiguration_ByDefault_MonitoredResourceIsGlobal()
         {
             Assert.NotNull(StackdriverStatsConfiguration.Default.MonitoredResource);
-<<<<<<< HEAD
-<<<<<<< HEAD
 
             Assert.Equal(Constants.GLOBAL, StackdriverStatsConfiguration.Default.MonitoredResource.Type);
 
             Assert.NotNull(StackdriverStatsConfiguration.Default.MonitoredResource.Labels);
 
             Assert.True(StackdriverStatsConfiguration.Default.MonitoredResource.Labels.ContainsKey("project_id"));
-=======
-            Assert.Equal(Constants.GLOBAL, StackdriverStatsConfiguration.Default.MonitoredResource.Type);
-            Assert.NotNull(StackdriverStatsConfiguration.Default.MonitoredResource.Labels);
->>>>>>> - Added test project for Stackdriver Exporter
             Assert.True(StackdriverStatsConfiguration.Default.MonitoredResource.Labels.ContainsKey(Constants.PROJECT_ID_LABEL_KEY));
-=======
-
-            Assert.Equal(Constants.GLOBAL, StackdriverStatsConfiguration.Default.MonitoredResource.Type);
-
-            Assert.NotNull(StackdriverStatsConfiguration.Default.MonitoredResource.Labels);
-
-            Assert.True(StackdriverStatsConfiguration.Default.MonitoredResource.Labels.ContainsKey("project_id"));
-<<<<<<< HEAD
->>>>>>> Temporarily commenting out lines that read from a friend assembly as it doesn't work on a build server
-=======
-            Assert.True(StackdriverStatsConfiguration.Default.MonitoredResource.Labels.ContainsKey(Constants.PROJECT_ID_LABEL_KEY));
->>>>>>> Added AssemblyInfo.cs into Stackdriver Exporter, so it's visible to tests on both signed and unsigned builds
             Assert.Equal(
                 StackdriverStatsConfiguration.Default.ProjectId,
                 StackdriverStatsConfiguration.Default.MonitoredResource.Labels[Constants.PROJECT_ID_LABEL_KEY]);

@@ -43,6 +43,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                 return projectId;
             }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
             // Try to detect projectId from service account credential if it exists
             string serviceAccountFilePath = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS");
@@ -58,6 +59,8 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             projectId = Environment.GetEnvironmentVariable("GOOGLE_PROJECT_ID");
             return projectId;
 =======
+=======
+>>>>>>> 40eb54751a4c178937527b2fb2da45500a1557b4
 
             // Try to detect projectId from service account credential if it exists
             string serviceAccountFilePath = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS");
@@ -71,9 +74,12 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             return null;
 >>>>>>> - Added test project for Stackdriver Exporter
 =======
+=======
+>>>>>>> 40eb54751a4c178937527b2fb2da45500a1557b4
             projectId = Environment.GetEnvironmentVariable("GOOGLE_PROJECT_ID");
             return projectId;
 >>>>>>> Adding an option to set google cloud projectId in environment variable for testing purposes(Stackdriver exporter).
