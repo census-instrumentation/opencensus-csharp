@@ -86,57 +86,12 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             var ret = new Span.Types.Link();
             ret.SpanId = link.SpanId.ToLowerBase16();
             ret.TraceId = link.TraceId.ToLowerBase16();
-            
+
             if (link.Attributes != null)
             {
                 ret.Attributes = new Span.Types.Attributes
                 {
-                    
-                    DroppedAttributesCount = OpenCensus.Trace.Config.TraceParams.DEFAULT.MaxNumberOfAttributes - link.Attributes.Count,
 
-                    AttributeMap = { link.Attributes.ToDictionary(
-                         att => att.Key,
-                         att => att.Value.ToAttributeValue()) }
-                };
-            }
-
-            // Span Links
-            if (spanData.Links != null)
-            {
-                span.Links = new Span.Types.Links
-                {
-                    DroppedLinksCount = spanData.Links.DroppedLinksCount,
-                    Link = { spanData.Links.Links.Select(l => l.ToLink()) }
-                };
-            }
-
-            // Span Attributes
-            if (spanData.Attributes != null)
-            {
-                span.Attributes = new Span.Types.Attributes
-                {
-                    DroppedAttributesCount = spanData.Attributes != null ? spanData.Attributes.DroppedAttributesCount : 0,
-
-                    AttributeMap = { spanData.Attributes?.AttributeMap?.ToDictionary(
-                                        s => s.Key,
-                                        s => s.Value?.ToAttributeValue()) },
-                };
-            }
-
-            return span;
-        }
-
-        public static Span.Types.Link ToLink(this ILink link)
-        {
-            var ret = new Span.Types.Link();
-            ret.SpanId = link.SpanId.ToLowerBase16();
-            ret.TraceId = link.TraceId.ToLowerBase16();
-            
-            if (link.Attributes != null)
-            {
-                ret.Attributes = new Span.Types.Attributes
-                {
-                    
                     DroppedAttributesCount = OpenCensus.Trace.Config.TraceParams.Default.MaxNumberOfAttributes - link.Attributes.Count,
 
                     AttributeMap = { link.Attributes.ToDictionary(
@@ -189,7 +144,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         public StackdriverTraceExporter(string projectId)
         {
             googleCloudProjectId = new Google.Api.Gax.ResourceNames.ProjectName(projectId);
-            
+
         }
 
         public void Export(IList<ISpanData> spanDataList)

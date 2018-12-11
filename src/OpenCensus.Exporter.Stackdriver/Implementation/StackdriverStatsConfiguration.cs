@@ -54,13 +54,6 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         /// </summary>
         public static StackdriverStatsConfiguration Default
         {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> Fixed Stackdriver export interval propagation
-=======
->>>>>>> 40eb54751a4c178937527b2fb2da45500a1557b4
             get
             {
                 var defaultConfig = new StackdriverStatsConfiguration
@@ -74,17 +67,5 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                 return defaultConfig;
             }
         }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-            ExportInterval = DEFAULT_INTERVAL,
-            ProjectId = GoogleCloudResourceUtils.GetProjectId(),
-            MetricNamePrefix = string.Empty,
-        };
->>>>>>> Fixing a few bugs in Stackdriver metrics exporter
-=======
->>>>>>> Fixed Stackdriver export interval propagation
-=======
->>>>>>> 40eb54751a4c178937527b2fb2da45500a1557b4
     }
 }

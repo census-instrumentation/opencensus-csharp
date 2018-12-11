@@ -31,19 +31,7 @@ namespace OpenCensus.Exporter.Stackdriver
         private readonly IExportComponent exportComponent;
         private readonly IViewManager viewManager;
         private readonly string projectId;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
         private StackdriverStatsExporter statsExporter;
-=======
-        private StackdriverStatsExporter metricsExporter;
->>>>>>> First working version of Stackdriver Stats Exporter.
-=======
-        private StackdriverStatsExporter statsExporter;
->>>>>>> Fixed Stackdriver export interval propagation
-=======
-        private StackdriverStatsExporter statsExporter;
->>>>>>> 40eb54751a4c178937527b2fb2da45500a1557b4
         private object locker = new object();
         private bool isInitialized = false;
 
@@ -86,47 +74,14 @@ namespace OpenCensus.Exporter.Stackdriver
                 if (viewManager != null)
                 {
                     StackdriverStatsConfiguration statsConfig = StackdriverStatsConfiguration.Default;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> Fixed Stackdriver export interval propagation
-=======
->>>>>>> 40eb54751a4c178937527b2fb2da45500a1557b4
                     if (statsConfig.ProjectId != projectId)
                     {
                         statsConfig.ProjectId = projectId;
                         statsConfig.MonitoredResource = GoogleCloudResourceUtils.GetDefaultResource(projectId);
                     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-                    statsConfig.ProjectId = projectId;
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> Fixing a few bugs in Stackdriver metrics exporter
-=======
-                    statsConfig.MonitoredResource = MetricsUtils.GetDefaultResource(projectId);
->>>>>>> - Fixing a few bugs around metric creation and labels
 
                     statsExporter = new StackdriverStatsExporter(viewManager, statsConfig);
                     statsExporter.Start();
-=======
-                    statsConfig.MonitoredResource = GoogleCloudResourceUtils.GetDefaultResource(projectId);
-
-                    metricsExporter = new StackdriverStatsExporter(viewManager, statsConfig);
-                    metricsExporter.Start();
->>>>>>> First working version of Stackdriver Stats Exporter.
-=======
-
-                    statsExporter = new StackdriverStatsExporter(viewManager, statsConfig);
-                    statsExporter.Start();
->>>>>>> Fixed Stackdriver export interval propagation
-=======
-
-                    statsExporter = new StackdriverStatsExporter(viewManager, statsConfig);
-                    statsExporter.Start();
->>>>>>> 40eb54751a4c178937527b2fb2da45500a1557b4
                 }
 
                 isInitialized = true;

@@ -57,13 +57,8 @@
                     
             // TestZipkin.Run();
             // TestApplicationInsights.Run();
-<<<<<<< HEAD
             // TestPrometheus.Run();
             // TestHttpClient.Run();
-=======
-            TestStackdriver.Run();
-            //TestPrometheus.Run();
->>>>>>> Updating translation from ISpan to Stackdriver's Span to cover more fields
         }
     }
 }
