@@ -30,7 +30,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         public const string GLOBAL = "global";
 
         public const string PROJECT_ID_LABEL_KEY = "project_id";
-        public static readonly string OPENCENSUS_TASK_VALUE_DEFAULT = generateDefaultTaskValue();
+        public static readonly string OPENCENSUS_TASK_VALUE_DEFAULT = GenerateDefaultTaskValue();
 
         public const string GCP_GCE_INSTANCE_TYPE = "cloud.google.com/gce/instance";
         public const string GCP_INSTANCE_ID_KEY = "cloud.google.com/gce/instance_id";
@@ -43,7 +43,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         public const string K8S_NAMESPACE_NAME_KEY = "k8s.io/namespace/name";
         public const string K8S_POD_NAME_KEY = "k8s.io/pod/name";
 
-        private static string generateDefaultTaskValue()
+        private static string GenerateDefaultTaskValue()
         {
             // Something like '<pid>@<hostname>'
             return $"dotnet-{System.Diagnostics.Process.GetCurrentProcess().Id}@{Environment.MachineName}";

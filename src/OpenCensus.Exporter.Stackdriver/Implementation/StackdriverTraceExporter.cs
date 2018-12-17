@@ -86,12 +86,12 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             var ret = new Span.Types.Link();
             ret.SpanId = link.SpanId.ToLowerBase16();
             ret.TraceId = link.TraceId.ToLowerBase16();
-            
+
             if (link.Attributes != null)
             {
                 ret.Attributes = new Span.Types.Attributes
                 {
-                    
+
                     DroppedAttributesCount = OpenCensus.Trace.Config.TraceParams.Default.MaxNumberOfAttributes - link.Attributes.Count,
 
                     AttributeMap = { link.Attributes.ToDictionary(
@@ -144,7 +144,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         public StackdriverTraceExporter(string projectId)
         {
             googleCloudProjectId = new Google.Api.Gax.ResourceNames.ProjectName(projectId);
-            
+
         }
 
         public void Export(IList<ISpanData> spanDataList)
