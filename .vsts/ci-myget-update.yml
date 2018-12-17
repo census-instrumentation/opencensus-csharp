@@ -1,7 +1,7 @@
 # CI build with the upload to MyGet
 
 variables:
-  DotNetVersion: "2.1.402"
+  DotNetVersion: "2.2.100"
 
 trigger:
   branches:
@@ -36,6 +36,7 @@ steps:
     projects: "*.sln"
     configuration: 'Release'
     packDirectory: '$(build.artifactStagingDirectory)'
+    arguments: "-p:SymbolPackageFormat=snupkg"
 
 - task: DotNetCoreCLI@2
   displayName: test

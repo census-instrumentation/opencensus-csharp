@@ -1,7 +1,7 @@
 # CI build. No publioshing of artifacts
 
 variables:
-  DotNetVersion: "2.1.402"
+  DotNetVersion: "2.2.100"
 
 phases:
 
@@ -38,7 +38,7 @@ phases:
   - task: PublishTestResults@2
 
 - phase: Linux
-  queue: Hosted Linux Preview
+  queue: Hosted Ubuntu 1604
   steps:
   - task: DotNetCoreInstaller@0
     displayName: force use of desired dotnet version
