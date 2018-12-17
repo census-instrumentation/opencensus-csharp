@@ -3,10 +3,17 @@
 [![Gitter chat][gitter-image]][gitter-url]
 [![Build Status](https://opencensus.visualstudio.com/continuous-integration/_apis/build/status/ci-myget-update.yml)](https://opencensus.visualstudio.com/continuous-integration/_build/latest?definitionId=3)
 
-| Source | OpenCensus                                                       | Zipkin Exporter                                                                                  | Application Insights exporter                                                            | Stackdriver                                                       |
-|--------|------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------|------------------------------------------------------------------|
-| MyGet  | [![MyGet Nightly][opencensus-myget-image]][opencensus-myget-url] | [![MyGet Nightly][opencensus-exporter-zipkin-myget-image]][opencensus-exporter-zipkin-myget-url] | [![MyGet Nightly][opencensus-exporter-ai-myget-image]][opencensus-exporter-ai-myget-url] |
- [![MyGet Nightly][opencensus-exporter-stackdriver-myget-image]][opencensus-exporter-stackdriver-myget-url]
+| Source | OpenCensus Core Package |
+| --- | -- |
+| MyGet | [![MyGet Nightly][opencensus-myget-image]][opencensus-myget-url] |
+
+## Exporters Packages
+
+| Exporter | MyGet |
+| --- | --- |
+| Zipkin | [![MyGet Nightly][opencensus-exporter-zipkin-myget-image]][opencensus-exporter-zipkin-myget-url] |
+| Application Insights | [![MyGet Nightly][opencensus-exporter-ai-myget-image]][opencensus-exporter-ai-myget-url]
+| Stackdriver | [![MyGet Nightly][opencensus-exporter-stackdriver-myget-image]][opencensus-exporter-stackdriver-myget-url]
 
 OpenCensus is a toolkit for collecting application performance and behavior
 data. It currently includes 3 APIs: stats, tracing and tags.
@@ -81,13 +88,18 @@ finally
 
 ### Using Stackdriver Exporter
 
-1. Enable [Stackdriver Trace][stackdriver-setup] resource.
-2. Instantiate a new instance of `StackdriverExporter` with your Google Cloud's ProjectId
-3. See [sample][stackdriver-sample] for example use.
+1. Add [Stackdriver Exporter package][opencensus-exporter-stackdriver-myget-url] reference.
+2. Enable [Stackdriver Trace][stackdriver-trace-setup] API.
+3. Enable [Stackdriver Monitoring][stackdriver-monitoring-setup] API.
+4. Instantiate a new instance of `StackdriverExporter` with your Google Cloud's ProjectId
+5. See [sample][stackdriver-sample] for example use.
 
 ``` csharp
-var exporter = new StackdriverExporter("YOUR-GOOGLE-PROJECT-ID", Tracing.ExportComponent);
-exporter.Start();
+    var exporter = new StackdriverExporter(
+        "YOUR-GOOGLE-PROJECT-ID",
+        Tracing.ExportComponent,
+        Stats.ViewManager);
+    exporter.Start();
 ```
 
 ### Using Application Insights exporter
@@ -140,7 +152,8 @@ deprecate it for 18 months before removing it, if possible.
 [good-first-issues]: https://github.com/census-instrumentation/opencensus-csharp/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22
 [zipkin-get-started]: https://zipkin.io/pages/quickstart.html
 [ai-get-started]: https://docs.microsoft.com/azure/application-insights
-[stackdriver-setup]: https://cloud.google.com/trace/docs/setup/
+[stackdriver-trace-setup]: https://cloud.google.com/trace/docs/setup/
+[stackdriver-monitoring-setup]: https://cloud.google.com/monitoring/api/enable-api
 [semver]: http://semver.org/
 [ai-sample]: https://github.com/census-instrumentation/opencensus-csharp/blob/develop/src/Samples/TestApplicationInsights.cs
 [stackdriver-sample]: https://github.com/census-instrumentation/opencensus-csharp/blob/develop/src/Samples/TestStackdriver.cs
