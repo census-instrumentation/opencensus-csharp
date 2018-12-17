@@ -189,8 +189,9 @@ namespace OpenCensus.Collector.Dependencies.Tests
       ""http.path"": ""/"",
       ""http.method"": ""GET"",
       ""http.host"": ""{host}:{port}"",
-""http.status_code"": ""404""
-    }
+      ""http.status_code"": ""404"",
+      ""http.url"": ""http://{host}:{port}/""
+}
         }
 ]
 ")));

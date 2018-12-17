@@ -109,6 +109,23 @@ namespace OpenCensus.Trace
         }
 
         /// <summary>
+        /// Helper method that populates span properties from host and port
+        /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md.
+        /// </summary>
+        /// <param name="span">Span to fill out.</param>
+        /// <param name="rawUrl">Raw url.</param>
+        /// <returns>Span with populated url properties.</returns>
+        public static ISpan PutHttpRawUrlAttribute(this ISpan span, string rawUrl)
+        {
+            if (!string.IsNullOrEmpty(rawUrl))
+            {
+                span.PutAttribute(SpanAttributeConstants.HttpUrlKey, AttributeValue.StringAttributeValue(rawUrl));
+            }
+
+            return span;
+        }
+
+        /// <summary>
         /// Helper method that populates span properties from url path according
         /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md.
         /// </summary>
@@ -144,67 +161,6 @@ namespace OpenCensus.Trace
         public static ISpan PutHttpRequestSizeAttribute(this ISpan span, long size)
         {
             span.PutAttribute(SpanAttributeConstants.HttpRequestSizeKey, AttributeValue.LongAttributeValue(size));
-            return span;
-        }
-
-        /// <summary>
-        /// Helper method that populates span properties from error attribute
-        /// according to https://github.com/opentracing/specification/blob/master/semantic_conventions.md#span-tags-table.
-        /// </summary>
-        /// <param name="span">Span to fill out.</param>
-        /// <param name="error">Indicate whether span ended with error.</param>
-        /// <returns>Span with populated properties.</returns>
-        public static ISpan PutErrorAttribute(this ISpan span, bool error = true)
-        {
-            span.PutAttribute(SpanAttributeConstants.ErrorKey, AttributeValue.BooleanAttributeValue(error));
-            return span;
-        }
-
-        /// <summary>
-        /// Stores error stack trace into the span as an attribute.
-        /// </summary>
-        /// <param name="span">Span to store attribute on.</param>
-        /// <param name="errorStackTrace">Error stack trace to store.</param>
-        /// <returns>Span with the populated error stack trace attribute.</returns>
-        public static ISpan PutErrorStackTraceAttribute(this ISpan span, string errorStackTrace)
-        {
-            span.PutAttribute(SpanAttributeConstants.ErrorStackTrace, AttributeValue.StringAttributeValue(errorStackTrace));
-            return span;
-        }
-
-        /// <summary>
-        /// Populates MVC controller class attribute.
-        /// </summary>
-        /// <param name="span">Span to store attribute on.</param>
-        /// <param name="className">MVC controller class name.</param>
-        /// <returns>Span with the populated MVC controller class attribute.</returns>
-        public static ISpan PutMvcControllerClass(this ISpan span,  string className)
-        {
-            span.PutAttribute(SpanAttributeConstants.MvcControllerClass, AttributeValue.StringAttributeValue(className));
-            return span;
-        }
-
-        /// <summary>
-        /// Populates MVC controller action attribute.
-        /// </summary>
-        /// <param name="span">Span to store attribute on.</param>
-        /// <param name="actionName">MVC controller action name.</param>
-        /// <returns>Span with the populated MVC controller action attribute.</returns>
-        public static ISpan PutMvcControllerAction(this ISpan span, string actionName)
-        {
-            span.PutAttribute(SpanAttributeConstants.MvcControllerMethod, AttributeValue.StringAttributeValue(actionName));
-            return span;
-        }
-
-        /// <summary>
-        /// Populates MVC view attribute on the span.
-        /// </summary>
-        /// <param name="span">Span to store attribute on.</param>
-        /// <param name="viewExecutingFilePath">View executing file path.</param>
-        /// <returns>Span with the populated view executing file path.</returns>
-        public static ISpan PutMvcViewExecutingFilePath(this ISpan span, string viewExecutingFilePath)
-        {
-            span.PutAttribute(SpanAttributeConstants.MvcViewFilePath, AttributeValue.StringAttributeValue(viewExecutingFilePath));
             return span;
         }
 
