@@ -103,11 +103,6 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
 
         private static string GetUri(HttpRequest request)
         {
-            if (request == null)
-            {
-                return string.Empty;
-            }
-
             var builder = new StringBuilder();
 
             builder.Append(request.Scheme).Append("://");
