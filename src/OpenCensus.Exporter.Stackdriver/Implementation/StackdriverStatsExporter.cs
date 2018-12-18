@@ -26,6 +26,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -45,9 +46,8 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         private const string CUSTOM_METRIC_DOMAIN = "custom.googleapis.com/";
         private const string CUSTOM_OPENCENSUS_DOMAIN = CUSTOM_METRIC_DOMAIN + "opencensus/";
 
-        // TODO - zeltser - figure out how to extract OpenCensus package version
-        private const string USER_AGENT = "opencensus-csharp [0.0]";
         private const string USER_AGENT_KEY = "user-agent";
+        private static string USER_AGENT;
 
         private readonly string domain;
         private readonly string displayNamePrefix;
@@ -86,6 +86,11 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
 
             domain = GetDomain(configuration.MetricNamePrefix);
             displayNamePrefix = GetDisplayNamePrefix(configuration.MetricNamePrefix);
+        }
+
+        static StackdriverStatsExporter()
+        {
+            USER_AGENT = $"opencensus-csharp/{Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
         }
 
         public void Start()

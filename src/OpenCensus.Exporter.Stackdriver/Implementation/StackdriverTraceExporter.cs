@@ -18,7 +18,10 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
+    using Google.Api.Gax.Grpc;
     using Google.Cloud.Trace.V2;
+    using Grpc.Core;
     using OpenCensus.Exporter.Stackdriver.Utils;
     using OpenCensus.Trace;
     using OpenCensus.Trace.Export;
@@ -139,24 +142,51 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
     /// </summary>
     internal class StackdriverTraceExporter : IHandler
     {
-        private Google.Api.Gax.ResourceNames.ProjectName googleCloudProjectId;
+        private static string STACKDRIVER_EXPORTER_VERSION;
+        private static string OPENCENSUS_EXPORTER_VERSION;
+
+        private readonly Google.Api.Gax.ResourceNames.ProjectName googleCloudProjectId;
+        private readonly TraceServiceSettings traceServiceSettings;
 
         public StackdriverTraceExporter(string projectId)
         {
             googleCloudProjectId = new Google.Api.Gax.ResourceNames.ProjectName(projectId);
 
+            // Set header mutation for every outgoing API call to Stackdriver so the BE knows
+            // which version of OC client is calling it as well as which version of the exporter
+            CallSettings callSettings = CallSettings.FromHeaderMutation(StackDriverCallHeaderAppender);
+            traceServiceSettings = new TraceServiceSettings();
+            traceServiceSettings.CallSettings = callSettings;
+        }
+
+        static StackdriverTraceExporter()
+        {
+            STACKDRIVER_EXPORTER_VERSION = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            OPENCENSUS_EXPORTER_VERSION = Assembly.GetCallingAssembly().GetName().Version.ToString();
         }
 
         public void Export(IList<ISpanData> spanDataList)
         {
-            TraceServiceClient traceWriter = TraceServiceClient.Create();
+            TraceServiceClient traceWriter = TraceServiceClient.Create(settings: traceServiceSettings);
+            
             var batchSpansRequest = new BatchWriteSpansRequest
             {
                 ProjectName = googleCloudProjectId,
                 Spans = { spanDataList.Select(s => s.ToSpan(googleCloudProjectId.ProjectId)) },
             };
+            
+            traceWriter.BatchWriteSpansAsync(batchSpansRequest);
+        }
 
-            traceWriter.BatchWriteSpans(batchSpansRequest);
+        /// <summary>
+        /// Appends OpenCensus headers for every outgoing request to Stackdriver Backend
+        /// </summary>
+        /// <param name="metadata">The metadata that is sent with every outgoing http request</param>
+        private static void StackDriverCallHeaderAppender(Metadata metadata)
+        {
+            
+            metadata.Add("AGENT_LABEL_KEY", "g.co/agent");
+            metadata.Add("AGENT_LABEL_VALUE_STRING", $"{OPENCENSUS_EXPORTER_VERSION}; stackdriver-exporter {STACKDRIVER_EXPORTER_VERSION}");
         }
     }
 }
