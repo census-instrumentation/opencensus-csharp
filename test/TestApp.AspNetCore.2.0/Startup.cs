@@ -53,6 +53,7 @@ namespace TestApp.AspNetCore._2._0
             services.AddSingleton<DependenciesCollector>();
             services.AddSingleton<IPropagationComponent>(new DefaultPropagationComponent());
             services.AddSingleton<IExportComponent>(Tracing.ExportComponent);
+            services.AddSingleton<CallbackMiddleware.CallbackMiddlewareImpl>(new CallbackMiddleware.CallbackMiddlewareImpl());
             services.AddSingleton<OcagentExporter>((p) =>
             {
                 var exportComponent = p.GetService<IExportComponent>();
@@ -72,6 +73,7 @@ namespace TestApp.AspNetCore._2._0
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseMiddleware<CallbackMiddleware>();
             app.UseMvc();
             var collector = app.ApplicationServices.GetService<RequestsCollector>();
             var depCollector = app.ApplicationServices.GetService<DependenciesCollector>();

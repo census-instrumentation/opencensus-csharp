@@ -16,7 +16,10 @@
 
 namespace OpenCensus.Collector.AspNetCore.Implementation
 {
+    using System;
     using System.Diagnostics;
+    using System.Linq;
+    using System.Text;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Http.Features;
     using OpenCensus.Collector.Implementation.Common;
@@ -25,6 +28,7 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
 
     internal class HttpInListener : ListenerHandler
     {
+        private const string UnknownHostName = "UNKNOWN-HOST";
         private readonly PropertyFetcher startContextFetcher = new PropertyFetcher("HttpContext");
         private readonly PropertyFetcher stopContextFetcher = new PropertyFetcher("HttpContext");
         private readonly IPropagationComponent propagationComponent;
@@ -51,16 +55,26 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
                 request,
                 (r, name) => r.Headers[name]);
 
-            this.Tracer.SpanBuilderWithRemoteParent("HttpIn", ctx).SetSampler(this.Sampler).StartScopedSpan();
+            // see the spec https://github.com/census-instrumentation/opencensus-specs/blob/master/trace/HTTP.md
+
+            string path = (request.PathBase.HasValue || request.Path.HasValue) ? (request.PathBase + request.Path).ToString() : "/";
+
+            this.Tracer.SpanBuilderWithRemoteParent(path, ctx).SetSampler(this.Sampler).StartScopedSpan();
 
             var span = this.Tracer.CurrentSpan;
 
             if (span != null)
             {
+                // Note, route is missing at this stage. It will be available later
+
                 span.PutServerSpanKindAttribute();
-                span.PutHttpMethodAttribute(request.Method);
                 span.PutHttpHostAttribute(request.Host.Host, request.Host.Port ?? 80);
-                span.PutHttpPathAttribute(request.Path);
+                span.PutHttpMethodAttribute(request.Method);
+                span.PutHttpPathAttribute(path);
+
+                var userAgent = request.Headers["User-Agent"].FirstOrDefault();
+                span.PutHttpUserAgentAttribute(userAgent);
+                span.PutHttpRawUrlAttribute(GetUri(request));
             }
         }
 
@@ -85,6 +99,41 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
 
             span.PutHttpStatusCode(response.StatusCode, response.HttpContext.Features.Get<IHttpResponseFeature>().ReasonPhrase);
             span.End();
+        }
+
+        private static string GetUri(HttpRequest request)
+        {
+            var builder = new StringBuilder();
+
+            builder.Append(request.Scheme).Append("://");
+
+            if (request.Host.HasValue)
+            {
+                builder.Append(request.Host.Value);
+            }
+            else
+            {
+                // HTTP 1.0 request with NO host header would result in empty Host.
+                // Use placeholder to avoid incorrect URL like "http:///"
+                builder.Append(UnknownHostName);
+            }
+
+            if (request.PathBase.HasValue)
+            {
+                builder.Append(request.PathBase.Value);
+            }
+
+            if (request.Path.HasValue)
+            {
+                builder.Append(request.Path.Value);
+            }
+
+            if (request.QueryString.HasValue)
+            {
+                builder.Append(request.QueryString);
+            }
+
+            return builder.ToString();
         }
     }
 }
