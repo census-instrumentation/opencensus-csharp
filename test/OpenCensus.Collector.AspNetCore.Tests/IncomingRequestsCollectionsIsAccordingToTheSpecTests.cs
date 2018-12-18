@@ -27,7 +27,6 @@ namespace OpenCensus.Collector.AspNetCore.Tests
     using OpenCensus.Common;
     using Moq;
     using Microsoft.AspNetCore.TestHost;
-    using System.Threading;
     using System;
     using Microsoft.AspNetCore.Http;
 
@@ -44,9 +43,11 @@ namespace OpenCensus.Collector.AspNetCore.Tests
 
         public class TestCallbackMiddlewareImpl : CallbackMiddleware.CallbackMiddlewareImpl
         {
-            public override bool Process(HttpContext context)
+
+            public override async Task<bool> ProcessAsync(HttpContext context)
             {
                 context.Response.StatusCode = 503;
+                await context.Response.WriteAsync("empty");
                 return false;
             }
         }
@@ -58,30 +59,42 @@ namespace OpenCensus.Collector.AspNetCore.Tests
             var tracer = new Tracer(new RandomGenerator(), startEndHandler.Object, new DateTimeOffsetClock(), new TraceConfig());
 
             // Arrange
-            var client = this.factory
+            using (var client = this.factory
                 .WithWebHostBuilder(builder =>
-                    builder.ConfigureTestServices((IServiceCollection services) => {
+                    builder.ConfigureTestServices((IServiceCollection services) =>
+                    {
                         services.AddSingleton<CallbackMiddleware.CallbackMiddlewareImpl>(new TestCallbackMiddlewareImpl());
                         services.AddSingleton<ITracer>(tracer);
                     }))
-                .CreateClient();
-
-            try
+                .CreateClient())
             {
-                // Act
-                var response = await client.GetAsync("/api/values");
-            }
-            catch (Exception ex)
-            {
-                // ignore errors
-            }
 
-            // TODO: this is needed as span generation happens after response is returned for some reason. 
-            // need to investigate
-            Thread.Sleep(TimeSpan.FromMilliseconds(1));
+                try
+                {
+                    // Act
+                    var response = await client.GetAsync("/api/values");
+                }
+                catch (Exception ex)
+                {
+                    // ignore errors
+                }
+
+                for (int i = 0; i < 10; i++)
+                {
+                    if (startEndHandler.Invocations.Count == 2)
+                    {
+                        break;
+                    }
+
+                    // We need to let End callback execute as it is executed AFTER response was returned.
+                    // In unit tests environment there may be a lot of parallel unit tests executed, so 
+                    // giving some breezing room for the End callback to complete
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+                }
+            }
 
             Assert.Equal(2, startEndHandler.Invocations.Count); // begin and end was called
-            var spanData = ((Span)startEndHandler.Invocations[1].Arguments[0]).ToSpanData();
+            var spanData = ((Span)startEndHandler.Invocations[0].Arguments[0]).ToSpanData();
 
             Assert.Equal(SpanKind.Server, spanData.Kind);
             Assert.Equal(AttributeValue.StringAttributeValue("/api/values"), spanData.Attributes.AttributeMap["http.path"]);

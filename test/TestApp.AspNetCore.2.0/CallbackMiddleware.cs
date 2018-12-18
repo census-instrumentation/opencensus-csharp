@@ -23,9 +23,9 @@ namespace TestApp.AspNetCore._2._0
     {
         public class CallbackMiddlewareImpl
         {
-            public virtual bool Process(HttpContext context)
+            public virtual async Task<bool> ProcessAsync(HttpContext context)
             {
-                return true;
+                return await Task.FromResult(true);
             }
         }
 
@@ -41,7 +41,7 @@ namespace TestApp.AspNetCore._2._0
 
         public async Task InvokeAsync(HttpContext context)
         {
-            if (_impl== null || _impl.Process(context))
+            if (_impl== null || await _impl.ProcessAsync(context))
             {
                 await _next(context);
             }
