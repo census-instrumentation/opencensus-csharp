@@ -64,6 +64,7 @@ namespace OpenCensus.Collector.Dependencies.Implementation
             span.PutHttpPathAttribute(request.RequestUri.AbsolutePath);
             request.Headers.TryGetValues("User-Agent", out IEnumerable<string> userAgents);
             span.PutHttpUserAgentAttribute(userAgents?.FirstOrDefault());
+            span.PutHttpRawUrlAttribute(request.RequestUri.OriginalString);
 
             this.propagationComponent.TextFormat.Inject<HttpRequestMessage>(span.Context, request, (r, k, v) => r.Headers.Add(k, v));
         }
@@ -84,7 +85,7 @@ namespace OpenCensus.Collector.Dependencies.Implementation
             {
                 if (requestTaskStatus != TaskStatus.RanToCompletion)
                 {
-                    span.PutErrorAttribute();
+                    span.Status = Status.Unknown;
 
                     if (requestTaskStatus == TaskStatus.Canceled)
                     {
