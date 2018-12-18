@@ -16,19 +16,8 @@ steps:
   inputs:
     version: $(DotNetVersion)
 
-- task: DotNetCoreCLI@2
-  displayName: restore packages
-  inputs:
-    command: "restore"
-    projects: "*.sln"
-
-- task: DotNetCoreCLI@2
-  displayName: build solution (Release)
-  inputs:
-    command: "build"
-    projects: "*.sln"
-    arguments: "--configuration Release"
-
+# "build" and "restore" are run by "pack".
+# See https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-pack?tabs=netcore2x
 - task: DotNetCoreCLI@2
   displayName: pack solution with symbols (Release)
   inputs:
@@ -54,6 +43,7 @@ steps:
     nuGetFeedType: external
     publishFeedCredentials: 'myget-open-census'
 
+# this task is required as symbols packages needs to be published manually.
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: "$(build.artifactstagingdirectory)"
