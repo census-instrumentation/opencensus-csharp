@@ -30,7 +30,7 @@ steps:
     arguments: "--configuration Release"
 
 - task: DotNetCoreCLI@2
-  displayName: pack solution (Release)
+  displayName: pack solution with symbols (Release)
   inputs:
     command: "pack"
     projects: "*.sln"
@@ -46,14 +46,6 @@ steps:
     arguments: "--configuration Release"
 
 - task: PublishTestResults@2
-
-- task: DotNetCoreCLI@1
-  displayName: publish
-  inputs:
-    command: "publish"
-    publishWebProjects: "True"
-    arguments: "--configuration Release --output $(build.artifactstagingdirectory)"
-    zipAfterPublish: "True"
 
 - task: NuGetCommand@2
   displayName: 'Publish nugets to MyGet'
