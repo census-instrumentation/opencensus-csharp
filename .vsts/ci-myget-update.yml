@@ -18,9 +18,6 @@ steps:
     version: $(DotNetVersion)
 
 # "build" and "restore" are run by "pack".
-# See https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-pack?tabs=netcore2x
-# arguments parameter doesn't seems to be working: https://github.com/Microsoft/azure-pipelines-tasks/issues/9107
-# One option to work around it is potentially switch to MSBuild task
 - task: DotNetCoreCLI@2
   displayName: pack solution with symbols (Release)
   inputs:
