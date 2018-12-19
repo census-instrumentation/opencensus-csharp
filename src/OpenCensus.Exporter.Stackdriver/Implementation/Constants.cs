@@ -20,6 +20,8 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
 
     internal class Constants
     {
+        public const string PACKAGE_VERSION_UNDEFINED = "undefined";
+
         public const string LABEL_DESCRIPTION = "OpenCensus TagKey";
         public const string OPENCENSUS_TASK = "opencensus_task";
         public const string OPENCENSUS_TASK_DESCRIPTION = "Opencensus task identifier";
