@@ -10,6 +10,7 @@ trigger:
     - develop
 
 queue: Hosted VS2017
+
 steps:
 - task: DotNetCoreInstaller@0
   displayName: force use of desired dotnet version
@@ -27,7 +28,7 @@ steps:
     projects: "*.sln"
     configuration: 'Release'
     packDirectory: '$(build.artifactStagingDirectory)'
-    arguments: "-p:SymbolPackageFormat=snupkg"
+    buildProperties: "SymbolPackageFormat=snupkg"
 
 - task: DotNetCoreCLI@2
   displayName: test
