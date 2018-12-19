@@ -1,7 +1,7 @@
 # CI build with the upload to MyGet
 
 variables:
-  DotNetVersion: "2.1.402"
+  DotNetVersion: "2.2.101"
 
 trigger:
   branches:
@@ -10,32 +10,22 @@ trigger:
     - develop
 
 queue: Hosted VS2017
+
 steps:
 - task: DotNetCoreInstaller@0
   displayName: force use of desired dotnet version
   inputs:
     version: $(DotNetVersion)
 
+# "build" and "restore" are run by "pack".
 - task: DotNetCoreCLI@2
-  displayName: restore packages
-  inputs:
-    command: "restore"
-    projects: "*.sln"
-
-- task: DotNetCoreCLI@2
-  displayName: build solution (Release)
-  inputs:
-    command: "build"
-    projects: "*.sln"
-    arguments: "--configuration Release"
-
-- task: DotNetCoreCLI@2
-  displayName: pack solution (Release)
+  displayName: pack solution with symbols (Release)
   inputs:
     command: "pack"
     projects: "*.sln"
     configuration: 'Release'
     packDirectory: '$(build.artifactStagingDirectory)'
+    buildProperties: "SymbolPackageFormat=snupkg"
 
 - task: DotNetCoreCLI@2
   displayName: test
@@ -46,14 +36,6 @@ steps:
 
 - task: PublishTestResults@2
 
-- task: DotNetCoreCLI@1
-  displayName: publish
-  inputs:
-    command: "publish"
-    publishWebProjects: "True"
-    arguments: "--configuration Release --output $(build.artifactstagingdirectory)"
-    zipAfterPublish: "True"
-
 - task: NuGetCommand@2
   displayName: 'Publish nugets to MyGet'
   inputs:
@@ -61,6 +43,7 @@ steps:
     nuGetFeedType: external
     publishFeedCredentials: 'myget-open-census'
 
+# this task is required as symbols packages needs to be published manually.
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: "$(build.artifactstagingdirectory)"
