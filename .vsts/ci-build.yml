@@ -1,7 +1,7 @@
 # CI build. No publioshing of artifacts
 
 variables:
-  DotNetVersion: "2.1.402"
+  DotNetVersion: "2.2.101"
 
 phases:
 
@@ -14,12 +14,7 @@ phases:
     inputs:
       version: $(DotNetVersion)
 
-  - task: DotNetCoreCLI@2
-    displayName: restore packages
-    inputs:
-      command: "restore"
-      projects: "*.sln"
-
+  # "restore" is run automatically by "build"
   - task: DotNetCoreCLI@2
     displayName: build solution (Release)
     inputs:
@@ -38,19 +33,14 @@ phases:
   - task: PublishTestResults@2
 
 - phase: Linux
-  queue: Hosted Linux Preview
+  queue: Hosted Ubuntu 1604
   steps:
   - task: DotNetCoreInstaller@0
     displayName: force use of desired dotnet version
     inputs:
       version: $(DotNetVersion)
 
-  - task: DotNetCoreCLI@2
-    displayName: restore packages
-    inputs:
-      command: "restore"
-      projects: "*.sln"
-
+  # "restore" is run automatically by "build"
   - task: DotNetCoreCLI@2
     displayName: build
     inputs:
