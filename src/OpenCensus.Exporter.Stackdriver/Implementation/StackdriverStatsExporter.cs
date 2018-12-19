@@ -26,6 +26,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Linq;
     using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
@@ -90,7 +91,15 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
 
         static StackdriverStatsExporter()
         {
-            USER_AGENT = $"opencensus-csharp/{Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
+            try
+            {
+                string assemblyPackageVersion = typeof(StackdriverStatsExporter).GetTypeInfo().Assembly.GetCustomAttributes<AssemblyInformationalVersionAttribute>().First().InformationalVersion;
+                USER_AGENT = $"opencensus-csharp/{assemblyPackageVersion}";
+            }
+            catch (Exception)
+            {
+                USER_AGENT = $"opencensus-csharp/{Constants.PACKAGE_VERSION_UNDEFINED}";
+            }
         }
 
         public void Start()

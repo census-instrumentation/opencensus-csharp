@@ -16,6 +16,7 @@
 
 namespace OpenCensus.Exporter.Stackdriver.Implementation
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
@@ -161,8 +162,24 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
 
         static StackdriverTraceExporter()
         {
-            STACKDRIVER_EXPORTER_VERSION = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            OPENCENSUS_EXPORTER_VERSION = Assembly.GetCallingAssembly().GetName().Version.ToString();
+            try
+            {
+                string assemblyPackageVersion = typeof(StackdriverTraceExporter).GetTypeInfo().Assembly.GetCustomAttributes<AssemblyInformationalVersionAttribute>().First().InformationalVersion;
+                STACKDRIVER_EXPORTER_VERSION = assemblyPackageVersion;
+            }
+            catch (Exception)
+            {
+                STACKDRIVER_EXPORTER_VERSION = $"{Constants.PACKAGE_VERSION_UNDEFINED}";
+            }
+
+            try
+            {
+                OPENCENSUS_EXPORTER_VERSION = Assembly.GetCallingAssembly().GetName().Version.ToString();
+            }
+            catch (Exception)
+            {
+                OPENCENSUS_EXPORTER_VERSION = $"{Constants.PACKAGE_VERSION_UNDEFINED}";
+            }
         }
 
         public void Export(IList<ISpanData> spanDataList)
