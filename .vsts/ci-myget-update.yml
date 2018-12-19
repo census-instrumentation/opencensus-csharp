@@ -1,7 +1,7 @@
 # CI build with the upload to MyGet
 
 variables:
-  DotNetVersion: "2.2.100"
+  DotNetVersion: "2.2.101"
 
 trigger:
   branches:

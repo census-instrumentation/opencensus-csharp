@@ -1,7 +1,7 @@
 # CI build. No publioshing of artifacts
 
 variables:
-  DotNetVersion: "2.2"
+  DotNetVersion: "2.2.101"
 
 phases:
 
