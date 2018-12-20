@@ -43,7 +43,6 @@ namespace OpenCensus.Collector.AspNetCore
                 new Dictionary<string, Func<ITracer, ISampler, ListenerHandler>>()
                 {
                     { "Microsoft.AspNetCore", (t, s) => new HttpInListener(t, s, propagationComponent) },
-                    { "Microsoft.AspNetCore.Mvc.BeforeAction", (t, s) => new HttpInListener(t, s, propagationComponent) },
                 },
                 tracer,
                 sampler);
