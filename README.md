@@ -3,18 +3,6 @@
 [![Gitter chat][gitter-image]][gitter-url]
 [![Build Status](https://opencensus.visualstudio.com/continuous-integration/_apis/build/status/ci-myget-update.yml)](https://opencensus.visualstudio.com/continuous-integration/_build/latest?definitionId=3)
 
-| Source | OpenCensus Core Package |
-| --- | -- |
-| MyGet | [![MyGet Nightly][opencensus-myget-image]][opencensus-myget-url] |
-
-## Exporters Packages
-
-| Exporter | MyGet |
-| --- | --- |
-| Zipkin | [![MyGet Nightly][opencensus-exporter-zipkin-myget-image]][opencensus-exporter-zipkin-myget-url] |
-| Application Insights | [![MyGet Nightly][opencensus-exporter-ai-myget-image]][opencensus-exporter-ai-myget-url]
-| Stackdriver | [![MyGet Nightly][opencensus-exporter-stackdriver-myget-image]][opencensus-exporter-stackdriver-myget-url]
-
 OpenCensus is a toolkit for collecting application performance and behavior
 data. It currently includes 3 APIs: stats, tracing and tags.
 
@@ -29,7 +17,95 @@ We encourage contributions. Use tags [up-for-grabs][up-for-grabs-issues] and
 [good first issue][good-first-issues] to get started with the project. Follow
 [CONTRIBUTING](CONTRIBUTING.md) guide to report issues or submit a proposal.
 
-## OpenCensus Quickstart
+| Package                 | MyGet (CI)       | NuGet (releases) |
+| ----------------------- | ---------------- | -----------------|
+| OpenCensus              | [![MyGet Nightly][opencensus-myget-image]][opencensus-myget-url]         | [![NuGet Release][opencensus-nuget-image]][opencensus-nuget-url]         |
+| OpenCensus.Abstractions | [![MyGet Nightly][opencensus-abs-myget-image]][opencensus-abs-myget-url] | [![NuGet Release][opencensus-abs-nuget-image]][opencensus-abs-nuget-url] |
+
+## Data Collectors
+
+| Package                 | MyGet (CI)       | NuGet (releases) |
+| ----------------------- | ---------------- | -----------------|
+| Asp.Net Core            | [![MyGet Nightly][opencensus-collect-aspnetcore-myget-image]][opencensus-collect-aspnetcore-myget-url]       | [![NuGet Release][opencensus-collect-aspnetcore-nuget-image]][opencensus-collect-aspnetcore-nuget-url]   |
+| .Net Core HttpClient    | [![MyGet Nightly][opencensus-collect-deps-myget-image]][opencensus-collect-deps-myget-url]                   | [![NuGet Release][opencensus-collect-deps-nuget-image]][opencensus-collect-deps-nuget-url]               |
+
+## Exporters Packages
+
+| Package                 | MyGet (CI)       | NuGet (releases) |
+| ----------------------- | ---------------- | -----------------|
+| Zipkin                  | [![MyGet Nightly][opencensus-exporter-zipkin-myget-image]][opencensus-exporter-zipkin-myget-url]            | [![NuGet release][opencensus-exporter-zipkin-nuget-image]][opencensus-exporter-zipkin-nuget-url]            |
+| Prometheus              | [![MyGet Nightly][opencensus-exporter-prom-myget-image]][opencensus-exporter-prom-myget-url]                | [![NuGet release][opencensus-exporter-prom-nuget-image]][opencensus-exporter-prom-nuget-url]                |
+| Application Insights    | [![MyGet Nightly][opencensus-exporter-ai-myget-image]][opencensus-exporter-ai-myget-url]                    | [![NuGet release][opencensus-exporter-ai-nuget-image]][opencensus-exporter-ai-nuget-url]                    |
+| Stackdriver             | [![MyGet Nightly][opencensus-exporter-stackdriver-myget-image]][opencensus-exporter-stackdriver-myget-url]  | [![NuGet release][opencensus-exporter-stackdriver-nuget-image]][opencensus-exporter-stackdriver-nuget-url]  |
+
+## OpenCensus QuickStart: collecting data
+
+You can use Open Census API to instrument code and report data. Or use one of
+automatic data collection modules.
+
+### Using ASP.NET Core incoming requests collector
+
+Incoming requests of ASP.NET Core app can be automatically tracked.
+
+1. Install package to your project:
+   [OpenCensus.Collector.AspNetCore][opencensus-collect-aspnetcore-nuget-url]
+
+2. Make sure `ITracer`, `ISampler`, and `IPropagationComponent` registered in DI.
+    ``` csharp
+    services.AddSingleton<ITracer>(Tracing.Tracer);
+    services.AddSingleton<ISampler>(Samplers.AlwaysSample);
+    services.AddSingleton<IPropagationComponent>(new DefaultPropagationComponent());
+    ```
+
+3. Configure data collection singletons in ConfigureServices method:
+    ``` csharp
+    public void ConfigureServices(IServiceCollection services)
+    {
+        // ...
+        services.AddSingleton<RequestsCollectorOptions>(new RequestsCollectorOptions());
+        services.AddSingleton<RequestsCollector>();
+    ```
+
+4. Initiate data collection by instantiating singleton in Configure method
+    ``` csharp
+    public void Configure(IApplicationBuilder app, /*... other arguments*/ )
+    {
+        // ...
+        var collector = app.ApplicationServices.GetService<RequestsCollector>();
+    ```
+
+### Using Dependencies collector
+
+Outgoing http calls made by .NET Core `HttpClient` can be automatically tracked.
+
+1. Install package to your project:
+   [OpenCensus.Collector.Dependencies][opencensus-collect-deps-nuget-url]
+
+2. Make sure `ITracer`, `ISampler`, and `IPropagationComponent` registered in DI.
+    ``` csharp
+    services.AddSingleton<ITracer>(Tracing.Tracer);
+    services.AddSingleton<ISampler>(Samplers.AlwaysSample);
+    services.AddSingleton<IPropagationComponent>(new DefaultPropagationComponent());
+    ```
+
+3. Configure data collection singletons in ConfigureServices method:
+    ``` csharp
+    public void ConfigureServices(IServiceCollection services)
+    {
+        // ...
+        services.AddSingleton<DependenciesCollectorOptions>(new DependenciesCollectorOptions());
+        services.AddSingleton<DependenciesCollector>();
+    ```
+
+4. Initiate data collection by instantiating singleton in Configure method
+    ``` csharp
+    public void Configure(IApplicationBuilder app, /*... other arguments*/ )
+    {
+        // ...
+        var depCollector = app.ApplicationServices.GetService<DependenciesCollector>();
+    ```
+
+## OpenCensus QuickStart: exporting data
 
 ### Using Zipkin exporter
 
@@ -142,12 +218,36 @@ deprecate it for 18 months before removing it, if possible.
 [gitter-url]:https://gitter.im/census-instrumentation/lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 [opencensus-myget-image]:https://img.shields.io/myget/opencensus/vpre/OpenCensus.svg
 [opencensus-myget-url]: https://www.myget.org/feed/opencensus/package/nuget/OpenCensus
+[opencensus-abs-myget-image]:https://img.shields.io/myget/opencensus/vpre/OpenCensus.Abstractions.svg
+[opencensus-abs-myget-url]: https://www.myget.org/feed/opencensus/package/nuget/OpenCensus.Abstractions
 [opencensus-exporter-zipkin-myget-image]:https://img.shields.io/myget/opencensus/vpre/OpenCensus.Exporter.Zipkin.svg
 [opencensus-exporter-zipkin-myget-url]: https://www.myget.org/feed/opencensus/package/nuget/OpenCensus.Exporter.Zipkin
+[opencensus-exporter-prom-myget-image]:https://img.shields.io/myget/opencensus/vpre/OpenCensus.Exporter.Prometheus.svg
+[opencensus-exporter-prom-myget-url]: https://www.myget.org/feed/opencensus/package/nuget/OpenCensus.Exporter.Prometheus
 [opencensus-exporter-ai-myget-image]:https://img.shields.io/myget/opencensus/vpre/OpenCensus.Exporter.ApplicationInsights.svg
 [opencensus-exporter-ai-myget-url]: https://www.myget.org/feed/opencensus/package/nuget/OpenCensus.Exporter.ApplicationInsights
 [opencensus-exporter-stackdriver-myget-image]:https://img.shields.io/myget/opencensus/vpre/OpenCensus.Exporter.Stackdriver.svg
 [opencensus-exporter-stackdriver-myget-url]: https://www.myget.org/feed/opencensus/package/nuget/OpenCensus.Exporter.Stackdriver
+[opencensus-collect-aspnetcore-myget-image]:https://img.shields.io/myget/opencensus/vpre/OpenCensus.Collector.AspNetCore.svg
+[opencensus-collect-aspnetcore-myget-url]: https://www.myget.org/feed/opencensus/package/nuget/OpenCensus.Collector.AspNetCore
+[opencensus-collect-deps-myget-image]:https://img.shields.io/myget/opencensus/vpre/OpenCensus.Collector.Dependencies.svg
+[opencensus-collect-deps-myget-url]: https://www.myget.org/feed/opencensus/package/nuget/OpenCensus.Collector.Dependencies
+[opencensus-nuget-image]:https://img.shields.io/nuget/vpre/OpenCensus.svg
+[opencensus-nuget-url]:https://www.nuget.org/packages/OpenCensus
+[opencensus-abs-nuget-image]:https://img.shields.io/nuget/vpre/OpenCensus.Abstractions.svg
+[opencensus-abs-nuget-url]: https://www.nuget.org/packages/OpenCensus.Abstractions
+[opencensus-exporter-zipkin-nuget-image]:https://img.shields.io/nuget/vpre/OpenCensus.Exporter.Zipkin.svg
+[opencensus-exporter-zipkin-nuget-url]: https://www.nuget.org/packages/OpenCensus.Exporter.Zipkin
+[opencensus-exporter-prom-myget-image]:https://img.shields.io/nuget/vpre/OpenCensus.Exporter.Prometheus.svg
+[opencensus-exporter-prom-myget-url]: https://www.nuget.org/packages/OpenCensus.Exporter.Prometheus
+[opencensus-exporter-ai-nuget-image]:https://img.shields.io/nuget/vpre/OpenCensus.Exporter.ApplicationInsights.svg
+[opencensus-exporter-ai-nuget-url]: https://www.nuget.org/packages/OpenCensus.Exporter.ApplicationInsights
+[opencensus-exporter-stackdriver-nuget-image]:https://img.shields.io/nuget/vpre/OpenCensus.Exporter.Stackdriver.svg
+[opencensus-exporter-stackdriver-nuget-url]: https://www.nuget.org/packages/OpenCensus.Exporter.Stackdriver
+[opencensus-collect-aspnetcore-myget-image]:https://img.shields.io/nuget/vpre/OpenCensus.Collector.AspNetCore.svg
+[opencensus-collect-aspnetcore-myget-url]: https://www.nuget.org/packages/OpenCensus.Collector.AspNetCore
+[opencensus-collect-deps-myget-image]:https://img.shields.io/nuget/vpre/OpenCensus.Collector.Dependencies.svg
+[opencensus-collect-deps-myget-url]: https://www.nuget.org/packages/OpenCensus.Collector.Dependencies
 [up-for-grabs-issues]: https://github.com/census-instrumentation/opencensus-csharp/issues?q=is%3Aissue+is%3Aopen+label%3Aup-for-grabs
 [good-first-issues]: https://github.com/census-instrumentation/opencensus-csharp/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22
 [zipkin-get-started]: https://zipkin.io/pages/quickstart.html
