@@ -144,7 +144,7 @@ namespace OpenCensus.Collector.AspNetCore.Tests
             var spanData = ((Span)startEndHandler.Invocations[0].Arguments[0]).ToSpanData();
 
             Assert.Equal(SpanKind.Server, spanData.Kind);
-            Assert.Equal("/api/values/{0}", spanData.Name);
+            Assert.Equal("api/Values/{id}", spanData.Name);
             Assert.Equal(AttributeValue.StringAttributeValue("/api/values/2"), spanData.Attributes.AttributeMap["http.path"]);
 
             Assert.Equal(expectedTraceId, spanData.Context.TraceId);
