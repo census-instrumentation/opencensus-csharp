@@ -42,10 +42,10 @@ namespace OpenCensus.Trace.Export
             this.HasRemoteParent = hasRemoteParent;
             this.Name = name ?? throw new ArgumentNullException(nameof(name));
             this.StartTimestamp = startTimestamp ?? throw new ArgumentNullException(nameof(startTimestamp));
-            this.Attributes = attributes ?? throw new ArgumentNullException(nameof(attributes));
-            this.Annotations = annotations ?? throw new ArgumentNullException(nameof(annotations));
-            this.MessageEvents = messageEvents ?? throw new ArgumentNullException(nameof(messageEvents));
-            this.Links = links ?? throw new ArgumentNullException(nameof(links));
+            this.Attributes = attributes ?? Export.Attributes.Create(new Dictionary<string, IAttributeValue>(), 0);
+            this.Annotations = annotations ?? TimedEvents<IAnnotation>.Create(new List<ITimedEvent<IAnnotation>>(), 0);
+            this.MessageEvents = messageEvents ?? TimedEvents<IMessageEvent>.Create(new List<ITimedEvent<IMessageEvent>>(), 0);
+            this.Links = links ?? LinkList.Create(new List<ILink>(), 0);
             this.ChildSpanCount = childSpanCount;
             this.Status = status;
             this.Kind = kind;
@@ -97,7 +97,7 @@ namespace OpenCensus.Trace.Export
         {
             if (messageOrNetworkEvents == null)
             {
-                throw new ArgumentNullException(nameof(messageOrNetworkEvents));
+                messageOrNetworkEvents = TimedEvents<IMessageEvent>.Create(new List<ITimedEvent<IMessageEvent>>(), 0);
             }
 
             IList<ITimedEvent<IMessageEvent>> messageEventsList = new List<ITimedEvent<IMessageEvent>>();
@@ -142,7 +142,7 @@ namespace OpenCensus.Trace.Export
                 + "}";
         }
 
-    /// <inheritdoc/>
+        /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)

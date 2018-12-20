@@ -5,12 +5,6 @@
     <Description>Unit test project for ApplicationInsights Exporter for OpenCensus</Description>
     <TargetFrameworks>net46;netcoreapp2.0</TargetFrameworks>
     <TargetFrameworks Condition="$(OS) != 'Windows_NT'">netcoreapp2.0</TargetFrameworks>
-    <AssemblyName>OpenCensus.Exporter.Stackdriver.Tests</AssemblyName>
-    <PackageId>OpenCensus.Exporter.ApplicationInsights.Tests</PackageId>
-    <PackageTags>OpenCensus;Tracing;Management;Monitoring;ApplicationInsights;Google;Cloud</PackageTags>
-    <PackageProjectUrl>http://opencensus.io</PackageProjectUrl>
-    <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
-    <RootNamespace>OpenCensus</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\OpenCensus.Exporter.ApplicationInsights\OpenCensus.Exporter.ApplicationInsights.csproj" />
+    <ProjectReference Include="..\..\src\OpenCensus\OpenCensus.csproj" />
   </ItemGroup>
 
   <ItemGroup>

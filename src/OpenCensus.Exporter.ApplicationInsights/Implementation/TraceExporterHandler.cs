@@ -49,14 +49,26 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                     result = new DependencyTelemetry();
                 }
 
+                result.Timestamp = DateTimeOffset.FromUnixTimeSeconds(span.StartTimestamp.Seconds);
+
+                // 1 tick is 100 ns
+                result.Timestamp = result.Timestamp.Add(TimeSpan.FromTicks(span.StartTimestamp.Nanos / 100));
                 result.Name = span.Name;
                 result.Id = span.Context.SpanId.ToLowerBase16();
                 result.Context.Operation.Id = span.Context.TraceId.ToLowerBase16();
-                result.Context.Operation.ParentId = span.ParentSpanId.ToLowerBase16();
-                var duration = span.StartTimestamp.SubtractTimestamp(span.EndTimestamp);
+
+                if (span.ParentSpanId.IsValid)
+                {
+                    result.Context.Operation.ParentId = span.ParentSpanId.ToLowerBase16();
+                }
+
+                var duration = span.EndTimestamp.SubtractTimestamp(span.StartTimestamp);
                 result.Duration = TimeSpan.FromTicks((duration.Seconds * TimeSpan.TicksPerSecond) + (duration.Nanos / 100));
-                result.Success = span.Status.IsOk;
-                ((RequestTelemetry)result).ResponseCode = span.Status.Description ?? span.Status.CanonicalCode.ToString();
+                if (span.Status != null)
+                {
+                    result.Success = span.Status.IsOk;
+                    ((RequestTelemetry)result).ResponseCode = span.Status.Description ?? span.Status.CanonicalCode.ToString();
+                }
 
                 foreach (var attr in span.Attributes.AttributeMap)
                 {
