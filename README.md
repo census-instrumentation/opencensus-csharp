@@ -17,19 +17,23 @@ We encourage contributions. Use tags [up-for-grabs][up-for-grabs-issues] and
 [good first issue][good-first-issues] to get started with the project. Follow
 [CONTRIBUTING](CONTRIBUTING.md) guide to report issues or submit a proposal.
 
+## Packages
+
+### API and implementation
+
 | Package                 | MyGet (CI)       | NuGet (releases) |
 | ----------------------- | ---------------- | -----------------|
 | OpenCensus              | [![MyGet Nightly][opencensus-myget-image]][opencensus-myget-url]         | [![NuGet Release][opencensus-nuget-image]][opencensus-nuget-url]         |
 | OpenCensus.Abstractions | [![MyGet Nightly][opencensus-abs-myget-image]][opencensus-abs-myget-url] | [![NuGet Release][opencensus-abs-nuget-image]][opencensus-abs-nuget-url] |
 
-## Data Collectors
+### Data Collectors
 
 | Package                 | MyGet (CI)       | NuGet (releases) |
 | ----------------------- | ---------------- | -----------------|
 | Asp.Net Core            | [![MyGet Nightly][opencensus-collect-aspnetcore-myget-image]][opencensus-collect-aspnetcore-myget-url]       | [![NuGet Release][opencensus-collect-aspnetcore-nuget-image]][opencensus-collect-aspnetcore-nuget-url]   |
 | .Net Core HttpClient    | [![MyGet Nightly][opencensus-collect-deps-myget-image]][opencensus-collect-deps-myget-url]                   | [![NuGet Release][opencensus-collect-deps-nuget-image]][opencensus-collect-deps-nuget-url]               |
 
-## Exporters Packages
+### Exporters Packages
 
 | Package                 | MyGet (CI)       | NuGet (releases) |
 | ----------------------- | ---------------- | -----------------|
@@ -238,16 +242,16 @@ deprecate it for 18 months before removing it, if possible.
 [opencensus-abs-nuget-url]: https://www.nuget.org/packages/OpenCensus.Abstractions
 [opencensus-exporter-zipkin-nuget-image]:https://img.shields.io/nuget/vpre/OpenCensus.Exporter.Zipkin.svg
 [opencensus-exporter-zipkin-nuget-url]: https://www.nuget.org/packages/OpenCensus.Exporter.Zipkin
-[opencensus-exporter-prom-myget-image]:https://img.shields.io/nuget/vpre/OpenCensus.Exporter.Prometheus.svg
-[opencensus-exporter-prom-myget-url]: https://www.nuget.org/packages/OpenCensus.Exporter.Prometheus
+[opencensus-exporter-prom-nuget-image]:https://img.shields.io/nuget/vpre/OpenCensus.Exporter.Prometheus.svg
+[opencensus-exporter-prom-nuget-url]: https://www.nuget.org/packages/OpenCensus.Exporter.Prometheus
 [opencensus-exporter-ai-nuget-image]:https://img.shields.io/nuget/vpre/OpenCensus.Exporter.ApplicationInsights.svg
 [opencensus-exporter-ai-nuget-url]: https://www.nuget.org/packages/OpenCensus.Exporter.ApplicationInsights
 [opencensus-exporter-stackdriver-nuget-image]:https://img.shields.io/nuget/vpre/OpenCensus.Exporter.Stackdriver.svg
 [opencensus-exporter-stackdriver-nuget-url]: https://www.nuget.org/packages/OpenCensus.Exporter.Stackdriver
-[opencensus-collect-aspnetcore-myget-image]:https://img.shields.io/nuget/vpre/OpenCensus.Collector.AspNetCore.svg
-[opencensus-collect-aspnetcore-myget-url]: https://www.nuget.org/packages/OpenCensus.Collector.AspNetCore
-[opencensus-collect-deps-myget-image]:https://img.shields.io/nuget/vpre/OpenCensus.Collector.Dependencies.svg
-[opencensus-collect-deps-myget-url]: https://www.nuget.org/packages/OpenCensus.Collector.Dependencies
+[opencensus-collect-aspnetcore-nuget-image]:https://img.shields.io/nuget/vpre/OpenCensus.Collector.AspNetCore.svg
+[opencensus-collect-aspnetcore-nuget-url]: https://www.nuget.org/packages/OpenCensus.Collector.AspNetCore
+[opencensus-collect-deps-nuget-image]:https://img.shields.io/nuget/vpre/OpenCensus.Collector.Dependencies.svg
+[opencensus-collect-deps-nuget-url]: https://www.nuget.org/packages/OpenCensus.Collector.Dependencies
 [up-for-grabs-issues]: https://github.com/census-instrumentation/opencensus-csharp/issues?q=is%3Aissue+is%3Aopen+label%3Aup-for-grabs
 [good-first-issues]: https://github.com/census-instrumentation/opencensus-csharp/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22
 [zipkin-get-started]: https://zipkin.io/pages/quickstart.html
