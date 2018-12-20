@@ -19,6 +19,7 @@ namespace OpenCensus.Resource
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Security;
     using System.Text.RegularExpressions;
     using OpenCensus.Tags;
     using OpenCensus.Utils;
@@ -33,7 +34,12 @@ namespace OpenCensus.Resource
         /// <summary>
         /// Maximum length of the resource type name.
         /// </summary>
-        internal const int MaxLength = 255;
+        internal const int MaxResourceTypeNameLength = 255;
+
+        /// <summary>
+        /// Special resource type name that is assigned if nothing else is detected.
+        /// </summary>
+        private const string GlobalResourceType = "Global";
 
         /// <summary>
         /// OpenCensus Resource Type Environment Variable Name
@@ -59,15 +65,45 @@ namespace OpenCensus.Resource
         /// Error message when string contains invalid characters.
         /// </summary>
         private static readonly string ERROR_MESSAGE_INVALID_CHARS =
-            " should be a ASCII string with a length greater than 0 and not exceed " + MaxLength + " characters.";
+            " should be a ASCII string with a length greater than 0 and not exceed " + MaxResourceTypeNameLength + " characters.";
 
         /// <summary>
         /// Environment identification (for example, AKS/GKE/etc).
         /// </summary>
-        private static readonly string EnvironmentType = ParseResourceType(Environment.GetEnvironmentVariable(OC_RESOURCE_TYPE_ENV));
+        private static readonly string EnvironmentType;
 
-        private static readonly ITag[] EnvironmentToLabelMap =
-            ParseResourceLabels(Environment.GetEnvironmentVariable(OC_RESOURCE_LABELS_ENV));
+        private static readonly ITag[] EnvironmentToLabelMap;
+
+        static Resource()
+        {
+            string openCensusResourceType;
+            string openCensusEnvironmentTags;
+
+            try
+            {
+                openCensusResourceType = Environment.GetEnvironmentVariable(OC_RESOURCE_TYPE_ENV);
+            }
+            catch (SecurityException)
+            {
+                openCensusResourceType = GlobalResourceType;
+
+                // TODO - Log error
+            }
+
+            try
+            {
+                openCensusEnvironmentTags = Environment.GetEnvironmentVariable(OC_RESOURCE_LABELS_ENV);
+            }
+            catch (SecurityException)
+            {
+                openCensusEnvironmentTags = string.Empty;
+
+                // TODO - Log error
+            }
+
+            TryParseResourceType(openCensusResourceType, out EnvironmentType);
+            EnvironmentToLabelMap = ParseResourceLabels(Environment.GetEnvironmentVariable(OC_RESOURCE_LABELS_ENV));
+        }
 
         /// <summary>
         /// Gets the identification of the resource.
@@ -98,6 +134,9 @@ namespace OpenCensus.Resource
             {
                 var labels = new List<ITag>();
                 string[] rawLabels = rawEnvironmentTags.Split(LABEL_LIST_SPLITTER);
+
+                Regex regex = new Regex("^\"|\"$", RegexOptions.Compiled);
+                
                 foreach (var rawLabel in rawLabels)
                 {
                     string[] keyValuePair = rawLabel.Split(LABEL_KEY_VALUE_SPLITTER);
@@ -119,30 +158,34 @@ namespace OpenCensus.Resource
             }
         }
 
-        private static string ParseResourceType(string rawEnvironmentType)
+        private static bool TryParseResourceType(string rawEnvironmentType, out string resourceType)
         {
-            if (!string.IsNullOrEmpty(rawEnvironmentType))
+            if (string.IsNullOrEmpty(rawEnvironmentType))
             {
-                if (rawEnvironmentType.Length > MaxLength)
-                {
-                    throw new ArgumentException($"Type {ERROR_MESSAGE_INVALID_CHARS}");
-                }
-                
-                return rawEnvironmentType.Trim();
+                resourceType = GlobalResourceType;
+                return false;
             }
 
-            return rawEnvironmentType;
+            if (rawEnvironmentType.Length > MaxResourceTypeNameLength)
+            {
+                // TODO Log error $"Type {ERROR_MESSAGE_INVALID_CHARS}";
+                resourceType = GlobalResourceType;
+                return false;
+            }
+
+            resourceType = rawEnvironmentType.Trim();
+            return true;
         }
 
         /// <summary>
         /// Checks whether given string is a valid printable ASCII string with a length not exeeding
-        /// <see cref="MaxLength"/> characters.
+        /// <see cref="MaxResourceTypeNameLength"/> characters.
         /// </summary>
         /// <param name="name">The string.</param>
         /// <returns>Whether given string is valid.</returns>
         private static bool IsValid(string name)
         {
-            return name.Length <= MaxLength && StringUtil.IsPrintableString(name);
+            return name.Length <= MaxResourceTypeNameLength && StringUtil.IsPrintableString(name);
         }
 
         /// <summary>

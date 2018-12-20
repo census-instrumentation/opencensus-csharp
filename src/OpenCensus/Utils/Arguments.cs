@@ -19,21 +19,22 @@ namespace OpenCensus.Utils
     using System;
 
     /// <summary>
-    /// Method for arguments validation.
+    /// Methods for arguments validation.
     /// </summary>
-    public class Arguments
+    internal class Arguments
     {
         /// <summary>
         /// Validates a condition.
         /// </summary>
         /// <param name="condition">Boolean condition</param>
-        /// <param name="errorMessage">Error that is thrown in case of condition being false</param>
-        /// <returns>Whether condition is true</returns>
+        /// <param name="errorMessage">Error that is thrown in case of condition being false.</param>
+        /// <returns>Whether condition is true.</returns>
         public static bool Check(bool condition, string errorMessage)
         {
             if (!condition)
             {
-                throw new ArgumentException(errorMessage);
+                // TODO - Log error instead of exception
+                //throw new ArgumentException(errorMessage);
             }
 
             return condition;
