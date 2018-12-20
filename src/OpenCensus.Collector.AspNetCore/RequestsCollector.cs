@@ -41,7 +41,10 @@ namespace OpenCensus.Collector.AspNetCore
         {
             this.diagnosticSourceSubscriber = new DiagnosticSourceSubscriber(
                 new Dictionary<string, Func<ITracer, ISampler, ListenerHandler>>()
-                { { "Microsoft.AspNetCore", (t, s) => new HttpInListener(t, s, propagationComponent) } },
+                {
+                    { "Microsoft.AspNetCore", (t, s) => new HttpInListener(t, s, propagationComponent) },
+                    { "Microsoft.AspNetCore.Mvc.BeforeAction", (t, s) => new HttpInListener(t, s, propagationComponent) },
+                },
                 tracer,
                 sampler);
             this.diagnosticSourceSubscriber.Subscribe();

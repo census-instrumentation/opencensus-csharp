@@ -53,6 +53,8 @@ namespace OpenCensus.Trace
             this.Options = options;
         }
 
+        public abstract string Name { get; set; }
+
         /// <inheritdoc/>
         public virtual ISpanContext Context { get; }
 
@@ -64,11 +66,6 @@ namespace OpenCensus.Trace
 
         /// <inheritdoc/>
         public abstract SpanKind? Kind { get; set; }
-
-        /// <summary>
-        /// Gets the name of the span.
-        /// </summary>
-        public abstract string Name { get; }
 
         /// <inheritdoc/>
         public SpanBase Next { get; set; }

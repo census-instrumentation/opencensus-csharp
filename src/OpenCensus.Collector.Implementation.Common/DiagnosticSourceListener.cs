@@ -63,6 +63,10 @@ namespace OpenCensus.Collector.Implementation.Common
                 {
                     this.handler.OnException(Activity.Current, value.Value);
                 }
+                else
+                {
+                    this.handler.OnCustom(value.Key, Activity.Current, value.Value);
+                }
             }
             catch (Exception e)
             {

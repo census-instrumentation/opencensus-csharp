@@ -121,7 +121,7 @@ namespace OpenCensus.Collector.AspNetCore.Tests
             {
 
                 // Act
-                var response = await client.GetAsync("/api/values");
+                var response = await client.GetAsync("/api/values/2");
 
                 // Assert
                 response.EnsureSuccessStatusCode(); // Status Code 200-299
@@ -144,7 +144,8 @@ namespace OpenCensus.Collector.AspNetCore.Tests
             var spanData = ((Span)startEndHandler.Invocations[0].Arguments[0]).ToSpanData();
 
             Assert.Equal(SpanKind.Server, spanData.Kind);
-            Assert.Equal(AttributeValue.StringAttributeValue("/api/values"), spanData.Attributes.AttributeMap["http.path"]);
+            Assert.Equal("/api/values/{0}", spanData.Name);
+            Assert.Equal(AttributeValue.StringAttributeValue("/api/values/2"), spanData.Attributes.AttributeMap["http.path"]);
 
             Assert.Equal(expectedTraceId, spanData.Context.TraceId);
             Assert.Equal(expectedSpanId, spanData.ParentSpanId);

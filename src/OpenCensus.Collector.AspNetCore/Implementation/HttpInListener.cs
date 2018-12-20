@@ -17,6 +17,7 @@
 namespace OpenCensus.Collector.AspNetCore.Implementation
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
     using System.Text;
@@ -31,12 +32,24 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
         private const string UnknownHostName = "UNKNOWN-HOST";
         private readonly PropertyFetcher startContextFetcher = new PropertyFetcher("HttpContext");
         private readonly PropertyFetcher stopContextFetcher = new PropertyFetcher("HttpContext");
+        private readonly PropertyFetcher beforActionRouteDataFetcher = new PropertyFetcher("routeData");
         private readonly IPropagationComponent propagationComponent;
 
         public HttpInListener(ITracer tracer, ISampler sampler, IPropagationComponent propagationComponent)
             : base("Microsoft.AspNetCore", tracer, sampler)
         {
             this.propagationComponent = propagationComponent;
+        }
+
+        /// <summary>
+        /// Proxy interface for <c>RouteData</c> class from Microsoft.AspNetCore.Routing.Abstractions
+        /// </summary>
+        public interface IRouteData
+        {
+            /// <summary>
+            /// Gets the set of values produced by routes on the current routing path.
+            /// </summary>
+            IDictionary<string, object> Values { get; }
         }
 
         public override void OnStartActivity(Activity activity, object payload)
@@ -101,6 +114,23 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
             span.End();
         }
 
+        public override void OnCustom(string name, Activity activity, object payload)
+        {
+            if (name == "Microsoft.AspNetCore.Mvc.BeforeAction")
+            {
+                var span = this.Tracer.CurrentSpan;
+
+                if (span == null)
+                {
+                    // report lost span
+                }
+
+                var routeData = this.beforActionRouteDataFetcher.Fetch(payload) as IRouteData;
+
+                span.Name = GetNameFromRouteContext(routeData);
+            }
+        }
+
         private static string GetUri(HttpRequest request)
         {
             var builder = new StringBuilder();
@@ -134,6 +164,59 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
             }
 
             return builder.ToString();
+        }
+
+        private static string GetNameFromRouteContext(IRouteData routeData)
+        {
+            string name = null;
+            if (routeData.Values.Count > 0)
+            {
+                var routeValues = routeData.Values;
+                object controller;
+                routeValues.TryGetValue("controller", out controller);
+                string controllerString = (controller == null) ? string.Empty : controller.ToString();
+                if (!string.IsNullOrEmpty(controllerString))
+                {
+                    name = controllerString;
+                    object action;
+                    routeValues.TryGetValue("action", out action);
+                    string actionString = (action == null) ? string.Empty : action.ToString();
+                    if (!string.IsNullOrEmpty(actionString))
+                    {
+                        name += "/" + actionString;
+                    }
+
+                    if (routeValues.Keys.Count > 2)
+                    {
+                        // Add parameters
+                        var sortedKeys = routeValues.Keys
+                            .Where(key =>
+                                !string.Equals(key, "controller", StringComparison.OrdinalIgnoreCase) &&
+                                !string.Equals(key, "action", StringComparison.OrdinalIgnoreCase) &&
+                                !string.Equals(key, "!__route_group", StringComparison.OrdinalIgnoreCase))
+                            .OrderBy(key => key, StringComparer.OrdinalIgnoreCase)
+                            .ToArray();
+
+                        if (sortedKeys.Length > 0)
+                        {
+                            string arguments = string.Join(@"/", sortedKeys);
+                            name += " [" + arguments + "]";
+                        }
+                    }
+                }
+                else
+                {
+                    object page;
+                    routeValues.TryGetValue("page", out page);
+                    string pageString = (page == null) ? string.Empty : page.ToString();
+                    if (!string.IsNullOrEmpty(pageString))
+                    {
+                        name = pageString;
+                    }
+                }
+            }
+
+            return name;
         }
     }
 }

@@ -31,7 +31,7 @@ namespace OpenCensus.Trace
         private readonly bool? hasRemoteParent;
         private readonly ITraceParams traceParams;
         private readonly IStartEndHandler startEndHandler;
-        private readonly string name;
+        private string name;
         private readonly IClock clock;
         private readonly ITimestampConverter timestampConverter;
         private readonly long startNanoTime;
@@ -77,11 +77,17 @@ namespace OpenCensus.Trace
             }
         }
 
+        /// <inheritdoc/>
         public override string Name
         {
             get
             {
                 return this.name;
+            }
+
+            set
+            {
+                this.name = value;
             }
         }
 

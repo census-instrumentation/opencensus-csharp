@@ -29,7 +29,8 @@ namespace OpenCensus.Trace
         {
         }
 
-        public override string Name { get; }
+        /// <inheritdoc/>
+        public override string Name { get; set; }
 
         public override Status Status { get; set; }
 
