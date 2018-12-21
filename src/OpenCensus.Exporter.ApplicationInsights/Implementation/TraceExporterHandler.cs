@@ -40,7 +40,23 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
             {
                 OperationTelemetry result;
 
-                if (span.Kind == SpanKind.Server)
+                SpanKind resultKind = span.Kind;
+
+                if (span.Attributes.AttributeMap.ContainsKey("span.kind"))
+                {
+                    var kind = span.Attributes.AttributeMap["span.kind"].Match((s) => s, null, null, null, null);
+                    if (kind == "server")
+                    {
+                        resultKind = SpanKind.Server;
+                        result = new RequestTelemetry();
+                    }
+                    else
+                    {
+                        resultKind = SpanKind.Client;
+                        result = new DependencyTelemetry();
+                    }
+                }
+                else if (span.Kind == SpanKind.Server)
                 {
                     result = new RequestTelemetry();
                 }
@@ -54,12 +70,20 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                 // 1 tick is 100 ns
                 result.Timestamp = result.Timestamp.Add(TimeSpan.FromTicks(span.StartTimestamp.Nanos / 100));
                 result.Name = span.Name;
-                result.Id = span.Context.SpanId.ToLowerBase16();
                 result.Context.Operation.Id = span.Context.TraceId.ToLowerBase16();
 
-                if (span.ParentSpanId.IsValid)
+                if (span.ParentSpanId != null && span.ParentSpanId.IsValid)
                 {
-                    result.Context.Operation.ParentId = span.ParentSpanId.ToLowerBase16();
+                    result.Context.Operation.ParentId =
+                        string.Concat("|", span.Context.TraceId.ToLowerBase16(), ".", span.ParentSpanId.ToLowerBase16(), ".");
+                }
+
+                // TODO: I don't understant why this concatanation is required
+                result.Id = string.Concat("|", span.Context.TraceId.ToLowerBase16(), ".", span.Context.SpanId.ToLowerBase16(), ".");
+
+                foreach (var ts in span.Context.Tracestate.Entries)
+                {
+                    result.Properties[ts.Key] = ts.Value;
                 }
 
                 var duration = span.EndTimestamp.SubtractTimestamp(span.StartTimestamp);
@@ -67,7 +91,19 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                 if (span.Status != null)
                 {
                     result.Success = span.Status.IsOk;
-                    ((RequestTelemetry)result).ResponseCode = span.Status.Description ?? span.Status.CanonicalCode.ToString();
+                    if (resultKind == SpanKind.Server)
+                    {
+                        ((RequestTelemetry)result).ResponseCode = span.Status.Description ?? span.Status.CanonicalCode.ToString();
+                    }
+                    else
+                    {
+                        ((DependencyTelemetry)result).ResultCode = span.Status.Description ?? span.Status.CanonicalCode.ToString();
+                    }
+
+                    if (!string.IsNullOrEmpty(span.Status.Description))
+                    {
+                        result.Properties["statusDescription"] = span.Status.Description;
+                    }
                 }
 
                 foreach (var attr in span.Attributes.AttributeMap)
