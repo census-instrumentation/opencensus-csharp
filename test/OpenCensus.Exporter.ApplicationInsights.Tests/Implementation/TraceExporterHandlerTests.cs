@@ -638,23 +638,20 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             Assert.True(Math.Abs((request.Timestamp - DateTime.UtcNow).TotalSeconds) < 1);
             Assert.Equal(0, request.Duration.TotalSeconds);
         }
-        /*
-
 
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpRequestWithUrl()
         {
+            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             var url = new Uri("https://host:123/path?query");
-            var span = this.CreateBasicSpan(SpanKind.Server, "HttpIn");
-            span.Attributes = new Span.Types.Attributes
-            {
-                AttributeMap =
+            name = "HttpIn";
+            attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
                 {
-                    ["http.url"] = this.CreateAttributeValue(url),
-                    ["http.method"] = this.CreateAttributeValue("POST"),
-                    ["http.status_code"] = this.CreateAttributeValue(409),
-                },
-            };
+                    { "http.url", AttributeValue.StringAttributeValue(url.ToString()) },
+                    { "http.method", AttributeValue.StringAttributeValue("POST") },
+                    { "http.status_code", AttributeValue.LongAttributeValue(409) },
+                }, 0);
+            var span = SpanData.Create(context, parentSpanId, false, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
 
             var sentItems = this.ConvertSpan(span);
 
@@ -667,17 +664,16 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpRequestWithRelativeUrl()
         {
+            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             var url = new Uri("https://host:123/path?query");
-            var span = this.CreateBasicSpan(SpanKind.Server, "HttpIn");
-            span.Attributes = new Span.Types.Attributes
-            {
-                AttributeMap =
+            name = "HttpIn";
+            attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
                 {
-                    ["http.url"] = this.CreateAttributeValue(url.LocalPath),
-                    ["http.method"] = this.CreateAttributeValue("POST"),
-                    ["http.status_code"] = this.CreateAttributeValue(409),
-                },
-            };
+                    { "http.url", AttributeValue.StringAttributeValue(url.LocalPath) },
+                    { "http.method", AttributeValue.StringAttributeValue("POST") },
+                    { "http.status_code", AttributeValue.LongAttributeValue(409) },
+                }, 0);
+            var span = SpanData.Create(context, parentSpanId, false, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
 
             var sentItems = this.ConvertSpan(span);
 
@@ -690,18 +686,17 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpRequestWithUrlAndRoute()
         {
+            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             var url = new Uri("https://host:123/path?query");
-            var span = this.CreateBasicSpan(SpanKind.Server, "HttpIn");
-            span.Attributes = new Span.Types.Attributes
-            {
-                AttributeMap =
+            name = "HttpIn";
+            attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
                 {
-                    ["http.url"] = this.CreateAttributeValue(url),
-                    ["http.method"] = this.CreateAttributeValue("POST"),
-                    ["http.route"] = this.CreateAttributeValue("route"),
-                    ["http.status_code"] = this.CreateAttributeValue(503),
-                },
-            };
+                    { "http.url", AttributeValue.StringAttributeValue(url.ToString()) },
+                    { "http.method", AttributeValue.StringAttributeValue("POST") },
+                    { "http.route", AttributeValue.StringAttributeValue("route") },
+                    { "http.status_code", AttributeValue.LongAttributeValue(503) },
+                }, 0);
+            var span = SpanData.Create(context, parentSpanId, false, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
 
             var sentItems = this.ConvertSpan(span);
 
@@ -714,16 +709,15 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpRequestWithUrlAndNoMethod()
         {
+            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             var url = new Uri("https://host:123/path?query");
-            var span = this.CreateBasicSpan(SpanKind.Server, "HttpIn");
-            span.Attributes = new Span.Types.Attributes
-            {
-                AttributeMap =
+            name = "HttpIn";
+            attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
                 {
-                    ["http.url"] = this.CreateAttributeValue(url),
-                    ["http.status_code"] = this.CreateAttributeValue(200),
-                },
-            };
+                    { "http.url", AttributeValue.StringAttributeValue(url.ToString()) },
+                    { "http.status_code", AttributeValue.LongAttributeValue(200) },
+                }, 0);
+            var span = SpanData.Create(context, parentSpanId, false, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
 
             var sentItems = this.ConvertSpan(span);
 
@@ -736,20 +730,19 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpRequestWithUrlOtherAttributesAreIgnored()
         {
+            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             var url = new Uri("https://host:123/path?query");
-            var span = this.CreateBasicSpan(SpanKind.Server, "HttpIn");
-            span.Attributes = new Span.Types.Attributes
-            {
-                AttributeMap =
+            name = "HttpIn";
+            attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
                 {
-                    ["http.url"] = this.CreateAttributeValue(url),
-                    ["http.method"] = this.CreateAttributeValue("POST"),
-                    ["http.path"] = this.CreateAttributeValue("another path"),
-                    ["http.host"] = this.CreateAttributeValue("another host"),
-                    ["http.port"] = this.CreateAttributeValue(8080),
-                    ["http.status_code"] = this.CreateAttributeValue(200),
-                },
-            };
+                    { "http.url", AttributeValue.StringAttributeValue(url.ToString()) },
+                    { "http.method", AttributeValue.StringAttributeValue("POST") },
+                    { "http.path", AttributeValue.StringAttributeValue("another path") },
+                    { "http.host", AttributeValue.StringAttributeValue("another host") },
+                    { "http.port", AttributeValue.LongAttributeValue(8080) },
+                    { "http.status_code", AttributeValue.LongAttributeValue(200) },
+                }, 0);
+            var span = SpanData.Create(context, parentSpanId, false, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
 
             var sentItems = this.ConvertSpan(span);
 
@@ -763,14 +756,14 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         public void OpenCensusTelemetryConverterTests_TracksRequestWithStringStatusCode()
         {
             // ARRANGE
-            var span = this.CreateBasicSpan(SpanKind.Server, "spanName");
-            span.Attributes = new Span.Types.Attributes
-            {
-                AttributeMap =
+            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            var url = new Uri("https://host:123/path?query");
+            name = "HttpIn";
+            attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
                 {
-                    ["http.status_code"] = this.CreateAttributeValue("201"),
-                },
-            };
+                    { "http.status_code", AttributeValue.LongAttributeValue(201) },
+                }, 0);
+            var span = SpanData.Create(context, parentSpanId, false, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
 
             // ACT
             var sentItems = this.ConvertSpan(span);
@@ -784,18 +777,18 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpRequestHostPortPathAttributes()
         {
-            var span = this.CreateBasicSpan(SpanKind.Server, "HttpIn");
-            span.Attributes = new Span.Types.Attributes
-            {
-                AttributeMap =
+            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            var url = new Uri("https://host:123/path?query");
+            name = "HttpIn";
+            attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
                 {
-                    ["http.method"] = this.CreateAttributeValue("POST"),
-                    ["http.path"] = this.CreateAttributeValue("path"),
-                    ["http.host"] = this.CreateAttributeValue("host"),
-                    ["http.port"] = this.CreateAttributeValue(123),
-                    ["http.status_code"] = this.CreateAttributeValue(200),
-                },
-            };
+                    { "http.method", AttributeValue.StringAttributeValue("POST") },
+                    { "http.path", AttributeValue.StringAttributeValue("path") },
+                    { "http.host", AttributeValue.StringAttributeValue("host") },
+                    { "http.port", AttributeValue.LongAttributeValue(123) },
+                    { "http.status_code", AttributeValue.LongAttributeValue(200) },
+                }, 0);
+            var span = SpanData.Create(context, parentSpanId, false, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
 
             var sentItems = this.ConvertSpan(span);
 
@@ -808,18 +801,18 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpRequestPortPathAndEmptyHostAttributes()
         {
-            var span = this.CreateBasicSpan(SpanKind.Server, "HttpIn");
-            span.Attributes = new Span.Types.Attributes
-            {
-                AttributeMap =
+            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            var url = new Uri("https://host:123/path?query");
+            name = "HttpIn";
+            attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
                 {
-                    ["http.method"] = this.CreateAttributeValue("POST"),
-                    ["http.path"] = this.CreateAttributeValue("path"),
-                    ["http.host"] = this.CreateAttributeValue(""),
-                    ["http.port"] = this.CreateAttributeValue(123),
-                    ["http.status_code"] = this.CreateAttributeValue(200),
-                },
-            };
+                    { "http.method", AttributeValue.StringAttributeValue("POST") },
+                    { "http.path", AttributeValue.StringAttributeValue("path") },
+                    { "http.host", AttributeValue.StringAttributeValue("host") },
+                    { "http.port", AttributeValue.LongAttributeValue(123) },
+                    { "http.status_code", AttributeValue.LongAttributeValue(200) },
+                }, 0);
+            var span = SpanData.Create(context, parentSpanId, false, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
 
             var sentItems = this.ConvertSpan(span);
 
@@ -832,17 +825,17 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpRequestHostPathAttributes()
         {
-            var span = this.CreateBasicSpan(SpanKind.Server, "HttpIn");
-            span.Attributes = new Span.Types.Attributes
-            {
-                AttributeMap =
+            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            var url = new Uri("https://host:123/path?query");
+            name = "HttpIn";
+            attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
                 {
-                    ["http.method"] = this.CreateAttributeValue("POST"),
-                    ["http.path"] = this.CreateAttributeValue("/path"),
-                    ["http.host"] = this.CreateAttributeValue("host"),
-                    ["http.status_code"] = this.CreateAttributeValue(200),
-                },
-            };
+                    { "http.method", AttributeValue.StringAttributeValue("POST") },
+                    { "http.path", AttributeValue.StringAttributeValue("/path") },
+                    { "http.host", AttributeValue.StringAttributeValue("host") },
+                    { "http.status_code", AttributeValue.LongAttributeValue(200) },
+                }, 0);
+            var span = SpanData.Create(context, parentSpanId, false, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
 
             var sentItems = this.ConvertSpan(span);
 
@@ -855,16 +848,16 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpRequestHostAttributes()
         {
-            var span = this.CreateBasicSpan(SpanKind.Server, "HttpIn");
-            span.Attributes = new Span.Types.Attributes
-            {
-                AttributeMap =
+            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            var url = new Uri("https://host:123/path?query");
+            name = "HttpIn";
+            attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
                 {
-                    ["http.method"] = this.CreateAttributeValue("POST"),
-                    ["http.host"] = this.CreateAttributeValue("host"),
-                    ["http.status_code"] = this.CreateAttributeValue(200),
-                },
-            };
+                    { "http.method", AttributeValue.StringAttributeValue("POST") },
+                    { "http.host", AttributeValue.StringAttributeValue("host") },
+                    { "http.status_code", AttributeValue.LongAttributeValue(200) },
+                }, 0);
+            var span = SpanData.Create(context, parentSpanId, false, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
 
             var sentItems = this.ConvertSpan(span);
 
@@ -877,15 +870,15 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpRequestOnlyMethodAttributes()
         {
-            var span = this.CreateBasicSpan(SpanKind.Server, "HttpIn");
-            span.Attributes = new Span.Types.Attributes
-            {
-                AttributeMap =
+            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            var url = new Uri("https://host:123/path?query");
+            name = "HttpIn";
+            attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
                 {
-                    ["http.method"] = this.CreateAttributeValue("POST"),
-                    ["http.status_code"] = this.CreateAttributeValue(200),
-                },
-            };
+                    { "http.method", AttributeValue.StringAttributeValue("POST") },
+                    { "http.status_code", AttributeValue.LongAttributeValue(200) },
+                }, 0);
+            var span = SpanData.Create(context, parentSpanId, false, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
 
             var sentItems = this.ConvertSpan(span);
 
@@ -899,14 +892,14 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         public void OpenCensusTelemetryConverterTests_TracksDependencyWithStringStatusCode()
         {
             // ARRANGE
-            var span = this.CreateBasicSpan(SpanKind.Client, "spanName");
-            span.Attributes = new Span.Types.Attributes
-            {
-                AttributeMap =
+            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            var url = new Uri("https://host:123/path?query");
+            name = "HttpIn";
+            attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
                 {
-                    ["http.status_code"] = this.CreateAttributeValue("201"),
-                },
-            };
+                    { "http.status_code", AttributeValue.LongAttributeValue(201) },
+                }, 0);
+            var span = SpanData.Create(context, parentSpanId, false, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
 
             // ACT
             var sentItems = this.ConvertSpan(span);
@@ -920,17 +913,16 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpRequestUserAgent()
         {
+            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            var url = new Uri("https://host/path");
             var userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36";
-
-            var span = this.CreateBasicSpan(SpanKind.Server, "HttpIn");
-            span.Attributes = new Span.Types.Attributes
-            {
-                AttributeMap =
+            name = "HttpIn";
+            attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
                 {
-                    ["http.url"] = this.CreateAttributeValue("https://host/path"),
-                    ["http.user_agent"] = this.CreateAttributeValue(userAgent),
-                },
-            };
+                    { "http.url", AttributeValue.StringAttributeValue(url.ToString()) },
+                    { "http.user_agent", AttributeValue.StringAttributeValue(userAgent) },
+                }, 0);
+            var span = SpanData.Create(context, parentSpanId, false, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
 
             var sentItems = this.ConvertSpan(span);
 
@@ -941,17 +933,17 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpDependencyWithUrl()
         {
+            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             var url = new Uri("https://host:123/path?query");
-            var span = this.CreateBasicSpan(SpanKind.Client, "HttpOut");
-            span.Attributes = new Span.Types.Attributes
-            {
-                AttributeMap =
+            name = "HttpOut";
+            kind = SpanKind.Client;
+            attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
                 {
-                    ["http.url"] = this.CreateAttributeValue(url),
-                    ["http.method"] = this.CreateAttributeValue("POST"),
-                    ["http.status_code"] = this.CreateAttributeValue(200),
-                },
-            };
+                    { "http.url", AttributeValue.StringAttributeValue(url.ToString()) },
+                    { "http.method", AttributeValue.StringAttributeValue("POST") },
+                    { "http.status_code", AttributeValue.LongAttributeValue(200) },
+                }, 0);
+            var span = SpanData.Create(context, parentSpanId, false, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
 
             var sentItems = this.ConvertSpan(span);
 
@@ -966,17 +958,17 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpDependencyWithRelativeUrl()
         {
+            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             var url = new Uri("https://host:123/path?query");
-            var span = this.CreateBasicSpan(SpanKind.Client, "HttpOut");
-            span.Attributes = new Span.Types.Attributes
-            {
-                AttributeMap =
+            name = "HttpOut";
+            kind = SpanKind.Client;
+            attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
                 {
-                    ["http.url"] = this.CreateAttributeValue(url.LocalPath),
-                    ["http.method"] = this.CreateAttributeValue("POST"),
-                    ["http.status_code"] = this.CreateAttributeValue(200),
-                },
-            };
+                    { "http.url", AttributeValue.StringAttributeValue(url.LocalPath) },
+                    { "http.method", AttributeValue.StringAttributeValue("POST") },
+                    { "http.status_code", AttributeValue.LongAttributeValue(200) },
+                }, 0);
+            var span = SpanData.Create(context, parentSpanId, false, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
 
             var sentItems = this.ConvertSpan(span);
 
@@ -988,6 +980,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             Assert.Equal("Http", dependency.Type);
         }
 
+        /*
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpDependencyWithUrlIgnoresHostPortPath()
         {
