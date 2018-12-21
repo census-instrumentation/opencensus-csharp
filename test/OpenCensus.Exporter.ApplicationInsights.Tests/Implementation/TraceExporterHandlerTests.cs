@@ -1,4 +1,4 @@
-﻿// <copyright file="TraceExporterHandlerTests.cs" company="OpenCensus Authors">
+// <copyright file="TraceExporterHandlerTests.cs" company="OpenCensus Authors">
 // Copyright 2018, OpenCensus Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -1912,5 +1912,36 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
                 }
         */
 
+        private void GetDefaults(
+            out TestClock now,
+            out ISpanContext context,
+            out ISpanId parentSpanId,
+            out bool? hasRemoteParent,
+            out string name,
+            out ITimestamp startTimestamp,
+            out IAttributes attributes,
+            out ITimedEvents<IAnnotation> annotations,
+            out ITimedEvents<IMessageEvent> messageOrNetworkEvents,
+            out ILinks links,
+            out int? childSpanCount,
+            out Status status,
+            out SpanKind kind,
+            out ITimestamp endTimestamp)
+        {
+            now = new TestClock(DateTimeOffset.UtcNow);
+            context = SpanContext.Create(TraceId.FromBytes(this.testTraceIdBytes), SpanId.FromBytes(this.testSpanIdBytes), TraceOptions.Default, Tracestate.Empty);
+            parentSpanId = SpanId.Invalid;
+            hasRemoteParent = false;
+            name = "spanName";
+            startTimestamp = now.GetBefore(TimeSpan.FromSeconds(1)).Now;
+            attributes = null;
+            annotations = null;
+            messageOrNetworkEvents = null;
+            links = null;
+            childSpanCount = null;
+            status = null;
+            kind = SpanKind.Server;
+            endTimestamp = now.Now;
+        }
     }
 }
