@@ -9,7 +9,7 @@
     <PackageId>OpenCensus.Exporter.Stackdriver.Tests</PackageId>
     <PackageTags>OpenCensus;Tracing;Management;Monitoring;Stackdriver;Google;Cloud</PackageTags>
     <PackageProjectUrl>http://opencensus.io</PackageProjectUrl>
-    <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <RootNamespace>OpenCensus</RootNamespace>
   </PropertyGroup>
 
