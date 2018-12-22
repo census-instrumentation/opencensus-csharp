@@ -422,7 +422,7 @@ namespace OpenCensus.Trace
                 this.Context,
                 this.parentSpanId,
                 this.hasRemoteParent,
-                this.name,
+                this.Name,
                 this.timestampConverter.ConvertNanoTime(this.startNanoTime),
                 attributesSpanData,
                 annotationsSpanData,
