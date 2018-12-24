@@ -18,6 +18,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using Microsoft.ApplicationInsights;
     using Microsoft.ApplicationInsights.DataContracts;
     using Microsoft.ApplicationInsights.Extensibility;
@@ -40,7 +41,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
             {
                 OperationTelemetry result;
 
-                SpanKind resultKind = span.Kind;
+                SpanKind resultKind = SpanKind.Unspecified;
 
                 if (span.Attributes.AttributeMap.ContainsKey("span.kind"))
                 {
@@ -48,22 +49,37 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                     if (kind == "server")
                     {
                         resultKind = SpanKind.Server;
-                        result = new RequestTelemetry();
                     }
                     else
                     {
                         resultKind = SpanKind.Client;
-                        result = new DependencyTelemetry();
                     }
                 }
-                else if (span.Kind == SpanKind.Server)
+
+                resultKind = span.Kind;
+
+                if (resultKind == SpanKind.Unspecified)
                 {
-                    result = new RequestTelemetry();
+                    if (span.HasRemoteParent.HasValue && span.HasRemoteParent.Value)
+                    {
+                        resultKind = SpanKind.Server;
+                    }
+                    else
+                    {
+                        resultKind = SpanKind.Client;
+                    }
                 }
-                else
+
+                if (resultKind == SpanKind.Client)
                 {
                     result = new DependencyTelemetry();
                 }
+                else
+                {
+                    result = new RequestTelemetry();
+                }
+
+                result.Success = null;
 
                 result.Timestamp = DateTimeOffset.FromUnixTimeSeconds(span.StartTimestamp.Seconds);
 
@@ -93,17 +109,34 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                     result.Success = span.Status.IsOk;
                     if (resultKind == SpanKind.Server)
                     {
-                        ((RequestTelemetry)result).ResponseCode = span.Status.Description ?? span.Status.CanonicalCode.ToString();
+                        ((RequestTelemetry)result).ResponseCode = ((int)span.Status.CanonicalCode).ToString();
                     }
                     else
                     {
-                        ((DependencyTelemetry)result).ResultCode = span.Status.Description ?? span.Status.CanonicalCode.ToString();
+                        ((DependencyTelemetry)result).ResultCode = ((int)span.Status.CanonicalCode).ToString();
                     }
 
                     if (!string.IsNullOrEmpty(span.Status.Description))
                     {
                         result.Properties["statusDescription"] = span.Status.Description;
                     }
+                }
+
+                if (span.Attributes.AttributeMap.ContainsKey("http.status_code"))
+                {
+                    if (resultKind == SpanKind.Server)
+                    {
+                        ((RequestTelemetry)result).ResponseCode = span.Attributes.AttributeMap["http.status_code"].Match((s) => s, null, (l) => l.ToString(CultureInfo.InvariantCulture), null, null);
+                    }
+                    else
+                    {
+                        ((DependencyTelemetry)result).ResultCode = span.Attributes.AttributeMap["http.status_code"].Match((s) => s, null, (l) => l.ToString(CultureInfo.InvariantCulture), null, null);
+                    }
+                }
+
+                if (span.Attributes.AttributeMap.ContainsKey("error"))
+                {
+                    ((OperationTelemetry)result).Success = span.Attributes.AttributeMap["error"].Match((s) => !(s == "true"), (b) => !b, null, null, null);
                 }
 
                 foreach (var attr in span.Attributes.AttributeMap)
