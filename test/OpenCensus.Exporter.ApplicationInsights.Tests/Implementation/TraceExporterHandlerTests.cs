@@ -207,7 +207,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
 
             Assert.True(request.Success.HasValue);
             Assert.True(request.Success.Value);
-            Assert.True(string.IsNullOrEmpty(request.ResponseCode));
+            Assert.Equal("0", request.ResponseCode);
         }
 
         [Fact]
@@ -228,7 +228,8 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
 
             Assert.True(request.Success.HasValue);
             Assert.True(request.Success.Value);
-            Assert.Equal("all good", request.ResponseCode);
+            Assert.Equal("0", request.ResponseCode);
+            Assert.Equal("all good", request.Properties["statusDescription"]);
         }
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksRequestWithNonSuccessStatusAndDescription()
@@ -249,7 +250,8 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
 
             Assert.True(request.Success.HasValue);
             Assert.False(request.Success.Value);
-            Assert.Equal("all bad", request.ResponseCode);
+            Assert.Equal("1", request.ResponseCode);
+            Assert.Equal("all bad", request.Properties["statusDescription"]);
         }
 
         [Fact]
@@ -678,7 +680,6 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             var sentItems = this.ConvertSpan(span);
 
             var request = sentItems.OfType<RequestTelemetry>().Single();
-            Assert.Null(request.Url);
             Assert.Equal("POST /path", request.Name);
             Assert.Equal("409", request.ResponseCode);
         }
@@ -748,7 +749,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
 
             var request = sentItems.OfType<RequestTelemetry>().Single();
             Assert.Equal(url.ToString(), request.Url.ToString());
-            Assert.Equal("POST /path", request.Name);
+            Assert.Equal("POST another path", request.Name);
             Assert.Equal("200", request.ResponseCode);
         }
 
@@ -802,13 +803,12 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         public void OpenCensusTelemetryConverterTests_TracksHttpRequestPortPathAndEmptyHostAttributes()
         {
             this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
-            var url = new Uri("https://host:123/path?query");
             name = "HttpIn";
             attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
                 {
                     { "http.method", AttributeValue.StringAttributeValue("POST") },
                     { "http.path", AttributeValue.StringAttributeValue("path") },
-                    { "http.host", AttributeValue.StringAttributeValue("host") },
+                    { "http.host", AttributeValue.StringAttributeValue("") },
                     { "http.port", AttributeValue.LongAttributeValue(123) },
                     { "http.status_code", AttributeValue.LongAttributeValue(200) },
                 }, 0);
@@ -817,7 +817,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             var sentItems = this.ConvertSpan(span);
 
             var request = sentItems.OfType<RequestTelemetry>().Single();
-            Assert.Null(request.Url);
+            Assert.Equal("/path", request.Url.ToString());
             Assert.Equal("POST path", request.Name);
             Assert.Equal("200", request.ResponseCode);
         }
@@ -849,7 +849,6 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         public void OpenCensusTelemetryConverterTests_TracksHttpRequestHostAttributes()
         {
             this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
-            var url = new Uri("https://host:123/path?query");
             name = "HttpIn";
             attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
                 {
