@@ -1217,8 +1217,6 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             Assert.Equal(bool.TrueString, request.Properties["custom.boolAttribute"]);
         }
 
-        /*
-
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksDependencyWithLinks()
         {
@@ -1230,31 +1228,20 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             var (link1SpanId, link1SpanIdBytes) = GenerateRandomId(8);
             var (link2SpanId, link2SpanIdBytes) = GenerateRandomId(8);
 
-            var span = this.CreateBasicSpan(SpanKind.Client, "spanName");
-            span.Links = new Span.Types.Links
-            {
-                Link =
-                {
-                    new Span.Types.Link
-                    {
-                        SpanId = ByteString.CopyFrom(link0SpanIdBytes),
-                        TraceId = ByteString.CopyFrom(link0TraceIdBytes),
-                        Type = Span.Types.Link.Types.Type.ChildLinkedSpan,
-                    },
-                    new Span.Types.Link
-                    {
-                        SpanId = ByteString.CopyFrom(link1SpanIdBytes),
-                        TraceId = ByteString.CopyFrom(link1TraceIdBytes),
-                        Type = Span.Types.Link.Types.Type.ParentLinkedSpan,
-                    },
-                    new Span.Types.Link
-                    {
-                        SpanId = ByteString.CopyFrom(link2SpanIdBytes),
-                        TraceId = ByteString.CopyFrom(link2TraceIdBytes),
-                        Type = Span.Types.Link.Types.Type.Unspecified,
-                    },
-                },
-            };
+            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            name = "spanName";
+            kind = SpanKind.Client;
+
+            links = LinkList.Create(new List<ILink>() {
+                    Link.FromSpanContext(
+                        SpanContext.Create(TraceId.FromBytes(link0TraceIdBytes), SpanId.FromBytes(link0SpanIdBytes), TraceOptions.Default, Tracestate.Empty), LinkType.ChildLinkedSpan),
+                    Link.FromSpanContext(
+                        SpanContext.Create(TraceId.FromBytes(link1TraceIdBytes), SpanId.FromBytes(link1SpanIdBytes), TraceOptions.Default, Tracestate.Empty), LinkType.ParentLinkedSpan),
+                    Link.FromSpanContext(
+                        SpanContext.Create(TraceId.FromBytes(link2TraceIdBytes), SpanId.FromBytes(link2SpanIdBytes), TraceOptions.Default, Tracestate.Empty), LinkType.Unspecified),
+                    }, 0);
+
+            var span = SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
 
             var sentItems = this.ConvertSpan(span);
 
@@ -1285,6 +1272,9 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             Assert.Equal("ParentLinkedSpan", dependency.Properties["link1_type"]);
             Assert.Equal("Unspecified", dependency.Properties["link2_type"]);
         }
+
+        /*
+
 
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksDependencyWithLinksAndAttributes()

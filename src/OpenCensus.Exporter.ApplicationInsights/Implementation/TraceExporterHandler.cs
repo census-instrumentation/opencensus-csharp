@@ -72,57 +72,68 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                 foreach (var attr in span.Attributes.AttributeMap)
                 {
                     var key = attr.Key;
-                    if (key == "span.kind")
-                    {
-                        spanKindAttr = attr.Value;
-                    }
-                    else if (key == "error")
-                    {
-                        errorAttr = attr.Value;
-                    }
-                    else if (key == "http.method")
-                    {
-                        httpMethodAttr = attr.Value;
-                    }
-                    else if (key == "http.path")
-                    {
-                        httpPathAttr = attr.Value;
-                    }
-                    else if (key == "http.host")
-                    {
-                        httpHostAttr = attr.Value;
-                    }
-                    else if (key == "http.url")
-                    {
-                        httpUrlAttr = attr.Value;
-                    }
-                    else if (key == "http.status_code")
-                    {
-                        httpStatusCodeAttr = attr.Value;
-                    }
-                    else if (key == "http.user_agent")
-                    {
-                        httpUserAgentAttr = attr.Value;
-                    }
-                    else if (key == "http.route")
-                    {
-                        httpRouteAttr = attr.Value;
-                    }
-                    else if (key == "http.port")
-                    {
-                        httpPortAttr = attr.Value;
-                    }
-                    else
-                    {
-                        var value = attr.Value.Match<string>(
-                            (s) => { return s; },
-                            (b) => { return b.ToString(); },
-                            (l) => { return l.ToString(); },
-                            (d) => { return d.ToString(); },
-                            (obj) => { return obj.ToString(); });
 
-                        props.Add(attr.Key, value);
+                    switch (attr.Key)
+                    {
+                        case "span.kind":
+                            spanKindAttr = attr.Value;
+                            break;
+                        case "error":
+                            errorAttr = attr.Value;
+                            break;
+                        case "http.method":
+                            httpMethodAttr = attr.Value;
+                            break;
+                        case "http.path":
+                            httpPathAttr = attr.Value;
+                            break;
+                        case "http.host":
+                            httpHostAttr = attr.Value;
+                            break;
+                        case "http.url":
+                            httpUrlAttr = attr.Value;
+                            break;
+                        case "http.status_code":
+                            httpStatusCodeAttr = attr.Value;
+                            break;
+                        case "http.user_agent":
+                            httpUserAgentAttr = attr.Value;
+                            break;
+                        case "http.route":
+                            httpRouteAttr = attr.Value;
+                            break;
+                        case "http.port":
+                            httpPortAttr = attr.Value;
+                            break;
+                        default:
+                            var value = attr.Value.Match<string>(
+                                (s) => { return s; },
+                                (b) => { return b.ToString(); },
+                                (l) => { return l.ToString(); },
+                                (d) => { return d.ToString(); },
+                                (obj) => { return obj.ToString(); });
+
+                            try
+                            {
+                                props.Add(attr.Key, value);
+                            }
+                            catch (Exception)
+                            {
+                                // TODO: do something
+                            }
+
+                            break;
                     }
+                }
+
+                var linkId = 0;
+                foreach (var link in span.Links.Links)
+                {
+                    // TODO: check for duplicates
+                    props.Add("link" + linkId + "_traceId", link.TraceId.ToLowerBase16());
+                    props.Add("link" + linkId + "_spanId", link.SpanId.ToLowerBase16());
+                    props.Add("link" + linkId + "_type", link.Type.ToString());
+                    ++linkId;
                 }
 
                 this.OverwriteSpanKindFromAttribute(spanKindAttr, ref resultKind);
