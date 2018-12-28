@@ -300,6 +300,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
             if (httpStatusCodeAttr != null)
             {
                 resultCode = httpStatusCodeAttr.Match((s) => s, null, (l) => l.ToString(CultureInfo.InvariantCulture), null, null);
+                type = "Http";
             }
 
             Uri url = null;
