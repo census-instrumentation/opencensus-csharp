@@ -19,3 +19,4 @@
 10. Will url or individual components win when looking at port, host, path?
 11. Why start and end time of span are not required fields?
 12. Span [name](https://github.com/census-instrumentation/opencensus-proto/blob/ba49f56771b83cff7bea7f34d1236fc139dbc471/src/opencensus/proto/trace/v1/trace.proto#L85-L86) is required. Does it mean that it's not empty?
+13. LinkList should use `Attributes` class for consistency.
