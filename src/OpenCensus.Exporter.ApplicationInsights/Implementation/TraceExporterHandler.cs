@@ -113,14 +113,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                                 (d) => { return d.ToString(); },
                                 (obj) => { return obj.ToString(); });
 
-                            try
-                            {
-                                props.Add(attr.Key, value);
-                            }
-                            catch (Exception)
-                            {
-                                // TODO: do something
-                            }
+                            AddPropertyWithAdjustedName(props, attr.Key, value);
 
                             break;
                     }
@@ -129,14 +122,13 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                 var linkId = 0;
                 foreach (var link in span.Links.Links)
                 {
-                    // TODO: check for duplicates
-                    props.Add("link" + linkId + "_traceId", link.TraceId.ToLowerBase16());
-                    props.Add("link" + linkId + "_spanId", link.SpanId.ToLowerBase16());
-                    props.Add("link" + linkId + "_type", link.Type.ToString());
+                    AddPropertyWithAdjustedName(props, "link" + linkId + "_traceId", link.TraceId.ToLowerBase16()));
+                    AddPropertyWithAdjustedName(props, "link" + linkId + "_spanId", link.SpanId.ToLowerBase16()));
+                    AddPropertyWithAdjustedName(props, "link" + linkId + "_type", link.Type.ToString()));
 
                     foreach (var attr in link.Attributes)
                     {
-                        props.Add("link" + linkId + "_" + attr.Key, attr.Value.Match((s) => s, (b) => b.ToString(), (l) => l.ToString(), (d) => d.ToString(), (obj) => obj.ToString()));
+                        AddPropertyWithAdjustedName(props, "link" + linkId + "_" + attr.Key, attr.Value.Match((s) => s, (b) => b.ToString(), (l) => l.ToString(), (d) => d.ToString(), (obj) => obj.ToString())));
                     }
 
                     ++linkId;
@@ -162,14 +154,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                             (d) => { return d.ToString(); },
                             (obj) => { return obj.ToString(); });
 
-                        try
-                        {
-                            log.Properties.Add(attr.Key, value);
-                        }
-                        catch (Exception)
-                        {
-                            // TODO: do something
-                        }
+                        AddPropertyWithAdjustedName(log.Properties, attr.Key, value);
                     }
 
                     log.Context.Operation.Id = traceId;
@@ -254,7 +239,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
 
                 foreach (var prop in props)
                 {
-                    result.Properties.Add(prop.Key, prop.Value);
+                    AddPropertyWithAdjustedName(result.Properties, prop.Key, prop.Value)
                 }
 
                 if (parentId != null)
@@ -279,6 +264,19 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
 
                 this.telemetryClient.Track(result);
             }
+        }
+
+        private static void AddPropertyWithAdjustedName(IDictionary<string, string> props, string name, string value)
+        {
+            var n = name;
+            var i = 0;
+            while (props.ContainsKey(n))
+            {
+                n = name + "_" + i;
+                ++i;
+            }
+
+            props.Add(n, value);
         }
 
         private void ExtractGenericProperties(ISpanData span, out SpanKind resultKind, out DateTimeOffset timestamp, out string name, out string resultCode, out IDictionary<string, string> props, out string traceId, out string spanId, out string parentId, out Tracestate tracestate, out bool? success, out TimeSpan duration)

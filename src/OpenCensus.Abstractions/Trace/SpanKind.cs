@@ -24,16 +24,16 @@ namespace OpenCensus.Trace
         /// <summary>
         /// Span kind was not specified.
         /// </summary>
-        Unspecified,
+        Unspecified = 0,
 
         /// <summary>
         /// Server span represents request incoming from external component.
         /// </summary>
-        Server,
+        Server = 1,
 
         /// <summary>
         /// Client span represents outgoing request to the external component.
         /// </summary>
-        Client,
+        Client = 2,
     }
 }
