@@ -124,7 +124,14 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
                 var actionDescriptor = this.beforeActionActionDescriptorFetcher.Fetch(payload);
                 var attributeRouteInfo = this.beforeActionAttributeRouteInfoFetcher.Fetch(actionDescriptor);
                 var template = this.beforeActionTemplateFetcher.Fetch(attributeRouteInfo) as string;
-                span.Name = template;
+
+                if (!string.IsNullOrEmpty(template))
+                {
+                    // override the span name that was previously set to the path part of URL.
+                    span.Name = template;
+
+                    span.PutHttpRouteAttribute(template);
+                }
 
                 // TODO: Should we get values from RouteData?
                 // private readonly PropertyFetcher beforActionRouteDataFetcher = new PropertyFetcher("routeData");
