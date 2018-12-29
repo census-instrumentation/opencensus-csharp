@@ -1596,51 +1596,24 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             Assert.Equal(bool.TrueString, trace2.Properties["custom.boolAttribute"]);
         }
 
-        /*
-
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksRequestWithMessage()
         {
-            var now = DateTime.UtcNow;
-            var span = this.CreateBasicSpan(SpanKind.Server, "spanName");
-            span.TimeEvents = new Span.Types.TimeEvents
-            {
-                TimeEvent =
+            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            Thread.Sleep(TimeSpan.FromTicks(10));
+            name = "spanName";
+            kind = SpanKind.Server;
+
+            messageOrNetworkEvents = TimedEvents<IMessageEvent>.Create(
+                new List<ITimedEvent<IMessageEvent>>()
                 {
-                    new Span.Types.TimeEvent
-                    {
-                        Time = now.ToTimestamp(),
-                        MessageEvent = new Span.Types.TimeEvent.Types.MessageEvent
-                        {
-                            Id = 1,
-                            CompressedSize = 2,
-                            UncompressedSize = 3,
-                            Type = Span.Types.TimeEvent.Types.MessageEvent.Types.Type.Received,
-                        },
-                    },
-                    new Span.Types.TimeEvent
-                    {
-                        Time = now.ToTimestamp(),
-                        MessageEvent = new Span.Types.TimeEvent.Types.MessageEvent
-                        {
-                            Id = 4,
-                            CompressedSize = 5,
-                            UncompressedSize = 6,
-                            Type = Span.Types.TimeEvent.Types.MessageEvent.Types.Type.Sent,
-                        },
-                    },
-                    new Span.Types.TimeEvent
-                    {
-                        MessageEvent = new Span.Types.TimeEvent.Types.MessageEvent
-                        {
-                            Id = 7,
-                            CompressedSize = 8,
-                            UncompressedSize = 9,
-                            Type = Span.Types.TimeEvent.Types.MessageEvent.Types.Type.Unspecified,
-                        },
-                    },
+                    TimedEvent<IMessageEvent>.Create(now.Now, MessageEvent.Builder(MessageEventType.Received, 1).SetCompressedMessageSize(2).SetUncompressedMessageSize(3).Build()),
+                    TimedEvent<IMessageEvent>.Create(now.Now, MessageEvent.Builder(MessageEventType.Sent, 4).SetCompressedMessageSize(5).SetUncompressedMessageSize(6).Build()),
+                    TimedEvent<IMessageEvent>.Create(null, MessageEvent.Builder(MessageEventType.Unspecified, 7).SetCompressedMessageSize(8).SetUncompressedMessageSize(9).Build()),
                 },
-            };
+                droppedEventsCount: 0);
+
+            var span = SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
 
             var sentItems = this.ConvertSpan(span);
 
@@ -1663,6 +1636,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             Assert.Equal("MessageEvent. messageId: '7', type: 'Unspecified', compressed size: '8', uncompressed size: '9'", traces[2].Message);
         }
 
+        /*
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksRequestWithCorrectIkey()
         {
@@ -1864,6 +1838,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
 
         private static readonly Random Rand = new Random();
 
+        /*
         internal static string GetAssemblyVersionString()
         {
             // Since dependencySource is no longer set, sdk version is prepended 
@@ -1882,6 +1857,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             string postfix = version.Revision.ToString(CultureInfo.InvariantCulture);
             return version.ToString(3) + "-" + postfix;
         }
+        */
 
         private void GetDefaults(
             out TestClock now,

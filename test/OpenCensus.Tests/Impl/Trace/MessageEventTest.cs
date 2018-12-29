@@ -54,11 +54,11 @@ namespace OpenCensus.Trace.Test
         public void BuildMessageEvent_WithAllValues()
         {
             IMessageEvent messageEvent =
-                MessageEvent.Builder(MessageEventType.Recieved, 1L)
+                MessageEvent.Builder(MessageEventType.Received, 1L)
                     .SetUncompressedMessageSize(123L)
                     .SetCompressedMessageSize(63L)
                     .Build();
-            Assert.Equal(MessageEventType.Recieved, messageEvent.Type);
+            Assert.Equal(MessageEventType.Received, messageEvent.Type);
             Assert.Equal(1L, messageEvent.MessageId);
             Assert.Equal(123L, messageEvent.UncompressedMessageSize);
             Assert.Equal(63L, messageEvent.CompressedMessageSize);

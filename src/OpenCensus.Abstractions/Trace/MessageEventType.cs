@@ -22,13 +22,18 @@ namespace OpenCensus.Trace
     public enum MessageEventType
     {
         /// <summary>
+        /// Unknown event type.
+        /// </summary>
+        Unspecified = 0,
+
+        /// <summary>
         /// Represent message that was sent from client.
         /// </summary>
-        Sent,
+        Sent = 1,
 
         /// <summary>
         /// Represents message that was recieved by the client.
         /// </summary>
-        Recieved,
+        Received = 2,
     }
 }
