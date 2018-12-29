@@ -95,6 +95,7 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
             if (span == null)
             {
                 // TODO: report lost span
+                return;
             }
 
             var response = context.Response;
@@ -112,6 +113,7 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
                 if (span == null)
                 {
                     // TODO: report lost span
+                    return;
                 }
 
                 // See https://github.com/aspnet/Mvc/blob/2414db256f32a047770326d14d8b0e2afd49ba49/src/Microsoft.AspNetCore.Mvc.Core/MvcCoreDiagnosticSourceExtensions.cs#L36-L44
