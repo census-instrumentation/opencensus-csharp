@@ -133,7 +133,49 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                     props.Add("link" + linkId + "_traceId", link.TraceId.ToLowerBase16());
                     props.Add("link" + linkId + "_spanId", link.SpanId.ToLowerBase16());
                     props.Add("link" + linkId + "_type", link.Type.ToString());
+
+                    foreach (var attr in link.Attributes)
+                    {
+                        props.Add("link" + linkId + "_" + attr.Key, attr.Value.Match((s) => s, (b) => b.ToString(), (l) => l.ToString(), (d) => d.ToString(), (obj) => obj.ToString()));
+                    }
+
                     ++linkId;
+                }
+
+                foreach (var t in span.Annotations.Events)
+                {
+                    var log = new TraceTelemetry(t.Event.Description);
+
+                    if (t.Timestamp != null)
+                    {
+                        var logTimestamp = DateTimeOffset.FromUnixTimeSeconds(t.Timestamp.Seconds);
+                        logTimestamp = logTimestamp.Add(TimeSpan.FromTicks(t.Timestamp.Nanos / 100));
+                        log.Timestamp = logTimestamp;
+                    }
+
+                    foreach (var attr in t.Event.Attributes)
+                    {
+                        var value = attr.Value.Match<string>(
+                            (s) => { return s; },
+                            (b) => { return b.ToString(); },
+                            (l) => { return l.ToString(); },
+                            (d) => { return d.ToString(); },
+                            (obj) => { return obj.ToString(); });
+
+                        try
+                        {
+                            log.Properties.Add(attr.Key, value);
+                        }
+                        catch (Exception)
+                        {
+                            // TODO: do something
+                        }
+                    }
+
+                    log.Context.Operation.Id = traceId;
+                    log.Context.Operation.ParentId = string.Concat("|", traceId, ".", spanId, ".");
+
+                    this.telemetryClient.Track(log);
                 }
 
                 this.OverwriteSpanKindFromAttribute(spanKindAttr, ref resultKind);

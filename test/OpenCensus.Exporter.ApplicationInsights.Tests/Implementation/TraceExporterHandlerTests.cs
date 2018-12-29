@@ -30,6 +30,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
     using System.Globalization;
     using System.Linq;
     using System.Reflection;
+    using System.Threading;
     using Xunit;
 
     public class OpenCensusTelemetryConverterTests
@@ -44,18 +45,19 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
 
         public class TestClock : IClock
         {
-            private DateTimeOffset nowSecondsPrecision;
-            private int NanosecondsAfterSeconds = 235938509;
+            private readonly DateTimeOffset nowSecondsPrecision;
+            private int NanosecondsAfterSeconds;
 
             public TestClock(DateTimeOffset now)
             {
                 // remove ticks
                 this.nowSecondsPrecision = DateTimeOffset.FromUnixTimeSeconds(now.ToUnixTimeSeconds());
+                this.NanosecondsAfterSeconds = (int)(now.Subtract(this.nowSecondsPrecision).Ticks * 100 + 23); //23 is just a random constant
             }
 
             public TestClock GetBefore(TimeSpan span)
             {
-                return new TestClock(this.nowSecondsPrecision.Subtract(span));
+                return new TestClock(this.nowSecondsPrecision.Subtract(span).AddTicks(this.NanosecondsAfterSeconds / 100));
             }
 
             public ITimestamp Now
@@ -1371,33 +1373,32 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             Assert.Equal("Unspecified", request.Properties["link2_type"]);
         }
 
-                /*
-
-
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksRequestWithLinksAndAttributes()
         {
-            var span = this.CreateBasicSpan(SpanKind.Server, "spanName");
-            span.Links = new Span.Types.Links
-            {
-                Link =
-                {
-                    new Span.Types.Link
-                    {
-                        SpanId = ByteString.CopyFrom(GenerateRandomId(16).Item2),
-                        TraceId = ByteString.CopyFrom(GenerateRandomId(8).Item2),
-                        Type = Span.Types.Link.Types.Type.ChildLinkedSpan,
-                        Attributes = new Span.Types.Attributes {
-                            AttributeMap =
-                            {
-                                ["some.str.attribute"] = this.CreateAttributeValue("foo"),
-                                ["some.int.attribute"] = this.CreateAttributeValue(1),
-                                ["some.bool.attribute"] = this.CreateAttributeValue(true),
-                            },
-                        },
-                    },
+            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            name = "spanName";
+            kind = SpanKind.Server;
+
+            links = LinkList.Create(
+                new List<ILink>() {
+                    Link.FromSpanContext(
+                        SpanContext.Create(
+                            TraceId.FromBytes(GenerateRandomId(16).Item2),
+                            SpanId.FromBytes(GenerateRandomId(8).Item2),
+                            TraceOptions.Default,
+                            Tracestate.Empty),
+                        LinkType.ChildLinkedSpan,
+                        new Dictionary<string, IAttributeValue>()
+                        {
+                            { "some.str.attribute", AttributeValue.StringAttributeValue("foo") },
+                            { "some.int.attribute", AttributeValue.LongAttributeValue(1) },
+                            { "some.bool.attribute", AttributeValue.BooleanAttributeValue(true) },
+                        }),
                 },
-            };
+                droppedLinksCount: 0);
+
+            var span = SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
 
             var sentItems = this.ConvertSpan(span);
 
@@ -1417,36 +1418,24 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksRequestWithAnnotations()
         {
-            var now = DateTime.UtcNow;
-            var span = this.CreateBasicSpan(SpanKind.Server, "spanName");
-            span.TimeEvents = new Span.Types.TimeEvents
-            {
-                TimeEvent =
-                {
-                    new Span.Types.TimeEvent
-                    {
-                        Time = now.ToTimestamp(),
-                        Annotation = new Span.Types.TimeEvent.Types.Annotation
+            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            Thread.Sleep(TimeSpan.FromTicks(10));
+            name = "spanName";
+            kind = SpanKind.Server;
+
+            annotations = TimedEvents<IAnnotation>.Create(
+                new List<ITimedEvent<IAnnotation>>() {
+                    TimedEvent<IAnnotation>.Create(now.Now, Annotation.FromDescription("test message1")),
+                    TimedEvent<IAnnotation>.Create(null, Annotation.FromDescriptionAndAttributes("test message2", new Dictionary<string, IAttributeValue>()
                         {
-                            Description = new TruncatableString {Value = "test message1"},
-                        },
-                    },
-                    new Span.Types.TimeEvent
-                    {
-                        Annotation = new Span.Types.TimeEvent.Types.Annotation
-                        {
-                            Description = new TruncatableString {Value = "test message2"},
-                            Attributes = new Span.Types.Attributes {
-                                AttributeMap =
-                                {
-                                    ["custom.stringAttribute"] = this.CreateAttributeValue("string"),
-                                    ["custom.longAttribute"] = this.CreateAttributeValue(long.MaxValue),
-                                    ["custom.boolAttribute"] = this.CreateAttributeValue(true)
-                                },},
-                        },
-                    },
+                            { "custom.stringAttribute", AttributeValue.StringAttributeValue("string") },
+                            { "custom.longAttribute", AttributeValue.LongAttributeValue(long.MaxValue) },
+                            { "custom.boolAttribute", AttributeValue.BooleanAttributeValue(true) },
+                        })),
                 },
-            };
+                droppedEventsCount: 0);
+
+            var span = SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
 
             var sentItems = this.ConvertSpan(span);
 
@@ -1466,8 +1455,8 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             Assert.Equal("test message1", trace1.Message);
             Assert.Equal("test message2", trace2.Message);
 
-            Assert.Equal(now, trace1.Timestamp);
-            Assert.AreNotEqual(now, trace2.Timestamp);
+            Assert.Equal(now.NowNanos, new TestClock(trace1.Timestamp).NowNanos);
+            Assert.NotEqual(now.NowNanos, new TestClock(trace2.Timestamp).NowNanos);
             Assert.True(Math.Abs((DateTime.UtcNow - trace2.Timestamp).TotalSeconds) < 1);
 
             Assert.False(trace1.Properties.Any());
@@ -1482,6 +1471,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             Assert.Equal(bool.TrueString, trace2.Properties["custom.boolAttribute"]);
         }
 
+        /*
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksRequestWithAnnotationsAndNode()
         {
@@ -1836,7 +1826,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             var evnt = sentItems.OfType<EventTelemetry>().Single();
             Assert.Equal("ikey1", evnt.Context.InstrumentationKey);
             Assert.Equal($"{eventName}.node", evnt.Name);
-            Assert.Equal("lf_unspecified-oc:2", evnt.Context.GetInternalContext().SdkVersion);
+            //Assert.Equal("lf_unspecified-oc:2", evnt.Context.GetInternalContext().SdkVersion);
             Assert.Null(evnt.Context.Cloud.RoleName);
             Assert.Equal(peer, evnt.Properties["peer"]);
             Assert.Equal("1", evnt.Properties["oc_exporter_version"]);
