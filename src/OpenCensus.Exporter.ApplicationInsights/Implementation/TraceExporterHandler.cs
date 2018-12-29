@@ -122,13 +122,13 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                 var linkId = 0;
                 foreach (var link in span.Links.Links)
                 {
-                    AddPropertyWithAdjustedName(props, "link" + linkId + "_traceId", link.TraceId.ToLowerBase16()));
-                    AddPropertyWithAdjustedName(props, "link" + linkId + "_spanId", link.SpanId.ToLowerBase16()));
-                    AddPropertyWithAdjustedName(props, "link" + linkId + "_type", link.Type.ToString()));
+                    AddPropertyWithAdjustedName(props, "link" + linkId + "_traceId", link.TraceId.ToLowerBase16());
+                    AddPropertyWithAdjustedName(props, "link" + linkId + "_spanId", link.SpanId.ToLowerBase16());
+                    AddPropertyWithAdjustedName(props, "link" + linkId + "_type", link.Type.ToString());
 
                     foreach (var attr in link.Attributes)
                     {
-                        AddPropertyWithAdjustedName(props, "link" + linkId + "_" + attr.Key, attr.Value.Match((s) => s, (b) => b.ToString(), (l) => l.ToString(), (d) => d.ToString(), (obj) => obj.ToString())));
+                        AddPropertyWithAdjustedName(props, "link" + linkId + "_" + attr.Key, attr.Value.Match((s) => s, (b) => b.ToString(), (l) => l.ToString(), (d) => d.ToString(), (obj) => obj.ToString()));
                     }
 
                     ++linkId;
@@ -239,7 +239,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
 
                 foreach (var prop in props)
                 {
-                    AddPropertyWithAdjustedName(result.Properties, prop.Key, prop.Value)
+                    AddPropertyWithAdjustedName(result.Properties, prop.Key, prop.Value);
                 }
 
                 if (parentId != null)
