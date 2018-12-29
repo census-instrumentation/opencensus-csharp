@@ -209,7 +209,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
 
             Assert.True(request.Success.HasValue);
             Assert.True(request.Success.Value);
-            Assert.Equal("0", request.ResponseCode);
+            Assert.Equal("0", request.ResponseCode); // this check doesn't match Local Forwarder Assert.IsTrue(string.IsNullOrEmpty(request.ResponseCode));
         }
 
         [Fact]
@@ -230,8 +230,8 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
 
             Assert.True(request.Success.HasValue);
             Assert.True(request.Success.Value);
-            Assert.Equal("0", request.ResponseCode);
-            Assert.Equal("all good", request.Properties["statusDescription"]);
+            Assert.Equal("0", request.ResponseCode);  // this check doesn't match Local Forwarder Assert.AreEqual("all good", request.ResponseCode);
+            Assert.Equal("all good", request.Properties["statusDescription"]);  // this check doesn't match Local Forwarder
         }
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksRequestWithNonSuccessStatusAndDescription()
@@ -252,8 +252,8 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
 
             Assert.True(request.Success.HasValue);
             Assert.False(request.Success.Value);
-            Assert.Equal("1", request.ResponseCode);
-            Assert.Equal("all bad", request.Properties["statusDescription"]);
+            Assert.Equal("1", request.ResponseCode);  // this check doesn't match Local Forwarder Assert.AreEqual("all bad", request.ResponseCode);
+            Assert.Equal("all bad", request.Properties["statusDescription"]);  // this check doesn't match Local Forwarder
         }
 
         [Fact]
@@ -448,7 +448,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             Assert.True(dependency.Success.HasValue);
             Assert.True(dependency.Success.Value);
             Assert.Equal("0", dependency.ResultCode);
-            Assert.False(dependency.Properties.ContainsKey("StatusDescription"));
+            Assert.False(dependency.Properties.ContainsKey("StatusDescription"));  // TODO: why it is upper case first letter?
         }
 
         [Fact]
@@ -682,6 +682,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             var sentItems = this.ConvertSpan(span);
 
             var request = sentItems.OfType<RequestTelemetry>().Single();
+            Assert.Equal("/path", request.Url.ToString()); // This check doesn't match Local Forwarder Assert.Null(request.Url);
             Assert.Equal("POST /path", request.Name);
             Assert.Equal("409", request.ResponseCode);
         }
@@ -751,7 +752,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
 
             var request = sentItems.OfType<RequestTelemetry>().Single();
             Assert.Equal(url.ToString(), request.Url.ToString());
-            Assert.Equal("POST another path", request.Name);
+            Assert.Equal("POST another path", request.Name); // This check doesn't match Local Forwarder Assert.AreEqual("POST /path", request.Name);
             Assert.Equal("200", request.ResponseCode);
         }
 
@@ -819,7 +820,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             var sentItems = this.ConvertSpan(span);
 
             var request = sentItems.OfType<RequestTelemetry>().Single();
-            Assert.Equal("/path", request.Url.ToString());
+            Assert.Equal("/path", request.Url.ToString());  // This check doesn't match Local Forwarder Assert.IsNull(request.Url);
             Assert.Equal("POST path", request.Name);
             Assert.Equal("200", request.ResponseCode);
         }
@@ -1004,7 +1005,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
 
             var dependency = sentItems.OfType<DependencyTelemetry>().Single();
             Assert.Equal(url.ToString(), dependency.Data);
-            Assert.Equal("POST another path", dependency.Name);
+            Assert.Equal("POST another path", dependency.Name);  // This check doesn't match Local Forwarder Assert.AreEqual("POST /path", dependency.Name);
             Assert.Equal("200", dependency.ResultCode);
             Assert.Equal("host", dependency.Target);
             Assert.Equal("Http", dependency.Type);
@@ -1079,7 +1080,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             var sentItems = this.ConvertSpan(span);
 
             var dependency = sentItems.OfType<DependencyTelemetry>().Single();
-            Assert.Equal("/path", dependency.Data);
+            Assert.Equal("/path", dependency.Data);  // This check doesn't match Local Forwarder Assert.IsNull(dependency.Data);
             Assert.Equal("POST /path", dependency.Name);
             Assert.Equal("200", dependency.ResultCode);
             Assert.True(string.IsNullOrEmpty(dependency.Target));
@@ -1153,7 +1154,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
 
             var dependency = sentItems.OfType<DependencyTelemetry>().Single();
             Assert.Null(dependency.Data);
-            Assert.Equal("HttpOut", dependency.Name);
+            Assert.Equal("HttpOut", dependency.Name);  // This check doesn't match Local Forwarder
             Assert.Null(dependency.Target);
             Assert.Equal("Http", dependency.Type);
             Assert.Equal("200", dependency.ResultCode);
@@ -1537,39 +1538,29 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             Assert.Equal(0, trace2.Properties.Count);
         }
 
+        */
+
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksDependenciesWithAnnotations()
         {
-            var now = DateTime.UtcNow;
-            var span = this.CreateBasicSpan(SpanKind.Client, "spanName");
-            span.TimeEvents = new Span.Types.TimeEvents
-            {
-                TimeEvent =
-                {
-                    new Span.Types.TimeEvent
-                    {
-                        Time = now.ToTimestamp(),
-                        Annotation = new Span.Types.TimeEvent.Types.Annotation
+            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            Thread.Sleep(TimeSpan.FromTicks(10));
+            name = "spanName";
+            kind = SpanKind.Client;
+
+            annotations = TimedEvents<IAnnotation>.Create(
+                new List<ITimedEvent<IAnnotation>>() {
+                    TimedEvent<IAnnotation>.Create(now.Now, Annotation.FromDescription("test message1")),
+                    TimedEvent<IAnnotation>.Create(null, Annotation.FromDescriptionAndAttributes("test message2", new Dictionary<string, IAttributeValue>()
                         {
-                            Description = new TruncatableString {Value = "test message1"},
-                        },
-                    },
-                    new Span.Types.TimeEvent
-                    {
-                        Annotation = new Span.Types.TimeEvent.Types.Annotation
-                        {
-                            Description = new TruncatableString {Value = "test message2"},
-                            Attributes = new Span.Types.Attributes {
-                                AttributeMap =
-                                {
-                                    ["custom.stringAttribute"] = this.CreateAttributeValue("string"),
-                                    ["custom.longAttribute"] = this.CreateAttributeValue(long.MaxValue),
-                                    ["custom.boolAttribute"] = this.CreateAttributeValue(true)
-                                },},
-                        },
-                    },
+                            { "custom.stringAttribute", AttributeValue.StringAttributeValue("string") },
+                            { "custom.longAttribute", AttributeValue.LongAttributeValue(long.MaxValue) },
+                            { "custom.boolAttribute", AttributeValue.BooleanAttributeValue(true) },
+                        })),
                 },
-            };
+                droppedEventsCount: 0);
+
+            var span = SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
 
             var sentItems = this.ConvertSpan(span);
 
@@ -1589,8 +1580,8 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             Assert.Equal("test message1", trace1.Message);
             Assert.Equal("test message2", trace2.Message);
 
-            Assert.Equal(now, trace1.Timestamp);
-            Assert.AreNotEqual(now, trace2.Timestamp);
+            Assert.Equal(now.NowNanos, new TestClock(trace1.Timestamp).NowNanos);
+            Assert.NotEqual(now.NowNanos, new TestClock(trace2.Timestamp).NowNanos);
             Assert.True(Math.Abs((DateTime.UtcNow - trace2.Timestamp).TotalSeconds) < 1);
 
             Assert.False(trace1.Properties.Any());
@@ -1604,6 +1595,8 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             Assert.True(trace2.Properties.ContainsKey("custom.boolAttribute"));
             Assert.Equal(bool.TrueString, trace2.Properties["custom.boolAttribute"]);
         }
+
+        /*
 
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksRequestWithMessage()

@@ -245,12 +245,9 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                 result.Duration = duration;
 
                 // TODO: deal with those:
-                // span.Annotations
                 // span.ChildSpanCount
                 // span.Context.IsValid;
                 // span.Context.TraceOptions;
-                // span.HasRemoteParent
-                // span.Links
                 // span.MessageEvents
 
                 this.telemetryClient.Track(result);
