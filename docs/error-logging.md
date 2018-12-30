@@ -12,7 +12,15 @@ There are the following scenarios for SDK manageability:
 5. Testing – no debugger troubleshooting.
 6. Customer support – collect verbose logs.
 
-## Subscribing to EventSource 
+## Logging with EventSource
+
+TBD
+
+## Definition of verbosity levels
+
+TBD
+
+## Subscribing to EventSource
 
 EventSource allows us to separate logic of tracing and delivering those traces
 to different channels. Default ETW subscriber works out of the box. For all

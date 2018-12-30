@@ -20,6 +20,7 @@ namespace OpenCensus.Trace.Export
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using OpenCensus.Common;
+    using OpenCensus.Implementation;
 
     internal class SpanExporterWorker : IDisposable
     {
@@ -139,8 +140,7 @@ namespace OpenCensus.Trace.Export
                 }
                 catch (Exception ex)
                 {
-                    // TODO Log warning
-                    Console.WriteLine(ex);
+                    OpenCensusEventSource.Log.ExporterThrownExceptionWarning(ex);
                 }
             }
         }
