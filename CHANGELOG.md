@@ -7,6 +7,9 @@ the release.
 
 ## Unreleased
 
+- Application Insights exporter improvements - now understands http attributes
+  and process links, annotations and messages.
+
 ## 0.1.0-alpha-33381
 
 Released [12/18/2018](https://github.com/census-instrumentation/opencensus-csharp/releases/tag/0.1.0-alpha-33381).
