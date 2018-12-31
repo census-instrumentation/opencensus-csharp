@@ -27,6 +27,6 @@ namespace OpenCensus.Trace.Export
         /// Exports the list of spans to the backend.
         /// </summary>
         /// <param name="spanDataList">Collection of spans to export.</param>
-        void Export(IList<ISpanData> spanDataList);
+        void Export(IEnumerable<ISpanData> spanDataList);
     }
 }
