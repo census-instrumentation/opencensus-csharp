@@ -18,6 +18,7 @@ namespace OpenCensus.Trace
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using OpenCensus.Internal;
     using OpenCensus.Trace.Config;
     using OpenCensus.Trace.Internal;
@@ -46,7 +47,7 @@ namespace OpenCensus.Trace
 
         private ISampler Sampler { get; set; }
 
-        private IList<ISpan> ParentLinks { get; set; } = new List<ISpan>();
+        private IEnumerable<ISpan> ParentLinks { get; set; } = new List<ISpan>();
 
         private bool RecordEvents { get; set; }
 
@@ -94,7 +95,7 @@ namespace OpenCensus.Trace
             return this;
         }
 
-        public override ISpanBuilder SetParentLinks(IList<ISpan> parentLinks)
+        public override ISpanBuilder SetParentLinks(IEnumerable<ISpan> parentLinks)
         {
             this.ParentLinks = parentLinks ?? throw new ArgumentNullException(nameof(parentLinks));
             return this;
@@ -116,7 +117,7 @@ namespace OpenCensus.Trace
             return new SpanBuilder(spanName, options, remoteParentSpanContext, null);
         }
 
-        private static bool IsAnyParentLinkSampled(IList<ISpan> parentLinks)
+        private static bool IsAnyParentLinkSampled(IEnumerable<ISpan> parentLinks)
         {
             foreach (ISpan parentLink in parentLinks)
             {
@@ -129,9 +130,9 @@ namespace OpenCensus.Trace
             return false;
         }
 
-        private static void LinkSpans(ISpan span, IList<ISpan> parentLinks)
+        private static void LinkSpans(ISpan span, IEnumerable<ISpan> parentLinks)
         {
-            if (parentLinks.Count > 0)
+            if (parentLinks.Any())
             {
                 ILink childLink = Link.FromSpanContext(span.Context, LinkType.ChildLinkedSpan);
                 foreach (ISpan linkedSpan in parentLinks)
@@ -147,7 +148,7 @@ namespace OpenCensus.Trace
             bool hasRemoteParent,
             string name,
             ISampler sampler,
-            IList<ISpan> parentLinks,
+            IEnumerable<ISpan> parentLinks,
             ITraceId traceId,
             ISpanId spanId,
             ITraceParams activeTraceParams)
@@ -176,7 +177,7 @@ namespace OpenCensus.Trace
                      bool hasRemoteParent,
                      string name,
                      ISampler sampler,
-                     IList<ISpan> parentLinks,
+                     IEnumerable<ISpan> parentLinks,
                      bool recordEvents,
                      ITimestampConverter timestampConverter)
         {
