@@ -18,6 +18,7 @@ namespace OpenCensus.Stats.Test
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using OpenCensus.Common;
     using OpenCensus.Stats.Aggregations;
     using OpenCensus.Tags;
@@ -142,30 +143,33 @@ namespace OpenCensus.Stats.Test
             Assert.Equal(RemoveTrailingZeros(expected.BucketCounts), RemoveTrailingZeros((actual).BucketCounts));
         }
 
-        private static IList<long> RemoveTrailingZeros(IList<long> longs)
+        private static IEnumerable<long> RemoveTrailingZeros(IEnumerable<long> longs)
         {
-            if (longs == null || longs.Count == 0)
+            if (longs == null || longs.Any())
             {
                 return longs;
             }
-   
-            List<long> truncated = new List<long>();
-            int lastIndex = longs.Count - 1;
-            while (longs[lastIndex] == 0)
+
+            var buffer = new List<long>();
+            var result = new List<long>();
+            foreach (var item in longs)
             {
-                lastIndex--;
-                if (lastIndex <= 0)
+                if (item == 0)
                 {
-                    break;
+                    buffer.Add(item);
+                }
+                else
+                {
+                    foreach (var bufferedItem in buffer)
+                    {
+                        result.Add(bufferedItem);
+                    }
+                    buffer.Clear();
+                    result.Add(item);
                 }
             }
-            for (int i = 0; i < lastIndex; i++)
-            {
-                truncated.Add(longs[i]);
-            }
 
-            return truncated;
-       
+            return result;
         }
     }
 }
