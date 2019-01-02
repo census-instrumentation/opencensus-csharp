@@ -39,5 +39,3 @@ Open Census SDK must not throw or leak unhandled or user unhandled exceptions.
       original call stack is preserved.
 5. Beware of any call to external callbacks or override-able interface. Expect
    them to throw.
-
-
