@@ -1544,7 +1544,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         public void OpenCensusTelemetryConverterTests_TracksDependenciesWithAnnotations()
         {
             this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
-            Thread.Sleep(TimeSpan.FromTicks(10));
+            now = now.GetBefore(TimeSpan.FromSeconds(1));
             name = "spanName";
             kind = SpanKind.Client;
 
