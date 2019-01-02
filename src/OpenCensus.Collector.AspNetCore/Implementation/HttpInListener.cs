@@ -16,7 +16,6 @@
 
 namespace OpenCensus.Collector.AspNetCore.Implementation
 {
-    using System;
     using System.Diagnostics;
     using System.Linq;
     using System.Text;
@@ -31,6 +30,9 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
         private const string UnknownHostName = "UNKNOWN-HOST";
         private readonly PropertyFetcher startContextFetcher = new PropertyFetcher("HttpContext");
         private readonly PropertyFetcher stopContextFetcher = new PropertyFetcher("HttpContext");
+        private readonly PropertyFetcher beforeActionActionDescriptorFetcher = new PropertyFetcher("actionDescriptor");
+        private readonly PropertyFetcher beforeActionAttributeRouteInfoFetcher = new PropertyFetcher("AttributeRouteInfo");
+        private readonly PropertyFetcher beforeActionTemplateFetcher = new PropertyFetcher("Template");
         private readonly IPropagationComponent propagationComponent;
 
         public HttpInListener(ITracer tracer, ISampler sampler, IPropagationComponent propagationComponent)
@@ -84,7 +86,7 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
 
             if (context == null)
             {
-                // Debug.WriteLine("context is null");
+                // TODO: Debug.WriteLine("context is null");
                 return;
             }
 
@@ -92,13 +94,49 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
 
             if (span == null)
             {
-                // report lost span
+                // TODO: report lost span
+                return;
             }
 
             var response = context.Response;
 
             span.PutHttpStatusCode(response.StatusCode, response.HttpContext.Features.Get<IHttpResponseFeature>().ReasonPhrase);
             span.End();
+        }
+
+        public override void OnCustom(string name, Activity activity, object payload)
+        {
+            if (name == "Microsoft.AspNetCore.Mvc.BeforeAction")
+            {
+                var span = this.Tracer.CurrentSpan;
+
+                if (span == null)
+                {
+                    // TODO: report lost span
+                    return;
+                }
+
+                // See https://github.com/aspnet/Mvc/blob/2414db256f32a047770326d14d8b0e2afd49ba49/src/Microsoft.AspNetCore.Mvc.Core/MvcCoreDiagnosticSourceExtensions.cs#L36-L44
+                // Reflection accessing: ActionDescriptor.AttributeRouteInfo.Template
+                // The reason to use reflection is to avoid a reference on MVC package.
+                // This package can be used with non-MVC apps and this logic simply wouldn't run.
+                // Taking reference on MVC will increase size of deployment for non-MVC apps.
+                var actionDescriptor = this.beforeActionActionDescriptorFetcher.Fetch(payload);
+                var attributeRouteInfo = this.beforeActionAttributeRouteInfoFetcher.Fetch(actionDescriptor);
+                var template = this.beforeActionTemplateFetcher.Fetch(attributeRouteInfo) as string;
+
+                if (!string.IsNullOrEmpty(template))
+                {
+                    // override the span name that was previously set to the path part of URL.
+                    span.Name = template;
+
+                    span.PutHttpRouteAttribute(template);
+                }
+
+                // TODO: Should we get values from RouteData?
+                // private readonly PropertyFetcher beforActionRouteDataFetcher = new PropertyFetcher("routeData");
+                // var routeData = this.beforActionRouteDataFetcher.Fetch(payload) as RouteData;
+            }
         }
 
         private static string GetUri(HttpRequest request)

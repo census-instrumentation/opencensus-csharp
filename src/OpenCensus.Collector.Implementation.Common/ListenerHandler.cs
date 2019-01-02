@@ -61,5 +61,10 @@ namespace OpenCensus.Collector.Implementation.Common
 
             // TODO: gather exception information
         }
+
+        public virtual void OnCustom(string name, Activity activity, object payload)
+        {
+            // if custom handler needs to react on other events - this method should be overridden
+        }
     }
 }
