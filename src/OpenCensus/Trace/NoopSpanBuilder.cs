@@ -39,7 +39,7 @@ namespace OpenCensus.Trace
             return this;
         }
 
-        public override ISpanBuilder SetParentLinks(IList<ISpan> parentLinks)
+        public override ISpanBuilder SetParentLinks(IEnumerable<ISpan> parentLinks)
         {
             return this;
         }

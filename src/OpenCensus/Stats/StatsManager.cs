@@ -57,7 +57,7 @@ namespace OpenCensus.Stats
             return this.measureToViewMap.GetView(viewName, this.clock, this.state.Internal);
         }
 
-        internal void Record(ITagContext tags, IList<IMeasurement> measurementValues)
+        internal void Record(ITagContext tags, IEnumerable<IMeasurement> measurementValues)
         {
             // TODO(songya): consider exposing No-op MeasureMap and use it when stats state is DISABLED, so
             // that we don't need to create actual MeasureMapImpl.
@@ -80,10 +80,10 @@ namespace OpenCensus.Stats
         private class StatsEvent : IEventQueueEntry
         {
             private readonly ITagContext tags;
-            private readonly IList<IMeasurement> stats;
+            private readonly IEnumerable<IMeasurement> stats;
             private readonly StatsManager statsManager;
 
-            public StatsEvent(StatsManager statsManager, ITagContext tags, IList<IMeasurement> stats)
+            public StatsEvent(StatsManager statsManager, ITagContext tags, IEnumerable<IMeasurement> stats)
             {
                 this.statsManager = statsManager;
                 this.tags = tags;

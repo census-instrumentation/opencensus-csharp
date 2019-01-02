@@ -263,7 +263,7 @@ namespace OpenCensus.Trace.Sampler.Test
 
         // Applies the given sampler to NUM_SAMPLE_TRIES random traceId/spanId pairs.
         private static void AssertSamplerSamplesWithProbability(
-            ISampler sampler, ISpanContext parent, IList<ISpan> parentLinks, double probability)
+            ISampler sampler, ISpanContext parent, IEnumerable<ISpan> parentLinks, double probability)
         {
             RandomGenerator random = new RandomGenerator(1234);
             int count = 0; // Count of spans with sampling enabled

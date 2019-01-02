@@ -42,6 +42,6 @@ namespace OpenCensus.Trace
         /// </param>
         /// <param name="parentLinks">Links associated with the parent span.</param>
         /// <returns>True of span needs to be created. False otherwise.</returns>
-        bool ShouldSample(ISpanContext parentContext, bool hasRemoteParent, ITraceId traceId, ISpanId spanId, string name, IList<ISpan> parentLinks);
+        bool ShouldSample(ISpanContext parentContext, bool hasRemoteParent, ITraceId traceId, ISpanId spanId, string name, IEnumerable<ISpan> parentLinks);
     }
 }

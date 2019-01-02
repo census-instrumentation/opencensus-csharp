@@ -72,7 +72,7 @@ namespace OpenCensus.Exporter.Ocagent.Implementation
             this.Start();
         }
 
-        public void Export(IList<ISpanData> spanDataList)
+        public void Export(IEnumerable<ISpanData> spanDataList)
         {
             if (this.cts == null || this.cts.IsCancellationRequested)
             {
