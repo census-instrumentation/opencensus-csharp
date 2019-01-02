@@ -36,7 +36,7 @@ namespace OpenCensus.Trace.Test
 
         public override SpanKind? Kind { get; set; }
 
-        public override string Name { get; }
+        public override string Name { get; set; }
 
         public override ISpanId ParentSpanId { get; }
 

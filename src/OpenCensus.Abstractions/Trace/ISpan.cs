@@ -28,6 +28,11 @@ namespace OpenCensus.Trace
     public interface ISpan
     {
         /// <summary>
+        /// Gets or sets the span name.
+        /// </summary>
+        string Name { get; set; }
+
+        /// <summary>
         /// Gets the span context.
         /// </summary>
         ISpanContext Context { get; }

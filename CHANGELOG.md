@@ -9,15 +9,18 @@ the release.
 
 - Application Insights exporter improvements - now understands http attributes
   and process links, annotations and messages.
+- ASP.NET Core collector now uses `http.route` for the span name.
 
 ## 0.1.0-alpha-33381
 
-Released [12/18/2018](https://github.com/census-instrumentation/opencensus-csharp/releases/tag/0.1.0-alpha-33381).
+Released
+[12/18/2018](https://github.com/census-instrumentation/opencensus-csharp/releases/tag/0.1.0-alpha-33381).
 
 - Collectors for ASP.NET Core and .NET Core HttpClient.
 - Initial version of Ocagent exporter implemented.
 - Initial version of StackDriver exporter implemented.
-- Support double attributes according to the [spec change](https://github.com/census-instrumentation/opencensus-specs/issues/172).
+- Support double attributes according to the [spec
+  change](https://github.com/census-instrumentation/opencensus-specs/issues/172).
 - Initial implementation of Prometheus exporter.
 - Initial version of Application Insights exporter implemented.
 - Zipkin exporter implemented.
