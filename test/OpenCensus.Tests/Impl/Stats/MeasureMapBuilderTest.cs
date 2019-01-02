@@ -35,21 +35,21 @@ namespace OpenCensus.Stats.Test
         [Fact]
         public void TestPutDouble()
         {
-            IList<IMeasurement> metrics = MeasureMapBuilder.Builder().Put(M1, 44.4).Build();
+            var metrics = MeasureMapBuilder.Builder().Put(M1, 44.4).Build();
             AssertContains(metrics, MeasurementDouble.Create(M1, 44.4) );
         }
 
         [Fact]
         public void TestPutLong()
         {
-            IList<IMeasurement> metrics = MeasureMapBuilder.Builder().Put(M3, 9999L).Put(M4, 8888L).Build();
+            var metrics = MeasureMapBuilder.Builder().Put(M3, 9999L).Put(M4, 8888L).Build();
             AssertContains(metrics, MeasurementLong.Create(M3, 9999L), MeasurementLong.Create(M4, 8888L));
         }
 
         [Fact]
         public void TestCombination()
         {
-            IList<IMeasurement> metrics =
+            var metrics =
                 MeasureMapBuilder.Builder()
                     .Put(M1, 44.4)
                     .Put(M2, 66.6)
@@ -65,14 +65,14 @@ namespace OpenCensus.Stats.Test
         [Fact]
         public void TestBuilderEmpty()
         {
-            IList<IMeasurement> metrics = MeasureMapBuilder.Builder().Build();
+            var metrics = MeasureMapBuilder.Builder().Build();
             AssertContains(metrics);
         }
 
         [Fact]
         public void TestBuilder()
         {
-            IList<IMeasurement> expected = new List<IMeasurement>(10);
+            var expected = new List<IMeasurement>(10);
             MeasureMapBuilder builder = MeasureMapBuilder.Builder();
             for (int i = 1; i <= 10; i++)
             {
@@ -144,7 +144,7 @@ namespace OpenCensus.Stats.Test
             return MeasureLong.Create(measure, measure + " description", "1");
         }
 
-        private static void AssertContains(IList<IMeasurement> metrics, params IMeasurement[] measurements)
+        private static void AssertContains(IEnumerable<IMeasurement> metrics, params IMeasurement[] measurements)
         {
             var expected = measurements.ToList();
             Assert.True(Collections.AreEquivalent(metrics, expected));
