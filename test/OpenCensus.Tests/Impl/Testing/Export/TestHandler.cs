@@ -36,9 +36,9 @@ namespace OpenCensus.Testing.Export
             
         }
 
-        public IList<ISpanData> WaitForExport(int numberOfSpans)
+        public IEnumerable<ISpanData> WaitForExport(int numberOfSpans)
         {
-            IList<ISpanData> ret;
+            IList<ISpanData> result;
             lock (monitor) {
                 while (spanDataList.Count < numberOfSpans)
                 {
@@ -56,10 +56,10 @@ namespace OpenCensus.Testing.Export
                         return new List<ISpanData>();
                     }
                 }
-                ret = new List<ISpanData>(spanDataList);
+                result = new List<ISpanData>(spanDataList);
                 spanDataList.Clear();
             }
-            return ret;
+            return result;
         }
     }
 }
