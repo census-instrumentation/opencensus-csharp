@@ -33,7 +33,14 @@ namespace OpenCensus.Collector.Implementation.Common
         {
             if (this.innerFetcher == null)
             {
-                this.innerFetcher = PropertyFetch.FetcherForProperty(obj.GetType().GetTypeInfo().GetDeclaredProperty(this.propertyName));
+                var type = obj.GetType().GetTypeInfo();
+                var property = type.GetDeclaredProperty(this.propertyName);
+                if (property == null)
+                {
+                    property = type.GetProperty(this.propertyName);
+                }
+
+                this.innerFetcher = PropertyFetch.FetcherForProperty(property);
             }
 
             return this.innerFetcher?.Fetch(obj);

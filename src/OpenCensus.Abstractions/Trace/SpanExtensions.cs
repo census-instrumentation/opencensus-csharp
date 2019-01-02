@@ -109,6 +109,23 @@ namespace OpenCensus.Trace
         }
 
         /// <summary>
+        /// Helper method that populates span properties from route
+        /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md.
+        /// </summary>
+        /// <param name="span">Span to fill out.</param>
+        /// <param name="route">Route used to resolve url to controller.</param>
+        /// <returns>Span with populated route properties.</returns>
+        public static ISpan PutHttpRouteAttribute(this ISpan span, string route)
+        {
+            if (!string.IsNullOrEmpty(route))
+            {
+                span.PutAttribute(SpanAttributeConstants.HttpRouteKey, AttributeValue.StringAttributeValue(route));
+            }
+
+            return span;
+        }
+
+        /// <summary>
         /// Helper method that populates span properties from host and port
         /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md.
         /// </summary>
