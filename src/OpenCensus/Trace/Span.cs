@@ -31,7 +31,6 @@ namespace OpenCensus.Trace
         private readonly bool? hasRemoteParent;
         private readonly ITraceParams traceParams;
         private readonly IStartEndHandler startEndHandler;
-        private readonly string name;
         private readonly IClock clock;
         private readonly ITimestampConverter timestampConverter;
         private readonly long startNanoTime;
@@ -59,7 +58,7 @@ namespace OpenCensus.Trace
         {
             this.parentSpanId = parentSpanId;
             this.hasRemoteParent = hasRemoteParent;
-            this.name = name;
+            this.Name = name;
             this.traceParams = traceParams ?? throw new ArgumentNullException(nameof(traceParams));
             this.startEndHandler = startEndHandler;
             this.clock = clock;
@@ -77,13 +76,8 @@ namespace OpenCensus.Trace
             }
         }
 
-        public override string Name
-        {
-            get
-            {
-                return this.name;
-            }
-        }
+        /// <inheritdoc/>
+        public override string Name { get; set; }
 
         public override Status Status
         {
@@ -428,7 +422,7 @@ namespace OpenCensus.Trace
                 this.Context,
                 this.parentSpanId,
                 this.hasRemoteParent,
-                this.name,
+                this.Name,
                 this.timestampConverter.ConvertNanoTime(this.startNanoTime),
                 attributesSpanData,
                 annotationsSpanData,
