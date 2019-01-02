@@ -100,7 +100,7 @@ namespace OpenCensus.Trace.Export
                 throw new ArgumentNullException(nameof(messageOrNetworkEvents));
             }
 
-            IList<ITimedEvent<IMessageEvent>> messageEventsList = new List<ITimedEvent<IMessageEvent>>();
+            var messageEventsList = new List<ITimedEvent<IMessageEvent>>();
             foreach (ITimedEvent<IMessageEvent> timedEvent in messageOrNetworkEvents.Events)
             {
                 messageEventsList.Add(timedEvent);

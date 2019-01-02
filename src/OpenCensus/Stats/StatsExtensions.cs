@@ -18,6 +18,7 @@ namespace OpenCensus.Stats
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using OpenCensus.Tags;
 
     public static class StatsExtensions
@@ -67,30 +68,32 @@ namespace OpenCensus.Stats
             return MutableViewData.CreateAggregationData(sum, view.Measure);
         }
 
-        private static bool TagValuesMatch(IList<ITagValue> aggValues, IList<ITagValue> values)
+        private static bool TagValuesMatch(IEnumerable<ITagValue> aggValues, IEnumerable<ITagValue> values)
         {
             if (values == null)
             {
                 return true;
             }
 
-            if (aggValues.Count != values.Count)
+            if (aggValues.Count() != values.Count())
             {
                 return false;
             }
 
-            for (int i = 0; i < aggValues.Count; i++)
-            {
-                var v1 = aggValues[i];
-                var v2 = values[i];
+            var first = aggValues.GetEnumerator();
+            var second = values.GetEnumerator();
 
+            while (first.MoveNext())
+            {
+                second.MoveNext();
+                
                 // Null matches any aggValue
-                if (v2 == null)
+                if (second.Current == null)
                 {
                     continue;
                 }
 
-                if (!v2.Equals(v1))
+                if (first.Current != second.Current)
                 {
                     return false;
                 }

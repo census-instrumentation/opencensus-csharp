@@ -40,7 +40,7 @@ namespace OpenCensus.Trace.Sampler
 
         public long IdUpperBound { get; }
 
-        public bool ShouldSample(ISpanContext parentContext, bool hasRemoteParent, ITraceId traceId, ISpanId spanId, string name, IList<ISpan> parentLinks)
+        public bool ShouldSample(ISpanContext parentContext, bool hasRemoteParent, ITraceId traceId, ISpanId spanId, string name, IEnumerable<ISpan> parentLinks)
         {
             // If the parent is sampled keep the sampling decision.
             if (parentContext != null && parentContext.TraceOptions.IsSampled)

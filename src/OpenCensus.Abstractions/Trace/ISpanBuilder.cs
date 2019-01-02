@@ -36,7 +36,7 @@ namespace OpenCensus.Trace
         /// </summary>
         /// <param name="parentLinks">Parent links to set on span.</param>
         /// <returns>This span builder for chaining.</returns>
-        ISpanBuilder SetParentLinks(IList<ISpan> parentLinks);
+        ISpanBuilder SetParentLinks(IEnumerable<ISpan> parentLinks);
 
         /// <summary>
         /// Set the record events value.

@@ -103,7 +103,7 @@ namespace OpenCensus.Stats
         }
 
         // Records stats with a set of tags.
-        internal void Record(ITagContext tags, IList<IMeasurement> stats, ITimestamp timestamp)
+        internal void Record(ITagContext tags, IEnumerable<IMeasurement> stats, ITimestamp timestamp)
         {
             lock (this.lck)
             {
@@ -117,7 +117,7 @@ namespace OpenCensus.Stats
                         continue;
                     }
 
-                    IList<MutableViewData> views = this.mutableMap[measure.Name];
+                    var views = this.mutableMap[measure.Name];
                     foreach (MutableViewData view in views)
                     {
                         measurement.Match<object>(

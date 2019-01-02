@@ -128,7 +128,7 @@ namespace OpenCensus.Trace.Export
             }
         }
 
-        private void Export(IList<ISpanData> export)
+        private void Export(IEnumerable<ISpanData> export)
         {
             var handlers = this.serviceHandlers.Values;
             foreach (var handler in handlers)
