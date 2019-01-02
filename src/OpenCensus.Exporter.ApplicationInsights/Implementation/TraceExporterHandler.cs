@@ -35,7 +35,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
             this.telemetryClient = new TelemetryClient(telemetryConfiguration);
         }
 
-        public void Export(IList<ISpanData> spanDataList)
+        public void Export(IEnumerable<ISpanData> spanDataList)
         {
             foreach (var span in spanDataList)
             {

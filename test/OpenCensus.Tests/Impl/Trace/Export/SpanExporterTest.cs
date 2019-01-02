@@ -18,6 +18,7 @@ namespace OpenCensus.Trace.Export.Test
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading;
     using Moq;
     using OpenCensus.Common;
@@ -89,8 +90,8 @@ namespace OpenCensus.Trace.Export.Test
         {
             Span span1 = CreateSampledEndedSpan(SPAN_NAME_1);
             Span span2 = CreateSampledEndedSpan(SPAN_NAME_2);
-            IList<ISpanData> exported = serviceHandler.WaitForExport(2);
-            Assert.Equal(2, exported.Count);
+            var exported = serviceHandler.WaitForExport(2);
+            Assert.Equal(2, exported.Count());
             Assert.Contains(span1.ToSpanData(), exported);
             Assert.Contains(span2.ToSpanData(), exported);
         }
@@ -104,8 +105,8 @@ namespace OpenCensus.Trace.Export.Test
             Span span4 = CreateSampledEndedSpan(SPAN_NAME_1);
             Span span5 = CreateSampledEndedSpan(SPAN_NAME_1);
             Span span6 = CreateSampledEndedSpan(SPAN_NAME_1);
-            IList<ISpanData> exported = serviceHandler.WaitForExport(6);
-            Assert.Equal(6, exported.Count);
+            var exported = serviceHandler.WaitForExport(6);
+            Assert.Equal(6, exported.Count());
             Assert.Contains(span1.ToSpanData(), exported);
             Assert.Contains(span2.ToSpanData(), exported);
             Assert.Contains(span3.ToSpanData(), exported);
@@ -136,14 +137,14 @@ namespace OpenCensus.Trace.Export.Test
             //    .export(anyListOf(SpanData));
             spanExporter.RegisterHandler("mock.service", mockServiceHandler);
             Span span1 = CreateSampledEndedSpan(SPAN_NAME_1);
-            IList<ISpanData> exported = serviceHandler.WaitForExport(1);
-            Assert.Equal(1, exported.Count);
+            var exported = serviceHandler.WaitForExport(1);
+            Assert.Equal(1, exported.Count());
             Assert.Contains(span1.ToSpanData(), exported);
             // assertThat(exported).containsExactly(span1.toSpanData());
             // Continue to export after the exception was received.
             Span span2 = CreateSampledEndedSpan(SPAN_NAME_1);
             exported = serviceHandler.WaitForExport(1);
-            Assert.Equal(1, exported.Count);
+            Assert.Equal(1, exported.Count());
             Assert.Contains(span2.ToSpanData(), exported);
             // assertThat(exported).containsExactly(span2.toSpanData());
         }
@@ -155,12 +156,12 @@ namespace OpenCensus.Trace.Export.Test
             spanExporter.RegisterHandler("test.service2", serviceHandler2);
             Span span1 = CreateSampledEndedSpan(SPAN_NAME_1);
             Span span2 = CreateSampledEndedSpan(SPAN_NAME_2);
-            IList<ISpanData> exported1 = serviceHandler.WaitForExport(2);
-            IList<ISpanData> exported2 = serviceHandler2.WaitForExport(2);
-            Assert.Equal(2, exported1.Count);
+            var exported1 = serviceHandler.WaitForExport(2);
+            var exported2 = serviceHandler2.WaitForExport(2);
+            Assert.Equal(2, exported1.Count());
             Assert.Contains(span1.ToSpanData(), exported1);
             Assert.Contains(span2.ToSpanData(), exported1);
-            Assert.Equal(2, exported2.Count);
+            Assert.Equal(2, exported2.Count());
             Assert.Contains(span1.ToSpanData(), exported2);
             Assert.Contains(span2.ToSpanData(), exported2);
         }
@@ -174,10 +175,10 @@ namespace OpenCensus.Trace.Export.Test
             // sampled span is not exported by creating and ending a sampled span after a non sampled span
             // and checking that the first exported span is the sampled span (the non sampled did not get
             // exported).
-            IList<ISpanData> exported = serviceHandler.WaitForExport(1);
+            var exported = serviceHandler.WaitForExport(1);
             // Need to check this because otherwise the variable span1 is unused, other option is to not
             // have a span1 variable.
-            Assert.Equal(1, exported.Count);
+            Assert.Equal(1, exported.Count());
             Assert.DoesNotContain(span1.ToSpanData(), exported);
             Assert.Contains(span2.ToSpanData(), exported);
 

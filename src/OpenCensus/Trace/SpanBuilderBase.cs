@@ -23,7 +23,7 @@ namespace OpenCensus.Trace
     {
         public abstract ISpanBuilder SetSampler(ISampler sampler);
 
-        public abstract ISpanBuilder SetParentLinks(IList<ISpan> parentLinks);
+        public abstract ISpanBuilder SetParentLinks(IEnumerable<ISpan> parentLinks);
 
         public abstract ISpanBuilder SetRecordEvents(bool recordEvents);
 
@@ -33,16 +33,5 @@ namespace OpenCensus.Trace
         {
             return CurrentSpanUtils.WithSpan(this.StartSpan(), true);
         }
-
-        // public void StartSpanAndRun(Runnable runnable)
-        // {
-        //    Span span = startSpan();
-        //    CurrentSpanUtils.withSpan(span, /* endSpan= */ true, runnable).run();
-        // }
-        // public final<V> V startSpanAndCall(Callable<V> callable) throws Exception
-        // {
-        //    final Span span = startSpan();
-        //    return CurrentSpanUtils.withSpan(span, /* endSpan= */ true, callable).call();
-        // }
     }
 }

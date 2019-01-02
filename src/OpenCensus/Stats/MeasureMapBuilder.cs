@@ -41,7 +41,7 @@ namespace OpenCensus.Stats
             return this;
         }
 
-        internal IList<IMeasurement> Build()
+        internal IEnumerable<IMeasurement> Build()
         {
             // Note: this makes adding measurements quadratic but is fastest for the sizes of
             // MeasureMapInternals that we should see. We may want to go to a strategy of sort/eliminate

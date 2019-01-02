@@ -53,7 +53,7 @@ namespace OpenCensus.Trace.Export
                 + "}";
         }
 
-    /// <inheritdoc/>
+        /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)

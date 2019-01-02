@@ -26,7 +26,7 @@ namespace OpenCensus.Testing.Export
         private readonly object monitor = new object();
         private readonly List<ISpanData> spanDataList = new List<ISpanData>();
 
-        public void Export(IList<ISpanData> data)
+        public void Export(IEnumerable<ISpanData> data)
         {
             lock (monitor)
             {
@@ -36,9 +36,9 @@ namespace OpenCensus.Testing.Export
             
         }
 
-        public IList<ISpanData> WaitForExport(int numberOfSpans)
+        public IEnumerable<ISpanData> WaitForExport(int numberOfSpans)
         {
-            IList<ISpanData> ret;
+            IList<ISpanData> result;
             lock (monitor) {
                 while (spanDataList.Count < numberOfSpans)
                 {
@@ -56,10 +56,10 @@ namespace OpenCensus.Testing.Export
                         return new List<ISpanData>();
                     }
                 }
-                ret = new List<ISpanData>(spanDataList);
+                result = new List<ISpanData>(spanDataList);
                 spanDataList.Clear();
             }
-            return ret;
+            return result;
         }
     }
 }

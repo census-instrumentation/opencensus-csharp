@@ -466,16 +466,15 @@ namespace OpenCensus.Trace
             return span;
         }
 
-        // public abstract void AddLink(LinkBase link);
         private static ITimedEvents<T> CreateTimedEvents<T>(TraceEvents<EventWithNanoTime<T>> events, ITimestampConverter timestampConverter)
         {
             if (events == null)
             {
-                IList<ITimedEvent<T>> empty = new List<ITimedEvent<T>>();
+                IEnumerable<ITimedEvent<T>> empty = new ITimedEvent<T>[0];
                 return TimedEvents<T>.Create(empty, 0);
             }
 
-            IList<ITimedEvent<T>> eventsList = new List<ITimedEvent<T>>(events.Events.Count);
+            var eventsList = new List<ITimedEvent<T>>(events.Events.Count);
             foreach (EventWithNanoTime<T> networkEvent in events.Events)
             {
                 eventsList.Add(networkEvent.ToSpanDataTimedEvent(timestampConverter));

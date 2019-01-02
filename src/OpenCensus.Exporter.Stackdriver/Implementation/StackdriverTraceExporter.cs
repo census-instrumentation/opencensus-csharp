@@ -182,7 +182,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             }
         }
 
-        public void Export(IList<ISpanData> spanDataList)
+        public void Export(IEnumerable<ISpanData> spanDataList)
         {
             TraceServiceClient traceWriter = TraceServiceClient.Create(settings: traceServiceSettings);
             

@@ -100,7 +100,7 @@ namespace OpenCensus.Trace.Export
                 messageOrNetworkEvents = TimedEvents<IMessageEvent>.Create(new List<ITimedEvent<IMessageEvent>>(), 0);
             }
 
-            IList<ITimedEvent<IMessageEvent>> messageEventsList = new List<ITimedEvent<IMessageEvent>>();
+            var messageEventsList = new List<ITimedEvent<IMessageEvent>>();
             foreach (ITimedEvent<IMessageEvent> timedEvent in messageOrNetworkEvents.Events)
             {
                 messageEventsList.Add(timedEvent);
