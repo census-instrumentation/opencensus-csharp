@@ -80,7 +80,7 @@ namespace OpenCensus.Trace.Test
             span.AddAnnotation(Annotation.FromDescription(ANNOTATION_DESCRIPTION));
             span.AddAnnotation(ANNOTATION_DESCRIPTION, attributes);
             span.AddMessageEvent(
-                MessageEvent.Builder(MessageEventType.Recieved, 1).SetUncompressedMessageSize(3).Build());
+                MessageEvent.Builder(MessageEventType.Received, 1).SetUncompressedMessageSize(3).Build());
             span.AddLink(Link.FromSpanContext(spanContext, LinkType.ChildLinkedSpan));
             span.End();
             // exception.expect(IllegalStateException);
@@ -111,7 +111,7 @@ namespace OpenCensus.Trace.Test
             span.AddAnnotation(Annotation.FromDescription(ANNOTATION_DESCRIPTION));
             span.AddAnnotation(ANNOTATION_DESCRIPTION, attributes);
             span.AddMessageEvent(
-                MessageEvent.Builder(MessageEventType.Recieved, 1).SetUncompressedMessageSize(3).Build());
+                MessageEvent.Builder(MessageEventType.Received, 1).SetUncompressedMessageSize(3).Build());
             span.AddLink(Link.FromSpanContext(spanContext, LinkType.ChildLinkedSpan));
             ISpanData spanData = ((Span)span).ToSpanData();
             Assert.Equal(timestamp, spanData.StartTimestamp);
@@ -168,7 +168,7 @@ namespace OpenCensus.Trace.Test
             span.AddAnnotation(ANNOTATION_DESCRIPTION, attributes);
             testClock.AdvanceTime(Duration.Create(0, 100));
             IMessageEvent networkEvent =
-                MessageEvent.Builder(MessageEventType.Recieved, 1).SetUncompressedMessageSize(3).Build();
+                MessageEvent.Builder(MessageEventType.Received, 1).SetUncompressedMessageSize(3).Build();
             span.AddMessageEvent(networkEvent);
             testClock.AdvanceTime(Duration.Create(0, 100));
             ILink link = Link.FromSpanContext(spanContext, LinkType.ChildLinkedSpan);
@@ -227,7 +227,7 @@ namespace OpenCensus.Trace.Test
             span.AddAnnotation(ANNOTATION_DESCRIPTION, attributes);
             testClock.AdvanceTime(Duration.Create(0, 100));
             IMessageEvent networkEvent =
-                MessageEvent.Builder(MessageEventType.Recieved, 1).SetUncompressedMessageSize(3).Build();
+                MessageEvent.Builder(MessageEventType.Received, 1).SetUncompressedMessageSize(3).Build();
             span.AddMessageEvent(networkEvent);
             ILink link = Link.FromSpanContext(spanContext, LinkType.ChildLinkedSpan);
             span.AddLink(link);
@@ -486,7 +486,7 @@ namespace OpenCensus.Trace.Test
                     timestampConverter,
                     testClock);
             IMessageEvent networkEvent =
-                MessageEvent.Builder(MessageEventType.Recieved, 1).SetUncompressedMessageSize(3).Build();
+                MessageEvent.Builder(MessageEventType.Received, 1).SetUncompressedMessageSize(3).Build();
             for (int i = 0; i < 2 * maxNumberOfNetworkEvents; i++)
             {
                 span.AddMessageEvent(networkEvent);
