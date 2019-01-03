@@ -35,7 +35,7 @@ namespace OpenCensus.Trace.Export.Test
         //    NetworkEvent.Builder(NetworkEvent.Type.RECV, 1).build();
         //      private static readonly NetworkEvent sentNetworkEvent =
         //    NetworkEvent.Builder(NetworkEvent.Type.SENT, 1).build();
-        private static readonly IMessageEvent recvMessageEvent = MessageEvent.Builder(MessageEventType.Recieved, 1).Build();
+        private static readonly IMessageEvent recvMessageEvent = MessageEvent.Builder(MessageEventType.Received, 1).Build();
         private static readonly IMessageEvent sentMessageEvent = MessageEvent.Builder(MessageEventType.Sent, 1).Build();
         private static readonly Status status = Status.DeadlineExceeded.WithDescription("TooSlow");
         private static readonly SpanKind kind = SpanKind.Client;

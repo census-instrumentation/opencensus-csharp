@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2042
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28407.52
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenCensus", "src\OpenCensus\OpenCensus.csproj", "{AE3E3DF5-4083-4C6E-A840-8271B0ACDE7E}"
 EndProject
@@ -60,6 +60,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenCensus.Exporter.Ocagent", "src\OpenCensus.Exporter.Ocagent\OpenCensus.Exporter.Ocagent.csproj", "{56B0ED25-8A14-4AA2-B59D-FAAFCBACDD4A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenCensus.Exporter.Stackdriver.Tests", "test\OpenCensus.Exporter.Stackdriver.Tests\OpenCensus.Exporter.Stackdriver.Tests.csproj", "{6875032B-DFDC-4CDE-A283-37CA7F99926A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenCensus.Exporter.ApplicationInsights.Tests", "test\OpenCensus.Exporter.ApplicationInsights.Tests\OpenCensus.Exporter.ApplicationInsights.Tests.csproj", "{1FA1F509-7722-48E3-9A35-16CBB6774957}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -127,6 +129,10 @@ Global
 		{6875032B-DFDC-4CDE-A283-37CA7F99926A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6875032B-DFDC-4CDE-A283-37CA7F99926A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6875032B-DFDC-4CDE-A283-37CA7F99926A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FA1F509-7722-48E3-9A35-16CBB6774957}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FA1F509-7722-48E3-9A35-16CBB6774957}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FA1F509-7722-48E3-9A35-16CBB6774957}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FA1F509-7722-48E3-9A35-16CBB6774957}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

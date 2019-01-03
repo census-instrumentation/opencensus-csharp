@@ -22,13 +22,18 @@ namespace OpenCensus.Trace
     public enum LinkType
     {
         /// <summary>
-        /// Child link.
+        /// The relationship of the two spans is unknown, or known but other than parent-child.
         /// </summary>
-        ChildLinkedSpan,
+        Unspecified = 0,
 
         /// <summary>
-        /// Parent link.
+        /// The linked span is a child of the current span.
         /// </summary>
-        ParentLinkedSpan,
+        ChildLinkedSpan = 1,
+
+        /// <summary>
+        /// The linked span is a parent of the current span.
+        /// </summary>
+        ParentLinkedSpan = 2,
     }
 }

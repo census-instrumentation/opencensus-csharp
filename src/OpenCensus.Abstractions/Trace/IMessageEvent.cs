@@ -17,7 +17,7 @@
 namespace OpenCensus.Trace
 {
     /// <summary>
-    /// Message event happoened during the span execution.
+    /// Message event happened during the span execution.
     /// </summary>
     public interface IMessageEvent
     {
