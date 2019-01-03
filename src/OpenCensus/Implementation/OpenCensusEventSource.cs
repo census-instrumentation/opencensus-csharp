@@ -41,25 +41,25 @@ namespace OpenCensus.Implementation
             this.WriteEvent(1, ex);
         }
 
-        [Event(2, Message = "{0} should be an ASCII string with a length greater than 0 and not exceeding {1} characters.", Level = EventLevel.Warning)]
-        public void InvalidCharactersInElement(string element)
+        [Event(2, Message = "Failed to parse a resource tag. {0} should be an ASCII string with a length greater than 0 and not exceeding {1} characters.", Level = EventLevel.Warning)]
+        public void InvalidCharactersInResourceElement(string element)
         {
             this.WriteEvent(2, element, Constants.MaxResourceTypeNameLength);
         }
 
         [NonEvent]
-        public void SecurityExceptionWarning(Exception ex)
+        public void FailedReadingEnvironmentVariableWarning(string environmentVariableName, Exception ex)
         {
             if (Log.IsEnabled(EventLevel.Warning, EventKeywords.All))
             {
-                this.SecurityExceptionWarning(ToInvariantString(ex));
+                this.FailedReadingEnvironmentVariableWarning(environmentVariableName, ToInvariantString(ex));
             }
         }
 
-        [Event(3, Message = "Main library failed with security exception: {0}")]
-        public void SecurityExceptionWarning(string ex)
+        [Event(3, Message = "Failed to read environment variable {0}. Main library failed with security exception: {1}", Level = EventLevel.Warning)]
+        public void FailedReadingEnvironmentVariableWarning(string environmentVariableName, string ex)
         {
-            this.WriteEvent(3, ex);
+            this.WriteEvent(3, environmentVariableName, ex);
         }
 
         /// <summary>

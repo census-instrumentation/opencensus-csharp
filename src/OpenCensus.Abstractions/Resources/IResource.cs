@@ -33,8 +33,8 @@ namespace OpenCensus.Resources
         string Type { get; }
 
         /// <summary>
-        /// Gets the list of the labels/tags that describe the resource.
+        /// Gets the map of the labels/tags that describe the resource.
         /// </summary>
-        IList<ITag> Tags { get; }
+        IEnumerable<ITag> Tags { get; }
     }
 }

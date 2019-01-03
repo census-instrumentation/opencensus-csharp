@@ -61,7 +61,7 @@ namespace OpenCensus.Resources
             {
                 openCensusResourceType = Constants.GlobalResourceType;
 
-                Log.SecurityExceptionWarning(ex);
+                Log.FailedReadingEnvironmentVariableWarning(Constants.ResourceTypeEnvironmentVariable, ex);
             }
 
             try
@@ -72,7 +72,7 @@ namespace OpenCensus.Resources
             {
                 openCensusEnvironmentTags = string.Empty;
 
-                Log.SecurityExceptionWarning(ex);
+                Log.FailedReadingEnvironmentVariableWarning(Constants.ResourceLabelsEnvironmentVariable, ex);
             }
 
             TryParseResourceType(openCensusResourceType, out EnvironmentType);
@@ -87,7 +87,7 @@ namespace OpenCensus.Resources
         /// <summary>
         /// Gets the map between the tag and its value.
         /// </summary>
-        public abstract IList<ITag> Tags { get; }
+        public abstract IEnumerable<ITag> Tags { get; }
 
         private static OpenCensusEventSource Log => OpenCensusEventSource.Log;
 
@@ -126,13 +126,13 @@ namespace OpenCensus.Resources
 
                     if (!IsValidAndNotEmpty(key))
                     {
-                        Log.InvalidCharactersInElement("Label key");
+                        Log.InvalidCharactersInResourceElement("Label key");
                         return new ITag[0] { };
                     }
 
                     if (!IsValid(value))
                     {
-                        Log.InvalidCharactersInElement("Label key");
+                        Log.InvalidCharactersInResourceElement("Label key");
                         return new ITag[0] { };
                     }
 
@@ -153,7 +153,7 @@ namespace OpenCensus.Resources
 
             if (rawEnvironmentType.Length > Constants.MaxResourceTypeNameLength)
             {
-                Log.InvalidCharactersInElement(rawEnvironmentType);
+                Log.InvalidCharactersInResourceElement(rawEnvironmentType);
                 resourceType = Constants.GlobalResourceType;
                 return false;
             }
