@@ -14,10 +14,10 @@
 // limitations under the License.
 // </copyright>
 
-namespace OpenCensus.Impl.Resource
+namespace OpenCensus.Impl.Resources
 {
     using Xunit;
-    using OpenCensus.Resource;
+    using OpenCensus.Resources;
     using OpenCensus.Tags;
     using OpenCensus.Implementation;
 

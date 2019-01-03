@@ -8,6 +8,7 @@ the release.
 ## Unreleased
 
 - ASP.NET Core collector now uses `http.route` for the span name.
+- Initial implementation of Resource Specification.
 
 ## 0.1.0-alpha-33381
 

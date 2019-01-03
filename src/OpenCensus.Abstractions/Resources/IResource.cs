@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-namespace OpenCensus.Resource
+namespace OpenCensus.Resources
 {
     using System.Collections.Generic;
     using OpenCensus.Tags;
