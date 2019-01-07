@@ -27,8 +27,6 @@
 
             Thread.Sleep(TimeSpan.FromSeconds(1));
             var span2 = tracer.CurrentSpan;
-            //span2.PutAttribute("computername", AttributeValue.StringAttributeValue(Environment.MachineName));
-            Tracing.Tracer.CurrentSpan.PutAttribute("computer", AttributeValue.StringAttributeValue(Environment.MachineName));
             span2.End();
 
             Console.ReadLine();
