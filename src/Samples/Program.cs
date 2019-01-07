@@ -1,6 +1,7 @@
 ﻿namespace Samples
 {
     using CommandLine;
+    using System;
 
     [Verb("stackdriver", HelpText = "Specify the options required to test Stackdriver exporter", Hidden = false)]
     class StackdriverOptions
@@ -55,6 +56,8 @@
                     (HttpClientOptions options) => TestHttpClient.Run(),
                     (StackdriverOptions options) => TestStackdriver.Run(options.ProjectId),
                     errs => 1);
+
+            Console.ReadLine();
         }
     }
 }
