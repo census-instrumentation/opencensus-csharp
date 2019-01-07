@@ -67,7 +67,7 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
 
             if (span != null)
             {
-                // Note, route is missing at this stage. It will be available later
+                // TODO: Note, route is missing at this stage. It will be available later
 
                 span.PutServerSpanKindAttribute();
                 span.PutHttpHostAttribute(request.Host.Host, request.Host.Port ?? 80);

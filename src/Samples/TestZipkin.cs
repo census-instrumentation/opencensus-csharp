@@ -10,14 +10,14 @@
     {
         private static ITracer tracer = Tracing.Tracer;
 
-        internal static object Run()
+        internal static object Run(string zipkinUri)
         {
             Console.WriteLine("Hello World!");
 
             var exporter = new ZipkinTraceExporter(
                 new ZipkinTraceExporterOptions()
                 {
-                    Endpoint = new Uri("https://zipkin.azurewebsites.net/api/v2/spans"),
+                    Endpoint = new Uri(zipkinUri),
                     ServiceName = typeof(Program).Assembly.GetName().Name,
                 },
                 Tracing.ExportComponent);
@@ -27,6 +27,8 @@
 
             Thread.Sleep(TimeSpan.FromSeconds(1));
             var span2 = tracer.CurrentSpan;
+            //span2.PutAttribute("computername", AttributeValue.StringAttributeValue(Environment.MachineName));
+            Tracing.Tracer.CurrentSpan.PutAttribute("computer", AttributeValue.StringAttributeValue(Environment.MachineName));
             span2.End();
 
             Console.ReadLine();
