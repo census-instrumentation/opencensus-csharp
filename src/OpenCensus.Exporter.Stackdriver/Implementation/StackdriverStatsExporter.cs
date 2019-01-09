@@ -170,7 +170,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                ExporterStackDriverEventSource.Log.UnknownProblemInWorkerThreadError(ex);
             }
         }
 
@@ -267,8 +267,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                 }
                 catch (RpcException e)
                 {
-                    // TODO - zeltser - figure out where to send the error from exception
-                    Console.WriteLine(e);
+                    ExporterStackDriverEventSource.Log.UnknownProblemWhileCreatingStackDriverTimeSeriesError(e);
                 }
             }
         }
