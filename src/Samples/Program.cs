@@ -13,6 +13,8 @@
     [Verb("zipkin", HelpText = "Specify the options required to test Zipkin exporter")]
     class ZipkinOptions
     {
+        [Option('u', "uri", HelpText = "Please specify the uri of Zipkin backend", Required = true)]
+        public string Uri { get; set; }
     }
 
     [Verb("appInsights", HelpText = "Specify the options required to test ApplicationInsights")]
@@ -39,7 +41,7 @@
         /// Main method - invoke this using command line.
         /// For example:
         /// 
-        /// Samples.dll zipkin
+        /// Samples.dll zipkin http://localhost:9411/api/v2/spans
         /// Sample.dll appInsights
         /// Sample.dll prometheus
         /// </summary>
@@ -48,17 +50,14 @@
         {
             Parser.Default.ParseArguments<ZipkinOptions, ApplicationInsightsOptions, PrometheusOptions, HttpClientOptions, StackdriverOptions>(args)
                 .MapResult(
-                    (ZipkinOptions options) => TestZipkin.Run(),
+                    (ZipkinOptions options) => TestZipkin.Run(options.Uri),
                     (ApplicationInsightsOptions options) => TestApplicationInsights.Run(),
                     (PrometheusOptions options) => TestPrometheus.Run(),
                     (HttpClientOptions options) => TestHttpClient.Run(),
                     (StackdriverOptions options) => TestStackdriver.Run(options.ProjectId),
                     errs => 1);
-                    
-            // TestZipkin.Run();
-            // TestApplicationInsights.Run();
-            // TestPrometheus.Run();
-            // TestHttpClient.Run();
+
+            Console.ReadLine();
         }
     }
 }
