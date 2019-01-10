@@ -1,4 +1,4 @@
-﻿// <copyright file="AssemblyInfo.cs" company="OpenCensus Authors">
+﻿// <copyright file="ExporterStackdriverEventSource.cs" company="OpenCensus Authors">
 // Copyright 2018, OpenCensus Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,10 +21,10 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
     using System.Globalization;
     using System.Threading;
 
-    [EventSource(Name = "OpenCensus-Exporter-StackDriver")]
-    internal class ExporterStackDriverEventSource : EventSource
+    [EventSource(Name = "OpenCensus-Exporter-Stackdriver")]
+    internal class ExporterStackdriverEventSource : EventSource
     {
-        public static readonly ExporterStackDriverEventSource Log = new ExporterStackDriverEventSource();
+        public static readonly ExporterStackdriverEventSource Log = new ExporterStackdriverEventSource();
 
         [NonEvent]
         public void UnknownProblemInWorkerThreadError(Exception ex)
@@ -35,23 +35,23 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             }
         }
 
-        [Event(1, Message = "StackDriver exporter encountered an unknown error and will shut down. Exception: {0}", Level = EventLevel.Error)]
+        [Event(1, Message = "Stackdriver exporter encountered an unknown error and will shut down. Exception: {0}", Level = EventLevel.Error)]
         public void UnknownProblemInWorkerThreadError(string ex)
         {
             this.WriteEvent(1, ex);
         }
 
         [NonEvent]
-        public void UnknownProblemWhileCreatingStackDriverTimeSeriesError(Exception ex)
+        public void UnknownProblemWhileCreatingStackdriverTimeSeriesError(Exception ex)
         {
             if (Log.IsEnabled(EventLevel.Error, EventKeywords.All))
             {
-                this.UnknownProblemWhileCreatingStackDriverTimeSeriesError(ToInvariantString(ex));
+                this.UnknownProblemWhileCreatingStackdriverTimeSeriesError(ToInvariantString(ex));
             }
         }
 
-        [Event(2, Message = "StackDriver exporter failed to create time series. Time series will be lost. Exception: {0}", Level = EventLevel.Error)]
-        public void UnknownProblemWhileCreatingStackDriverTimeSeriesError(string ex)
+        [Event(2, Message = "Stackdriver exporter failed to create time series. Time series will be lost. Exception: {0}", Level = EventLevel.Error)]
+        public void UnknownProblemWhileCreatingStackdriverTimeSeriesError(string ex)
         {
             this.WriteEvent(2, ex);
         }

@@ -170,7 +170,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             }
             catch (Exception ex)
             {
-                ExporterStackDriverEventSource.Log.UnknownProblemInWorkerThreadError(ex);
+                ExporterStackdriverEventSource.Log.UnknownProblemInWorkerThreadError(ex);
             }
         }
 
@@ -267,7 +267,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                 }
                 catch (RpcException e)
                 {
-                    ExporterStackDriverEventSource.Log.UnknownProblemWhileCreatingStackDriverTimeSeriesError(e);
+                    ExporterStackdriverEventSource.Log.UnknownProblemWhileCreatingStackdriverTimeSeriesError(e);
                 }
             }
         }

@@ -74,7 +74,7 @@ namespace OpenCensus.Exporter.Ocagent.Implementation
             catch (Exception e)
             {
                 // TODO: Is there a way to handle this better?
-                // This type of error processign is very aggressive and doesn't follow the
+                // This type of error processing is very aggressive and doesn't follow the
                 // error handling practices when smart defaults should be used when possible.
                 // See: https://github.com/census-instrumentation/opencensus-csharp/blob/develop/docs/error-handling.md
                 ExporterOcagentEventSource.Log.FailedToConvertToProtoDefinitionError(e);
