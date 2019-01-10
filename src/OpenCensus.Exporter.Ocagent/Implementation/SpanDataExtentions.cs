@@ -92,15 +92,12 @@ namespace OpenCensus.Exporter.Ocagent.Implementation
 
             attributes.AttributeMap.Add(source.AttributeMap.ToDictionary(
                 kvp => kvp.Key,
-                kvp => new Opencensus.Proto.Trace.V1.AttributeValue
-                {
-                    StringValue = new TruncatableString
-                    {
-                        Value = kvp.Value.Match(s => s, b => b.ToString(), l => l.ToString(), d => d.ToString(), o => o?.ToString()),
-                    },
-
-                    // todo: how to determine AttributeValue type?
-                }));
+                kvp => kvp.Value.Match(
+                    s => new Opencensus.Proto.Trace.V1.AttributeValue { StringValue = new TruncatableString() { Value = s } },
+                    b => new Opencensus.Proto.Trace.V1.AttributeValue { BoolValue = b },
+                    l => new Opencensus.Proto.Trace.V1.AttributeValue { IntValue = l },
+                    d => new Opencensus.Proto.Trace.V1.AttributeValue { DoubleValue = d },
+                    o => new Opencensus.Proto.Trace.V1.AttributeValue { StringValue = new TruncatableString() { Value = o?.ToString() } })));
 
             return attributes;
         }
@@ -172,15 +169,12 @@ namespace OpenCensus.Exporter.Ocagent.Implementation
 
             attributes.AttributeMap.Add(source.ToDictionary(
                 kvp => kvp.Key,
-                kvp => new Opencensus.Proto.Trace.V1.AttributeValue
-                {
-                    StringValue = new TruncatableString
-                    {
-                        Value = kvp.Value.Match(s => s, b => b.ToString(), l => l.ToString(), d => d.ToString(), o => o?.ToString()),
-                    },
-
-                    // todo: how to determine AttributeValue type?
-                }));
+                kvp => kvp.Value.Match(
+                    s => new Opencensus.Proto.Trace.V1.AttributeValue { StringValue = new TruncatableString() { Value = s } },
+                    b => new Opencensus.Proto.Trace.V1.AttributeValue { BoolValue = b },
+                    l => new Opencensus.Proto.Trace.V1.AttributeValue { IntValue = l },
+                    d => new Opencensus.Proto.Trace.V1.AttributeValue { DoubleValue = d },
+                    o => new Opencensus.Proto.Trace.V1.AttributeValue { StringValue = new TruncatableString() { Value = o?.ToString() } })));
 
             return attributes;
         }
