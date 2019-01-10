@@ -190,9 +190,6 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                         });
                     this.telemetryClient.TrackMetric(metricTelemetry);
                 }
-
-                Console.WriteLine(view);
-                Console.WriteLine(data);
             }
         }
     }

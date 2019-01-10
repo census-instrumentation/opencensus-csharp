@@ -155,7 +155,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
 
             // Set header mutation for every outgoing API call to Stackdriver so the BE knows
             // which version of OC client is calling it as well as which version of the exporter
-            CallSettings callSettings = CallSettings.FromHeaderMutation(StackDriverCallHeaderAppender);
+            CallSettings callSettings = CallSettings.FromHeaderMutation(StackdriverCallHeaderAppender);
             traceServiceSettings = new TraceServiceSettings();
             traceServiceSettings.CallSettings = callSettings;
         }
@@ -199,7 +199,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         /// Appends OpenCensus headers for every outgoing request to Stackdriver Backend
         /// </summary>
         /// <param name="metadata">The metadata that is sent with every outgoing http request</param>
-        private static void StackDriverCallHeaderAppender(Metadata metadata)
+        private static void StackdriverCallHeaderAppender(Metadata metadata)
         {
             
             metadata.Add("AGENT_LABEL_KEY", "g.co/agent");
