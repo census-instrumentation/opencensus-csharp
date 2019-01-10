@@ -1340,7 +1340,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
                         SpanContext.Create(TraceId.FromBytes(link1TraceIdBytes), SpanId.FromBytes(link1SpanIdBytes), TraceOptions.Default, Tracestate.Empty), LinkType.ParentLinkedSpan),
                     Link.FromSpanContext(
                         SpanContext.Create(TraceId.FromBytes(link2TraceIdBytes), SpanId.FromBytes(link2SpanIdBytes), TraceOptions.Default, Tracestate.Empty), LinkType.Unspecified),
-                    }, 0);
+            }, 0);
 
             var span = SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
 
