@@ -17,6 +17,7 @@
 namespace OpenCensus.Trace.Test
 {
     using Moq;
+    using Internal;
     using OpenCensus.Common;
     using Xunit;
 
