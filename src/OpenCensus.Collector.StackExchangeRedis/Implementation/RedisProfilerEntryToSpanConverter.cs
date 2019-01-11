@@ -55,11 +55,33 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
             bool? hasRemoteParent = false;
             string name = command.Command; // Example: SET;
 
+            // Timing examples:
+            // command.CommandCreated; //2019-01-10 22:18:28Z
+
+            // command.CreationToEnqueued;      // 00:00:32.4571995
+            // command.EnqueuedToSending;       // 00:00:00.0352838
+            // command.SentToResponse;          // 00:00:00.0060586
+            // command.ResponseToCompletion;    // 00:00:00.0002601
+
+            // Total:
+            // command.ElapsedTime;             // 00:00:32.4988020
+
             // TODO: make timestamp with the better precision
             ITimestamp startTimestamp = Timestamp.FromMillis(new DateTimeOffset(command.CommandCreated).ToUnixTimeMilliseconds());
+
+            var timestamp = new DateTimeOffset(command.CommandCreated).Add(command.CreationToEnqueued);
+            var annotations = TimedEvents<IAnnotation>.Create(
+                new List<ITimedEvent<IAnnotation>>()
+                {
+                    TimedEvent<IAnnotation>.Create(Timestamp.FromMillis(timestamp.ToUnixTimeMilliseconds()), Annotation.FromDescription("Enqueued")),
+                    TimedEvent<IAnnotation>.Create(Timestamp.FromMillis((timestamp = timestamp.Add(command.EnqueuedToSending)).ToUnixTimeMilliseconds()), Annotation.FromDescription("Sent")),
+                    TimedEvent<IAnnotation>.Create(Timestamp.FromMillis((timestamp = timestamp.Add(command.SentToResponse)).ToUnixTimeMilliseconds()), Annotation.FromDescription("ResponseRecieved")),
+                },
+                droppedEventsCount: 0);
+
             ITimestamp endTimestamp = Timestamp.FromMillis(new DateTimeOffset(command.CommandCreated.Add(command.ElapsedTime)).ToUnixTimeMilliseconds());
 
-            // TODO: deal with the retransmission
+            // TODO: deal with the re-transmission
             // command.RetransmissionOf;
             // command.RetransmissionReason;
 
@@ -80,8 +102,6 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
                 },
                 0);
 
-            // TODO: use timing info to populate annotations
-            ITimedEvents<IAnnotation> annotations = null;
             ITimedEvents<IMessageEvent> messageOrNetworkEvents = null;
             ILinks links = null;
             int? childSpanCount = 0;
@@ -92,17 +112,6 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
 
             // TODO: SpanData.Create is from OpenCensus implementation
             return SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
-
-            // Timing examples:
-            // command.CommandCreated; //2019-01-10 22:18:28Z
-
-            // command.CreationToEnqueued;      // 00:00:32.4571995
-            // command.EnqueuedToSending;       // 00:00:00.0352838
-            // command.SentToResponse;          // 00:00:00.0060586
-            // command.ResponseToCompletion;    // 00:00:00.0002601
-
-            // Total:
-            // command.ElapsedTime;             // 00:00:32.4988020
         }
 
         private static byte[] GenerateRandomId(int byteCount)
