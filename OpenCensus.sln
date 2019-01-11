@@ -65,6 +65,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenCensus.Exporter.Applica
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenCensus.Collector.StackExchangeRedis", "src\OpenCensus.Collector.StackExchangeRedis\OpenCensus.Collector.StackExchangeRedis.csproj", "{6B681D72-D68A-44CC-8C75-53B9A322E6EC}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenCensus.Collector.StackExchangeRedis.Tests", "test\OpenCensus.Collector.StackExchangeRedis.Tests\OpenCensus.Collector.StackExchangeRedis.Tests.csproj", "{CA98AF29-0852-4ADD-A66B-7E96266EE7B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -139,6 +141,10 @@ Global
 		{6B681D72-D68A-44CC-8C75-53B9A322E6EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B681D72-D68A-44CC-8C75-53B9A322E6EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B681D72-D68A-44CC-8C75-53B9A322E6EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA98AF29-0852-4ADD-A66B-7E96266EE7B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA98AF29-0852-4ADD-A66B-7E96266EE7B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA98AF29-0852-4ADD-A66B-7E96266EE7B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA98AF29-0852-4ADD-A66B-7E96266EE7B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

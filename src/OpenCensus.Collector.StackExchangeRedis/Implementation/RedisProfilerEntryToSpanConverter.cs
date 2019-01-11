@@ -16,48 +16,101 @@
 
 namespace OpenCensus.Collector.StackExchangeRedis.Implementation
 {
+    using System;
+    using System.Collections.Generic;
+    using OpenCensus.Common;
+    using OpenCensus.Stats.Aggregations;
     using OpenCensus.Trace;
+    using OpenCensus.Trace.Export;
     using StackExchange.Redis.Profiling;
 
     internal static class RedisProfilerEntryToSpanConverter
     {
-        public static void DrainSession(ISpan parentSpan, ProfilingSession session, ITracer tracer)
+        private static readonly Random Rand = new Random();
+
+        public static void DrainSession(ISpan parentSpan, ProfilingSession session, ITracer tracer, IHandler handler)
         {
             foreach (var entry in session.FinishProfiling())
             {
-                RecordSpan(parentSpan, entry, tracer);
+                RecordSpan(parentSpan, entry, tracer, handler);
             }
         }
 
-        public static void RecordSpan(ISpan parentSpan, IProfiledCommand command, ITracer tracer)
+        public static void RecordSpan(ISpan parentSpan, IProfiledCommand command, ITracer tracer, IHandler handler)
+        {
+            // TODO: Check sampling first
+            var sd = ConvertProfiledCommandToSpanData(parentSpan, command);
+
+            handler.Export(new ISpanData[] { sd });
+        }
+
+        public static ISpanData ConvertProfiledCommandToSpanData(ISpan parentSpan, IProfiledCommand command)
         {
             // use https://github.com/opentracing/specification/blob/master/semantic_conventions.md for now
 
-            var builder = tracer.SpanBuilder(command.Command); // Example: SET
+            // TODO: SpanContext.Create is from OpenCensus implementation
+            // TODO: deal with tracestate and traceoptions
+            ISpanContext context = SpanContext.Create(parentSpan?.Context.TraceId, SpanId.FromBytes(GenerateRandomId(8)), TraceOptions.Default, Tracestate.Empty);
+            ISpanId parentSpanId = parentSpan?.Context.SpanId;
+            bool? hasRemoteParent = false;
+            string name = command.Command; // Example: SET;
 
-            var span = builder.StartSpan();
+            // TODO: make timestamp with the better precision
+            ITimestamp startTimestamp = Timestamp.FromMillis(new DateTimeOffset(command.CommandCreated).ToUnixTimeMilliseconds());
+            ITimestamp endTimestamp = Timestamp.FromMillis(new DateTimeOffset(command.CommandCreated.Add(command.ElapsedTime)).ToUnixTimeMilliseconds());
 
-            span.PutAttribute("db.statement", AttributeValue.StringAttributeValue(command.Command)); // Example: SET
-            span.PutAttribute("db.type", AttributeValue.StringAttributeValue("redis"));
-
-            span.End();
-
-            // db.instance
-            // command.Db; // 0
-
-            // command.EndPoint; // Unspecified/localhost:6379
-
-            // command.Flags; // None, DemandMaster
-
-            // command.CommandCreated; / /2019-01-10 22:18:28Z
-
-            // command.CreationToEnqueued; // 00:00:32.4571995
-            // command.ElapsedTime; // 00:00:32.4988020
-            // command.EnqueuedToSending; // 00:00:00.0352838
-            // command.ResponseToCompletion; // 00:00:00.0002601
+            // TODO: deal with the retransmission
             // command.RetransmissionOf;
             // command.RetransmissionReason;
-            // command.SentToResponse; // 00:00:00.0060586
+
+            var attributes = Attributes.Create(
+                new Dictionary<string, IAttributeValue>()
+                {
+                    // Example: "db.statement": SET;
+                    { "db.statement", AttributeValue.StringAttributeValue(command.Command) },
+
+                    // TODO: pre-allocate constant attribute and reuse
+                    { "db.type", AttributeValue.StringAttributeValue("redis") },
+
+                    // Example: "db.instance": Unspecified/localhost:6379[0]
+                    { "db.instance", AttributeValue.StringAttributeValue(command.EndPoint.ToString() + "[" + command.Db + "]") },
+
+                    // Example: "redis.flags": None, DemandMaster
+                    { "redis.flags", AttributeValue.StringAttributeValue(command.Flags.ToString()) },
+                },
+                0);
+
+            // TODO: use timing info to populate annotations
+            ITimedEvents<IAnnotation> annotations = null;
+            ITimedEvents<IMessageEvent> messageOrNetworkEvents = null;
+            ILinks links = null;
+            int? childSpanCount = 0;
+
+            // TODO: this is strange that IProfiledCommand doesn't give the result
+            Status status = Status.Ok;
+            SpanKind kind = SpanKind.Client;
+
+            // TODO: SpanData.Create is from OpenCensus implementation
+            return SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
+
+            // Timing examples:
+            // command.CommandCreated; //2019-01-10 22:18:28Z
+
+            // command.CreationToEnqueued;      // 00:00:32.4571995
+            // command.EnqueuedToSending;       // 00:00:00.0352838
+            // command.SentToResponse;          // 00:00:00.0060586
+            // command.ResponseToCompletion;    // 00:00:00.0002601
+
+            // Total:
+            // command.ElapsedTime;             // 00:00:32.4988020
+        }
+
+        private static byte[] GenerateRandomId(int byteCount)
+        {
+            var idBytes = new byte[byteCount];
+            Rand.NextBytes(idBytes);
+
+            return idBytes;
         }
     }
 }

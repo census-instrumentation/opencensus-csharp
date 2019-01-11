@@ -22,6 +22,7 @@ namespace OpenCensus.Collector.StackExchangeRedis
     using System.Threading.Tasks;
     using OpenCensus.Collector.StackExchangeRedis.Implementation;
     using OpenCensus.Trace;
+    using OpenCensus.Trace.Export;
     using OpenCensus.Trace.Propagation;
     using StackExchange.Redis.Profiling;
 
@@ -31,6 +32,7 @@ namespace OpenCensus.Collector.StackExchangeRedis
     public class StackExchangeRedisCallsCollector : IDisposable
     {
         private readonly ITracer tracer;
+        private readonly IHandler handler;
 
         private readonly CancellationTokenSource cancellationTokenSource;
         private readonly CancellationToken cancellationToken;
@@ -45,9 +47,11 @@ namespace OpenCensus.Collector.StackExchangeRedis
         /// <param name="tracer">Tracer to record traced with.</param>
         /// <param name="sampler">Sampler to use to sample dependnecy calls.</param>
         /// <param name="propagationComponent">Propagation component to use to encode span context to the wire.</param>
-        public StackExchangeRedisCallsCollector(StackExchangeRedisCallsCollectorOptions options, ITracer tracer, ISampler sampler, IPropagationComponent propagationComponent)
+        /// <param name="handler">TEMPORARY: handler to send data to</param>
+        public StackExchangeRedisCallsCollector(StackExchangeRedisCallsCollectorOptions options, ITracer tracer, ISampler sampler, IPropagationComponent propagationComponent, IHandler handler)
         {
             this.tracer = tracer;
+            this.handler = handler;
 
             this.cancellationTokenSource = new CancellationTokenSource();
             this.cancellationToken = this.cancellationTokenSource.Token;
@@ -63,7 +67,11 @@ namespace OpenCensus.Collector.StackExchangeRedis
             return () =>
             {
                 var span = this.tracer.CurrentSpan;
-                if (span == null)
+
+                // when there are no spans in current context - BlankSpan will be returned
+                // BlankSpan has invalid context. It's OK to use a single profiler session
+                // for all invalid context's spans.
+                if (span == null || !span.Context.IsValid)
                 {
                     return this.defaultSession;
                 }
@@ -84,7 +92,7 @@ namespace OpenCensus.Collector.StackExchangeRedis
         {
             while (!this.cancellationToken.IsCancellationRequested)
             {
-                RedisProfilerEntryToSpanConverter.DrainSession(null, this.defaultSession, this.tracer);
+                RedisProfilerEntryToSpanConverter.DrainSession(null, this.defaultSession, this.tracer, this.handler);
 
                 foreach (var entry in this.cache)
                 {
@@ -92,14 +100,16 @@ namespace OpenCensus.Collector.StackExchangeRedis
                     if (span.HasEnded)
                     {
                         this.cache.TryRemove(span, out var session);
-                        RedisProfilerEntryToSpanConverter.DrainSession(span, session, this.tracer);
+                        RedisProfilerEntryToSpanConverter.DrainSession(span, session, this.tracer, this.handler);
                     }
                     else
                     {
                         this.cache.TryGetValue(span, out var session);
-                        RedisProfilerEntryToSpanConverter.DrainSession(span, session, this.tracer);
+                        RedisProfilerEntryToSpanConverter.DrainSession(span, session, this.tracer, this.handler);
                     }
                 }
+
+                Thread.Sleep(TimeSpan.FromSeconds(1));
             }
         }
     }
