@@ -21,15 +21,15 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
 
     internal static class RedisProfilerEntryToSpanConverter
     {
-        public static void DrainSession(ProfilingSession session, ITracer tracer)
+        public static void DrainSession(ISpan parentSpan, ProfilingSession session, ITracer tracer)
         {
             foreach (var entry in session.FinishProfiling())
             {
-                RecordSpan(entry, tracer);
+                RecordSpan(parentSpan, entry, tracer);
             }
         }
 
-        public static void RecordSpan(IProfiledCommand command, ITracer tracer)
+        public static void RecordSpan(ISpan parentSpan, IProfiledCommand command, ITracer tracer)
         {
             // use https://github.com/opentracing/specification/blob/master/semantic_conventions.md for now
 

@@ -84,7 +84,7 @@ namespace OpenCensus.Collector.StackExchangeRedis
         {
             while (!this.cancellationToken.IsCancellationRequested)
             {
-                RedisProfilerEntryToSpanConverter.DrainSession(this.defaultSession, this.tracer);
+                RedisProfilerEntryToSpanConverter.DrainSession(null, this.defaultSession, this.tracer);
 
                 foreach (var entry in this.cache)
                 {
@@ -92,12 +92,12 @@ namespace OpenCensus.Collector.StackExchangeRedis
                     if (span.HasEnded)
                     {
                         this.cache.TryRemove(span, out var session);
-                        RedisProfilerEntryToSpanConverter.DrainSession(session, this.tracer);
+                        RedisProfilerEntryToSpanConverter.DrainSession(span, session, this.tracer);
                     }
                     else
                     {
                         this.cache.TryGetValue(span, out var session);
-                        RedisProfilerEntryToSpanConverter.DrainSession(session, this.tracer);
+                        RedisProfilerEntryToSpanConverter.DrainSession(span, session, this.tracer);
                     }
                 }
             }
