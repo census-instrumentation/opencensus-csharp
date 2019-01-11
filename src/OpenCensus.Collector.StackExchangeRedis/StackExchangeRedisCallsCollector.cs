@@ -71,11 +71,15 @@ namespace OpenCensus.Collector.StackExchangeRedis
                 // when there are no spans in current context - BlankSpan will be returned
                 // BlankSpan has invalid context. It's OK to use a single profiler session
                 // for all invalid context's spans.
+                //
+                // TODO: It will be great to allow to check sampling here, but it is impossible
+                // to start a new trace id here - no way to pass it to the resulting Span.
                 if (span == null || !span.Context.IsValid)
                 {
                     return this.defaultSession;
                 }
 
+                // TODO: check sampling of a current span
                 var session = this.cache.GetOrAdd(span, (s) => new ProfilingSession(s));
                 return session;
             };
