@@ -145,7 +145,7 @@ namespace OpenCensus.Trace.Export.Test
                 sampleStore.GetErrorSampledSpans(
                     SampledSpanStoreErrorFilter.Create(REGISTERED_SPAN_NAME, CanonicalCode.Cancelled, 0));
             Assert.Single(samples);
-            Assert.True(samples.Contains(span.ToSpanData()));
+            Assert.Contains(span.ToSpanData(), samples);
         }
 
         [Fact]
@@ -212,7 +212,7 @@ namespace OpenCensus.Trace.Export.Test
                         25000,
                         0));
             Assert.Single(samples);
-            Assert.True(samples.Contains(span.ToSpanData()));
+            Assert.Contains(span.ToSpanData(), samples);
         }
 
         [Fact]
@@ -245,7 +245,7 @@ namespace OpenCensus.Trace.Export.Test
                         25000,
                         0));
             Assert.Single(samples);
-            Assert.True(samples.Contains(span.ToSpanData()));
+            Assert.Contains(span.ToSpanData(), samples);
         }
 
         [Fact]
@@ -290,7 +290,7 @@ namespace OpenCensus.Trace.Export.Test
                         250000,
                         1));
             Assert.Single(samples);
-            Assert.True(samples.Contains(span1.ToSpanData()));
+            Assert.Contains(span1.ToSpanData(), samples);
         }
 
         [Fact]
