@@ -26,7 +26,7 @@ namespace OpenCensus.Trace.Export
 
         private static readonly ISampledSpanStoreSummary EmptySummary = SampledSpanStoreSummary.Create(new Dictionary<string, ISampledPerSpanNameSummary>());
 
-        private static readonly IList<ISpanData> EmptySpanData = new List<ISpanData>();
+        private static readonly IEnumerable<ISpanData> EmptySpanData = new ISpanData[0];
 
         private readonly HashSet<string> registeredSpanNames = new HashSet<string>();
 
@@ -59,12 +59,12 @@ namespace OpenCensus.Trace.Export
         {
         }
 
-        public override IList<ISpanData> GetErrorSampledSpans(ISampledSpanStoreErrorFilter filter)
+        public override IEnumerable<ISpanData> GetErrorSampledSpans(ISampledSpanStoreErrorFilter filter)
         {
             return EmptySpanData;
         }
 
-        public override IList<ISpanData> GetLatencySampledSpans(ISampledSpanStoreLatencyFilter filter)
+        public override IEnumerable<ISpanData> GetLatencySampledSpans(ISampledSpanStoreLatencyFilter filter)
         {
             return EmptySpanData;
         }
