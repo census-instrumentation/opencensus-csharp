@@ -379,12 +379,12 @@ namespace OpenCensus.Trace.Export.Test
                 sampleStore = store;
             }
 
-            public void OnStart(SpanBase span)
+            public void OnStart(ISpan span)
             {
                 // Do nothing.
             }
 
-            public void OnEnd(SpanBase span)
+            public void OnEnd(ISpan span)
             {
                 sampleStore.ConsiderForSampling(span);
             }

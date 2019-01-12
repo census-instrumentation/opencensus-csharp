@@ -17,6 +17,7 @@
 namespace OpenCensus.Trace.Export
 {
     using System.Collections.Generic;
+    using Internal;
     using OpenCensus.Utils;
 
     public sealed class InProcessRunningSpanStore : RunningSpanStoreBase

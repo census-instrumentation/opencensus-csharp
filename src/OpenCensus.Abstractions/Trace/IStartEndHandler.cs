@@ -25,12 +25,12 @@ namespace OpenCensus.Trace
         /// Called when span is being started.
         /// </summary>
         /// <param name="span">Span that just started.</param>
-        void OnStart(SpanBase span);
+        void OnStart(ISpan span);
 
         /// <summary>
         /// Called when span is just ended.
         /// </summary>
         /// <param name="span">Span that was just ended.</param>
-        void OnEnd(SpanBase span);
+        void OnEnd(ISpan span);
     }
 }

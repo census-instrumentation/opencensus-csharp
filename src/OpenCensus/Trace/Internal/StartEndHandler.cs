@@ -14,12 +14,12 @@
 // limitations under the License.
 // </copyright>
 
-namespace OpenCensus.Trace
+namespace OpenCensus.Trace.Internal
 {
     using OpenCensus.Internal;
     using OpenCensus.Trace.Export;
 
-    public sealed class StartEndHandler : IStartEndHandler
+    internal sealed class StartEndHandler : IStartEndHandler
     {
         private readonly ISpanExporter spanExporter;
         private readonly IRunningSpanStore runningSpanStore;
@@ -39,7 +39,7 @@ namespace OpenCensus.Trace
             this.eventQueue = eventQueue;
         }
 
-        public void OnEnd(SpanBase span)
+        public void OnEnd(ISpan span)
         {
             if ((span.Options.HasFlag(SpanOptions.RecordEvents) && this.enqueueEventForNonSampledSpans)
                 || span.Context.TraceOptions.IsSampled)
@@ -48,7 +48,7 @@ namespace OpenCensus.Trace
             }
         }
 
-        public void OnStart(SpanBase span)
+        public void OnStart(ISpan span)
         {
             if (span.Options.HasFlag(SpanOptions.RecordEvents) && this.enqueueEventForNonSampledSpans)
             {
@@ -58,10 +58,10 @@ namespace OpenCensus.Trace
 
         private sealed class SpanStartEvent : IEventQueueEntry
         {
-            private readonly SpanBase span;
+            private readonly ISpan span;
             private readonly IRunningSpanStore activeSpansExporter;
 
-            public SpanStartEvent(SpanBase span, IRunningSpanStore activeSpansExporter)
+            public SpanStartEvent(ISpan span, IRunningSpanStore activeSpansExporter)
             {
                 this.span = span;
                 this.activeSpansExporter = activeSpansExporter;
@@ -78,13 +78,13 @@ namespace OpenCensus.Trace
 
         private sealed class SpanEndEvent : IEventQueueEntry
         {
-            private readonly SpanBase span;
+            private readonly ISpan span;
             private readonly IRunningSpanStore runningSpanStore;
             private readonly ISpanExporter spanExporter;
             private readonly ISampledSpanStore sampledSpanStore;
 
             public SpanEndEvent(
-                    SpanBase span,
+                    ISpan span,
                     ISpanExporter spanExporter,
                     IRunningSpanStore runningSpanStore,
                     ISampledSpanStore sampledSpanStore)
