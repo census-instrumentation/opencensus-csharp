@@ -19,6 +19,7 @@ namespace OpenCensus.Trace
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Internal;
     using OpenCensus.Common;
     using OpenCensus.Internal;
     using OpenCensus.Trace.Config;
