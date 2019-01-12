@@ -47,8 +47,8 @@ namespace OpenCensus.Trace.Export.Test
         private readonly IList<ITimedEvent<IAnnotation>> annotationsList = new List<ITimedEvent<IAnnotation>>();
         // private readonly List<TimedEvent<NetworkEvent>> networkEventsList =
         //    new List<SpanData.TimedEvent<NetworkEvent>>();
-        private readonly IList<ITimedEvent<IMessageEvent>> messageEventsList = new List<ITimedEvent<IMessageEvent>>();
-        private readonly IList<ILink> linksList = new List<ILink>();
+        private readonly List<ITimedEvent<IMessageEvent>> messageEventsList = new List<ITimedEvent<IMessageEvent>>();
+        private readonly List<ILink> linksList = new List<ILink>();
 
         private IAttributes attributes;
         private ITimedEvents<IAnnotation> annotations;

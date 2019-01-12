@@ -26,7 +26,7 @@ namespace OpenCensus.Trace.Export
         /// <summary>
         /// Gets the list of links.
         /// </summary>
-        IList<ILink> Links { get; }
+        IEnumerable<ILink> Links { get; }
 
         /// <summary>
         /// Gets the number of dropped links due to exceeding the maximum links count limit.

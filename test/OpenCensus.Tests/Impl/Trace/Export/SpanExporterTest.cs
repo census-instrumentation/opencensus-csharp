@@ -138,13 +138,13 @@ namespace OpenCensus.Trace.Export.Test
             spanExporter.RegisterHandler("mock.service", mockServiceHandler);
             Span span1 = CreateSampledEndedSpan(SPAN_NAME_1);
             var exported = serviceHandler.WaitForExport(1);
-            Assert.Equal(1, exported.Count());
+            Assert.Single(exported);
             Assert.Contains(span1.ToSpanData(), exported);
             // assertThat(exported).containsExactly(span1.toSpanData());
             // Continue to export after the exception was received.
             Span span2 = CreateSampledEndedSpan(SPAN_NAME_1);
             exported = serviceHandler.WaitForExport(1);
-            Assert.Equal(1, exported.Count());
+            Assert.Single(exported);
             Assert.Contains(span2.ToSpanData(), exported);
             // assertThat(exported).containsExactly(span2.toSpanData());
         }
@@ -178,7 +178,7 @@ namespace OpenCensus.Trace.Export.Test
             var exported = serviceHandler.WaitForExport(1);
             // Need to check this because otherwise the variable span1 is unused, other option is to not
             // have a span1 variable.
-            Assert.Equal(1, exported.Count());
+            Assert.Single(exported);
             Assert.DoesNotContain(span1.ToSpanData(), exported);
             Assert.Contains(span2.ToSpanData(), exported);
 

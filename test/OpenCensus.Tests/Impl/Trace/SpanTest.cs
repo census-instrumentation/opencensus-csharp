@@ -18,6 +18,7 @@ namespace OpenCensus.Trace.Test
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Moq;
     using OpenCensus.Common;
     using OpenCensus.Internal;
@@ -191,8 +192,8 @@ namespace OpenCensus.Trace.Test
             Assert.Equal(timestamp.AddNanos(300), spanData.MessageEvents.Events[0].Timestamp);
             Assert.Equal(networkEvent, spanData.MessageEvents.Events[0].Event);
             Assert.Equal(0, spanData.Links.DroppedLinksCount);
-            Assert.Equal(1, spanData.Links.Links.Count);
-            Assert.Equal(link, spanData.Links.Links[0]);
+            Assert.Single(spanData.Links.Links);
+            Assert.Equal(link, spanData.Links.Links.First());
             Assert.Equal(timestamp, spanData.StartTimestamp);
             Assert.Null(spanData.Status);
             Assert.Null(spanData.EndTimestamp);
@@ -252,8 +253,8 @@ namespace OpenCensus.Trace.Test
             Assert.Equal(timestamp.AddNanos(300), spanData.MessageEvents.Events[0].Timestamp);
             Assert.Equal(networkEvent, spanData.MessageEvents.Events[0].Event);
             Assert.Equal(0, spanData.Links.DroppedLinksCount);
-            Assert.Equal(1, spanData.Links.Links.Count);
-            Assert.Equal(link, spanData.Links.Links[0]);
+            Assert.Single(spanData.Links.Links);
+            Assert.Equal(link, spanData.Links.Links.First());
             Assert.Equal(timestamp, spanData.StartTimestamp);
             Assert.Equal(Status.Cancelled, spanData.Status);
             Assert.Equal(timestamp.AddNanos(400), spanData.EndTimestamp);
@@ -535,18 +536,18 @@ namespace OpenCensus.Trace.Test
             }
             ISpanData spanData = ((Span)span).ToSpanData();
             Assert.Equal(maxNumberOfLinks, spanData.Links.DroppedLinksCount);
-            Assert.Equal(maxNumberOfLinks, spanData.Links.Links.Count);
-            for (int i = 0; i < maxNumberOfLinks; i++)
-            {
-                Assert.Equal(link, spanData.Links.Links[i]);
+            Assert.Equal(maxNumberOfLinks, spanData.Links.Links.Count());
+            foreach (var actualLink in spanData.Links.Links)
+            { 
+                Assert.Equal(link, actualLink);
             }
             span.End();
             spanData = ((Span)span).ToSpanData();
             Assert.Equal(maxNumberOfLinks, spanData.Links.DroppedLinksCount);
-            Assert.Equal(maxNumberOfLinks, spanData.Links.Links.Count);
-            for (int i = 0; i < maxNumberOfLinks; i++)
+            Assert.Equal(maxNumberOfLinks, spanData.Links.Links.Count());
+            foreach (var actualLink in spanData.Links.Links)
             {
-                Assert.Equal(link, spanData.Links.Links[i]);
+                Assert.Equal(link, actualLink);
             }
         }
 
