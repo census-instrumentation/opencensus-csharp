@@ -44,7 +44,7 @@ namespace OpenCensus.Trace.Export.Test
         private readonly ISpanContext spanContext;
         private readonly ISpanId parentSpanId; 
         private readonly IDictionary<string, IAttributeValue> attributesMap = new Dictionary<string, IAttributeValue>();
-        private readonly IList<ITimedEvent<IAnnotation>> annotationsList = new List<ITimedEvent<IAnnotation>>();
+        private readonly List<ITimedEvent<IAnnotation>> annotationsList = new List<ITimedEvent<IAnnotation>>();
         // private readonly List<TimedEvent<NetworkEvent>> networkEventsList =
         //    new List<SpanData.TimedEvent<NetworkEvent>>();
         private readonly List<ITimedEvent<IMessageEvent>> messageEventsList = new List<ITimedEvent<IMessageEvent>>();
