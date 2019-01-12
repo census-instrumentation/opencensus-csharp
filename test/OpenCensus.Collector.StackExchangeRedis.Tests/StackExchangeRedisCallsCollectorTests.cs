@@ -33,16 +33,18 @@ namespace OpenCensus.Collector.StackExchangeRedis.Tests
             var startEndHandler = new Mock<IStartEndHandler>();
             var tracer = new Tracer(new RandomGenerator(), startEndHandler.Object, new DateTimeOffsetClock(), new TraceConfig());
 
-            var collector = new StackExchangeRedisCallsCollector(null, tracer, null, null, null);
-            var profilerFactory = collector.GetProfiler();
-            var first = profilerFactory();
-            var second = profilerFactory();
+            using (var collector = new StackExchangeRedisCallsCollector(null, tracer, null, null, null))
+            {
+                var profilerFactory = collector.GetProfiler();
+                var first = profilerFactory();
+                var second = profilerFactory();
 
-            ProfilingSession third = null;
-            await Task.Delay(1).ContinueWith((t) => { third = profilerFactory(); });
+                ProfilingSession third = null;
+                await Task.Delay(1).ContinueWith((t) => { third = profilerFactory(); });
 
-            Assert.Equal(first, second);
-            Assert.Equal(second, third);
+                Assert.Equal(first, second);
+                Assert.Equal(second, third);
+            }
         }
     }
 }

@@ -47,7 +47,7 @@ namespace OpenCensus.Collector.StackExchangeRedis
         /// <param name="tracer">Tracer to record traced with.</param>
         /// <param name="sampler">Sampler to use to sample dependnecy calls.</param>
         /// <param name="propagationComponent">Propagation component to use to encode span context to the wire.</param>
-        /// <param name="handler">TEMPORARY: handler to send data to</param>
+        /// <param name="handler">TEMPORARY: handler to send data to.</param>
         public StackExchangeRedisCallsCollector(StackExchangeRedisCallsCollectorOptions options, ITracer tracer, ISampler sampler, IPropagationComponent propagationComponent, IHandler handler)
         {
             this.tracer = tracer;
