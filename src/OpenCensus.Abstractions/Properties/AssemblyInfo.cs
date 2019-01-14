@@ -16,6 +16,8 @@
 
 using System.Runtime.CompilerServices;
 
+[assembly: System.CLSCompliant(true)]
+
 [assembly: InternalsVisibleTo("OpenCensus.Tests" + AssemblyInfo.PublicKey)]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2" + AssemblyInfo.MoqPublicKey)]
 
