@@ -467,6 +467,7 @@ namespace OpenCensus.Trace.Test
             {
                 Assert.Equal(timestamp.AddNanos(100 * (maxNumberOfAnnotations + i)), te.Timestamp);
                 Assert.Equal(annotation, te.Event);
+                i++;
             }
         }
 
