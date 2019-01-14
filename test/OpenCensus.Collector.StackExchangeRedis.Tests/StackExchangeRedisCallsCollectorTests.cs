@@ -33,7 +33,7 @@ namespace OpenCensus.Collector.StackExchangeRedis.Tests
             var startEndHandler = new Mock<IStartEndHandler>();
             var tracer = new Tracer(new RandomGenerator(), startEndHandler.Object, new DateTimeOffsetClock(), new TraceConfig());
 
-            using (var collector = new StackExchangeRedisCallsCollector(null, tracer, null, null, null))
+            using (var collector = new StackExchangeRedisCallsCollector(null, tracer, null, null))
             {
                 var profilerFactory = collector.GetProfiler();
                 var first = profilerFactory();
