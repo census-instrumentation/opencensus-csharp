@@ -61,23 +61,24 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
 
             string path = (request.PathBase.HasValue || request.Path.HasValue) ? (request.PathBase + request.Path).ToString() : "/";
 
-            this.Tracer.SpanBuilderWithRemoteParent(path, ctx).SetSampler(this.Sampler).StartScopedSpan();
-
-            var span = this.Tracer.CurrentSpan;
-
-            if (span != null)
+            ISpan span = null;
+            this.Tracer.SpanBuilderWithRemoteParent(path, ctx).SetSampler(this.Sampler).StartScopedSpan(out span);
+            if (span == null)
             {
-                // Note, route is missing at this stage. It will be available later
-
-                span.PutServerSpanKindAttribute();
-                span.PutHttpHostAttribute(request.Host.Host, request.Host.Port ?? 80);
-                span.PutHttpMethodAttribute(request.Method);
-                span.PutHttpPathAttribute(path);
-
-                var userAgent = request.Headers["User-Agent"].FirstOrDefault();
-                span.PutHttpUserAgentAttribute(userAgent);
-                span.PutHttpRawUrlAttribute(GetUri(request));
+                // Debug.WriteLine("span is null");
+                return;
             }
+
+            // Note, route is missing at this stage. It will be available later
+
+            span.PutServerSpanKindAttribute();
+            span.PutHttpHostAttribute(request.Host.Host, request.Host.Port ?? 80);
+            span.PutHttpMethodAttribute(request.Method);
+            span.PutHttpPathAttribute(path);
+
+            var userAgent = request.Headers["User-Agent"].FirstOrDefault();
+            span.PutHttpUserAgentAttribute(userAgent);
+            span.PutHttpRawUrlAttribute(GetUri(request));
         }
 
         public override void OnStopActivity(Activity activity, object payload)
