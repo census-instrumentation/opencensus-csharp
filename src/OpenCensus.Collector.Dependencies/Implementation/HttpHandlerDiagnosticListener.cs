@@ -56,8 +56,7 @@ namespace OpenCensus.Collector.Dependencies.Implementation
                 return;
             }
 
-            ISpan span;
-            this.Tracer.SpanBuilder(request.RequestUri.AbsolutePath).SetSampler(this.Sampler).StartScopedSpan(out span);
+            this.Tracer.SpanBuilder(request.RequestUri.AbsolutePath).SetSampler(this.Sampler).StartScopedSpan(out ISpan span);
             span.PutClientSpanKindAttribute();
             span.PutHttpMethodAttribute(request.Method.ToString());
             span.PutHttpHostAttribute(request.RequestUri.Host, request.RequestUri.Port);

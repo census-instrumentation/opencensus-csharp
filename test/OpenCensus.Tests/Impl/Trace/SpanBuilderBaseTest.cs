@@ -55,8 +55,7 @@ namespace OpenCensus.Trace.Test
         {
             Assert.Same(BlankSpan.Instance, tracer.CurrentSpan);
 
-            ISpan outSpan;
-            IScope scope = spanBuilder.Object.StartScopedSpan(out outSpan);
+            IScope scope = spanBuilder.Object.StartScopedSpan(out ISpan outSpan);
             try
             {
                 Assert.Same(outSpan, tracer.CurrentSpan);
