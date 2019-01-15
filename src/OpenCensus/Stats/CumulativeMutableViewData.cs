@@ -33,7 +33,7 @@ namespace OpenCensus.Stats
 
         internal override void Record(ITagContext context, double value, ITimestamp timestamp)
         {
-            IList<ITagValue> values = GetTagValues(GetTagMap(context), this.View.Columns);
+            var values = GetTagValues(GetTagMap(context), this.View.Columns);
             var tagValues = TagValues.Create(values);
             if (!this.tagValueAggregationMap.ContainsKey(tagValues))
             {

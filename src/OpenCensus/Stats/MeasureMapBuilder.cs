@@ -22,7 +22,7 @@ namespace OpenCensus.Stats
 
     internal class MeasureMapBuilder
     {
-        private readonly IList<IMeasurement> measurements = new List<IMeasurement>();
+        private readonly List<IMeasurement> measurements = new List<IMeasurement>();
 
         internal static MeasureMapBuilder Builder()
         {

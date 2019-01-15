@@ -94,10 +94,24 @@ namespace OpenCensus.Collector.Dependencies.Tests
         public static IDisposable RunServer(Action<HttpListenerContext> action, out string host, out int port)
         {
             host = "localhost";
-            port = GlobalRandom.Next(2000, 5000);
+            port = 0;
+            RunningServer server = null;
 
-            var server = new RunningServer(action, host, port);
-            server.Start();
+            var retryCount = 5;
+            while (retryCount > 0)
+            {
+                try
+                {
+                    port = GlobalRandom.Next(2000, 5000);
+                    server = new RunningServer(action, host, port);
+                    server.Start();
+                    break;
+                }
+                catch (HttpListenerException)
+                {
+                    retryCount--;
+                }
+            }
 
             return server;
         }
