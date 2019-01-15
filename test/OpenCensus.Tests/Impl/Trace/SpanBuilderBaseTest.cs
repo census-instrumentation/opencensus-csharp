@@ -49,5 +49,24 @@ namespace OpenCensus.Trace.Test
             span.Verify(s => s.End(EndSpanOptions.Default));
             Assert.Same(BlankSpan.Instance, tracer.CurrentSpan);
         }
+
+        [Fact]
+        public void StartScopedSpan_WithParam()
+        {
+            Assert.Same(BlankSpan.Instance, tracer.CurrentSpan);
+
+            ISpan outSpan;
+            IScope scope = spanBuilder.Object.StartScopedSpan(out outSpan);
+            try
+            {
+                Assert.Same(outSpan, tracer.CurrentSpan);
+            }
+            finally
+            {
+                scope.Dispose();
+            }
+            span.Verify(s => s.End(EndSpanOptions.Default));
+            Assert.Same(BlankSpan.Instance, tracer.CurrentSpan);
+        }
     }
 }
