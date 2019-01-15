@@ -36,7 +36,7 @@ namespace OpenCensus.Trace.Export
             }
         }
 
-        public abstract IList<ISpanData> GetRunningSpans(IRunningSpanStoreFilter filter);
+        public abstract IEnumerable<ISpanData> GetRunningSpans(IRunningSpanStoreFilter filter);
 
         public abstract void OnEnd(ISpan span);
 

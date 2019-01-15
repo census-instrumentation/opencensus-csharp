@@ -57,5 +57,13 @@ namespace OpenCensus.Trace
         /// <returns>Scoped event to control the scope of span in the context.
         /// Dispose to stop the span and disassiciate it from the current context.</returns>
         IScope StartScopedSpan();
+
+        /// <summary>
+        /// Starts the span and set it as a current on the current context, setting the out param to current span.
+        /// </summary>
+        /// <param name="currentSpan">Current span.</param>
+        /// <returns>Scoped event to control the scope of span in the context.
+        /// Dispose to stop the span and disassiciate it from the current context.</returns>
+        IScope StartScopedSpan(out ISpan currentSpan);
     }
 }

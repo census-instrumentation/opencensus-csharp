@@ -30,7 +30,7 @@ namespace OpenCensus.Trace.Export
 
         public int DroppedLinksCount { get; }
 
-        public IList<ILink> Links { get; }
+        public IEnumerable<ILink> Links { get; }
 
         public static LinkList Create(IList<ILink> links, int droppedLinksCount)
         {

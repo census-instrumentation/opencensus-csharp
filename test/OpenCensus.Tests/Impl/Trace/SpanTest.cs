@@ -18,6 +18,7 @@ namespace OpenCensus.Trace.Test
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Moq;
     using OpenCensus.Common;
     using OpenCensus.Internal;
@@ -181,18 +182,18 @@ namespace OpenCensus.Trace.Test
             Assert.Equal(0, spanData.Attributes.DroppedAttributesCount);
             Assert.Equal(expectedAttributes, spanData.Attributes.AttributeMap); 
             Assert.Equal(0, spanData.Annotations.DroppedEventsCount);
-            Assert.Equal(2, spanData.Annotations.Events.Count);
-            Assert.Equal(timestamp.AddNanos(100), spanData.Annotations.Events[0].Timestamp);
-            Assert.Equal(Annotation.FromDescription(ANNOTATION_DESCRIPTION), spanData.Annotations.Events[0].Event);
-            Assert.Equal(timestamp.AddNanos(200), spanData.Annotations.Events[1].Timestamp);
-            Assert.Equal(Annotation.FromDescriptionAndAttributes(ANNOTATION_DESCRIPTION, attributes), spanData.Annotations.Events[1].Event);
+            Assert.Equal(2, spanData.Annotations.Events.Count());
+            Assert.Equal(timestamp.AddNanos(100), spanData.Annotations.Events.ToList()[0].Timestamp);
+            Assert.Equal(Annotation.FromDescription(ANNOTATION_DESCRIPTION), spanData.Annotations.Events.ToList()[0].Event);
+            Assert.Equal(timestamp.AddNanos(200), spanData.Annotations.Events.ToList()[1].Timestamp);
+            Assert.Equal(Annotation.FromDescriptionAndAttributes(ANNOTATION_DESCRIPTION, attributes), spanData.Annotations.Events.ToList()[1].Event);
             Assert.Equal(0, spanData.MessageEvents.DroppedEventsCount);
-            Assert.Equal(1, spanData.MessageEvents.Events.Count);
-            Assert.Equal(timestamp.AddNanos(300), spanData.MessageEvents.Events[0].Timestamp);
-            Assert.Equal(networkEvent, spanData.MessageEvents.Events[0].Event);
+            Assert.Single(spanData.MessageEvents.Events);
+            Assert.Equal(timestamp.AddNanos(300), spanData.MessageEvents.Events.First().Timestamp);
+            Assert.Equal(networkEvent, spanData.MessageEvents.Events.First().Event);
             Assert.Equal(0, spanData.Links.DroppedLinksCount);
-            Assert.Equal(1, spanData.Links.Links.Count);
-            Assert.Equal(link, spanData.Links.Links[0]);
+            Assert.Single(spanData.Links.Links);
+            Assert.Equal(link, spanData.Links.Links.First());
             Assert.Equal(timestamp, spanData.StartTimestamp);
             Assert.Null(spanData.Status);
             Assert.Null(spanData.EndTimestamp);
@@ -242,18 +243,18 @@ namespace OpenCensus.Trace.Test
             Assert.Equal(0, spanData.Attributes.DroppedAttributesCount);
             Assert.Equal(expectedAttributes, spanData.Attributes.AttributeMap);
             Assert.Equal(0, spanData.Annotations.DroppedEventsCount);
-            Assert.Equal(2, spanData.Annotations.Events.Count);
-            Assert.Equal(timestamp.AddNanos(100), spanData.Annotations.Events[0].Timestamp);
-            Assert.Equal(Annotation.FromDescription(ANNOTATION_DESCRIPTION), spanData.Annotations.Events[0].Event);
-            Assert.Equal(timestamp.AddNanos(200), spanData.Annotations.Events[1].Timestamp);
-            Assert.Equal(Annotation.FromDescriptionAndAttributes(ANNOTATION_DESCRIPTION, attributes), spanData.Annotations.Events[1].Event);
+            Assert.Equal(2, spanData.Annotations.Events.Count());
+            Assert.Equal(timestamp.AddNanos(100), spanData.Annotations.Events.ToList()[0].Timestamp);
+            Assert.Equal(Annotation.FromDescription(ANNOTATION_DESCRIPTION), spanData.Annotations.Events.ToList()[0].Event);
+            Assert.Equal(timestamp.AddNanos(200), spanData.Annotations.Events.ToList()[1].Timestamp);
+            Assert.Equal(Annotation.FromDescriptionAndAttributes(ANNOTATION_DESCRIPTION, attributes), spanData.Annotations.Events.ToList()[1].Event);
             Assert.Equal(0, spanData.MessageEvents.DroppedEventsCount);
-            Assert.Equal(1, spanData.MessageEvents.Events.Count);
-            Assert.Equal(timestamp.AddNanos(300), spanData.MessageEvents.Events[0].Timestamp);
-            Assert.Equal(networkEvent, spanData.MessageEvents.Events[0].Event);
+            Assert.Single(spanData.MessageEvents.Events);
+            Assert.Equal(timestamp.AddNanos(300), spanData.MessageEvents.Events.First().Timestamp);
+            Assert.Equal(networkEvent, spanData.MessageEvents.Events.First().Event);
             Assert.Equal(0, spanData.Links.DroppedLinksCount);
-            Assert.Equal(1, spanData.Links.Links.Count);
-            Assert.Equal(link, spanData.Links.Links[0]);
+            Assert.Single(spanData.Links.Links);
+            Assert.Equal(link, spanData.Links.Links.First());
             Assert.Equal(timestamp, spanData.StartTimestamp);
             Assert.Equal(Status.Cancelled, spanData.Status);
             Assert.Equal(timestamp.AddNanos(400), spanData.EndTimestamp);
@@ -441,27 +442,32 @@ namespace OpenCensus.Trace.Test
                     timestampConverter,
                     testClock);
             IAnnotation annotation = Annotation.FromDescription(ANNOTATION_DESCRIPTION);
-            for (int i = 0; i < 2 * maxNumberOfAnnotations; i++)
+            int i = 0;
+            for (i = 0; i < 2 * maxNumberOfAnnotations; i++)
             {
                 span.AddAnnotation(annotation);
                 testClock.AdvanceTime(Duration.Create(0, 100));
             }
             ISpanData spanData = ((Span)span).ToSpanData();
             Assert.Equal(maxNumberOfAnnotations, spanData.Annotations.DroppedEventsCount);
-            Assert.Equal(maxNumberOfAnnotations, spanData.Annotations.Events.Count);
-            for (int i = 0; i < maxNumberOfAnnotations; i++)
+            Assert.Equal(maxNumberOfAnnotations, spanData.Annotations.Events.Count());
+            i = 0;
+            foreach (var te in spanData.Annotations.Events)
             {
-                Assert.Equal(timestamp.AddNanos(100 * (maxNumberOfAnnotations + i)), spanData.Annotations.Events[i].Timestamp);
-                Assert.Equal(annotation, spanData.Annotations.Events[i].Event);
+                Assert.Equal(timestamp.AddNanos(100 * (maxNumberOfAnnotations + i)), te.Timestamp);
+                Assert.Equal(annotation, te.Event);
+                i++;
             }
             span.End();
             spanData = ((Span)span).ToSpanData();
             Assert.Equal(maxNumberOfAnnotations, spanData.Annotations.DroppedEventsCount);
-            Assert.Equal(maxNumberOfAnnotations, spanData.Annotations.Events.Count);
-            for (int i = 0; i < maxNumberOfAnnotations; i++)
+            Assert.Equal(maxNumberOfAnnotations, spanData.Annotations.Events.Count());
+            i = 0;
+            foreach (var te in spanData.Annotations.Events)
             {
-                Assert.Equal(timestamp.AddNanos(100 * (maxNumberOfAnnotations + i)), spanData.Annotations.Events[i].Timestamp);
-                Assert.Equal(annotation, spanData.Annotations.Events[i].Event);
+                Assert.Equal(timestamp.AddNanos(100 * (maxNumberOfAnnotations + i)), te.Timestamp);
+                Assert.Equal(annotation, te.Event);
+                i++;
             }
         }
 
@@ -494,20 +500,22 @@ namespace OpenCensus.Trace.Test
             }
             ISpanData spanData = ((Span)span).ToSpanData();
             Assert.Equal(maxNumberOfNetworkEvents, spanData.MessageEvents.DroppedEventsCount);
-            Assert.Equal(maxNumberOfNetworkEvents, spanData.MessageEvents.Events.Count);
+            Assert.Equal(maxNumberOfNetworkEvents, spanData.MessageEvents.Events.Count());
+            var list = spanData.MessageEvents.Events.ToList();
             for (int i = 0; i < maxNumberOfNetworkEvents; i++)
             {
-                Assert.Equal(timestamp.AddNanos(100 * (maxNumberOfNetworkEvents + i)), spanData.MessageEvents.Events[i].Timestamp);
-                Assert.Equal(networkEvent, spanData.MessageEvents.Events[i].Event);
+                Assert.Equal(timestamp.AddNanos(100 * (maxNumberOfNetworkEvents + i)), list[i].Timestamp);
+                Assert.Equal(networkEvent, list[i].Event);
             }
             span.End();
             spanData = ((Span)span).ToSpanData();
             Assert.Equal(maxNumberOfNetworkEvents, spanData.MessageEvents.DroppedEventsCount);
-            Assert.Equal(maxNumberOfNetworkEvents, spanData.MessageEvents.Events.Count);
+            Assert.Equal(maxNumberOfNetworkEvents, spanData.MessageEvents.Events.Count());
+            list = spanData.MessageEvents.Events.ToList();
             for (int i = 0; i < maxNumberOfNetworkEvents; i++)
             {
-                Assert.Equal(timestamp.AddNanos(100 * (maxNumberOfNetworkEvents + i)), spanData.MessageEvents.Events[i].Timestamp);
-                Assert.Equal(networkEvent, spanData.MessageEvents.Events[i].Event);
+                Assert.Equal(timestamp.AddNanos(100 * (maxNumberOfNetworkEvents + i)), list[i].Timestamp);
+                Assert.Equal(networkEvent, list[i].Event);
             }
         }
 
@@ -535,18 +543,18 @@ namespace OpenCensus.Trace.Test
             }
             ISpanData spanData = ((Span)span).ToSpanData();
             Assert.Equal(maxNumberOfLinks, spanData.Links.DroppedLinksCount);
-            Assert.Equal(maxNumberOfLinks, spanData.Links.Links.Count);
-            for (int i = 0; i < maxNumberOfLinks; i++)
-            {
-                Assert.Equal(link, spanData.Links.Links[i]);
+            Assert.Equal(maxNumberOfLinks, spanData.Links.Links.Count());
+            foreach (var actualLink in spanData.Links.Links)
+            { 
+                Assert.Equal(link, actualLink);
             }
             span.End();
             spanData = ((Span)span).ToSpanData();
             Assert.Equal(maxNumberOfLinks, spanData.Links.DroppedLinksCount);
-            Assert.Equal(maxNumberOfLinks, spanData.Links.Links.Count);
-            for (int i = 0; i < maxNumberOfLinks; i++)
+            Assert.Equal(maxNumberOfLinks, spanData.Links.Links.Count());
+            foreach (var actualLink in spanData.Links.Links)
             {
-                Assert.Equal(link, spanData.Links.Links[i]);
+                Assert.Equal(link, actualLink);
             }
         }
 

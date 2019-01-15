@@ -91,7 +91,7 @@ namespace OpenCensus.Trace.Export
             }
         }
 
-        public override IList<ISpanData> GetErrorSampledSpans(ISampledSpanStoreErrorFilter filter)
+        public override IEnumerable<ISpanData> GetErrorSampledSpans(ISampledSpanStoreErrorFilter filter)
         {
             int numSpansToReturn = filter.MaxSpansToReturn == 0 ? MaxPerSpanNameSamples : filter.MaxSpansToReturn;
             IList<SpanBase> spans = new List<SpanBase>();
@@ -115,7 +115,7 @@ namespace OpenCensus.Trace.Export
             return ret.AsReadOnly();
         }
 
-        public override IList<ISpanData> GetLatencySampledSpans(ISampledSpanStoreLatencyFilter filter)
+        public override IEnumerable<ISpanData> GetLatencySampledSpans(ISampledSpanStoreLatencyFilter filter)
         {
             int numSpansToReturn = filter.MaxSpansToReturn == 0 ? MaxPerSpanNameSamples : filter.MaxSpansToReturn;
             IList<SpanBase> spans = new List<SpanBase>();

@@ -281,22 +281,22 @@ namespace OpenCensus.Trace.Test
             ITraceId traceId =
                 TraceId.FromBytes(
                     new byte[] {
-              0x8F,
-              0xFF,
-              0xFF,
-              0xFF,
-              0xFF,
-              0xFF,
-              0xFF,
-              0xFF,
-              0,
-              0,
-              0,
-              0,
-              0,
-              0,
-              0,
-              0,
+                        0x8F,
+                        0xFF,
+                        0xFF,
+                        0xFF,
+                        0xFF,
+                        0xFF,
+                        0xFF,
+                        0xFF,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
                     });
 
             // If parent is sampled then the remote child must be sampled.

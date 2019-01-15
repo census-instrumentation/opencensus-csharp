@@ -17,7 +17,6 @@
 namespace OpenCensus.Trace.Export
 {
     using System.Collections.Generic;
-    using Internal;
     using OpenCensus.Utils;
 
     public sealed class InProcessRunningSpanStore : RunningSpanStoreBase
@@ -54,7 +53,7 @@ namespace OpenCensus.Trace.Export
             }
         }
 
-        public override IList<ISpanData> GetRunningSpans(IRunningSpanStoreFilter filter)
+        public override IEnumerable<ISpanData> GetRunningSpans(IRunningSpanStoreFilter filter)
         {
             ICollection<SpanBase> allRunningSpans = this.runningSpans.Copy();
             int maxSpansToReturn = filter.MaxSpansToReturn == 0 ? allRunningSpans.Count : filter.MaxSpansToReturn;
