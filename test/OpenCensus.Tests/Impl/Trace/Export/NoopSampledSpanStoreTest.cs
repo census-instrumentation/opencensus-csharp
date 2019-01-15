@@ -60,7 +60,7 @@ namespace OpenCensus.Trace.Export.Test
         public void NoopSampledSpanStore_GetLatencySampledSpans()
         {
             ISampledSpanStore sampledSpanStore = ExportComponentBase.NewNoopExportComponent.SampledSpanStore;
-            IList<ISpanData> latencySampledSpans =
+            var latencySampledSpans =
                 sampledSpanStore.GetLatencySampledSpans(
                     SampledSpanStoreLatencyFilter.Create("TestLatencyFilter", 0, 0, 0));
             Assert.Empty(latencySampledSpans);
@@ -70,7 +70,7 @@ namespace OpenCensus.Trace.Export.Test
         public void NoopSampledSpanStore_GetErrorSampledSpans()
         {
             ISampledSpanStore sampledSpanStore = ExportComponentBase.NewNoopExportComponent.SampledSpanStore;
-            IList<ISpanData> errorSampledSpans =
+            var errorSampledSpans =
                 sampledSpanStore.GetErrorSampledSpans(
                     SampledSpanStoreErrorFilter.Create("TestErrorFilter", null, 0));
             Assert.Empty(errorSampledSpans);

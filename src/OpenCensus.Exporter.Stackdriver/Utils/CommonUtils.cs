@@ -26,17 +26,29 @@ namespace OpenCensus.Exporter.Stackdriver.Utils
     public static class CommonUtils
     {
         /// <summary>
-        /// Divide the source list into batches of lists of given size
+        /// Divide the source list into batches of lists of given size.
         /// </summary>
         /// <typeparam name="T">The type of the list</typeparam>
         /// <param name="source">The list</param>
         /// <param name="size">Size of the batch</param>
         /// <returns></returns>
-        public static IEnumerable<List<T>> Partition<T>(this IList<T> source, Int32 size)
+        public static IEnumerable<IEnumerable<T>> Partition<T>(this IEnumerable<T> source, int size)
         {
-            for (int i = 0; i < Math.Ceiling(source.Count / (double)size); i++)
+            using (var enumerator = source.GetEnumerator())
             {
-                yield return new List<T>(source.Skip(size * i).Take(size));
+                while (enumerator.MoveNext())
+                {
+                    yield return WalkPartition(enumerator, size - 1);
+                }
+            }
+        }
+
+        private static IEnumerable<T> WalkPartition<T>(IEnumerator<T> source, int size)
+        {
+            yield return source.Current;
+            for (int i = 0; i < size && source.MoveNext(); i++)
+            {
+                yield return source.Current;
             }
         }
     }

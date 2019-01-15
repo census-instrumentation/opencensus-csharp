@@ -72,7 +72,7 @@ namespace OpenCensus.Common
                 + "}";
         }
 
-    /// <inheritdoc/>
+        /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -89,7 +89,7 @@ namespace OpenCensus.Common
             return false;
         }
 
-    /// <inheritdoc/>
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             long h = 1;

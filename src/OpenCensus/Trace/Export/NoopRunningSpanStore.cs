@@ -31,14 +31,14 @@ namespace OpenCensus.Trace.Export
             }
         }
 
-        public override IList<ISpanData> GetRunningSpans(IRunningSpanStoreFilter filter)
+        public override IEnumerable<ISpanData> GetRunningSpans(IRunningSpanStoreFilter filter)
         {
             if (filter == null)
             {
                 throw new ArgumentNullException(nameof(filter));
             }
 
-            return new List<ISpanData>();
+            return new ISpanData[0];
         }
 
         public override void OnEnd(ISpan span)

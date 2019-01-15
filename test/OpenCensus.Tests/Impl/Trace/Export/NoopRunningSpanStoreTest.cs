@@ -40,7 +40,7 @@ namespace OpenCensus.Trace.Export.Test
         [Fact]
         public void NoopRunningSpanStore_GetRunningSpans()
         {
-            IList<ISpanData> runningSpans = runningSpanStore.GetRunningSpans(RunningSpanStoreFilter.Create("TestSpan", 0));
+            var runningSpans = runningSpanStore.GetRunningSpans(RunningSpanStoreFilter.Create("TestSpan", 0));
             Assert.Empty(runningSpans);
         }
     }
