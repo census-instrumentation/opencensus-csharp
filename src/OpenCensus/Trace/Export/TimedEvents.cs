@@ -22,13 +22,13 @@ namespace OpenCensus.Trace.Export
 
     public sealed class TimedEvents<T> : ITimedEvents<T>
     {
-        internal TimedEvents(IList<ITimedEvent<T>> events, int droppedEventsCount)
+        internal TimedEvents(IEnumerable<ITimedEvent<T>> events, int droppedEventsCount)
         {
             this.Events = events ?? throw new ArgumentNullException("Null events");
             this.DroppedEventsCount = droppedEventsCount;
         }
 
-        public IList<ITimedEvent<T>> Events { get; }
+        public IEnumerable<ITimedEvent<T>> Events { get; }
 
         public int DroppedEventsCount { get; }
 
@@ -53,7 +53,7 @@ namespace OpenCensus.Trace.Export
                 + "}";
         }
 
-    /// <inheritdoc/>
+        /// <inheritdoc/>
         public override bool Equals(object o)
         {
             if (o == this)
@@ -70,7 +70,7 @@ namespace OpenCensus.Trace.Export
             return false;
         }
 
-    /// <inheritdoc/>
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             int h = 1;

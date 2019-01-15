@@ -33,7 +33,7 @@ namespace OpenCensus.Trace.Export
         /// </summary>
         /// <param name="filter">Filter to apply to query running spans.</param>
         /// <returns>List of currently running spans.</returns>
-        IList<ISpanData> GetRunningSpans(IRunningSpanStoreFilter filter);
+        IEnumerable<ISpanData> GetRunningSpans(IRunningSpanStoreFilter filter);
 
         /// <summary>
         /// Called when span got started.
