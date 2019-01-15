@@ -46,16 +46,27 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
 
         public static ISpanData ConvertProfiledCommandToSpanData(ISpan parentSpan, IProfiledCommand command)
         {
+            var parentContext = parentSpan?.Context ?? SpanContext.Invalid;
+
             // use https://github.com/opentracing/specification/blob/master/semantic_conventions.md for now
 
+            ISpanContext context = SpanContext.Invalid;
+
+            if (parentContext.IsValid)
+            {
+                var traceId = parentContext.TraceId;
+                var spanId = SpanId.FromBytes(GenerateRandomId(8));
+                var tracestate = parentContext.Tracestate;
+                context = SpanContext.Create(traceId, spanId, TraceOptions.Default, tracestate);
+            }
+
             // TODO: SpanContext.Create is from OpenCensus implementation
-            // TODO: deal with tracestate and traceoptions
-            ISpanContext context = SpanContext.Create(parentSpan?.Context?.TraceId, SpanId.FromBytes(GenerateRandomId(8)), TraceOptions.Default, Tracestate.Empty);
-            ISpanId parentSpanId = parentSpan?.Context.SpanId;
+            // TODO: deal with traceoptions
+            ISpanId parentSpanId = parentContext.SpanId;
             bool? hasRemoteParent = false;
             string name = command.Command; // Example: SET;
 
-            // Timing examples:
+            // Timing example:
             // command.CommandCreated; //2019-01-10 22:18:28Z
 
             // command.CreationToEnqueued;      // 00:00:32.4571995
