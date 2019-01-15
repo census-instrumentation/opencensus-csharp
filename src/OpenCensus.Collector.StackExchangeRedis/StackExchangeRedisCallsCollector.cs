@@ -61,7 +61,7 @@ namespace OpenCensus.Collector.StackExchangeRedis
         /// Returns session for the Redis calls recording.
         /// </summary>
         /// <returns>Session associated with the current span context to record Redis calls.</returns>
-        public Func<ProfilingSession> GetProfiler()
+        public Func<ProfilingSession> GetProfilerSessionsFactory()
         {
             return () =>
             {

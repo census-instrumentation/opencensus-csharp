@@ -40,7 +40,7 @@
 
             // connect to the server
             ConnectionMultiplexer connection = ConnectionMultiplexer.Connect("localhost:6379");
-            connection.RegisterProfiler(collector.GetProfiler());
+            connection.RegisterProfiler(collector.GetProfilerSessionsFactory());
 
             // select a database (by default, DB = 0)
             IDatabase db = connection.GetDatabase();

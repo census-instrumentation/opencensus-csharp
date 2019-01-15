@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-namespace OpenCensus.Collector.StackExchangeRedis.Tests
+namespace OpenCensus.Collector.StackExchangeRedis
 {
     using Moq;
     using OpenCensus.Common;
@@ -35,7 +35,7 @@ namespace OpenCensus.Collector.StackExchangeRedis.Tests
 
             using (var collector = new StackExchangeRedisCallsCollector(null, tracer, null, null))
             {
-                var profilerFactory = collector.GetProfiler();
+                var profilerFactory = collector.GetProfilerSessionsFactory();
                 var first = profilerFactory();
                 var second = profilerFactory();
 

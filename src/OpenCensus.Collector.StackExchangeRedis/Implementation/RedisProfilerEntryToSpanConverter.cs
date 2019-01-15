@@ -50,7 +50,7 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
 
             // TODO: SpanContext.Create is from OpenCensus implementation
             // TODO: deal with tracestate and traceoptions
-            ISpanContext context = SpanContext.Create(parentSpan?.Context.TraceId, SpanId.FromBytes(GenerateRandomId(8)), TraceOptions.Default, Tracestate.Empty);
+            ISpanContext context = SpanContext.Create(parentSpan?.Context?.TraceId, SpanId.FromBytes(GenerateRandomId(8)), TraceOptions.Default, Tracestate.Empty);
             ISpanId parentSpanId = parentSpan?.Context.SpanId;
             bool? hasRemoteParent = false;
             string name = command.Command; // Example: SET;
@@ -85,22 +85,28 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
             // command.RetransmissionOf;
             // command.RetransmissionReason;
 
-            var attributes = Attributes.Create(
-                new Dictionary<string, IAttributeValue>()
-                {
-                    // Example: "db.statement": SET;
-                    { "db.statement", AttributeValue.StringAttributeValue(command.Command) },
+            var attributesMap = new Dictionary<string, IAttributeValue>()
+            {
+                // TODO: pre-allocate constant attribute and reuse
+                { "db.type", AttributeValue.StringAttributeValue("redis") },
 
-                    // TODO: pre-allocate constant attribute and reuse
-                    { "db.type", AttributeValue.StringAttributeValue("redis") },
+                // Example: "redis.flags": None, DemandMaster
+                { "redis.flags", AttributeValue.StringAttributeValue(command.Flags.ToString()) },
+            };
 
-                    // Example: "db.instance": Unspecified/localhost:6379[0]
-                    { "db.instance", AttributeValue.StringAttributeValue(command.EndPoint.ToString() + "[" + command.Db + "]") },
+            if (command.Command != null)
+            {
+                // Example: "db.statement": SET;
+                attributesMap.Add("db.statement", AttributeValue.StringAttributeValue(command.Command));
+            }
 
-                    // Example: "redis.flags": None, DemandMaster
-                    { "redis.flags", AttributeValue.StringAttributeValue(command.Flags.ToString()) },
-                },
-                0);
+            if (command.EndPoint != null)
+            {
+                // Example: "db.instance": Unspecified/localhost:6379[0]
+                attributesMap.Add("db.instance", AttributeValue.StringAttributeValue(command.EndPoint.ToString() + "[" + command.Db + "]"));
+            }
+
+            var attributes = Attributes.Create(attributesMap, 0);
 
             ITimedEvents<IMessageEvent> messageOrNetworkEvents = null;
             ILinks links = null;
