@@ -33,5 +33,11 @@ namespace OpenCensus.Trace
         {
             return CurrentSpanUtils.WithSpan(this.StartSpan(), true);
         }
+
+        public IScope StartScopedSpan(out ISpan currentSpan)
+        {
+            currentSpan = this.StartSpan();
+            return CurrentSpanUtils.WithSpan(currentSpan, true);
+        }
     }
 }
