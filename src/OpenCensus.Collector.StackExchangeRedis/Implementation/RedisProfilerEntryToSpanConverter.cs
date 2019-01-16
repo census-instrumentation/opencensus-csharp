@@ -19,7 +19,6 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
     using System;
     using System.Collections.Generic;
     using OpenCensus.Common;
-    using OpenCensus.Stats.Aggregations;
     using OpenCensus.Trace;
     using OpenCensus.Trace.Export;
     using StackExchange.Redis.Profiling;
@@ -28,7 +27,7 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
     {
         private static readonly Random Rand = new Random();
 
-        public static void DrainSession(ISpan parentSpan, ProfilingSession session, ISampler sampler, IList<ISpanData> spans)
+        public static void DrainSession(ISpan parentSpan, IEnumerable<IProfiledCommand> sessionCommands, ISampler sampler, IList<ISpanData> spans)
         {
             var parentContext = parentSpan?.Context ?? SpanContext.Invalid;
 
@@ -45,13 +44,13 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
                 parentOptions = parentContext.TraceOptions;
             }
 
-            foreach (var entry in session.FinishProfiling())
+            foreach (var entry in sessionCommands)
             {
-                RecordSpan(parentContext, traceId, parentSpanId, parentOptions, tracestate, entry, sampler, spans);
+                RecordSpanIfSampledIn(parentContext, traceId, parentSpanId, parentOptions, tracestate, entry, sampler, spans);
             }
         }
 
-        public static void RecordSpan(ISpanContext parentContext, ITraceId traceId, ISpanId parentSpanId, TraceOptions traceOptions, Tracestate tracestate, IProfiledCommand command, ISampler sampler, IList<ISpanData> spans)
+        internal static void RecordSpanIfSampledIn(ISpanContext parentContext, ITraceId traceId, ISpanId parentSpanId, TraceOptions traceOptions, Tracestate tracestate, IProfiledCommand command, ISampler sampler, IList<ISpanData> spans)
         {
             bool hasRemoteParent = false;
             var spanId = SpanId.FromBytes(GenerateRandomId(8));
@@ -69,14 +68,15 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
                 traceOptions = builder.Build();
             }
 
-            var sd = ConvertProfiledCommandToSpanData(name, traceId, spanId, parentSpanId, traceOptions, tracestate, command);
+            var context = SpanContext.Create(traceId, spanId, traceOptions, tracestate);
+
+            var sd = ConvertProfiledCommandToSpanData(context, name, parentSpanId, command);
 
             spans.Add(sd);
         }
 
-        public static ISpanData ConvertProfiledCommandToSpanData(string name, ITraceId traceId, ISpanId spanId, ISpanId parentSpanId, TraceOptions traceOptions, Tracestate tracestate, IProfiledCommand command)
+        internal static ISpanData ConvertProfiledCommandToSpanData(ISpanContext context, string name, ISpanId parentSpanId, IProfiledCommand command)
         {
-            var context = SpanContext.Create(traceId, spanId, traceOptions, tracestate);
             var hasRemoteParent = false;
 
             // use https://github.com/opentracing/specification/blob/master/semantic_conventions.md for now

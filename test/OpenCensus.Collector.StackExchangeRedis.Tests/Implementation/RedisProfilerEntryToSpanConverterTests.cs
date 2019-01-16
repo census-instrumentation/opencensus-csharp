@@ -23,28 +23,34 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
     using OpenCensus.Trace.Internal;
     using System;
     using OpenCensus.Common;
+    using System.Collections.Generic;
+    using OpenCensus.Trace.Export;
 
     public class RedisProfilerEntryToSpanConverterTests
     {
         [Fact]
-        public void ConvertProfiledCommandToSpanDataUsesCommandAsName()
+        public void DrainSessionUsesCommandAsName()
         {
             var parentSpan = BlankSpan.Instance;
             var profiledCommand = new Mock<IProfiledCommand>();
             profiledCommand.Setup(m => m.Command).Returns("SET");
-            var result = RedisProfilerEntryToSpanConverter.ConvertProfiledCommandToSpanData("SET", TraceId.Invalid, SpanId.Invalid, SpanId.Invalid, TraceOptions.Default, Tracestate.Empty, profiledCommand.Object);
-            Assert.Equal("SET", result.Name);
+            var result = new List<ISpanData>();
+            RedisProfilerEntryToSpanConverter.DrainSession(parentSpan, new IProfiledCommand[] { profiledCommand.Object }, null, result);
+            Assert.Single(result);
+            Assert.Equal("SET", result[0].Name);
         }
 
         [Fact]
-        public void ConvertProfiledCommandToSpanDataUsesTimestampAsStartTime()
+        public void DrainSessionUsesTimestampAsStartTime()
         {
             var parentSpan = BlankSpan.Instance;
             var profiledCommand = new Mock<IProfiledCommand>();
             var now = DateTimeOffset.Now;
             profiledCommand.Setup(m => m.CommandCreated).Returns(now.DateTime);
-            var result = RedisProfilerEntryToSpanConverter.ConvertProfiledCommandToSpanData("name", TraceId.Invalid, SpanId.Invalid, SpanId.Invalid, TraceOptions.Default, Tracestate.Empty, profiledCommand.Object);
-            Assert.Equal(Timestamp.FromMillis(now.ToUnixTimeMilliseconds()), result.StartTimestamp);
+            var result = new List<ISpanData>();
+            RedisProfilerEntryToSpanConverter.DrainSession(parentSpan, new IProfiledCommand[] { profiledCommand.Object }, null, result);
+            Assert.Single(result);
+            Assert.Equal(Timestamp.FromMillis(now.ToUnixTimeMilliseconds()), result[0].StartTimestamp);
         }
     }
 }

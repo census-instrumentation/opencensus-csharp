@@ -100,7 +100,7 @@ namespace OpenCensus.Collector.StackExchangeRedis
             {
                 var spans = new List<ISpanData>();
 
-                RedisProfilerEntryToSpanConverter.DrainSession(null, this.defaultSession, this.sampler, spans);
+                RedisProfilerEntryToSpanConverter.DrainSession(null, this.defaultSession.FinishProfiling(), this.sampler, spans);
 
                 foreach (var entry in this.cache)
                 {
@@ -108,12 +108,12 @@ namespace OpenCensus.Collector.StackExchangeRedis
                     if (span.HasEnded)
                     {
                         this.cache.TryRemove(span, out var session);
-                        RedisProfilerEntryToSpanConverter.DrainSession(span, session, this.sampler, spans);
+                        RedisProfilerEntryToSpanConverter.DrainSession(span, session.FinishProfiling(), this.sampler, spans);
                     }
                     else
                     {
                         this.cache.TryGetValue(span, out var session);
-                        RedisProfilerEntryToSpanConverter.DrainSession(span, session, this.sampler, spans);
+                        RedisProfilerEntryToSpanConverter.DrainSession(span, session.FinishProfiling(), this.sampler, spans);
                     }
                 }
 
