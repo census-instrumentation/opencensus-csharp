@@ -70,12 +70,12 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
 
             var context = SpanContext.Create(traceId, spanId, traceOptions, tracestate);
 
-            var sd = ConvertProfiledCommandToSpanData(context, name, parentSpanId, command);
+            var sd = ProfiledCommandToSpanData(context, name, parentSpanId, command);
 
             spans.Add(sd);
         }
 
-        internal static ISpanData ConvertProfiledCommandToSpanData(ISpanContext context, string name, ISpanId parentSpanId, IProfiledCommand command)
+        internal static ISpanData ProfiledCommandToSpanData(ISpanContext context, string name, ISpanId parentSpanId, IProfiledCommand command)
         {
             var hasRemoteParent = false;
 

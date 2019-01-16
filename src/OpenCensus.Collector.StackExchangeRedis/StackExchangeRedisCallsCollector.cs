@@ -66,6 +66,11 @@ namespace OpenCensus.Collector.StackExchangeRedis
         /// <returns>Session associated with the current span context to record Redis calls.</returns>
         public Func<ProfilingSession> GetProfilerSessionsFactory()
         {
+            // This implementation shares session for multiple Redis calls made inside a single parent Span.
+            // It cost an additional lookup in concurrent dictionary, but potentially saves an allocation
+            // if many calls to Redis were made from the same parent span.
+            // Creating a session per Redis call may be more optimal solution here as sampling will not
+            // require any locking and can redis the number of buffered sessions significantly.
             return () =>
             {
                 var span = this.tracer.CurrentSpan;
@@ -74,14 +79,17 @@ namespace OpenCensus.Collector.StackExchangeRedis
                 // BlankSpan has invalid context. It's OK to use a single profiler session
                 // for all invalid context's spans.
                 //
-                // TODO: It will be great to allow to check sampling here, but it is impossible
-                // to start a new trace id here - no way to pass it to the resulting Span.
+                // It would be great to allow to check sampling here, but it is impossible
+                // with the current model to start a new trace id here - no way to pass it
+                // to the resulting Span.
                 if (span == null || !span.Context.IsValid)
                 {
                     return this.defaultSession;
                 }
 
-                // TODO: check sampling of a current span
+                // TODO: As a performance optimization the check for sampling may be implemented here
+                // The problem with this approach would be that SpanId cannot be generated here
+                // So if sampler uses SpanId in algorithm - results would be inconsistent
                 var session = this.cache.GetOrAdd(span, (s) => new ProfilingSession(s));
                 return session;
             };
