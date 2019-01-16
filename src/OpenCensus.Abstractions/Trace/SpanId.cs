@@ -17,7 +17,6 @@
 namespace OpenCensus.Trace
 {
     using System;
-    using OpenCensus.Trace.Internal;
     using OpenCensus.Utils;
 
     public sealed class SpanId : ISpanId

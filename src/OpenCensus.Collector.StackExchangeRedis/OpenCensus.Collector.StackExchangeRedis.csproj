@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OpenCensus.Abstractions\OpenCensus.Abstractions.csproj" />
-    <ProjectReference Include="..\OpenCensus\OpenCensus.csproj" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.0-beta008" PrivateAssets="All" />
     <PackageReference Include="StackExchange.Redis" Version="2.0.519" />
   </ItemGroup>

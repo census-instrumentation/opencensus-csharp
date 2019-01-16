@@ -266,7 +266,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             }
 
             IView view = viewData.View;
-            Timestamp startTime = viewData.Start.ToTimestamp();
+            var startTime = viewData.Start.ToTimestamp();
 
             // Each entry in AggregationMap will be converted into an independent TimeSeries object
             foreach (var entry in viewData.AggregationMap)
