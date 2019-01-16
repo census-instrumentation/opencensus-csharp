@@ -31,48 +31,56 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
         {
             var parentContext = parentSpan?.Context ?? SpanContext.Invalid;
 
-            var traceId = TraceId.Invalid;
-            var tracestate = Tracestate.Empty;
-            var parentSpanId = SpanId.Invalid;
-            var parentOptions = TraceOptions.Default;
-
-            if (!parentContext.IsValid)
+            foreach (var command in sessionCommands)
             {
-                traceId = parentContext.TraceId;
-                tracestate = parentContext.Tracestate;
-                parentSpanId = parentContext.SpanId;
-                parentOptions = parentContext.TraceOptions;
-            }
+                string name = command.Command; // Example: SET;
+                if (string.IsNullOrEmpty(name))
+                {
+                    name = "name";
+                }
 
-            foreach (var entry in sessionCommands)
-            {
-                RecordSpanIfSampledIn(parentContext, traceId, parentSpanId, parentOptions, tracestate, entry, sampler, spans);
+                if (ShouldSample(parentContext, name, sampler, out var context, out var parentSpanId))
+                {
+                    var sd = ProfiledCommandToSpanData(context, name, parentSpanId, command);
+                    spans.Add(sd);
+                }
             }
         }
 
-        internal static void RecordSpanIfSampledIn(ISpanContext parentContext, ITraceId traceId, ISpanId parentSpanId, TraceOptions traceOptions, Tracestate tracestate, IProfiledCommand command, ISampler sampler, IList<ISpanData> spans)
+        internal static bool ShouldSample(ISpanContext parentContext, string name, ISampler sampler, out ISpanContext context, out ISpanId parentSpanId)
         {
-            bool hasRemoteParent = false;
-            var spanId = SpanId.FromBytes(GenerateRandomId(8));
+            var traceId = TraceId.Invalid;
+            var tracestate = Tracestate.Empty;
+            parentSpanId = SpanId.Invalid;
+            var parentOptions = TraceOptions.Default;
 
-            string name = command.Command; // Example: SET;
-            if (string.IsNullOrEmpty(name))
+            if (parentContext.IsValid)
             {
-                name = "name";
+                traceId = parentContext.TraceId;
+                parentSpanId = parentContext.SpanId;
+                parentOptions = parentContext.TraceOptions;
             }
+            else
+            {
+                traceId = TraceId.FromBytes(Guid.NewGuid().ToByteArray());
+            }
+
+            var result = false;
+            bool hasRemoteParent = false;
+            var spanId = SpanId.FromBytes(Guid.NewGuid().ToByteArray(), 8);
+            var traceOptions = TraceOptions.Default;
 
             if (sampler != null)
             {
-                var builder = TraceOptions.Builder(traceOptions);
-                builder = builder.SetIsSampled(sampler.ShouldSample(parentContext, hasRemoteParent, traceId, spanId, name, null));
+                var builder = TraceOptions.Builder(parentContext.TraceOptions);
+                result = sampler.ShouldSample(parentContext, hasRemoteParent, traceId, spanId, name, null);
+                builder = builder.SetIsSampled(result);
                 traceOptions = builder.Build();
             }
 
-            var context = SpanContext.Create(traceId, spanId, traceOptions, tracestate);
+            context = SpanContext.Create(traceId, spanId, traceOptions, parentContext.Tracestate);
 
-            var sd = ProfiledCommandToSpanData(context, name, parentSpanId, command);
-
-            spans.Add(sd);
+            return result;
         }
 
         internal static ISpanData ProfiledCommandToSpanData(ISpanContext context, string name, ISpanId parentSpanId, IProfiledCommand command)
@@ -143,14 +151,6 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
             SpanKind kind = SpanKind.Client;
 
             return SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
-        }
-
-        private static byte[] GenerateRandomId(int byteCount)
-        {
-            var idBytes = new byte[byteCount];
-            Rand.NextBytes(idBytes);
-
-            return idBytes;
         }
     }
 }
