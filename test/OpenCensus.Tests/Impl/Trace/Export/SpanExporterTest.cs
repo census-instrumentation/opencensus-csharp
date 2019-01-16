@@ -20,6 +20,7 @@ namespace OpenCensus.Trace.Export.Test
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
+    using System.Threading.Tasks;
     using Moq;
     using OpenCensus.Common;
     using OpenCensus.Internal;
@@ -181,7 +182,38 @@ namespace OpenCensus.Trace.Export.Test
             Assert.Single(exported);
             Assert.DoesNotContain(span1.ToSpanData(), exported);
             Assert.Contains(span2.ToSpanData(), exported);
+        }
 
+        [Fact]
+        public async Task ExportAsyncCallsAllHandlers()
+        {
+            var exporter = SpanExporter.Create(4, Duration.Create(1, 0));
+
+            var handler1 = new Mock<IHandler>();
+            var handler2 = new Mock<IHandler>();
+
+
+            exporter.RegisterHandler("first", handler1.Object);
+            exporter.RegisterHandler("second", handler2.Object);
+
+            var span1 = new Mock<ISpanData>();
+            var span2 = new Mock<ISpanData>();
+
+            await exporter.ExportAsync(new ISpanData[] { span1.Object, span2.Object }, CancellationToken.None);
+
+            Assert.Single(handler1.Invocations);
+            var args = (IEnumerable<ISpanData>)handler1.Invocations.First().Arguments.First();
+
+
+            handler1.Verify(c => c.Export(It.Is<IEnumerable<ISpanData>>(
+                (x) => x.Where((s) => s == span1.Object).Count() > 0 &&
+                       x.Where((s) => s == span2.Object).Count() > 0 &&
+                       x.Count() == 2)));
+
+            handler2.Verify(c => c.Export(It.Is<IEnumerable<ISpanData>>(
+                (x) => x.Where((s) => s == span1.Object).Count() > 0 &&
+                       x.Where((s) => s == span2.Object).Count() > 0 &&
+                       x.Count() == 2)));
         }
     }
 

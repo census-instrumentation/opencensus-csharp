@@ -49,6 +49,14 @@ namespace OpenCensus.Trace.Export
             this.worker.AddSpan(span);
         }
 
+        /// <inheritdoc/>
+        public override Task ExportAsync(IEnumerable<ISpanData> export, CancellationToken token)
+        {
+            this.worker.ExportAsync(export, token);
+
+            return Task.CompletedTask;
+        }
+
         public override void RegisterHandler(string name, IHandler handler)
         {
             this.worker.RegisterHandler(name, handler);

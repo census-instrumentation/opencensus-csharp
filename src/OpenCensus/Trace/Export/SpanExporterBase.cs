@@ -30,6 +30,9 @@ namespace OpenCensus.Trace.Export
 
         public abstract void AddSpan(ISpan span);
 
+        /// <inheritdoc/>
+        public abstract Task ExportAsync(IEnumerable<ISpanData> export, CancellationToken token);
+
         public abstract void Dispose();
 
         public abstract void RegisterHandler(string name, IHandler handler);
