@@ -21,6 +21,8 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
     using StackExchange.Redis.Profiling;
     using Xunit;
     using OpenCensus.Trace.Internal;
+    using System;
+    using OpenCensus.Common;
 
     public class RedisProfilerEntryToSpanConverterTests
     {
@@ -30,8 +32,19 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
             var parentSpan = BlankSpan.Instance;
             var profiledCommand = new Mock<IProfiledCommand>();
             profiledCommand.Setup(m => m.Command).Returns("SET");
-            var result = RedisProfilerEntryToSpanConverter.ConvertProfiledCommandToSpanData(parentSpan, profiledCommand.Object);
+            var result = RedisProfilerEntryToSpanConverter.ConvertProfiledCommandToSpanData("SET", TraceId.Invalid, SpanId.Invalid, SpanId.Invalid, TraceOptions.Default, Tracestate.Empty, profiledCommand.Object);
             Assert.Equal("SET", result.Name);
+        }
+
+        [Fact]
+        public void ConvertProfiledCommandToSpanDataUsesTimestampAsStartTime()
+        {
+            var parentSpan = BlankSpan.Instance;
+            var profiledCommand = new Mock<IProfiledCommand>();
+            var now = DateTimeOffset.Now;
+            profiledCommand.Setup(m => m.CommandCreated).Returns(now.DateTime);
+            var result = RedisProfilerEntryToSpanConverter.ConvertProfiledCommandToSpanData("name", TraceId.Invalid, SpanId.Invalid, SpanId.Invalid, TraceOptions.Default, Tracestate.Empty, profiledCommand.Object);
+            Assert.Equal(Timestamp.FromMillis(now.ToUnixTimeMilliseconds()), result.StartTimestamp);
         }
     }
 }

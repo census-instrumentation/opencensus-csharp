@@ -22,13 +22,21 @@ namespace OpenCensus.Trace
     public sealed class TraceId : ITraceId
     {
         public const int Size = 16;
-        public static readonly TraceId Invalid = new TraceId(new byte[Size]);
+        private static readonly TraceId InvalidTraceId = new TraceId(new byte[Size]);
 
         private readonly byte[] bytes;
 
         private TraceId(byte[] bytes)
         {
             this.bytes = bytes;
+        }
+
+        public static ITraceId Invalid
+        {
+            get
+            {
+                return InvalidTraceId;
+            }
         }
 
         public byte[] Bytes
@@ -45,7 +53,7 @@ namespace OpenCensus.Trace
         {
             get
             {
-                return !Arrays.Equals(this.bytes, Invalid.bytes);
+                return !Arrays.Equals(this.bytes, InvalidTraceId.bytes);
             }
         }
 
@@ -113,7 +121,7 @@ namespace OpenCensus.Trace
             {
                 random.NextBytes(bytes);
             }
-            while (Arrays.Equals(bytes, Invalid.bytes));
+            while (Arrays.Equals(bytes, InvalidTraceId.bytes));
             return new TraceId(bytes);
         }
 

@@ -28,43 +28,58 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
     {
         private static readonly Random Rand = new Random();
 
-        public static void DrainSession(ISpan parentSpan, ProfilingSession session, ITracer tracer, IHandler handler)
-        {
-            foreach (var entry in session.FinishProfiling())
-            {
-                RecordSpan(parentSpan, entry, tracer, handler);
-            }
-        }
-
-        public static void RecordSpan(ISpan parentSpan, IProfiledCommand command, ITracer tracer, IHandler handler)
-        {
-            // TODO: Check sampling first
-            var sd = ConvertProfiledCommandToSpanData(parentSpan, command);
-
-            handler.Export(new ISpanData[] { sd });
-        }
-
-        public static ISpanData ConvertProfiledCommandToSpanData(ISpan parentSpan, IProfiledCommand command)
+        public static void DrainSession(ISpan parentSpan, ProfilingSession session, ISampler sampler, IList<ISpanData> spans)
         {
             var parentContext = parentSpan?.Context ?? SpanContext.Invalid;
 
-            // use https://github.com/opentracing/specification/blob/master/semantic_conventions.md for now
+            var traceId = TraceId.Invalid;
+            var tracestate = Tracestate.Empty;
+            var parentSpanId = SpanId.Invalid;
+            var parentOptions = TraceOptions.Default;
 
-            ISpanContext context = SpanContext.Invalid;
-
-            if (parentContext.IsValid)
+            if (!parentContext.IsValid)
             {
-                var traceId = parentContext.TraceId;
-                var spanId = SpanId.FromBytes(GenerateRandomId(8));
-                var tracestate = parentContext.Tracestate;
-                context = SpanContext.Create(traceId, spanId, TraceOptions.Default, tracestate);
+                traceId = parentContext.TraceId;
+                tracestate = parentContext.Tracestate;
+                parentSpanId = parentContext.SpanId;
+                parentOptions = parentContext.TraceOptions;
             }
 
-            // TODO: SpanContext.Create is from OpenCensus implementation
-            // TODO: deal with traceoptions
-            ISpanId parentSpanId = parentContext.SpanId;
-            bool? hasRemoteParent = false;
+            foreach (var entry in session.FinishProfiling())
+            {
+                RecordSpan(parentContext, traceId, parentSpanId, parentOptions, tracestate, entry, sampler, spans);
+            }
+        }
+
+        public static void RecordSpan(ISpanContext parentContext, ITraceId traceId, ISpanId parentSpanId, TraceOptions traceOptions, Tracestate tracestate, IProfiledCommand command, ISampler sampler, IList<ISpanData> spans)
+        {
+            bool hasRemoteParent = false;
+            var spanId = SpanId.FromBytes(GenerateRandomId(8));
+
             string name = command.Command; // Example: SET;
+            if (string.IsNullOrEmpty(name))
+            {
+                name = "name";
+            }
+
+            if (sampler != null)
+            {
+                var builder = TraceOptions.Builder(traceOptions);
+                builder = builder.SetIsSampled(sampler.ShouldSample(parentContext, hasRemoteParent, traceId, spanId, name, null));
+                traceOptions = builder.Build();
+            }
+
+            var sd = ConvertProfiledCommandToSpanData(name, traceId, spanId, parentSpanId, traceOptions, tracestate, command);
+
+            spans.Add(sd);
+        }
+
+        public static ISpanData ConvertProfiledCommandToSpanData(string name, ITraceId traceId, ISpanId spanId, ISpanId parentSpanId, TraceOptions traceOptions, Tracestate tracestate, IProfiledCommand command)
+        {
+            var context = SpanContext.Create(traceId, spanId, traceOptions, tracestate);
+            var hasRemoteParent = false;
+
+            // use https://github.com/opentracing/specification/blob/master/semantic_conventions.md for now
 
             // Timing example:
             // command.CommandCreated; //2019-01-10 22:18:28Z
@@ -127,7 +142,6 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
             Status status = Status.Ok;
             SpanKind kind = SpanKind.Client;
 
-            // TODO: SpanData.Create is from OpenCensus implementation
             return SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
         }
 

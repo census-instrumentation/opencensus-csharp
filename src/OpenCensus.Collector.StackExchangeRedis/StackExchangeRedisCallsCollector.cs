@@ -18,6 +18,7 @@ namespace OpenCensus.Collector.StackExchangeRedis
 {
     using System;
     using System.Collections.Concurrent;
+    using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
     using OpenCensus.Collector.StackExchangeRedis.Implementation;
@@ -33,6 +34,7 @@ namespace OpenCensus.Collector.StackExchangeRedis
     {
         private readonly ITracer tracer;
         private readonly IHandler handler;
+        private readonly ISampler sampler;
 
         private readonly CancellationTokenSource cancellationTokenSource;
         private readonly CancellationToken cancellationToken;
@@ -51,6 +53,7 @@ namespace OpenCensus.Collector.StackExchangeRedis
         {
             this.tracer = tracer;
             this.handler = handler;
+            this.sampler = sampler;
 
             this.cancellationTokenSource = new CancellationTokenSource();
             this.cancellationToken = this.cancellationTokenSource.Token;
@@ -95,7 +98,9 @@ namespace OpenCensus.Collector.StackExchangeRedis
         {
             while (!this.cancellationToken.IsCancellationRequested)
             {
-                RedisProfilerEntryToSpanConverter.DrainSession(null, this.defaultSession, this.tracer, this.handler);
+                var spans = new List<ISpanData>();
+
+                RedisProfilerEntryToSpanConverter.DrainSession(null, this.defaultSession, this.sampler, spans);
 
                 foreach (var entry in this.cache)
                 {
@@ -103,14 +108,16 @@ namespace OpenCensus.Collector.StackExchangeRedis
                     if (span.HasEnded)
                     {
                         this.cache.TryRemove(span, out var session);
-                        RedisProfilerEntryToSpanConverter.DrainSession(span, session, this.tracer, this.handler);
+                        RedisProfilerEntryToSpanConverter.DrainSession(span, session, this.sampler, spans);
                     }
                     else
                     {
                         this.cache.TryGetValue(span, out var session);
-                        RedisProfilerEntryToSpanConverter.DrainSession(span, session, this.tracer, this.handler);
+                        RedisProfilerEntryToSpanConverter.DrainSession(span, session, this.sampler, spans);
                     }
                 }
+
+                this.handler.Export(spans);
 
                 Thread.Sleep(TimeSpan.FromSeconds(1));
             }

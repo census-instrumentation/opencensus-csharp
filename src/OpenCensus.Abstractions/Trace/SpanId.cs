@@ -22,13 +22,22 @@ namespace OpenCensus.Trace
     public sealed class SpanId : ISpanId
     {
         public const int Size = 8;
-        public static readonly SpanId Invalid = new SpanId(new byte[Size]);
+
+        private static readonly SpanId InvalidSpanId = new SpanId(new byte[Size]);
 
         private readonly byte[] bytes;
 
         private SpanId(byte[] bytes)
         {
             this.bytes = bytes;
+        }
+
+        public static ISpanId Invalid
+        {
+            get
+            {
+                return InvalidSpanId;
+            }
         }
 
         public byte[] Bytes
@@ -43,7 +52,7 @@ namespace OpenCensus.Trace
 
         public bool IsValid
         {
-            get { return !Arrays.Equals(this.bytes, Invalid.bytes); }
+            get { return !Arrays.Equals(this.bytes, InvalidSpanId.bytes); }
         }
 
         public static ISpanId FromBytes(byte[] buffer)
@@ -88,7 +97,7 @@ namespace OpenCensus.Trace
             {
                 random.NextBytes(bytes);
             }
-            while (Arrays.Equals(bytes, Invalid.bytes));
+            while (Arrays.Equals(bytes, InvalidSpanId.bytes));
             return new SpanId(bytes);
         }
 
