@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-namespace OpenCensus.Trace.Export
+namespace OpenCensus.Trace.Export.Internal
 {
     using System;
     using System.Collections.Concurrent;

@@ -17,6 +17,9 @@
 namespace OpenCensus.Trace.Export
 {
     using System;
+    using System.Collections.Generic;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Span exporter.
@@ -28,6 +31,16 @@ namespace OpenCensus.Trace.Export
         /// </summary>
         /// <param name="span">Span to export.</param>
         void AddSpan(ISpan span);
+
+        /// <summary>
+        /// Exports collection of spans. This method is used for the situation when the
+        /// span objects have been created from external sources, not using the Open Censis API.
+        /// For example, read from file or generated from objects recieved in async queue.
+        /// </summary>
+        /// <param name="export">Set of <see cref="ISpanData"/> objects to export.</param>
+        /// <param name="token">Cancellation token.</param>
+        /// <returns>A <see cref="Task"/> representing asynchronous export operation.</returns>
+        Task ExportAsync(IEnumerable<ISpanData> export, CancellationToken token);
 
         /// <summary>
         /// Registers the exporter handler.

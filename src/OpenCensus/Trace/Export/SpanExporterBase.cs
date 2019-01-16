@@ -16,6 +16,10 @@
 
 namespace OpenCensus.Trace.Export
 {
+    using System.Collections.Generic;
+    using System.Threading;
+    using System.Threading.Tasks;
+
     public abstract class SpanExporterBase : ISpanExporter
     {
         private static readonly ISpanExporter NoopSpanExporterInstance = new NoopSpanExporter();
@@ -29,6 +33,9 @@ namespace OpenCensus.Trace.Export
         }
 
         public abstract void AddSpan(ISpan span);
+
+        /// <inheritdoc/>
+        public abstract async Task ExportAsync(IEnumerable<ISpanData> export, CancellationToken token);
 
         public abstract void Dispose();
 
