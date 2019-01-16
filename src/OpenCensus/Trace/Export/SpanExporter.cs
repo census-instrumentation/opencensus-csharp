@@ -53,9 +53,11 @@ namespace OpenCensus.Trace.Export
         }
 
         /// <inheritdoc/>
-        public override async Task ExportAsync(IEnumerable<ISpanData> export, CancellationToken token)
+        public override Task ExportAsync(IEnumerable<ISpanData> export, CancellationToken token)
         {
+            this.worker.ExportAsync(export, token);
 
+            return Task.CompletedTask;
         }
 
         public override void RegisterHandler(string name, IHandler handler)
