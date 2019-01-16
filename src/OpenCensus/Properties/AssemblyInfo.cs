@@ -16,6 +16,8 @@
 
 using System.Runtime.CompilerServices;
 
+[assembly: System.CLSCompliant(true)]
+
 [assembly: InternalsVisibleTo("OpenCensus.Tests" + AssemblyInfo.PublicKey)]
 [assembly: InternalsVisibleTo("OpenCensus.Collector.Dependencies.Tests" + AssemblyInfo.PublicKey)]
 [assembly: InternalsVisibleTo("OpenCensus.Collector.AspNetCore.Tests" + AssemblyInfo.PublicKey)]
