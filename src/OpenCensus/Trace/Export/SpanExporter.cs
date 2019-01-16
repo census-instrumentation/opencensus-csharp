@@ -16,7 +16,9 @@
 
 namespace OpenCensus.Trace.Export
 {
+    using System.Collections.Generic;
     using System.Threading;
+    using System.Threading.Tasks;
     using OpenCensus.Common;
 
     public sealed class SpanExporter : SpanExporterBase
