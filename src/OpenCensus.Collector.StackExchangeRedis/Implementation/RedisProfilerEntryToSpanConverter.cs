@@ -65,7 +65,7 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
                 traceId = TraceId.FromBytes(Guid.NewGuid().ToByteArray());
             }
 
-            var result = false;
+            var result = parentOptions.IsSampled;
             bool hasRemoteParent = false;
             var spanId = SpanId.FromBytes(Guid.NewGuid().ToByteArray(), 8);
             var traceOptions = TraceOptions.Default;

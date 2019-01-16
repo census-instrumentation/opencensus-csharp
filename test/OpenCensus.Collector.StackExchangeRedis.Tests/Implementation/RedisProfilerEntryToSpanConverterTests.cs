@@ -33,9 +33,11 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
         {
             var parentSpan = BlankSpan.Instance;
             var profiledCommand = new Mock<IProfiledCommand>();
+            var sampler = new Mock<ISampler>();
+            sampler.Setup(x => x.ShouldSample(It.IsAny<ISpanContext>(), It.IsAny<bool>(), It.IsAny<ITraceId>(), It.IsAny<ISpanId>(), It.IsAny<string>(), It.IsAny<IEnumerable<ISpan>>())).Returns(true);
             profiledCommand.Setup(m => m.Command).Returns("SET");
             var result = new List<ISpanData>();
-            RedisProfilerEntryToSpanConverter.DrainSession(parentSpan, new IProfiledCommand[] { profiledCommand.Object }, null, result);
+            RedisProfilerEntryToSpanConverter.DrainSession(parentSpan, new IProfiledCommand[] { profiledCommand.Object }, sampler.Object, result);
             Assert.Single(result);
             Assert.Equal("SET", result[0].Name);
         }
