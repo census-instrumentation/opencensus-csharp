@@ -29,7 +29,6 @@
             description: "processed video size over time",
             measure: VideoSize,
             aggregation: Sum.Create(),
-            //aggregation: Distribution.Create(BucketBoundaries.Create(new List<double> { 0.0, 16.0 * MiB, 256.0 * MiB })),
             columns: new List<ITagKey>() { FrontendKey });
 
         internal static object Run(string projectId)
