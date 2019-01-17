@@ -109,30 +109,12 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
 
         public static Google.Cloud.Trace.V2.AttributeValue ToAttributeValue(this IAttributeValue av)
         {
-            var ret = new Google.Cloud.Trace.V2.AttributeValue();
-            var attributeType = av.GetType();
-
-            // Handle all primitive types
-            if (attributeType == typeof(AttributeValue<bool>))
-            {
-                ret.BoolValue = ((AttributeValue<bool>)av).Value;
-            }
-            else if (attributeType == typeof(AttributeValue<long>))
-            {
-                ret.IntValue = ((AttributeValue<long>)av).Value;
-            }
-            else // String or anything else is written as string
-            {
-                ret.StringValue = new TruncatableString()
-                {
-                    Value = av.Match(
-                        s => s,
-                        b => b.ToString(),
-                        l => l.ToString(),
-                        d => d.ToString(),
-                        o => o.ToString())
-                };
-            }
+            var ret = av.Match(
+                (s) => new Google.Cloud.Trace.V2.AttributeValue() { StringValue = new TruncatableString() { Value = s } },
+                (b) => new Google.Cloud.Trace.V2.AttributeValue() { BoolValue = b },
+                (l) => new Google.Cloud.Trace.V2.AttributeValue() { IntValue = l },
+                (d) => new Google.Cloud.Trace.V2.AttributeValue() { StringValue = new TruncatableString() { Value = d.ToString() } },
+                (obj) => new Google.Cloud.Trace.V2.AttributeValue() { StringValue = new TruncatableString() { Value = obj.ToString() } });
 
             return ret;
         }
@@ -155,7 +137,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
 
             // Set header mutation for every outgoing API call to Stackdriver so the BE knows
             // which version of OC client is calling it as well as which version of the exporter
-            CallSettings callSettings = CallSettings.FromHeaderMutation(StackDriverCallHeaderAppender);
+            CallSettings callSettings = CallSettings.FromHeaderMutation(StackdriverCallHeaderAppender);
             traceServiceSettings = new TraceServiceSettings();
             traceServiceSettings.CallSettings = callSettings;
         }
@@ -199,7 +181,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         /// Appends OpenCensus headers for every outgoing request to Stackdriver Backend
         /// </summary>
         /// <param name="metadata">The metadata that is sent with every outgoing http request</param>
-        private static void StackDriverCallHeaderAppender(Metadata metadata)
+        private static void StackdriverCallHeaderAppender(Metadata metadata)
         {
             
             metadata.Add("AGENT_LABEL_KEY", "g.co/agent");

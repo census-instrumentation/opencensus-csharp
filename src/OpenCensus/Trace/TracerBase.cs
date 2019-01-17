@@ -17,6 +17,7 @@
 namespace OpenCensus.Trace
 {
     using System;
+    using Internal;
     using OpenCensus.Common;
 
     public abstract class TracerBase : ITracer

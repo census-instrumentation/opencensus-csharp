@@ -1,4 +1,4 @@
-﻿// <copyright file="IStartEndHandler.cs" company="OpenCensus Authors">
+﻿// <copyright file="AssemblyInfo.cs" company="OpenCensus Authors">
 // Copyright 2018, OpenCensus Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,23 +14,4 @@
 // limitations under the License.
 // </copyright>
 
-namespace OpenCensus.Trace
-{
-    /// <summary>
-    /// Start event handler.
-    /// </summary>
-    public interface IStartEndHandler
-    {
-        /// <summary>
-        /// Called when span is being started.
-        /// </summary>
-        /// <param name="span">Span that just started.</param>
-        void OnStart(ISpan span);
-
-        /// <summary>
-        /// Called when span is just ended.
-        /// </summary>
-        /// <param name="span">Span that was just ended.</param>
-        void OnEnd(ISpan span);
-    }
-}
+[assembly: System.CLSCompliant(true)]

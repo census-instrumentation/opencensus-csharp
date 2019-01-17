@@ -122,9 +122,7 @@ namespace OpenCensus.Stats.Test
             var tv = TagValues.Create(new List<ITagValue>() { VALUE });
             StatsTestUtil.AssertAggregationMapEquals(
                 viewData.AggregationMap,
-                new Dictionary<TagValues, IAggregationData>() {
-                    { tv, StatsTestUtil.CreateAggregationData(Sum.Create(), MEASURE_DOUBLE, 2.0) },
-                },
+                new Dictionary<TagValues, IAggregationData>() {{ tv, StatsTestUtil.CreateAggregationData(Sum.Create(), MEASURE_DOUBLE, 2.0) }},
                 1e-6);
         }
 

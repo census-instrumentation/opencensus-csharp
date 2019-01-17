@@ -14,13 +14,13 @@
 // limitations under the License.
 // </copyright>
 
-namespace OpenCensus.Trace
+namespace OpenCensus.Trace.Internal
 {
     using System;
     using System.Collections.Generic;
     using OpenCensus.Trace.Export;
 
-    public sealed class BlankSpan : SpanBase
+    internal sealed class BlankSpan : SpanBase
     {
         public static readonly BlankSpan Instance = new BlankSpan();
 

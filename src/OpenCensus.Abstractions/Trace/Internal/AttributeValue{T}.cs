@@ -22,7 +22,7 @@ namespace OpenCensus.Trace
     /// Generic attribute value.
     /// </summary>
     /// <typeparam name="T">Type of the value carried by this attribute value.</typeparam>
-    public sealed class AttributeValue<T> : AttributeValue, IAttributeValue<T>
+    internal sealed class AttributeValue<T> : AttributeValue, IAttributeValue<T>
     {
         internal AttributeValue(T value)
         {

@@ -176,7 +176,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         private static IList<long> CreateBucketCounts(IList<long> bucketCounts)
         {
             // The first bucket (underflow bucket) should always be 0 count because the Metrics first bucket
-            // is [0, first_bound) but StackDriver distribution consists of an underflow bucket (number 0).
+            // is [0, first_bound) but Stackdriver distribution consists of an underflow bucket (number 0).
             var ret = new List<long>();
             ret.Add(0L);
             ret.AddRange(bucketCounts);

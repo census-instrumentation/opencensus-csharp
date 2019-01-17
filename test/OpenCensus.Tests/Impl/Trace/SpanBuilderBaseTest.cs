@@ -17,6 +17,7 @@
 namespace OpenCensus.Trace.Test
 {
     using Moq;
+    using Internal;
     using OpenCensus.Common;
     using Xunit;
 
@@ -40,6 +41,24 @@ namespace OpenCensus.Trace.Test
             try
             {
                 Assert.Same(span.Object, tracer.CurrentSpan);
+            }
+            finally
+            {
+                scope.Dispose();
+            }
+            span.Verify(s => s.End(EndSpanOptions.Default));
+            Assert.Same(BlankSpan.Instance, tracer.CurrentSpan);
+        }
+
+        [Fact]
+        public void StartScopedSpan_WithParam()
+        {
+            Assert.Same(BlankSpan.Instance, tracer.CurrentSpan);
+
+            IScope scope = spanBuilder.Object.StartScopedSpan(out ISpan outSpan);
+            try
+            {
+                Assert.Same(outSpan, tracer.CurrentSpan);
             }
             finally
             {

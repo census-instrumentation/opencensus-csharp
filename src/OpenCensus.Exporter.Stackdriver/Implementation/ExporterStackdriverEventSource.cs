@@ -1,4 +1,4 @@
-﻿// <copyright file="OpenCensusEventSource.cs" company="OpenCensus Authors">
+﻿// <copyright file="ExporterStackdriverEventSource.cs" company="OpenCensus Authors">
 // Copyright 2018, OpenCensus Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,52 +14,46 @@
 // limitations under the License.
 // </copyright>
 
-namespace OpenCensus.Implementation
+namespace OpenCensus.Exporter.Stackdriver.Implementation
 {
     using System;
     using System.Diagnostics.Tracing;
     using System.Globalization;
     using System.Threading;
 
-    [EventSource(Name = "OpenCensus-Base")]
-    internal class OpenCensusEventSource : EventSource
+    [EventSource(Name = "OpenCensus-Exporter-Stackdriver")]
+    internal class ExporterStackdriverEventSource : EventSource
     {
-        public static readonly OpenCensusEventSource Log = new OpenCensusEventSource();
+        public static readonly ExporterStackdriverEventSource Log = new ExporterStackdriverEventSource();
 
         [NonEvent]
-        public void ExporterThrownExceptionWarning(Exception ex)
+        public void UnknownProblemInWorkerThreadError(Exception ex)
         {
-            if (Log.IsEnabled(EventLevel.Warning, EventKeywords.All))
+            if (Log.IsEnabled(EventLevel.Error, EventKeywords.All))
             {
-                this.ExporterThrownExceptionWarning(ToInvariantString(ex));
+                this.UnknownProblemInWorkerThreadError(ToInvariantString(ex));
             }
         }
 
-        [Event(1, Message = "Exporter failed to export items. Exception: {0}", Level = EventLevel.Warning)]
-        public void ExporterThrownExceptionWarning(string ex)
+        [Event(1, Message = "Stackdriver exporter encountered an unknown error and will shut down. Exception: {0}", Level = EventLevel.Error)]
+        public void UnknownProblemInWorkerThreadError(string ex)
         {
             this.WriteEvent(1, ex);
         }
 
-        [Event(2, Message = "Failed to parse a resource tag. {0} should be an ASCII string with a length greater than 0 and not exceeding {1} characters.", Level = EventLevel.Warning)]
-        public void InvalidCharactersInResourceElement(string element)
-        {
-            this.WriteEvent(2, element, Constants.MaxResourceTypeNameLength);
-        }
-
         [NonEvent]
-        public void FailedReadingEnvironmentVariableWarning(string environmentVariableName, Exception ex)
+        public void UnknownProblemWhileCreatingStackdriverTimeSeriesError(Exception ex)
         {
-            if (Log.IsEnabled(EventLevel.Warning, EventKeywords.All))
+            if (Log.IsEnabled(EventLevel.Error, EventKeywords.All))
             {
-                this.FailedReadingEnvironmentVariableWarning(environmentVariableName, ToInvariantString(ex));
+                this.UnknownProblemWhileCreatingStackdriverTimeSeriesError(ToInvariantString(ex));
             }
         }
 
-        [Event(3, Message = "Failed to read environment variable {0}. Main library failed with security exception: {1}", Level = EventLevel.Warning)]
-        public void FailedReadingEnvironmentVariableWarning(string environmentVariableName, string ex)
+        [Event(2, Message = "Stackdriver exporter failed to create time series. Time series will be lost. Exception: {0}", Level = EventLevel.Error)]
+        public void UnknownProblemWhileCreatingStackdriverTimeSeriesError(string ex)
         {
-            this.WriteEvent(3, environmentVariableName, ex);
+            this.WriteEvent(2, ex);
         }
 
         /// <summary>

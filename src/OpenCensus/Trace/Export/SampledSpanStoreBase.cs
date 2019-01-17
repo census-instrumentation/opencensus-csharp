@@ -48,9 +48,9 @@ namespace OpenCensus.Trace.Export
 
         public abstract void ConsiderForSampling(ISpan span);
 
-        public abstract IList<ISpanData> GetErrorSampledSpans(ISampledSpanStoreErrorFilter filter);
+        public abstract IEnumerable<ISpanData> GetErrorSampledSpans(ISampledSpanStoreErrorFilter filter);
 
-        public abstract IList<ISpanData> GetLatencySampledSpans(ISampledSpanStoreLatencyFilter filter);
+        public abstract IEnumerable<ISpanData> GetLatencySampledSpans(ISampledSpanStoreLatencyFilter filter);
 
         public abstract void RegisterSpanNamesForCollection(IList<string> spanNames);
 

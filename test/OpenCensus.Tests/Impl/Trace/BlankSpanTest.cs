@@ -17,6 +17,7 @@
 namespace OpenCensus.Trace.Test
 {
     using System.Collections.Generic;
+    using Internal;
     using Xunit;
 
     public class BlankSpanTest

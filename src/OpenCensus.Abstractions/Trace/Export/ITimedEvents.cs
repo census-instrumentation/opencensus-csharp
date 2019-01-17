@@ -27,7 +27,7 @@ namespace OpenCensus.Trace.Export
         /// <summary>
         /// Gets ths list of timed events.
         /// </summary>
-        IList<ITimedEvent<T>> Events { get; }
+        IEnumerable<ITimedEvent<T>> Events { get; }
 
         /// <summary>
         /// Gets the number of dropped events due to active limits.
