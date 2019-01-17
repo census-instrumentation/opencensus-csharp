@@ -57,18 +57,6 @@ namespace OpenCensus.Exporter.Zipkin
         }
 
         /// <summary>
-        /// Gets the handler used by Zipkin.
-        /// </summary>
-        /// <remarks>It is only used for prototypes of Redis use.</remarks>
-        public IHandler Handler
-        {
-            get
-            {
-                return this.handler;
-            }
-        }
-
-        /// <summary>
         /// Start exporter.
         /// </summary>
         public void Start()

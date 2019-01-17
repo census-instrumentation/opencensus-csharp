@@ -24,7 +24,6 @@ namespace OpenCensus.Collector.StackExchangeRedis
     using OpenCensus.Collector.StackExchangeRedis.Implementation;
     using OpenCensus.Trace;
     using OpenCensus.Trace.Export;
-    using OpenCensus.Trace.Propagation;
     using StackExchange.Redis.Profiling;
 
     /// <summary>
@@ -33,7 +32,7 @@ namespace OpenCensus.Collector.StackExchangeRedis
     public class StackExchangeRedisCallsCollector : IDisposable
     {
         private readonly ITracer tracer;
-        private readonly IHandler handler;
+        private readonly IExportComponent exporter;
         private readonly ISampler sampler;
 
         private readonly CancellationTokenSource cancellationTokenSource;
@@ -48,11 +47,11 @@ namespace OpenCensus.Collector.StackExchangeRedis
         /// <param name="options">Configuration options for dependencies collector.</param>
         /// <param name="tracer">Tracer to record traced with.</param>
         /// <param name="sampler">Sampler to use to sample dependnecy calls.</param>
-        /// <param name="handler">TEMPORARY: handler to send data to.</param>
-        public StackExchangeRedisCallsCollector(StackExchangeRedisCallsCollectorOptions options, ITracer tracer, ISampler sampler, IHandler handler)
+        /// <param name="exportComponent">TEMPORARY: handler to send data to.</param>
+        public StackExchangeRedisCallsCollector(StackExchangeRedisCallsCollectorOptions options, ITracer tracer, ISampler sampler, IExportComponent exportComponent)
         {
             this.tracer = tracer;
-            this.handler = handler;
+            this.exporter = exportComponent;
             this.sampler = sampler;
 
             this.cancellationTokenSource = new CancellationTokenSource();
@@ -125,7 +124,7 @@ namespace OpenCensus.Collector.StackExchangeRedis
                     }
                 }
 
-                this.handler.Export(spans);
+                this.exporter.SpanExporter.ExportAsync(spans, CancellationToken.None).Wait();
 
                 Thread.Sleep(TimeSpan.FromSeconds(1));
             }

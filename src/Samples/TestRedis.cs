@@ -36,7 +36,7 @@
             // but if not - you can use it as follows:
             var tracer = Tracing.Tracer;
 
-            var collector = new StackExchangeRedisCallsCollector(null, tracer, null, exporter.Handler);
+            var collector = new StackExchangeRedisCallsCollector(null, tracer, null, Tracing.ExportComponent);
 
             // connect to the server
             ConnectionMultiplexer connection = ConnectionMultiplexer.Connect("localhost:6379");
