@@ -222,7 +222,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             string domain)
         {
             var metric = new Metric();
-            metric.Type = metricDescriptor.Name;
+            metric.Type = metricDescriptor.Type;
 
             IList<ITagKey> columns = view.Columns;
 

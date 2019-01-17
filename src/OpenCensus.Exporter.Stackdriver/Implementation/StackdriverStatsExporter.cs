@@ -19,7 +19,9 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
     using Google.Api;
     using Google.Api.Gax;
     using Google.Api.Gax.Grpc;
+    using Google.Apis.Auth.OAuth2;
     using Google.Cloud.Monitoring.V3;
+    using Grpc.Auth;
     using Grpc.Core;
     using OpenCensus.Exporter.Stackdriver.Utils;
     using OpenCensus.Stats;
@@ -39,6 +41,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
 
         private readonly Dictionary<IView, MetricDescriptor> metricDescriptors = new Dictionary<IView, MetricDescriptor>(new ViewNameComparer());
         private readonly ProjectName project;
+        private readonly GoogleCredential credential;
         private MetricServiceClient metricServiceClient;
         private CancellationTokenSource tokenSource;
 
@@ -73,8 +76,8 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
            StackdriverStatsConfiguration configuration)
         {
             GaxPreconditions.CheckNotNull(configuration, "configuration");
-            GaxPreconditions.CheckNotNullOrEmpty(configuration.ProjectId, "configuration.ProjectId");
             GaxPreconditions.CheckNotNull(configuration.MonitoredResource, "configuration.MonitoredResource");
+            GaxPreconditions.CheckNotNull(configuration.GoogleCredential, "configuration.GoogleCredential");
             GaxPreconditions.CheckArgument(
                 configuration.ExportInterval != TimeSpan.Zero,
                 paramName: "configuration.ExportInterval", 
@@ -84,6 +87,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             monitoredResource = configuration.MonitoredResource;
             collectionInterval = configuration.ExportInterval;
             project = new ProjectName(configuration.ProjectId);
+            credential = configuration.GoogleCredential;
 
             domain = GetDomain(configuration.MetricNamePrefix);
             displayNamePrefix = GetDisplayNamePrefix(configuration.MetricNamePrefix);
@@ -109,7 +113,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                 if (!isStarted)
                 {
                     tokenSource = new CancellationTokenSource();
-                    metricServiceClient = CreateMetricServiceClient(tokenSource);
+                    metricServiceClient = CreateMetricServiceClient(credential, tokenSource);
 
                     Task.Factory.StartNew(DoWork, tokenSource.Token);
 
@@ -273,7 +277,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             }
         }
 
-        private static MetricServiceClient CreateMetricServiceClient(CancellationTokenSource tokenSource)
+        private static MetricServiceClient CreateMetricServiceClient(GoogleCredential credential, CancellationTokenSource tokenSource)
         {
             // Make sure to add Opencensus header to every outgoing call to Stackdriver APIs
             Action<Metadata> addOpencensusHeader = m => m.Add(USER_AGENT_KEY, USER_AGENT);
@@ -284,12 +288,17 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                 headerMutation: addOpencensusHeader,
                 writeOptions: WriteOptions.Default,
                 propagationToken: null);
+
+            var channel = new Channel(
+                MetricServiceClient.DefaultEndpoint.ToString(),
+                credential.ToChannelCredentials());
+
             var metricServiceSettings = new MetricServiceSettings()
             {
                 CallSettings = callSettings
             };
 
-            return MetricServiceClient.Create(settings: metricServiceSettings);
+            return MetricServiceClient.Create(channel, settings: metricServiceSettings);
         }
 
         private static string GetDomain(string metricNamePrefix)
