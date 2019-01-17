@@ -14,6 +14,10 @@
 // limitations under the License.
 // </copyright>
 
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace OpenCensus.Trace.Export
 {
     public abstract class SpanExporterBase : ISpanExporter
@@ -29,6 +33,9 @@ namespace OpenCensus.Trace.Export
         }
 
         public abstract void AddSpan(ISpan span);
+
+        /// <inheritdoc/>
+        public abstract Task ExportAsync(IEnumerable<ISpanData> export, CancellationToken token);
 
         public abstract void Dispose();
 

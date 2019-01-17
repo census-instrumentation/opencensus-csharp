@@ -16,7 +16,9 @@
 
 namespace OpenCensus.Trace.Export
 {
+    using System.Collections.Generic;
     using System.Threading;
+    using System.Threading.Tasks;
     using OpenCensus.Common;
 
     public sealed class SpanExporter : SpanExporterBase
@@ -47,6 +49,14 @@ namespace OpenCensus.Trace.Export
         public override void AddSpan(ISpan span)
         {
             this.worker.AddSpan(span);
+        }
+
+        /// <inheritdoc/>
+        public override Task ExportAsync(IEnumerable<ISpanData> export, CancellationToken token)
+        {
+            this.worker.ExportAsync(export, token);
+
+            return Task.CompletedTask;
         }
 
         public override void RegisterHandler(string name, IHandler handler)
