@@ -19,6 +19,8 @@ namespace OpenCensus.Trace.Export
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
+    using System.Threading;
+    using System.Threading.Tasks;
     using OpenCensus.Common;
     using OpenCensus.Implementation;
 
@@ -54,6 +56,25 @@ namespace OpenCensus.Trace.Export
             }
         }
 
+        internal Task ExportAsync(IEnumerable<ISpanData> export, CancellationToken token)
+        {
+            var handlers = this.serviceHandlers.Values;
+            foreach (var handler in handlers)
+            {
+                try
+                {
+                    // TODO: when handlers interface will be switched to async - this need to await
+                    handler.Export(export);
+                }
+                catch (Exception ex)
+                {
+                    OpenCensusEventSource.Log.ExporterThrownExceptionWarning(ex);
+                }
+            }
+
+            return Task.CompletedTask;
+        }
+
         internal void Run(object obj)
         {
             List<ISpanData> toExport = new List<ISpanData>();
@@ -67,7 +88,7 @@ namespace OpenCensus.Trace.Export
                         this.BuildList(item, toExport);
 
                         // Export them
-                        this.Export(toExport);
+                        this.ExportAsync(toExport, CancellationToken.None);
 
                         // Get ready for next batch
                         toExport.Clear();
@@ -125,22 +146,6 @@ namespace OpenCensus.Trace.Export
                 if (toExport.Count >= this.bufferSize)
                 {
                     break;
-                }
-            }
-        }
-
-        private void Export(IEnumerable<ISpanData> export)
-        {
-            var handlers = this.serviceHandlers.Values;
-            foreach (var handler in handlers)
-            {
-                try
-                {
-                    handler.Export(export);
-                }
-                catch (Exception ex)
-                {
-                    OpenCensusEventSource.Log.ExporterThrownExceptionWarning(ex);
                 }
             }
         }
