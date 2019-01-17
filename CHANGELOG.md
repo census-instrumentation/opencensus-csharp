@@ -11,6 +11,9 @@ the release.
   and process links, annotations and messages.
 - ASP.NET Core collector now uses `http.route` for the span name.
 - Initial implementation of Resource Specification.
+- Plug in to collect Redis calls made using StackExchange.Redis package.
+- Object of type `ISpanData` can be created using only Abstractions package.
+- Number of minor APIs adjustments.
 
 ## 0.1.0-alpha-33381
 

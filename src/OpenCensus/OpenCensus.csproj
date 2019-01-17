@@ -32,7 +32,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Common\" />
     <Folder Include="Internal\" />
     <Folder Include="Stats\" />
     <Folder Include="Tags\" />

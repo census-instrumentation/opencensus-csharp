@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-namespace OpenCensus.Utils.Abstractions
+namespace OpenCensus.Abstractions.Utils
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -41,7 +41,7 @@ namespace OpenCensus.Utils.Abstractions
             return sb.ToString();
         }
 
-        public static string ToString<T>(IList<T> list)
+        public static string ToString<T>(IEnumerable<T> list)
         {
             if (list == null)
             {
@@ -61,11 +61,11 @@ namespace OpenCensus.Utils.Abstractions
             return sb.ToString();
         }
 
-        public static bool AreEquivalent<T>(IList<T> c1, IList<T> c2)
+        public static bool AreEquivalent<T>(IEnumerable<T> c1, IEnumerable<T> c2)
         {
             var c1Dist = c1.Distinct();
             var c2Dist = c2.Distinct();
-            return c1.Count == c2.Count && c1Dist.Count() == c2Dist.Count() && c1Dist.Intersect(c2Dist).Count() == c1Dist.Count();
+            return c1.Count() == c2.Count() && c1Dist.Count() == c2Dist.Count() && c1Dist.Intersect(c2Dist).Count() == c1Dist.Count();
         }
     }
 }

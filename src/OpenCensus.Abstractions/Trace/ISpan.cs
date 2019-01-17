@@ -53,6 +53,11 @@ namespace OpenCensus.Trace
         SpanKind? Kind { get; set; }
 
         /// <summary>
+        /// Gets a value indicating whether this span was already stopped.
+        /// </summary>
+        bool HasEnded { get; }
+
+        /// <summary>
         /// Puts a new attribute to the span.
         /// </summary>
         /// <param name="key">Key of the attribute.</param>
