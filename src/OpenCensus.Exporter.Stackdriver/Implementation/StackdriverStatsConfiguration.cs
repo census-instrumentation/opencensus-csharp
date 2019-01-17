@@ -17,6 +17,7 @@
 namespace OpenCensus.Exporter.Stackdriver.Implementation
 {
     using Google.Api;
+    using Google.Apis.Auth.OAuth2;
     using System;
 
     /// <summary>
@@ -40,6 +41,11 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         /// Google Cloud Project Id
         /// </summary>
         public string ProjectId { get; set; }
+
+        /// <summary>
+        /// Credential used to authenticate against Google Stackdriver Monitoring APIs
+        /// </summary>
+        public GoogleCredential GoogleCredential { get; set; }
 
         /// <summary>
         /// Monitored Resource associated with metrics collection.

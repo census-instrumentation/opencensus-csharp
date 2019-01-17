@@ -58,9 +58,11 @@
             // 7. Start another span. If another span was already started, it'll use that span as the parent span.
             // In this example, the main method already started a span, so that'll be the parent span, and this will be
             // a child span.
-            using (OpenCensus.Common.IScope scope = tracer.SpanBuilder("DoWork").StartScopedSpan(out ISpan span))
+            using (OpenCensus.Common.IScope scope = tracer.SpanBuilder("DoWork").StartScopedSpan())
             {
                 // Simulate some work.
+                ISpan span = tracer.CurrentSpan;
+
                 try
                 {
                     Console.WriteLine("Doing busy work");
