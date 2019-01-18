@@ -52,7 +52,8 @@ automatic data collection modules.
 
 Incoming requests of ASP.NET Core app can be automatically tracked.
 
-1. Install package to your project:
+1. Install packages to your project:
+   [OpenCensus][opencensus-nuget-url]
    [OpenCensus.Collector.AspNetCore][opencensus-collect-aspnetcore-nuget-url]
 
 2. Make sure `ITracer`, `ISampler`, and `IPropagationComponent` registered in DI.
@@ -71,7 +72,7 @@ Incoming requests of ASP.NET Core app can be automatically tracked.
         services.AddSingleton<RequestsCollector>();
     ```
 
-4. Initiate data collection by instantiating singleton in Configure method
+4. Initialize data collection by instantiating singleton in Configure method
     ``` csharp
     public void Configure(IApplicationBuilder app, /*... other arguments*/ )
     {
@@ -204,6 +205,11 @@ finally
 
 ### Using Stackdriver Exporter
 
+This sample assumes your code authenticates to Stackdriver APIs using [service account][gcp-auth] with
+credentials stored in environment variable GOOGLE_APPLICATION_CREDENTIALS.
+When you run on [GAE][GAE], [GKE][GKE] or locally with gcloud sdk installed - this is typically the case.
+There is also a constructor for specifying path to the service account credential. See [sample][stackdriver-sample] for details.
+
 1. Add [Stackdriver Exporter package][opencensus-exporter-stackdriver-myget-url] reference.
 2. Enable [Stackdriver Trace][stackdriver-trace-setup] API.
 3. Enable [Stackdriver Monitoring][stackdriver-monitoring-setup] API.
@@ -298,6 +304,9 @@ deprecate it for 18 months before removing it, if possible.
 [ai-get-started]: https://docs.microsoft.com/azure/application-insights
 [stackdriver-trace-setup]: https://cloud.google.com/trace/docs/setup/
 [stackdriver-monitoring-setup]: https://cloud.google.com/monitoring/api/enable-api
+[GAE]: https://cloud.google.com/appengine/docs/flexible/dotnet/quickstart
+[GKE]: https://codelabs.developers.google.com/codelabs/cloud-kubernetes-aspnetcore/index.html?index=..%2F..index#0
+[gcp-auth]: https://cloud.google.com/docs/authentication/getting-started
 [semver]: http://semver.org/
 [ai-sample]: https://github.com/census-instrumentation/opencensus-csharp/blob/develop/src/Samples/TestApplicationInsights.cs
 [stackdriver-sample]: https://github.com/census-instrumentation/opencensus-csharp/blob/develop/src/Samples/TestStackdriver.cs
