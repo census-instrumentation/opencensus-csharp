@@ -55,48 +55,7 @@ namespace OpenCensus.Exporter.Prometheus.Implementation
 
                     using (var output = ctx.Response.OutputStream)
                     {
-                        using (var writer = new StreamWriter(output))
-                        {
-                            foreach (var view in this.viewManager.AllExportedViews)
-                            {
-                                var data = this.viewManager.GetView(view.Name);
-
-                                var builder = new PrometheusMetricBuilder()
-                                    .WithName(data.View.Name.AsString)
-                                    .WithDescription(data.View.Description);
-
-                                builder = data.View.Aggregation.Match<PrometheusMetricBuilder>(
-                                    (agg) => { return builder.WithType("gauge"); }, // Func<ISum, M> p0
-                                    (agg) => { return builder.WithType("counter"); }, // Func< ICount, M > p1,
-                                    (agg) => { return builder.WithType("histogram"); }, // Func<IMean, M> p2,
-                                    (agg) => { return builder.WithType("histogram"); }, // Func< IDistribution, M > p3,
-                                    (agg) => { return builder.WithType("gauge"); }, // Func<ILastValue, M> p4,
-                                    (agg) => { return builder.WithType("gauge"); }); // Func< IAggregation, M > p6);
-
-                                foreach (var value in data.AggregationMap)
-                                {
-                                    var metricValueBuilder = builder.AddValue();
-
-                                    // TODO: This is not optimal. Need to refactor to split builder into separate functions
-                                    metricValueBuilder = value.Value.Match<PrometheusMetricBuilder.PrometheusMetricValueBuilder>(
-                                        metricValueBuilder.WithValue,
-                                        metricValueBuilder.WithValue,
-                                        metricValueBuilder.WithValue,
-                                        metricValueBuilder.WithValue,
-                                        metricValueBuilder.WithValue,
-                                        metricValueBuilder.WithValue,
-                                        metricValueBuilder.WithValue,
-                                        metricValueBuilder.WithValue);
-
-                                    for (int i = 0; i < value.Key.Values.Count; i++)
-                                    {
-                                        metricValueBuilder.WithLabel(data.View.Columns[i].Name, value.Key.Values[i].AsString);
-                                    }
-                                }
-
-                                builder.Write(writer);
-                            }
-                        }
+                        MetricsWriter.WriteMetrics(output, this.viewManager);
                     }
                 }
             }

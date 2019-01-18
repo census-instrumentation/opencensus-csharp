@@ -1,4 +1,4 @@
-﻿// <copyright file="AssemblyInfo.cs" company="OpenCensus Authors">
+﻿// <copyright file="Program.cs" company="OpenCensus Authors">
 // Copyright 2018, OpenCensus Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,3 +13,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 // </copyright>
+
+using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
+
+namespace TestPrometheusMiddleware.AspNetCore._2._0
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            CreateWebHostBuilder(args).Build().Run();
+        }
+
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
+                .UseStartup<Startup>();
+    }
+}

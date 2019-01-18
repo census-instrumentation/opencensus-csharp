@@ -1,4 +1,4 @@
-﻿// <copyright file="AssemblyInfo.cs" company="OpenCensus Authors">
+// <copyright file="PrometheusMiddlewareOptions.cs" company="OpenCensus Authors">
 // Copyright 2018, OpenCensus Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,3 +13,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 // </copyright>
+
+namespace OpenCensus.Exporter.Prometheus
+{
+    using System;
+
+    /// <summary>
+    /// Options to run prometheus exporter.
+    /// </summary>
+    public class PrometheusMiddlewareOptions
+    {
+        /// <summary>
+        /// Gets or sets the path to respond on. Typically "/metrics".
+        /// </summary>
+        public string Path { get; set; }
+    }
+}

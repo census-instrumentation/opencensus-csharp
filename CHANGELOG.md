@@ -14,6 +14,7 @@ the release.
 - Plug in to collect Redis calls made using StackExchange.Redis package.
 - Object of type `ISpanData` can be created using only Abstractions package.
 - Number of minor APIs adjustments.
+- Added MVC Middleware for Prometheus Exporter.
 
 ## 0.1.0-alpha-33381
 
