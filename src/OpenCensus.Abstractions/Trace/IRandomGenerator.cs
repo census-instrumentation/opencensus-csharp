@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-namespace OpenCensus.Trace.Internal
+namespace OpenCensus.Trace
 {
     public interface IRandomGenerator
     {

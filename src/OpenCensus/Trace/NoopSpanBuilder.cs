@@ -18,7 +18,7 @@ namespace OpenCensus.Trace
 {
     using System;
     using System.Collections.Generic;
-    using Internal;
+    using OpenCensus.Trace.Internal;
 
     public class NoopSpanBuilder : SpanBuilderBase
     {

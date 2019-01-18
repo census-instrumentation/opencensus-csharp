@@ -32,6 +32,13 @@
     {
     }
 
+    [Verb("redis", HelpText = "Specify the options required to test Redis with Zipkin")]
+    class RedisOptions
+    {
+        [Option('u', "uri", HelpText = "Please specify the uri of Zipkin backend", Required = true)]
+        public string Uri { get; set; }
+    }
+
     /// <summary>
     /// Main samples entry point.
     /// </summary>
@@ -54,6 +61,7 @@
                     (ApplicationInsightsOptions options) => TestApplicationInsights.Run(),
                     (PrometheusOptions options) => TestPrometheus.Run(),
                     (HttpClientOptions options) => TestHttpClient.Run(),
+                    (RedisOptions options) => TestRedis.Run(options.Uri),
                     (StackdriverOptions options) => TestStackdriver.Run(options.ProjectId),
                     errs => 1);
 
