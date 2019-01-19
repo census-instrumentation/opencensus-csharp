@@ -49,7 +49,7 @@ namespace OpenCensus.Exporter.Prometheus.Middleware
                 ctx.Response.ContentType = PrometheusMetricBuilder.ContentType;
                 using (var output = ctx.Response.Body)
                 {
-                    MetricsWriter.WriteMetrics(output, this.viewManager);
+                    MetricsWriter.Write(output, this.viewManager);
                 }
 
                 // Handle the request. Do not call next

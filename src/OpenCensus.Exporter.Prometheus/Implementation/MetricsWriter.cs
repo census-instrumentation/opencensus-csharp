@@ -28,7 +28,7 @@ namespace OpenCensus.Exporter.Prometheus.Implementation
         /// <summary>
         /// Writes the Prometheus Metrics in the given IViewManager to the given Stream
         /// </summary>
-        internal static void WriteMetrics(Stream stream, IViewManager viewManager)
+        internal static void Write(Stream stream, IViewManager viewManager)
         {
             using (var writer = new StreamWriter(stream))
             {

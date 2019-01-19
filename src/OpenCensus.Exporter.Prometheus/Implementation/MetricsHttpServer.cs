@@ -55,7 +55,7 @@ namespace OpenCensus.Exporter.Prometheus.Implementation
 
                     using (var output = ctx.Response.OutputStream)
                     {
-                        MetricsWriter.WriteMetrics(output, this.viewManager);
+                        MetricsWriter.Write(output, this.viewManager);
                     }
                 }
             }
