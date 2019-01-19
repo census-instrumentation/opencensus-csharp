@@ -43,7 +43,7 @@ namespace OpenCensus.Exporter.Prometheus.Middleware
         public async Task InvokeAsync(HttpContext ctx)
         {
             // Check the request for the given url path
-            if (ctx.Request.Path.Equals(this.options.Path))
+            if (ctx.Request.Path.Equals(this.options?.Path))
             {
                 ctx.Response.StatusCode = 200;
                 ctx.Response.ContentType = PrometheusMetricBuilder.ContentType;
