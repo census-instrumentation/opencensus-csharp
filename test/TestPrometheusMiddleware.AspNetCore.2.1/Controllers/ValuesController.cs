@@ -58,6 +58,9 @@ namespace TestPrometheusMiddleware.AspNetCore._2._0.Controllers
         }
 
         // GET api/values
+        /// <summary>
+        /// Returns a pseudorandom set of strings of format value{i} where i is between 1 and 100
+        /// </summary>
         [HttpGet]
         public IEnumerable<string> Get()
         {
