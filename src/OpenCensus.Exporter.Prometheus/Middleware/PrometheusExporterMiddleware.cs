@@ -35,9 +35,9 @@ namespace OpenCensus.Exporter.Prometheus.Middleware
 
         public PrometheusExporterMiddleware(RequestDelegate next, PrometheusMiddlewareOptions options, IViewManager viewManager)
         {
-            this.options = options;
-            this.viewManager = viewManager;
-            this.next = next;
+            this.options = options ?? throw new ArgumentNullException(nameof(options));
+            this.viewManager = viewManager ?? throw new ArgumentNullException(nameof(viewManager));
+            this.next = next ?? throw new ArgumentNullException(nameof(next));
         }
 
         public async Task InvokeAsync(HttpContext ctx)
