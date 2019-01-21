@@ -7,6 +7,12 @@ the release.
 
 ## Unreleased
 
+TBD
+
+## 0.1.0-alpha-42253
+
+Release [01/18/2019](https://github.com/census-instrumentation/opencensus-csharp/releases/tag/0.1.0-alpha-42253).
+
 - Application Insights exporter improvements - now understands http attributes
   and process links, annotations and messages.
 - ASP.NET Core collector now uses `http.route` for the span name.
