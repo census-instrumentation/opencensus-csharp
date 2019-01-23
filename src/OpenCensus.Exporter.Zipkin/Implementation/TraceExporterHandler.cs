@@ -254,7 +254,8 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
                     {
                         if (addr.AddressFamily.Equals(family))
                         {
-                            result = addr.ToString();
+                            var sanitizedAddress = new IPAddress(addr.GetAddressBytes()); // Construct address sans ScopeID
+                            result = sanitizedAddress.ToString();
 
                             break;
                         }
