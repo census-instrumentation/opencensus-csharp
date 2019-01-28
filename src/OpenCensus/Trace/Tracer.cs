@@ -29,14 +29,14 @@ namespace OpenCensus.Trace
             this.spanBuilderOptions = new SpanBuilderOptions(randomGenerator, startEndHandler, clock, traceConfig);
         }
 
-        public override ISpanBuilder SpanBuilderWithExplicitParent(string spanName, ISpan parent = null)
+        public override ISpanBuilder SpanBuilderWithExplicitParent(string spanName, SpanKind spanKind = SpanKind.Unspecified, ISpan parent = null)
         {
-            return Trace.SpanBuilder.CreateWithParent(spanName, parent, this.spanBuilderOptions);
+            return Trace.SpanBuilder.CreateWithParent(spanName, spanKind, parent, this.spanBuilderOptions);
         }
 
-        public override ISpanBuilder SpanBuilderWithRemoteParent(string spanName, ISpanContext remoteParentSpanContext = null)
+        public override ISpanBuilder SpanBuilderWithRemoteParent(string spanName, SpanKind spanKind = SpanKind.Unspecified, ISpanContext remoteParentSpanContext = null)
         {
-            return Trace.SpanBuilder.CreateWithRemoteParent(spanName, remoteParentSpanContext, this.spanBuilderOptions);
+            return Trace.SpanBuilder.CreateWithRemoteParent(spanName, spanKind, remoteParentSpanContext, this.spanBuilderOptions);
         }
     }
 }
