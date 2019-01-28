@@ -25,11 +25,6 @@ namespace OpenCensus.Trace
     public interface ISpanBuilder
     {
         /// <summary>
-        /// Gets the SpanKind for the spans produced by this builder.
-        /// </summary>
-        SpanKind Kind { get; }
-
-        /// <summary>
         /// Set the sampler for the span.
         /// </summary>
         /// <param name="sampler">Sampler to use to build span.</param>
