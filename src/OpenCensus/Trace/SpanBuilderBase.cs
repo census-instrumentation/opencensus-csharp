@@ -25,6 +25,8 @@ namespace OpenCensus.Trace
         {
         }
 
+        protected SpanKind Kind { get; private set; }
+
         protected SpanBuilderBase(SpanKind kind)
         {
             this.Kind = kind;
@@ -48,7 +50,5 @@ namespace OpenCensus.Trace
             currentSpan = this.StartSpan();
             return CurrentSpanUtils.WithSpan(currentSpan, true);
         }
-
-        public SpanKind Kind { get; }
     }
 }
