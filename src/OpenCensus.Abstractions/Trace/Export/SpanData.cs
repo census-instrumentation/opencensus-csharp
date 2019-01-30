@@ -27,7 +27,7 @@ namespace OpenCensus.Trace.Export
             ISpanId parentSpanId,
             bool? hasRemoteParent,
             string name,
-            ITimestamp startTimestamp,
+            Timestamp startTimestamp,
             IAttributes attributes,
             ITimedEvents<IAnnotation> annotations,
             ITimedEvents<IMessageEvent> messageEvents,
@@ -35,7 +35,7 @@ namespace OpenCensus.Trace.Export
             int? childSpanCount,
             Status status,
             SpanKind kind,
-            ITimestamp endTimestamp)
+            Timestamp endTimestamp)
         {
             this.Context = context ?? throw new ArgumentNullException(nameof(context));
             this.ParentSpanId = parentSpanId;
@@ -60,7 +60,7 @@ namespace OpenCensus.Trace.Export
 
         public string Name { get; }
 
-        public ITimestamp Timestamp { get; }
+        public Timestamp Timestamp { get; }
 
         public IAttributes Attributes { get; }
 
@@ -76,16 +76,16 @@ namespace OpenCensus.Trace.Export
 
         public SpanKind Kind { get; }
 
-        public ITimestamp EndTimestamp { get; }
+        public Timestamp EndTimestamp { get; }
 
-        public ITimestamp StartTimestamp { get; }
+        public Timestamp StartTimestamp { get; }
 
         public static ISpanData Create(
                         ISpanContext context,
                         ISpanId parentSpanId,
                         bool? hasRemoteParent,
                         string name,
-                        ITimestamp startTimestamp,
+                        Timestamp startTimestamp,
                         IAttributes attributes,
                         ITimedEvents<IAnnotation> annotations,
                         ITimedEvents<IMessageEvent> messageOrNetworkEvents,
@@ -93,7 +93,7 @@ namespace OpenCensus.Trace.Export
                         int? childSpanCount,
                         Status status,
                         SpanKind kind,
-                        ITimestamp endTimestamp)
+                        Timestamp endTimestamp)
         {
             if (messageOrNetworkEvents == null)
             {

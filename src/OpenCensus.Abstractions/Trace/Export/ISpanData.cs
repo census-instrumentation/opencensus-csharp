@@ -46,7 +46,7 @@ namespace OpenCensus.Trace.Export
         /// <summary>
         /// Gets the start timestamp.
         /// </summary>
-        ITimestamp StartTimestamp { get; }
+        Timestamp StartTimestamp { get; }
 
         /// <summary>
         /// Gets the collection of attributes.
@@ -86,6 +86,6 @@ namespace OpenCensus.Trace.Export
         /// <summary>
         /// Gets the end timestamp.
         /// </summary>
-        ITimestamp EndTimestamp { get; }
+        Timestamp EndTimestamp { get; }
     }
 }

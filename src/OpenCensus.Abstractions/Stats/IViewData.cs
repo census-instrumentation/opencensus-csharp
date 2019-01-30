@@ -38,11 +38,11 @@ namespace OpenCensus.Stats
         /// <summary>
         /// Gets the timestamp of a start of this aggregation.
         /// </summary>
-        ITimestamp Start { get; }
+        Timestamp Start { get; }
 
         /// <summary>
         /// Gets the timestamp of the end of this aggregation.
         /// </summary>
-        ITimestamp End { get; }
+        Timestamp End { get; }
     }
 }

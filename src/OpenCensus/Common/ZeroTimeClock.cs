@@ -19,9 +19,9 @@ namespace OpenCensus.Common
     internal sealed class ZeroTimeClock : IClock
     {
         public static readonly ZeroTimeClock Instance = new ZeroTimeClock();
-        private static readonly ITimestamp ZeroTimestamp = Timestamp.Create(0, 0);
+        private static readonly Timestamp ZeroTimestamp = Timestamp.Create(0, 0);
 
-        public ITimestamp Now
+        public Timestamp Now
         {
             get
             {

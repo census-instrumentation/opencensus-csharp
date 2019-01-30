@@ -33,7 +33,7 @@ namespace OpenCensus.Trace
         private readonly ITraceParams traceParams;
         private readonly IStartEndHandler startEndHandler;
         private readonly IClock clock;
-        private readonly ITimestampConverter timestampConverter;
+        private readonly TimestampConverter timestampConverter;
         private readonly long startNanoTime;
         private readonly object @lock = new object();
         private AttributesWithCapacity attributes;
@@ -53,7 +53,7 @@ namespace OpenCensus.Trace
                 bool? hasRemoteParent,
                 ITraceParams traceParams,
                 IStartEndHandler startEndHandler,
-                ITimestampConverter timestampConverter,
+                TimestampConverter timestampConverter,
                 IClock clock)
             : base(context, options)
         {
@@ -171,7 +171,7 @@ namespace OpenCensus.Trace
             }
         }
 
-        internal ITimestampConverter TimestampConverter
+        internal TimestampConverter TimestampConverter
         {
             get
             {
@@ -443,7 +443,7 @@ namespace OpenCensus.Trace
                         bool? hasRemoteParent,
                         ITraceParams traceParams,
                         IStartEndHandler startEndHandler,
-                        ITimestampConverter timestampConverter,
+                        TimestampConverter timestampConverter,
                         IClock clock)
         {
             var span = new Span(
@@ -467,7 +467,7 @@ namespace OpenCensus.Trace
             return span;
         }
 
-        private static ITimedEvents<T> CreateTimedEvents<T>(TraceEvents<EventWithNanoTime<T>> events, ITimestampConverter timestampConverter)
+        private static ITimedEvents<T> CreateTimedEvents<T>(TraceEvents<EventWithNanoTime<T>> events, TimestampConverter timestampConverter)
         {
             if (events == null)
             {

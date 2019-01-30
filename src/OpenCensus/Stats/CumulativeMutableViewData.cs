@@ -23,15 +23,15 @@ namespace OpenCensus.Stats
     internal class CumulativeMutableViewData : MutableViewData
     {
         private readonly IDictionary<TagValues, MutableAggregation> tagValueAggregationMap = new Dictionary<TagValues, MutableAggregation>();
-        private ITimestamp start;
+        private Timestamp start;
 
-        internal CumulativeMutableViewData(IView view, ITimestamp start)
+        internal CumulativeMutableViewData(IView view, Timestamp start)
             : base(view)
         {
             this.start = start;
         }
 
-        internal override void Record(ITagContext context, double value, ITimestamp timestamp)
+        internal override void Record(ITagContext context, double value, Timestamp timestamp)
         {
             var values = GetTagValues(GetTagMap(context), this.View.Columns);
             var tagValues = TagValues.Create(values);
@@ -43,7 +43,7 @@ namespace OpenCensus.Stats
             this.tagValueAggregationMap[tagValues].Add(value);
         }
 
-        internal override IViewData ToViewData(ITimestamp now, StatsCollectionState state)
+        internal override IViewData ToViewData(Timestamp now, StatsCollectionState state)
         {
             if (state == StatsCollectionState.ENABLED)
             {
@@ -69,7 +69,7 @@ namespace OpenCensus.Stats
             this.tagValueAggregationMap.Clear();
         }
 
-        internal override void ResumeStatsCollection(ITimestamp now)
+        internal override void ResumeStatsCollection(Timestamp now)
         {
             this.start = now;
         }

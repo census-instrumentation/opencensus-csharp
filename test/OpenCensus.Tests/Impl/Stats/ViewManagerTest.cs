@@ -745,7 +745,7 @@ namespace OpenCensus.Stats.Test
 
         private void SettingStateToDisabledWillClearStats(IView view)
         {
-            ITimestamp timestamp1 = Timestamp.Create(1, 0);
+            Timestamp timestamp1 = Timestamp.Create(1, 0);
             clock.Time = timestamp1;
             viewManager.RegisterView(view);
             statsRecorder
@@ -761,16 +761,16 @@ namespace OpenCensus.Stats.Test
                 },
                 EPSILON);
 
-            ITimestamp timestamp2 = Timestamp.Create(2, 0);
+            Timestamp timestamp2 = Timestamp.Create(2, 0);
             clock.Time = timestamp2;
             statsComponent.State = StatsCollectionState.DISABLED; // This will clear stats.
             Assert.Equal(StatsTestUtil.CreateEmptyViewData(view), viewManager.GetView(view.Name));
 
-            ITimestamp timestamp3 = Timestamp.Create(3, 0);
+            Timestamp timestamp3 = Timestamp.Create(3, 0);
             clock.Time = timestamp3;
             statsComponent.State = StatsCollectionState.ENABLED;
 
-            ITimestamp timestamp4 = Timestamp.Create(4, 0);
+            Timestamp timestamp4 = Timestamp.Create(4, 0);
             clock.Time = timestamp4;
             // This ViewData does not have any stats, but it should not be an empty ViewData, since it has
             // non-zero TimeStamps.

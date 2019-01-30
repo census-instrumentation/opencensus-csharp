@@ -18,24 +18,32 @@ namespace OpenCensus.Internal
 {
     using OpenCensus.Common;
 
-    internal class TimestampConverter : ITimestampConverter
+    /// <summary>
+    /// Converts nanoseconds into timestamp.
+    /// </summary>
+    public class TimestampConverter
     {
-        private readonly ITimestamp timestamp;
+        private readonly Timestamp timestamp;
         private readonly long nanoTime;
 
-        private TimestampConverter(ITimestamp timestamp, long nanoTime)
+        private TimestampConverter(Timestamp timestamp, long nanoTime)
         {
             this.timestamp = timestamp;
             this.nanoTime = nanoTime;
         }
 
         // Returns a WallTimeConverter initialized to now.
-        public static ITimestampConverter Now(IClock clock)
+        public static TimestampConverter Now(IClock clock)
         {
             return new TimestampConverter(clock.Now, clock.NowNanos);
         }
 
-        public ITimestamp ConvertNanoTime(long nanoTime)
+        /// <summary>
+        /// Converts nanoseconds to the timestamp.
+        /// </summary>
+        /// <param name="nanoTime">Nanoseconds time.</param>
+        /// <returns>Timestamp from the nanoseconds.</returns>
+        public Timestamp ConvertNanoTime(long nanoTime)
         {
             return this.timestamp.AddNanos(nanoTime - this.nanoTime);
         }

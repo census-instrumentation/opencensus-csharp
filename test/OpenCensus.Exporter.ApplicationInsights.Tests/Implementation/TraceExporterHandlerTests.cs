@@ -60,7 +60,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
                 return new TestClock(this.nowSecondsPrecision.Subtract(span).AddTicks(this.NanosecondsAfterSeconds / 100));
             }
 
-            public ITimestamp Now
+            public Timestamp Now
             {
                 get
                 {
@@ -1865,7 +1865,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             out ISpanId parentSpanId,
             out bool? hasRemoteParent,
             out string name,
-            out ITimestamp startTimestamp,
+            out Timestamp startTimestamp,
             out IAttributes attributes,
             out ITimedEvents<IAnnotation> annotations,
             out ITimedEvents<IMessageEvent> messageOrNetworkEvents,
@@ -1873,7 +1873,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             out int? childSpanCount,
             out Status status,
             out SpanKind kind,
-            out ITimestamp endTimestamp)
+            out Timestamp endTimestamp)
         {
             now = new TestClock(DateTimeOffset.UtcNow);
             context = SpanContext.Create(TraceId.FromBytes(this.testTraceIdBytes), SpanId.FromBytes(this.testSpanIdBytes), TraceOptions.Default, Tracestate.Empty);

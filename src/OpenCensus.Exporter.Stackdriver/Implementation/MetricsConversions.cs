@@ -292,8 +292,8 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         }
 
         private static Point ExtractPointInInterval(
-            ITimestamp startTime,
-            ITimestamp endTime, 
+            Common.Timestamp startTime,
+            Common.Timestamp endTime, 
             IAggregation aggregation, 
             IAggregationData points)
         {
@@ -304,7 +304,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             };
         }
 
-        private static TimeInterval CreateTimeInterval(ITimestamp start, ITimestamp end)
+        private static TimeInterval CreateTimeInterval(Common.Timestamp start, Common.Timestamp end)
         {
             return new TimeInterval { StartTime = start.ToTimestamp(), EndTime = end.ToTimestamp() };
         }

@@ -51,7 +51,7 @@ namespace OpenCensus.Trace
         {
             ISpanContext parentContext = this.RemoteParentSpanContext;
             bool hasRemoteParent = true;
-            ITimestampConverter timestampConverter = null;
+            TimestampConverter timestampConverter = null;
             if (this.RemoteParentSpanContext == null)
             {
                 // This is not a child of a remote Span. Get the parent SpanContext from the parent Span if
@@ -175,7 +175,7 @@ namespace OpenCensus.Trace
                      ISampler sampler,
                      IEnumerable<ISpan> parentLinks,
                      bool recordEvents,
-                     ITimestampConverter timestampConverter)
+                     TimestampConverter timestampConverter)
         {
             ITraceParams activeTraceParams = this.Options.TraceConfig.ActiveTraceParams;
             IRandomGenerator random = this.Options.RandomHandler;

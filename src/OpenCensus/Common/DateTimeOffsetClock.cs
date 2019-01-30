@@ -26,7 +26,7 @@ namespace OpenCensus.Common
         internal const long NanosPerMilli = 1000 * 1000;
         internal const long NanosPerSecond = NanosPerMilli * MillisPerSecond;
 
-        public ITimestamp Now
+        public Timestamp Now
         {
             get
             {
