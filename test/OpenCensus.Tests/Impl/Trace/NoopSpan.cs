@@ -26,9 +26,9 @@ namespace OpenCensus.Trace.Test
         {
         }
 
-        public override long EndNanoTime { get; }
+        public override long EndTime { get; }
 
-        public override long LatencyNs { get; }
+        public override long Latency { get; }
 
         public override bool IsSampleToLocalSpanStore { get; }
 

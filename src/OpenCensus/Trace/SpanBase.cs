@@ -76,12 +76,12 @@ namespace OpenCensus.Trace
         /// <summary>
         /// Gets the span end time as nanoseconds.
         /// </summary>
-        public abstract long EndNanoTime { get; }
+        public abstract long EndTime { get; }
 
         /// <summary>
         /// Gets the latency (difference beteen stat and end time) as nanoseconds.
         /// </summary>
-        public abstract long LatencyNs { get; }
+        public abstract long Latency { get; }
 
         /// <summary>
         /// Gets a value indicating whether span stored in local store.

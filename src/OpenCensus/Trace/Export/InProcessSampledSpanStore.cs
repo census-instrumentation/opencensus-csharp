@@ -218,7 +218,7 @@ namespace OpenCensus.Trace.Export
                         break;
                     }
 
-                    long spanLatencyNs = span.LatencyNs;
+                    long spanLatencyNs = span.Latency;
                     if (spanLatencyNs >= latencyLowerNs && spanLatencyNs < latencyUpperNs)
                     {
                         output.Add(span);
@@ -228,7 +228,7 @@ namespace OpenCensus.Trace.Export
 
             public void ConsiderForSampling(SpanBase span)
             {
-                long spanEndNanoTime = span.EndNanoTime;
+                long spanEndNanoTime = span.EndTime;
                 if (span.Context.TraceOptions.IsSampled)
                 {
                     // Need to compare by doing the subtraction all the time because in case of an overflow,
@@ -326,7 +326,7 @@ namespace OpenCensus.Trace.Export
                 {
                     Bucket bucket =
                         status.IsOk
-                            ? this.GetLatencyBucket(span.LatencyNs)
+                            ? this.GetLatencyBucket(span.Latency)
                             : this.GetErrorBucket(status.CanonicalCode);
 
                     // If unable to find the bucket, ignore this Span.

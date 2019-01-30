@@ -117,7 +117,7 @@ namespace OpenCensus.Trace
             set; // TODO: do we need to notify when attempt to set on already closed Span?
         }
 
-        public override long EndNanoTime
+        public override long EndTime
         {
             get
             {
@@ -128,7 +128,7 @@ namespace OpenCensus.Trace
             }
         }
 
-        public override long LatencyNs
+        public override long Latency
         {
             get
             {
