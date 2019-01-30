@@ -128,13 +128,13 @@ namespace OpenCensus.Trace
             }
         }
 
-        public override long Latency
+        public override TimeSpan Latency
         {
             get
             {
                 lock (this.@lock)
                 {
-                    return this.hasBeenEnded ? this.endNanoTime - this.startNanoTime : this.clock.NowNanos - this.startNanoTime;
+                    return this.hasBeenEnded ? TimeSpan.FromTicks((this.endNanoTime - this.startNanoTime) / 100) : TimeSpan.FromTicks((this.clock.NowNanos - this.startNanoTime) / 100);
                 }
             }
         }

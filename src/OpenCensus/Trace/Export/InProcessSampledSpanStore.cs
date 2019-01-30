@@ -218,7 +218,7 @@ namespace OpenCensus.Trace.Export
                         break;
                     }
 
-                    long spanLatencyNs = span.Latency;
+                    long spanLatencyNs = span.Latency.Ticks * 100;
                     if (spanLatencyNs >= latencyLowerNs && spanLatencyNs < latencyUpperNs)
                     {
                         output.Add(span);
@@ -326,7 +326,7 @@ namespace OpenCensus.Trace.Export
                 {
                     Bucket bucket =
                         status.IsOk
-                            ? this.GetLatencyBucket(span.Latency)
+                            ? this.GetLatencyBucket(span.Latency.Ticks * 100)
                             : this.GetErrorBucket(status.CanonicalCode);
 
                     // If unable to find the bucket, ignore this Span.

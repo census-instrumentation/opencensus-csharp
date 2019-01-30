@@ -44,11 +44,11 @@ namespace OpenCensus.Trace.Internal
             }
         }
 
-        public override long Latency
+        public override TimeSpan Latency
         {
             get
             {
-                return 0;
+                return TimeSpan.Zero;
             }
         }
 

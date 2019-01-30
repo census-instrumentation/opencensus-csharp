@@ -16,6 +16,7 @@
 
 namespace OpenCensus.Trace.Test
 {
+    using System;
     using System.Collections.Generic;
     using OpenCensus.Trace.Export;
 
@@ -28,7 +29,7 @@ namespace OpenCensus.Trace.Test
 
         public override long EndTime { get; }
 
-        public override long Latency { get; }
+        public override TimeSpan Latency { get; }
 
         public override bool IsSampleToLocalSpanStore { get; }
 
