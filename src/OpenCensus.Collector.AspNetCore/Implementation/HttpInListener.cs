@@ -62,7 +62,7 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
             string path = (request.PathBase.HasValue || request.Path.HasValue) ? (request.PathBase + request.Path).ToString() : "/";
 
             ISpan span = null;
-            this.Tracer.SpanBuilderWithRemoteParent(path, ctx).SetSampler(this.Sampler).StartScopedSpan(out span);
+            this.Tracer.SpanBuilderWithRemoteParent(path, SpanKind.Server, ctx).SetSampler(this.Sampler).StartScopedSpan(out span);
             if (span == null)
             {
                 // Debug.WriteLine("span is null");
@@ -71,7 +71,6 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
 
             // Note, route is missing at this stage. It will be available later
 
-            span.PutServerSpanKindAttribute();
             span.PutHttpHostAttribute(request.Host.Host, request.Host.Port ?? 80);
             span.PutHttpMethodAttribute(request.Method);
             span.PutHttpPathAttribute(path);

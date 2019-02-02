@@ -22,7 +22,7 @@ namespace OpenCensus.Trace
 
     public class NoopSpanBuilder : SpanBuilderBase
     {
-        private NoopSpanBuilder(string name)
+        private NoopSpanBuilder(string name, SpanKind kind) : base(kind)
         {
             if (name == null)
             {
@@ -50,14 +50,14 @@ namespace OpenCensus.Trace
             return this;
         }
 
-        internal static ISpanBuilder CreateWithParent(string spanName, ISpan parent = null)
+        internal static ISpanBuilder CreateWithParent(string spanName, SpanKind kind, ISpan parent = null)
         {
-            return new NoopSpanBuilder(spanName);
+            return new NoopSpanBuilder(spanName, kind);
         }
 
-        internal static ISpanBuilder CreateWithRemoteParent(string spanName, ISpanContext remoteParentSpanContext = null)
+        internal static ISpanBuilder CreateWithRemoteParent(string spanName, SpanKind kind, ISpanContext remoteParentSpanContext = null)
         {
-            return new NoopSpanBuilder(spanName);
+            return new NoopSpanBuilder(spanName, kind);
         }
     }
 }

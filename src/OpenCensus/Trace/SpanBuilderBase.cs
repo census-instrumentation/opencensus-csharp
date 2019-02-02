@@ -21,6 +21,17 @@ namespace OpenCensus.Trace
 
     public abstract class SpanBuilderBase : ISpanBuilder
     {
+        private SpanBuilderBase()
+        {
+        }
+
+        protected SpanKind Kind { get; private set; }
+
+        protected SpanBuilderBase(SpanKind kind)
+        {
+            this.Kind = kind;
+        }
+
         public abstract ISpanBuilder SetSampler(ISampler sampler);
 
         public abstract ISpanBuilder SetParentLinks(IEnumerable<ISpan> parentLinks);
