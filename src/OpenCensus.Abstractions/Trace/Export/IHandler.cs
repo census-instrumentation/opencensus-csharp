@@ -17,6 +17,7 @@
 namespace OpenCensus.Trace.Export
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Exporter handler.
@@ -27,6 +28,7 @@ namespace OpenCensus.Trace.Export
         /// Exports the list of spans to the backend.
         /// </summary>
         /// <param name="spanDataList">Collection of spans to export.</param>
-        void Export(IEnumerable<ISpanData> spanDataList);
+        /// <returns>A <see cref="Task"/> representing the asynchronous export operation.</returns>
+        Task Export(IEnumerable<ISpanData> spanDataList);
     }
 }

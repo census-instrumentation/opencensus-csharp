@@ -46,7 +46,7 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
             this.httpClient = client ?? new HttpClient();
         }
 
-        public void Export(IEnumerable<ISpanData> spanDataList)
+        public async Task Export(IEnumerable<ISpanData> spanDataList)
         {
             List<ZipkinSpan> zipkinSpans = new List<ZipkinSpan>();
 
@@ -56,7 +56,7 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
                 zipkinSpans.Add(zipkinSpan);
             }
 
-            this.SendSpansAsync(zipkinSpans);
+            await this.SendSpansAsync(zipkinSpans);
         }
 
         internal ZipkinSpan GenerateSpan(ISpanData spanData, ZipkinEndpoint localEndpoint)
@@ -163,7 +163,7 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
             return ZipkinSpanKind.CLIENT;
         }
 
-        private async void SendSpansAsync(List<ZipkinSpan> spans)
+        private async Task SendSpansAsync(List<ZipkinSpan> spans)
         {
             try
             {

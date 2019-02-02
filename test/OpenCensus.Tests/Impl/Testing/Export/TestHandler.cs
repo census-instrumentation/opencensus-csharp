@@ -19,6 +19,7 @@ namespace OpenCensus.Testing.Export
     using System;
     using System.Collections.Generic;
     using System.Threading;
+    using System.Threading.Tasks;
     using OpenCensus.Trace.Export;
 
     public class TestHandler : IHandler
@@ -26,7 +27,7 @@ namespace OpenCensus.Testing.Export
         private readonly object monitor = new object();
         private readonly List<ISpanData> spanDataList = new List<ISpanData>();
 
-        public void Export(IEnumerable<ISpanData> data)
+        public async Task Export(IEnumerable<ISpanData> data)
         {
             lock (monitor)
             {
