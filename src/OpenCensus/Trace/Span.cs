@@ -294,7 +294,7 @@ namespace OpenCensus.Trace
                     return;
                 }
 
-                this.InitializedAnnotations.AddEvent(new EventWithNanoTime<IAnnotation>(this.clock.NowNanos, Annotation.FromDescriptionAndAttributes(description, attributes)));
+                this.InitializedAnnotations.AddEvent(new EventWithNanoTime<IAnnotation>(this.clock.NowDateTimeOffset, Annotation.FromDescriptionAndAttributes(description, attributes)));
             }
         }
 
@@ -318,7 +318,7 @@ namespace OpenCensus.Trace
                     throw new ArgumentNullException(nameof(annotation));
                 }
 
-                this.InitializedAnnotations.AddEvent(new EventWithNanoTime<IAnnotation>(this.clock.NowNanos, annotation));
+                this.InitializedAnnotations.AddEvent(new EventWithNanoTime<IAnnotation>(this.clock.NowDateTimeOffset, annotation));
             }
         }
 
@@ -366,7 +366,7 @@ namespace OpenCensus.Trace
                     throw new ArgumentNullException(nameof(messageEvent));
                 }
 
-                this.InitializedMessageEvents.AddEvent(new EventWithNanoTime<IMessageEvent>(this.clock.NowNanos, messageEvent));
+                this.InitializedMessageEvents.AddEvent(new EventWithNanoTime<IMessageEvent>(this.clock.NowDateTimeOffset, messageEvent));
             }
         }
 

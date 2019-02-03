@@ -16,15 +16,17 @@
 
 namespace OpenCensus.Trace
 {
+    using System;
+    using OpenCensus.Common;
     using OpenCensus.Internal;
     using OpenCensus.Trace.Export;
 
     internal class EventWithNanoTime<T>
     {
-        private readonly long nanoTime;
+        private readonly DateTimeOffset nanoTime;
         private readonly T @event;
 
-        public EventWithNanoTime(long nanoTime, T @event)
+        public EventWithNanoTime(DateTimeOffset nanoTime, T @event)
         {
             this.nanoTime = nanoTime;
             this.@event = @event;
@@ -32,7 +34,7 @@ namespace OpenCensus.Trace
 
         internal ITimedEvent<T> ToSpanDataTimedEvent(TimestampConverter timestampConverter)
         {
-            return TimedEvent<T>.Create(timestampConverter.ConvertNanoTime(this.nanoTime), this.@event);
+            return TimedEvent<T>.Create(Timestamp.FromDateTimeOffset(this.nanoTime), this.@event);
         }
     }
 }
