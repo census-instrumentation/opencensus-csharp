@@ -69,6 +69,20 @@ namespace OpenCensus.Common
             return zero.Plus(0, nanos);
         }
 
+        public static Timestamp FromDateTimeOffset(DateTimeOffset time)
+        {
+            long seconds = 0;
+#if NET45
+            var unixZero = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);
+            seconds = (int)Math.Floor(time.Subtract(unixZero).TotalSeconds);
+#else
+            seconds = time.ToUnixTimeSeconds();
+#endif
+
+            int nanos = (int)time.Subtract(new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).Subtract(TimeSpan.FromSeconds(seconds)).Ticks * 100;
+            return Timestamp.Create(seconds, nanos);
+        }
+
         /// <summary>
         /// Adds duration to the timestamp.
         /// </summary>

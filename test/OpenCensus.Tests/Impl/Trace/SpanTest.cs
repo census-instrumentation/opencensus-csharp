@@ -35,7 +35,7 @@ namespace OpenCensus.Trace.Test
         private readonly RandomGenerator random = new RandomGenerator(1234);
         private readonly ISpanContext spanContext;
         private readonly ISpanId parentSpanId;
-        private readonly Timestamp timestamp = Timestamp.Create(1234, 5678);
+        private readonly Timestamp timestamp = Timestamp.Create(1234, 5600);
         private readonly TestClock testClock;
         private readonly TimestampConverter timestampConverter;
         private readonly SpanOptions noRecordSpanOptions = SpanOptions.None;

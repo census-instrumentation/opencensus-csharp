@@ -16,6 +16,7 @@
 
 namespace OpenCensus.Trace.Export
 {
+    using System;
     using System.Collections.Generic;
     using OpenCensus.Internal;
     using OpenCensus.Utils;
@@ -228,7 +229,8 @@ namespace OpenCensus.Trace.Export
 
             public void ConsiderForSampling(SpanBase span)
             {
-                long spanEndNanoTime = span.EndTime;
+                // TODO: this should operate with DateTimeOffset
+                long spanEndNanoTime = span.EndTime.Subtract(new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).Ticks * 100;
                 if (span.Context.TraceOptions.IsSampled)
                 {
                     // Need to compare by doing the subtraction all the time because in case of an overflow,

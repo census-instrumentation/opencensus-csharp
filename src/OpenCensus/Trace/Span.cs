@@ -34,14 +34,14 @@ namespace OpenCensus.Trace
         private readonly IStartEndHandler startEndHandler;
         private readonly IClock clock;
         private readonly TimestampConverter timestampConverter;
-        private readonly long startNanoTime;
+        private readonly DateTimeOffset startTime;
         private readonly object @lock = new object();
         private AttributesWithCapacity attributes;
         private TraceEvents<EventWithNanoTime<IAnnotation>> annotations;
         private TraceEvents<EventWithNanoTime<IMessageEvent>> messageEvents;
         private TraceEvents<ILink> links;
         private Status status;
-        private long endNanoTime;
+        private DateTimeOffset endTime;
         private bool hasBeenEnded;
         private bool sampleToLocalSpanStore;
 
@@ -68,11 +68,11 @@ namespace OpenCensus.Trace
             if (options.HasFlag(SpanOptions.RecordEvents))
             {
                 this.timestampConverter = timestampConverter ?? OpenCensus.Internal.TimestampConverter.Now(clock);
-                this.startNanoTime = clock.NowNanos;
+                this.startTime = clock.NowDateTimeOffset;
             }
             else
             {
-                this.startNanoTime = 0;
+                this.startTime = DateTimeOffset.MinValue;
                 this.timestampConverter = timestampConverter;
             }
         }
@@ -117,13 +117,13 @@ namespace OpenCensus.Trace
             set; // TODO: do we need to notify when attempt to set on already closed Span?
         }
 
-        public override long EndTime
+        public override DateTimeOffset EndTime
         {
             get
             {
                 lock (this.@lock)
                 {
-                    return this.hasBeenEnded ? this.endNanoTime : this.clock.NowNanos;
+                    return this.hasBeenEnded ? this.endTime : this.clock.NowDateTimeOffset;
                 }
             }
         }
@@ -134,7 +134,7 @@ namespace OpenCensus.Trace
             {
                 lock (this.@lock)
                 {
-                    return this.hasBeenEnded ? TimeSpan.FromTicks((this.endNanoTime - this.startNanoTime) / 100) : TimeSpan.FromTicks((this.clock.NowNanos - this.startNanoTime) / 100);
+                    return this.hasBeenEnded ? this.endTime - this.startTime : this.clock.NowDateTimeOffset - this.startTime;
                 }
             }
         }
@@ -391,7 +391,7 @@ namespace OpenCensus.Trace
                 }
 
                 this.sampleToLocalSpanStore = options.SampleToLocalSpanStore;
-                this.endNanoTime = this.clock.NowNanos;
+                this.endTime = this.clock.NowDateTimeOffset;
                 this.hasBeenEnded = true;
             }
 
@@ -424,7 +424,7 @@ namespace OpenCensus.Trace
                 this.parentSpanId,
                 this.hasRemoteParent,
                 this.Name,
-                this.timestampConverter.ConvertNanoTime(this.startNanoTime),
+                Timestamp.FromDateTimeOffset(this.startTime),
                 attributesSpanData,
                 annotationsSpanData,
                 messageEventsSpanData,
@@ -432,7 +432,7 @@ namespace OpenCensus.Trace
                 null, // Not supported yet.
                 this.hasBeenEnded ? this.StatusWithDefault : null,
                 this.Kind.HasValue ? this.Kind.Value : SpanKind.Client,
-                this.hasBeenEnded ? this.timestampConverter.ConvertNanoTime(this.endNanoTime) : null);
+                this.hasBeenEnded ? Timestamp.FromDateTimeOffset(this.endTime) : null);
         }
 
         internal static ISpan StartSpan(

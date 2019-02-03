@@ -76,7 +76,7 @@ namespace OpenCensus.Trace
         /// <summary>
         /// Gets the span end time as nanoseconds.
         /// </summary>
-        public abstract long EndTime { get; }
+        public abstract DateTimeOffset EndTime { get; }
 
         /// <summary>
         /// Gets the latency (difference beteen stat and end time) as nanoseconds.

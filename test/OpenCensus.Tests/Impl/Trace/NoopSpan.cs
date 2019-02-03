@@ -27,7 +27,7 @@ namespace OpenCensus.Trace.Test
         {
         }
 
-        public override long EndTime { get; }
+        public override DateTimeOffset EndTime { get; }
 
         public override TimeSpan Latency { get; }
 

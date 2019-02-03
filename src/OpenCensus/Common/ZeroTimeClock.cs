@@ -16,6 +16,8 @@
 
 namespace OpenCensus.Common
 {
+    using System;
+
     internal sealed class ZeroTimeClock : IClock
     {
         public static readonly ZeroTimeClock Instance = new ZeroTimeClock();
@@ -34,6 +36,13 @@ namespace OpenCensus.Common
             get
             {
                 return 0;
+            }
+        }
+        public DateTimeOffset NowDateTimeOffset
+        {
+            get
+            {
+                return DateTimeOffset.MinValue;
             }
         }
     }

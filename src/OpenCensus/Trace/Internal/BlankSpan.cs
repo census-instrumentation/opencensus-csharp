@@ -36,11 +36,11 @@ namespace OpenCensus.Trace.Internal
 
         public override SpanKind? Kind { get; set; }
 
-        public override long EndTime
+        public override DateTimeOffset EndTime
         {
             get
             {
-                return 0;
+                return DateTimeOffset.MinValue;
             }
         }
 

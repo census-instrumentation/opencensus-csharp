@@ -46,6 +46,14 @@ namespace OpenCensus.Common
             }
         }
 
+        public DateTimeOffset NowDateTimeOffset
+        {
+            get
+            {
+                return DateTimeOffset.UtcNow;
+            }
+        }
+
         public static IClock GetInstance()
         {
             return Instance;

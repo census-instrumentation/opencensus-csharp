@@ -16,6 +16,8 @@
 
 namespace OpenCensus.Common
 {
+    using System;
+
     /// <summary>
     /// Clock to get the current time with the nanoseconds precision.
     /// </summary>
@@ -30,5 +32,7 @@ namespace OpenCensus.Common
         /// Gets a time measurement with nanosecond precision that can only be used to calculate elapsed time.
         /// </summary>
         long NowNanos { get; }
+
+        DateTimeOffset NowDateTimeOffset { get; }
     }
 }
