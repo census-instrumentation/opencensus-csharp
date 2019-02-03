@@ -30,19 +30,7 @@ namespace OpenCensus.Common
         {
             get
             {
-                var nowNanoTicks = this.NowNanos;
-                var nowSecTicks = nowNanoTicks / NanosPerSecond;
-                var excessNanos = nowNanoTicks - (nowSecTicks * NanosPerSecond);
-                return Timestamp.Create(nowSecTicks, (int)excessNanos);
-            }
-        }
-
-        public long NowNanos
-        {
-            get
-            {
-                var millis = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                return millis * NanosPerMilli;
+                return Timestamp.FromDateTimeOffset(this.NowDateTimeOffset);
             }
         }
 

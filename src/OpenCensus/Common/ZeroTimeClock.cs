@@ -31,13 +31,6 @@ namespace OpenCensus.Common
             }
         }
 
-        public long NowNanos
-        {
-            get
-            {
-                return 0;
-            }
-        }
         public DateTimeOffset NowDateTimeOffset
         {
             get

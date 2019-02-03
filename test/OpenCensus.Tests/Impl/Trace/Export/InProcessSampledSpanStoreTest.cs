@@ -315,7 +315,6 @@ namespace OpenCensus.Trace.Export.Test
                 false,
                 TraceParams.Default,
                 startEndHandler,
-                null,
                 testClock);
         }
 
@@ -329,7 +328,6 @@ namespace OpenCensus.Trace.Export.Test
                 false,
                 TraceParams.Default,
                 startEndHandler,
-                null,
                 testClock);
         }
 

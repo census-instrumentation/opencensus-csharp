@@ -29,10 +29,8 @@ namespace OpenCensus.Common
         Timestamp Now { get; }
 
         /// <summary>
-        /// Gets a time measurement with nanosecond precision that can only be used to calculate elapsed time.
+        /// Gets the current instant from this clock.
         /// </summary>
-        long NowNanos { get; }
-
         DateTimeOffset NowDateTimeOffset { get; }
     }
 }
