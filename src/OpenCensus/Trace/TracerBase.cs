@@ -53,13 +53,13 @@ namespace OpenCensus.Trace
 
         // public final Runnable withSpan(Span span, Runnable runnable)
         // public final <C> Callable<C> withSpan(Span span, final Callable<C> callable)
-        public ISpanBuilder SpanBuilder(string spanName)
+        public ISpanBuilder SpanBuilder(string spanName, SpanKind spanKind = SpanKind.Unspecified)
         {
-            return this.SpanBuilderWithExplicitParent(spanName, CurrentSpanUtils.CurrentSpan);
+            return this.SpanBuilderWithExplicitParent(spanName, spanKind, CurrentSpanUtils.CurrentSpan);
         }
 
-        public abstract ISpanBuilder SpanBuilderWithExplicitParent(string spanName, ISpan parent = null);
+        public abstract ISpanBuilder SpanBuilderWithExplicitParent(string spanName, SpanKind spanKind = SpanKind.Unspecified, ISpan parent = null);
 
-        public abstract ISpanBuilder SpanBuilderWithRemoteParent(string spanName, ISpanContext remoteParentSpanContext = null);
+        public abstract ISpanBuilder SpanBuilderWithRemoteParent(string spanName, SpanKind spanKind = SpanKind.Unspecified, ISpanContext remoteParentSpanContext = null);
     }
 }

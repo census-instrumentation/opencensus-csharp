@@ -25,11 +25,7 @@ namespace OpenCensus.Trace
 
     public class SpanBuilder : SpanBuilderBase
     {
-        internal SpanBuilder()
-        {
-        }
-
-        private SpanBuilder(string name, SpanBuilderOptions options, ISpanContext remoteParentSpanContext = null, ISpan parent = null)
+        private SpanBuilder(string name, SpanKind kind, SpanBuilderOptions options, ISpanContext remoteParentSpanContext = null, ISpan parent = null) : base(kind)
         {
             this.Name = name ?? throw new ArgumentNullException(nameof(name));
             this.Parent = parent;
@@ -107,14 +103,14 @@ namespace OpenCensus.Trace
             return this;
         }
 
-        internal static ISpanBuilder CreateWithParent(string spanName, ISpan parent, SpanBuilderOptions options)
+        internal static ISpanBuilder CreateWithParent(string spanName, SpanKind kind, ISpan parent, SpanBuilderOptions options)
         {
-            return new SpanBuilder(spanName, options, null, parent);
+            return new SpanBuilder(spanName, kind, options, null, parent);
         }
 
-        internal static ISpanBuilder CreateWithRemoteParent(string spanName, ISpanContext remoteParentSpanContext, SpanBuilderOptions options)
+        internal static ISpanBuilder CreateWithRemoteParent(string spanName, SpanKind kind, ISpanContext remoteParentSpanContext, SpanBuilderOptions options)
         {
-            return new SpanBuilder(spanName, options, remoteParentSpanContext, null);
+            return new SpanBuilder(spanName, kind, options, remoteParentSpanContext, null);
         }
 
         private static bool IsAnyParentLinkSampled(IEnumerable<ISpan> parentLinks)
@@ -234,6 +230,7 @@ namespace OpenCensus.Trace
                         timestampConverter,
                         this.Options.Clock);
             LinkSpans(span, parentLinks);
+            span.Kind = this.Kind;
             return span;
         }
     }
