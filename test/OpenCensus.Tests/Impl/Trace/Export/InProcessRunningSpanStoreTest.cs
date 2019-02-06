@@ -53,6 +53,7 @@ namespace OpenCensus.Trace.Export.Test
                 false,
                 TraceParams.Default,
                 startEndHandler,
+                null,
                 DateTimeOffsetClock.GetInstance());
         }
 

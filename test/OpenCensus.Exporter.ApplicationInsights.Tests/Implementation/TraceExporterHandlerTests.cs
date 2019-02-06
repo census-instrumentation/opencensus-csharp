@@ -68,6 +68,13 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
                 }
             }
 
+            public long NowNanos
+            {
+                get
+                {
+                    return nowSecondsPrecision.ToUnixTimeSeconds() * 1000 * 1000 * 1000 + NanosecondsAfterSeconds;
+                }
+            }
             public DateTimeOffset NowDateTimeOffset
             {
                 get
@@ -110,7 +117,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
 
             var request = sentItems.OfType<RequestTelemetry>().Single();
             Assert.Equal("spanName", request.Name);
-            Assert.Equal(now.GetBefore(TimeSpan.FromSeconds(1)).NowDateTimeOffset, new TestClock(request.Timestamp).NowDateTimeOffset);
+            Assert.Equal(now.GetBefore(TimeSpan.FromSeconds(1)).NowNanos, new TestClock(request.Timestamp).NowNanos);
             Assert.Equal(1, request.Duration.TotalSeconds);
 
             Assert.Equal(TestTraceId, request.Context.Operation.Id);
@@ -291,7 +298,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
 
             var dependency = sentItems.OfType<DependencyTelemetry>().Single();
             Assert.Equal("spanName", dependency.Name);
-            Assert.Equal(now.GetBefore(TimeSpan.FromSeconds(1)).NowDateTimeOffset, new TestClock(dependency.Timestamp).NowDateTimeOffset);
+            Assert.Equal(now.GetBefore(TimeSpan.FromSeconds(1)).NowNanos, new TestClock(dependency.Timestamp).NowNanos);
             Assert.Equal(1, dependency.Duration.TotalSeconds);
 
             Assert.Equal(TestTraceId, dependency.Context.Operation.Id);
@@ -1456,8 +1463,8 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             Assert.Equal("test message1", trace1.Message);
             Assert.Equal("test message2", trace2.Message);
 
-            Assert.Equal(now.NowDateTimeOffset, new TestClock(trace1.Timestamp).NowDateTimeOffset);
-            Assert.NotEqual(now.NowDateTimeOffset, new TestClock(trace2.Timestamp).NowDateTimeOffset);
+            Assert.Equal(now.NowNanos, new TestClock(trace1.Timestamp).NowNanos);
+            Assert.NotEqual(now.NowNanos, new TestClock(trace2.Timestamp).NowNanos);
             Assert.True(Math.Abs((DateTime.UtcNow - trace2.Timestamp).TotalSeconds) < 1);
 
             Assert.False(trace1.Properties.Any());
@@ -1580,8 +1587,8 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             Assert.Equal("test message1", trace1.Message);
             Assert.Equal("test message2", trace2.Message);
 
-            Assert.Equal(now.NowDateTimeOffset, new TestClock(trace1.Timestamp).NowDateTimeOffset);
-            Assert.NotEqual(now.NowDateTimeOffset, new TestClock(trace2.Timestamp).NowDateTimeOffset);
+            Assert.Equal(now.NowNanos, new TestClock(trace1.Timestamp).NowNanos);
+            Assert.NotEqual(now.NowNanos, new TestClock(trace2.Timestamp).NowNanos);
             Assert.True(Math.Abs((DateTime.UtcNow - trace2.Timestamp).TotalSeconds) < 1);
 
             Assert.False(trace1.Properties.Any());

@@ -63,6 +63,7 @@ namespace OpenCensus.Trace.Export.Test
                     false,
                     TraceParams.Default,
                     startEndHandler,
+                    null,
                     DateTimeOffsetClock.Instance);
             span.End();
             return span as Span;
@@ -79,6 +80,7 @@ namespace OpenCensus.Trace.Export.Test
                     false,
                     TraceParams.Default,
                     startEndHandler,
+                    null,
                     DateTimeOffsetClock.Instance);
             span.End();
             return span as Span;

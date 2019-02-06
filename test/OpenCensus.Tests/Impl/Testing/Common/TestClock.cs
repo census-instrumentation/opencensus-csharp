@@ -65,6 +65,14 @@ namespace OpenCensus.Testing.Common
             }
         }
 
+        public long NowNanos
+        {
+            get
+            {
+                lock (_lck) { return GetNanos(currentTime); }
+            }
+        }
+
         public DateTimeOffset NowDateTimeOffset
         {
             get
