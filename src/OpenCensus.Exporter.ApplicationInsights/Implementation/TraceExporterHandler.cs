@@ -19,6 +19,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using System.Threading.Tasks;
     using Microsoft.ApplicationInsights;
     using Microsoft.ApplicationInsights.DataContracts;
     using Microsoft.ApplicationInsights.Extensibility;
@@ -35,77 +36,120 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
             this.telemetryClient = new TelemetryClient(telemetryConfiguration);
         }
 
-        public void Export(IEnumerable<ISpanData> spanDataList)
+        public async Task ExportAsync(IEnumerable<ISpanData> spanDataList)
         {
-            foreach (var span in spanDataList)
+            await Task.Run(async () =>
             {
-                this.ExtractGenericProperties(
-                    span,
-                    out var resultKind,
-                    out var timestamp,
-                    out var name,
-                    out var resultCode,
-                    out var props,
-                    out var traceId,
-                    out var spanId,
-                    out var parentId,
-                    out var tracestate,
-                    out var success,
-                    out var duration);
-
-                string data = null;
-                string target = null;
-                string type = null;
-                string userAgent = null;
-
-                IAttributeValue spanKindAttr = null;
-                IAttributeValue errorAttr = null;
-                IAttributeValue httpStatusCodeAttr = null;
-                IAttributeValue httpMethodAttr = null;
-                IAttributeValue httpPathAttr = null;
-                IAttributeValue httpHostAttr = null;
-                IAttributeValue httpUrlAttr = null;
-                IAttributeValue httpUserAgentAttr = null;
-                IAttributeValue httpRouteAttr = null;
-                IAttributeValue httpPortAttr = null;
-
-                foreach (var attr in span.Attributes.AttributeMap)
+                foreach (var span in spanDataList)
                 {
-                    var key = attr.Key;
+                    this.ExtractGenericProperties(
+                        span,
+                        out var resultKind,
+                        out var timestamp,
+                        out var name,
+                        out var resultCode,
+                        out var props,
+                        out var traceId,
+                        out var spanId,
+                        out var parentId,
+                        out var tracestate,
+                        out var success,
+                        out var duration);
 
-                    switch (attr.Key)
+                    string data = null;
+                    string target = null;
+                    string type = null;
+                    string userAgent = null;
+
+                    IAttributeValue spanKindAttr = null;
+                    IAttributeValue errorAttr = null;
+                    IAttributeValue httpStatusCodeAttr = null;
+                    IAttributeValue httpMethodAttr = null;
+                    IAttributeValue httpPathAttr = null;
+                    IAttributeValue httpHostAttr = null;
+                    IAttributeValue httpUrlAttr = null;
+                    IAttributeValue httpUserAgentAttr = null;
+                    IAttributeValue httpRouteAttr = null;
+                    IAttributeValue httpPortAttr = null;
+
+                    foreach (var attr in span.Attributes.AttributeMap)
                     {
-                        case "span.kind":
-                            spanKindAttr = attr.Value;
-                            break;
-                        case "error":
-                            errorAttr = attr.Value;
-                            break;
-                        case "http.method":
-                            httpMethodAttr = attr.Value;
-                            break;
-                        case "http.path":
-                            httpPathAttr = attr.Value;
-                            break;
-                        case "http.host":
-                            httpHostAttr = attr.Value;
-                            break;
-                        case "http.url":
-                            httpUrlAttr = attr.Value;
-                            break;
-                        case "http.status_code":
-                            httpStatusCodeAttr = attr.Value;
-                            break;
-                        case "http.user_agent":
-                            httpUserAgentAttr = attr.Value;
-                            break;
-                        case "http.route":
-                            httpRouteAttr = attr.Value;
-                            break;
-                        case "http.port":
-                            httpPortAttr = attr.Value;
-                            break;
-                        default:
+                        var key = attr.Key;
+
+                        switch (attr.Key)
+                        {
+                            case "span.kind":
+                                spanKindAttr = attr.Value;
+                                break;
+                            case "error":
+                                errorAttr = attr.Value;
+                                break;
+                            case "http.method":
+                                httpMethodAttr = attr.Value;
+                                break;
+                            case "http.path":
+                                httpPathAttr = attr.Value;
+                                break;
+                            case "http.host":
+                                httpHostAttr = attr.Value;
+                                break;
+                            case "http.url":
+                                httpUrlAttr = attr.Value;
+                                break;
+                            case "http.status_code":
+                                httpStatusCodeAttr = attr.Value;
+                                break;
+                            case "http.user_agent":
+                                httpUserAgentAttr = attr.Value;
+                                break;
+                            case "http.route":
+                                httpRouteAttr = attr.Value;
+                                break;
+                            case "http.port":
+                                httpPortAttr = attr.Value;
+                                break;
+                            default:
+                                var value = attr.Value.Match<string>(
+                                    (s) => { return s; },
+                                    (b) => { return b.ToString(); },
+                                    (l) => { return l.ToString(); },
+                                    (d) => { return d.ToString(); },
+                                    (obj) => { return obj.ToString(); });
+
+                                AddPropertyWithAdjustedName(props, attr.Key, value);
+
+                                break;
+                        }
+                    }
+
+                    var linkId = 0;
+                    foreach (var link in span.Links.Links)
+                    {
+                        AddPropertyWithAdjustedName(props, "link" + linkId + "_traceId", link.TraceId.ToLowerBase16());
+                        AddPropertyWithAdjustedName(props, "link" + linkId + "_spanId", link.SpanId.ToLowerBase16());
+                        AddPropertyWithAdjustedName(props, "link" + linkId + "_type", link.Type.ToString());
+
+                        foreach (var attr in link.Attributes)
+                        {
+                            AddPropertyWithAdjustedName(props, "link" + linkId + "_" + attr.Key, attr.Value.Match((s) => s, (b) => b.ToString(), (l) => l.ToString(), (d) => d.ToString(), (obj) => obj.ToString()));
+                        }
+
+                        ++linkId;
+                    }
+
+                    foreach (var t in span.Annotations.Events)
+                    {
+                        var log = new TraceTelemetry(t.Event.Description);
+
+                        if (t.Timestamp != null)
+                        {
+                            var logTimestamp = DateTimeOffset.FromUnixTimeSeconds(t.Timestamp.Seconds);
+                            logTimestamp = logTimestamp.Add(TimeSpan.FromTicks(t.Timestamp.Nanos / 100));
+                            log.Timestamp = logTimestamp;
+                        }
+
+                        foreach (var attr in t.Event.Attributes)
+                        {
                             var value = attr.Value.Match<string>(
                                 (s) => { return s; },
                                 (b) => { return b.ToString(); },
@@ -113,157 +157,117 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                                 (d) => { return d.ToString(); },
                                 (obj) => { return obj.ToString(); });
 
-                            AddPropertyWithAdjustedName(props, attr.Key, value);
+                            AddPropertyWithAdjustedName(log.Properties, attr.Key, value);
+                        }
 
-                            break;
+                        log.Context.Operation.Id = traceId;
+                        log.Context.Operation.ParentId = string.Concat("|", traceId, ".", spanId, ".");
+
+                        this.telemetryClient.Track(log);
                     }
-                }
 
-                var linkId = 0;
-                foreach (var link in span.Links.Links)
-                {
-                    AddPropertyWithAdjustedName(props, "link" + linkId + "_traceId", link.TraceId.ToLowerBase16());
-                    AddPropertyWithAdjustedName(props, "link" + linkId + "_spanId", link.SpanId.ToLowerBase16());
-                    AddPropertyWithAdjustedName(props, "link" + linkId + "_type", link.Type.ToString());
-
-                    foreach (var attr in link.Attributes)
+                    foreach (var m in span.MessageEvents.Events)
                     {
-                        AddPropertyWithAdjustedName(props, "link" + linkId + "_" + attr.Key, attr.Value.Match((s) => s, (b) => b.ToString(), (l) => l.ToString(), (d) => d.ToString(), (obj) => obj.ToString()));
+                        var log = new TraceTelemetry();
+
+                        if (m.Timestamp != null)
+                        {
+                            var logTimestamp = DateTimeOffset.FromUnixTimeSeconds(m.Timestamp.Seconds);
+                            logTimestamp = logTimestamp.Add(TimeSpan.FromTicks(m.Timestamp.Nanos / 100));
+                            log.Timestamp = logTimestamp;
+                        }
+
+                        log.Message = string.Concat(
+                            "MessageEvent. messageId: '",
+                            m.Event.MessageId,
+                            "', type: '",
+                            m.Event.Type.ToString(),
+                            "', compressed size: '",
+                            m.Event.CompressedMessageSize,
+                            "', uncompressed size: '",
+                            m.Event.UncompressedMessageSize,
+                            "'");
+
+                        log.Context.Operation.Id = traceId;
+                        log.Context.Operation.ParentId = string.Concat("|", traceId, ".", spanId, ".");
+
+                        this.telemetryClient.Track(log);
                     }
 
-                    ++linkId;
-                }
+                    this.OverwriteSpanKindFromAttribute(spanKindAttr, ref resultKind);
+                    this.OverwriteErrorAttribute(errorAttr, ref success);
+                    this.OverwriteFieldsForHttpSpans(
+                        httpMethodAttr,
+                        httpUrlAttr,
+                        httpHostAttr,
+                        httpPathAttr,
+                        httpStatusCodeAttr,
+                        httpUserAgentAttr,
+                        httpRouteAttr,
+                        httpPortAttr,
+                        ref name,
+                        ref resultCode,
+                        ref data,
+                        ref target,
+                        ref type,
+                        ref userAgent);
 
-                foreach (var t in span.Annotations.Events)
-                {
-                    var log = new TraceTelemetry(t.Event.Description);
-
-                    if (t.Timestamp != null)
+                    // BUILDING resulting telemetry
+                    OperationTelemetry result;
+                    if (resultKind == SpanKind.Client)
                     {
-                        var logTimestamp = DateTimeOffset.FromUnixTimeSeconds(t.Timestamp.Seconds);
-                        logTimestamp = logTimestamp.Add(TimeSpan.FromTicks(t.Timestamp.Nanos / 100));
-                        log.Timestamp = logTimestamp;
-                    }
+                        var resultD = new DependencyTelemetry();
+                        resultD.ResultCode = resultCode;
+                        resultD.Data = data;
+                        resultD.Target = target;
+                        resultD.Type = type;
 
-                    foreach (var attr in t.Event.Attributes)
+                        result = resultD;
+                    }
+                    else
                     {
-                        var value = attr.Value.Match<string>(
-                            (s) => { return s; },
-                            (b) => { return b.ToString(); },
-                            (l) => { return l.ToString(); },
-                            (d) => { return d.ToString(); },
-                            (obj) => { return obj.ToString(); });
-
-                        AddPropertyWithAdjustedName(log.Properties, attr.Key, value);
+                        var resultR = new RequestTelemetry();
+                        resultR.ResponseCode = resultCode;
+                        Uri.TryCreate(data, UriKind.RelativeOrAbsolute, out var url);
+                        resultR.Url = url;
+                        result = resultR;
                     }
 
-                    log.Context.Operation.Id = traceId;
-                    log.Context.Operation.ParentId = string.Concat("|", traceId, ".", spanId, ".");
+                    result.Success = success;
 
-                    this.telemetryClient.Track(log);
-                }
+                    result.Timestamp = timestamp;
+                    result.Name = name;
+                    result.Context.Operation.Id = traceId;
+                    result.Context.User.UserAgent = userAgent;
 
-                foreach (var m in span.MessageEvents.Events)
-                {
-                    var log = new TraceTelemetry();
-
-                    if (m.Timestamp != null)
+                    foreach (var prop in props)
                     {
-                        var logTimestamp = DateTimeOffset.FromUnixTimeSeconds(m.Timestamp.Seconds);
-                        logTimestamp = logTimestamp.Add(TimeSpan.FromTicks(m.Timestamp.Nanos / 100));
-                        log.Timestamp = logTimestamp;
+                        AddPropertyWithAdjustedName(result.Properties, prop.Key, prop.Value);
                     }
 
-                    log.Message = string.Concat(
-                        "MessageEvent. messageId: '",
-                        m.Event.MessageId,
-                        "', type: '",
-                        m.Event.Type.ToString(),
-                        "', compressed size: '",
-                        m.Event.CompressedMessageSize,
-                        "', uncompressed size: '",
-                        m.Event.UncompressedMessageSize,
-                        "'");
+                    if (parentId != null)
+                    {
+                        result.Context.Operation.ParentId = string.Concat("|", traceId, ".", parentId, ".");
+                    }
 
-                    log.Context.Operation.Id = traceId;
-                    log.Context.Operation.ParentId = string.Concat("|", traceId, ".", spanId, ".");
+                    // TODO: I don't understant why this concatanation is required
+                    result.Id = string.Concat("|", traceId, ".", spanId, ".");
 
-                    this.telemetryClient.Track(log);
+                    foreach (var ts in tracestate.Entries)
+                    {
+                        result.Properties[ts.Key] = ts.Value;
+                    }
+
+                    result.Duration = duration;
+
+                    // TODO: deal with those:
+                    // span.ChildSpanCount
+                    // span.Context.IsValid;
+                    // span.Context.TraceOptions;
+
+                    this.telemetryClient.Track(result);
                 }
-
-                this.OverwriteSpanKindFromAttribute(spanKindAttr, ref resultKind);
-                this.OverwriteErrorAttribute(errorAttr, ref success);
-                this.OverwriteFieldsForHttpSpans(
-                    httpMethodAttr,
-                    httpUrlAttr,
-                    httpHostAttr,
-                    httpPathAttr,
-                    httpStatusCodeAttr,
-                    httpUserAgentAttr,
-                    httpRouteAttr,
-                    httpPortAttr,
-                    ref name,
-                    ref resultCode,
-                    ref data,
-                    ref target,
-                    ref type,
-                    ref userAgent);
-
-                // BUILDING resulting telemetry
-                OperationTelemetry result;
-                if (resultKind == SpanKind.Client)
-                {
-                    var resultD = new DependencyTelemetry();
-                    resultD.ResultCode = resultCode;
-                    resultD.Data = data;
-                    resultD.Target = target;
-                    resultD.Type = type;
-
-                    result = resultD;
-                }
-                else
-                {
-                    var resultR = new RequestTelemetry();
-                    resultR.ResponseCode = resultCode;
-                    Uri.TryCreate(data, UriKind.RelativeOrAbsolute, out var url);
-                    resultR.Url = url;
-                    result = resultR;
-                }
-
-                result.Success = success;
-
-                result.Timestamp = timestamp;
-                result.Name = name;
-                result.Context.Operation.Id = traceId;
-                result.Context.User.UserAgent = userAgent;
-
-                foreach (var prop in props)
-                {
-                    AddPropertyWithAdjustedName(result.Properties, prop.Key, prop.Value);
-                }
-
-                if (parentId != null)
-                {
-                    result.Context.Operation.ParentId = string.Concat("|", traceId, ".", parentId, ".");
-                }
-
-                // TODO: I don't understant why this concatanation is required
-                result.Id = string.Concat("|", traceId, ".", spanId, ".");
-
-                foreach (var ts in tracestate.Entries)
-                {
-                    result.Properties[ts.Key] = ts.Value;
-                }
-
-                result.Duration = duration;
-
-                // TODO: deal with those:
-                // span.ChildSpanCount
-                // span.Context.IsValid;
-                // span.Context.TraceOptions;
-
-                this.telemetryClient.Track(result);
-            }
+            });
         }
 
         private static void AddPropertyWithAdjustedName(IDictionary<string, string> props, string name, string value)

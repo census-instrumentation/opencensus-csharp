@@ -89,7 +89,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             configuration.TelemetryChannel = channel;
 
             TraceExporterHandler exporter = new TraceExporterHandler(configuration);
-            exporter.Export(new List<ISpanData> { data });
+            exporter.ExportAsync(new List<ISpanData> { data }).Wait();
 
             return sentItems;
         }
