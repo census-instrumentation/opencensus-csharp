@@ -165,7 +165,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             }
         }
 
-        public async Task Export(IEnumerable<ISpanData> spanDataList)
+        public async Task ExportAsync(IEnumerable<ISpanData> spanDataList)
         {
             TraceServiceClient traceWriter = TraceServiceClient.Create(settings: traceServiceSettings);
             

@@ -36,7 +36,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
             this.telemetryClient = new TelemetryClient(telemetryConfiguration);
         }
 
-        public async Task Export(IEnumerable<ISpanData> spanDataList)
+        public async Task ExportAsync(IEnumerable<ISpanData> spanDataList)
         {
             await Task.Run(async () =>
             {

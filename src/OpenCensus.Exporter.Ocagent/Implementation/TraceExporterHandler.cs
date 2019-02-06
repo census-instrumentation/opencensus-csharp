@@ -72,7 +72,7 @@ namespace OpenCensus.Exporter.Ocagent.Implementation
             this.Start();
         }
 
-        public async Task Export(IEnumerable<ISpanData> spanDataList)
+        public async Task ExportAsync(IEnumerable<ISpanData> spanDataList)
         {
             await Task.Run(() =>
             {

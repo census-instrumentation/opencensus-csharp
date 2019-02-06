@@ -46,7 +46,7 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
             this.httpClient = client ?? new HttpClient();
         }
 
-        public async Task Export(IEnumerable<ISpanData> spanDataList)
+        public async Task ExportAsync(IEnumerable<ISpanData> spanDataList)
         {
             List<ZipkinSpan> zipkinSpans = new List<ZipkinSpan>();
 

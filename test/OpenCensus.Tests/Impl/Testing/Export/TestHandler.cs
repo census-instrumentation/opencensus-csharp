@@ -27,7 +27,7 @@ namespace OpenCensus.Testing.Export
         private readonly object monitor = new object();
         private readonly List<ISpanData> spanDataList = new List<ISpanData>();
 
-        public async Task Export(IEnumerable<ISpanData> data)
+        public async Task ExportAsync(IEnumerable<ISpanData> data)
         {
             lock (monitor)
             {

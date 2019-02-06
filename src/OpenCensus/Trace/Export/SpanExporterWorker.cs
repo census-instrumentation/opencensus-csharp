@@ -64,7 +64,7 @@ namespace OpenCensus.Trace.Export
                 try
                 {
                     // TODO: the async handlers could be run in parallel.
-                    await handler.Export(export);
+                    await handler.ExportAsync(export);
                 }
                 catch (Exception ex)
                 {
