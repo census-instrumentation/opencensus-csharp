@@ -37,6 +37,7 @@ namespace OpenCensus.Trace.Test
         private readonly ISpanId parentSpanId;
         private readonly Timestamp timestamp = Timestamp.Create(1234, 5600);
         private readonly TestClock testClock;
+        private readonly TimestampConverter timestampConverter;
         private readonly SpanOptions noRecordSpanOptions = SpanOptions.None;
         private readonly SpanOptions recordSpanOptions = SpanOptions.RecordEvents;
         private readonly IDictionary<String, IAttributeValue> attributes = new Dictionary<String, IAttributeValue>();
@@ -50,6 +51,7 @@ namespace OpenCensus.Trace.Test
             spanContext = SpanContext.Create(TraceId.GenerateRandomId(random), SpanId.GenerateRandomId(random), TraceOptions.Default, Tracestate.Empty);
             parentSpanId = SpanId.GenerateRandomId(random);
             testClock = TestClock.Create(timestamp);
+            timestampConverter = TimestampConverter.Now(testClock);
             attributes.Add(
                 "MyStringAttributeKey", AttributeValue.StringAttributeValue("MyStringAttributeValue"));
             attributes.Add("MyLongAttributeKey", AttributeValue.LongAttributeValue(123L));
@@ -72,6 +74,7 @@ namespace OpenCensus.Trace.Test
                     false,
                     TraceParams.Default,
                     startEndHandler,
+                    timestampConverter,
                     testClock);
             // Check that adding trace events after Span#End() does not throw any exception.
             span.PutAttributes(attributes);
@@ -97,6 +100,7 @@ namespace OpenCensus.Trace.Test
                     false,
                     TraceParams.Default,
                     startEndHandler,
+                    timestampConverter,
                     testClock);
             span.End();
             // Check that adding trace events after Span#End() does not throw any exception and are not
@@ -132,6 +136,7 @@ namespace OpenCensus.Trace.Test
         //              false,
         //              TraceParams.DEFAULT,
         //              startEndHandler,
+        //              timestampConverter,
         //              testClock);
         //      span.AddAttributes(attributes);
         //      span.End();
@@ -151,6 +156,7 @@ namespace OpenCensus.Trace.Test
                     true,
                     TraceParams.Default,
                     startEndHandler,
+                    timestampConverter,
                     testClock);
    
             span.PutAttribute(
@@ -209,6 +215,7 @@ namespace OpenCensus.Trace.Test
                     false,
                     TraceParams.Default,
                     startEndHandler,
+                    timestampConverter,
                     testClock);
      
             span.PutAttribute(
@@ -270,6 +277,7 @@ namespace OpenCensus.Trace.Test
                     false,
                     TraceParams.Default,
                     startEndHandler,
+                    timestampConverter,
                     testClock);
             testClock.AdvanceTime(Duration.Create(0, 100));
             Assert.Equal(Status.Ok, span.Status);
@@ -295,6 +303,7 @@ namespace OpenCensus.Trace.Test
                     false,
                     TraceParams.Default,
                     startEndHandler,
+                    timestampConverter,
                     testClock);
             testClock.AdvanceTime(Duration.Create(0, 100));
             Assert.Equal(Status.Ok, span.Status);
@@ -323,6 +332,7 @@ namespace OpenCensus.Trace.Test
                     false,
                     traceParams,
                     startEndHandler,
+                    timestampConverter,
                     testClock);
             for (int i = 0; i < 2 * maxNumberOfAttributes; i++)
             {
@@ -370,6 +380,7 @@ namespace OpenCensus.Trace.Test
                     false,
                     traceParams,
                     startEndHandler,
+                    timestampConverter,
                     testClock);
             for (int i = 0; i < 2 * maxNumberOfAttributes; i++)
             {
@@ -428,6 +439,7 @@ namespace OpenCensus.Trace.Test
                     false,
                     traceParams,
                     startEndHandler,
+                    timestampConverter,
                     testClock);
             IAnnotation annotation = Annotation.FromDescription(ANNOTATION_DESCRIPTION);
             int i = 0;
@@ -477,6 +489,7 @@ namespace OpenCensus.Trace.Test
                     false,
                     traceParams,
                     startEndHandler,
+                    timestampConverter,
                     testClock);
             IMessageEvent networkEvent =
                 MessageEvent.Builder(MessageEventType.Received, 1).SetUncompressedMessageSize(3).Build();
@@ -521,6 +534,7 @@ namespace OpenCensus.Trace.Test
                     false,
                     traceParams,
                     startEndHandler,
+                    timestampConverter,
                     testClock);
             ILink link = Link.FromSpanContext(spanContext, LinkType.ChildLinkedSpan);
             for (int i = 0; i < 2 * maxNumberOfLinks; i++)
@@ -556,6 +570,7 @@ namespace OpenCensus.Trace.Test
                     false,
                     TraceParams.Default,
                     startEndHandler,
+                    timestampConverter,
                     testClock);
             span.End(EndSpanOptions.Builder().SetSampleToLocalSpanStore(true).Build());
 
@@ -569,6 +584,7 @@ namespace OpenCensus.Trace.Test
                     false,
                     TraceParams.Default,
                     startEndHandler,
+                    timestampConverter,
                     testClock);
             span2.End();
 
@@ -593,6 +609,7 @@ namespace OpenCensus.Trace.Test
                     false,
                     TraceParams.Default,
                     startEndHandler,
+                    timestampConverter,
                     testClock);
 
             Assert.Throws<InvalidOperationException>(() => ((Span)span).IsSampleToLocalSpanStore);

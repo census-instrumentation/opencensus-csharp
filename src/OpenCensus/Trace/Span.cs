@@ -33,6 +33,7 @@ namespace OpenCensus.Trace
         private readonly ITraceParams traceParams;
         private readonly IStartEndHandler startEndHandler;
         private readonly IClock clock;
+        private readonly TimestampConverter timestampConverter;
         private readonly DateTimeOffset startTime;
         private readonly object @lock = new object();
         private AttributesWithCapacity attributes;
@@ -52,6 +53,7 @@ namespace OpenCensus.Trace
                 bool? hasRemoteParent,
                 ITraceParams traceParams,
                 IStartEndHandler startEndHandler,
+                TimestampConverter timestampConverter,
                 IClock clock)
             : base(context, options)
         {
@@ -65,11 +67,13 @@ namespace OpenCensus.Trace
             this.sampleToLocalSpanStore = false;
             if (options.HasFlag(SpanOptions.RecordEvents))
             {
+                this.timestampConverter = timestampConverter ?? OpenCensus.Internal.TimestampConverter.Now(clock);
                 this.startTime = clock.NowDateTimeOffset;
             }
             else
             {
                 this.startTime = DateTimeOffset.MinValue;
+                this.timestampConverter = timestampConverter;
             }
         }
 
@@ -164,6 +168,14 @@ namespace OpenCensus.Trace
             get
             {
                 return this.hasBeenEnded;
+            }
+        }
+
+        internal TimestampConverter TimestampConverter
+        {
+            get
+            {
+                return this.timestampConverter;
             }
         }
 
@@ -403,8 +415,8 @@ namespace OpenCensus.Trace
             Attributes attributesSpanData = this.attributes == null ? Attributes.Create(new Dictionary<string, IAttributeValue>(), 0)
                         : Attributes.Create(this.attributes, this.attributes.NumberOfDroppedAttributes);
 
-            ITimedEvents<IAnnotation> annotationsSpanData = CreateTimedEvents(this.InitializedAnnotations);
-            ITimedEvents<IMessageEvent> messageEventsSpanData = CreateTimedEvents(this.InitializedMessageEvents);
+            ITimedEvents<IAnnotation> annotationsSpanData = CreateTimedEvents(this.InitializedAnnotations, this.timestampConverter);
+            ITimedEvents<IMessageEvent> messageEventsSpanData = CreateTimedEvents(this.InitializedMessageEvents, this.timestampConverter);
             LinkList linksSpanData = this.links == null ? LinkList.Create(new List<ILink>(), 0) : LinkList.Create(this.links.Events.ToList(), this.links.NumberOfDroppedEvents);
 
             return SpanData.Create(
@@ -431,6 +443,7 @@ namespace OpenCensus.Trace
                         bool? hasRemoteParent,
                         ITraceParams traceParams,
                         IStartEndHandler startEndHandler,
+                        TimestampConverter timestampConverter,
                         IClock clock)
         {
             var span = new Span(
@@ -441,6 +454,7 @@ namespace OpenCensus.Trace
                hasRemoteParent,
                traceParams,
                startEndHandler,
+               timestampConverter,
                clock);
 
             // Call onStart here instead of calling in the constructor to make sure the span is completely
@@ -453,7 +467,7 @@ namespace OpenCensus.Trace
             return span;
         }
 
-        private static ITimedEvents<T> CreateTimedEvents<T>(TraceEvents<EventWithNanoTime<T>> events)
+        private static ITimedEvents<T> CreateTimedEvents<T>(TraceEvents<EventWithNanoTime<T>> events, TimestampConverter timestampConverter)
         {
             if (events == null)
             {
@@ -464,7 +478,7 @@ namespace OpenCensus.Trace
             var eventsList = new List<ITimedEvent<T>>(events.Events.Count);
             foreach (EventWithNanoTime<T> networkEvent in events.Events)
             {
-                eventsList.Add(networkEvent.ToSpanDataTimedEvent());
+                eventsList.Add(networkEvent.ToSpanDataTimedEvent(timestampConverter));
             }
 
             return TimedEvents<T>.Create(eventsList, events.NumberOfDroppedEvents);

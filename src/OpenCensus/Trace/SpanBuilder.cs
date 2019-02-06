@@ -51,6 +51,7 @@ namespace OpenCensus.Trace
         {
             ISpanContext parentContext = this.RemoteParentSpanContext;
             bool hasRemoteParent = true;
+            TimestampConverter timestampConverter = null;
             if (this.RemoteParentSpanContext == null)
             {
                 // This is not a child of a remote Span. Get the parent SpanContext from the parent Span if
@@ -60,6 +61,13 @@ namespace OpenCensus.Trace
                 if (parent != null)
                 {
                     parentContext = parent.Context;
+
+                    // Pass the timestamp converter from the parent to ensure that the recorded events are in
+                    // the right order. Implementation uses System.nanoTime() which is monotonically increasing.
+                    if (parent is Span)
+                    {
+                        timestampConverter = ((Span)parent).TimestampConverter;
+                    }
                 }
                 else
                 {
@@ -73,7 +81,8 @@ namespace OpenCensus.Trace
                 this.Name,
                 this.Sampler,
                 this.ParentLinks,
-                this.RecordEvents);
+                this.RecordEvents,
+                timestampConverter);
         }
 
         public override ISpanBuilder SetSampler(ISampler sampler)
@@ -165,7 +174,8 @@ namespace OpenCensus.Trace
                      string name,
                      ISampler sampler,
                      IEnumerable<ISpan> parentLinks,
-                     bool recordEvents)
+                     bool recordEvents,
+                     TimestampConverter timestampConverter)
         {
             ITraceParams activeTraceParams = this.Options.TraceConfig.ActiveTraceParams;
             IRandomGenerator random = this.Options.RandomHandler;
@@ -217,6 +227,7 @@ namespace OpenCensus.Trace
                         hasRemoteParent,
                         activeTraceParams,
                         this.Options.StartEndHandler,
+                        timestampConverter,
                         this.Options.Clock);
             LinkSpans(span, parentLinks);
             span.Kind = this.Kind;

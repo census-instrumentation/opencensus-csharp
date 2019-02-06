@@ -104,6 +104,7 @@ namespace OpenCensus.Trace.Test
             Assert.Equal(rootSpan.Context.TraceId, childSpan.Context.TraceId);
             Assert.Equal(rootSpan.Context.SpanId, ((Span)childSpan).ToSpanData().ParentSpanId);
             Assert.False(((Span)childSpan).ToSpanData().HasRemoteParent);
+            Assert.Equal(((Span)rootSpan).TimestampConverter, ((Span)childSpan).TimestampConverter);
         }
 
         [Fact]
