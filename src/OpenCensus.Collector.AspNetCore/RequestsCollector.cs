@@ -40,12 +40,12 @@ namespace OpenCensus.Collector.AspNetCore
         public RequestsCollector(RequestsCollectorOptions options, ITracer tracer, ISampler sampler, IPropagationComponent propagationComponent)
         {
             this.diagnosticSourceSubscriber = new DiagnosticSourceSubscriber(
-                new Dictionary<string, Func<ITracer, ISampler, ListenerHandler>>()
+                new Dictionary<string, Func<ITracer, Func<Uri, ISampler>, ListenerHandler>>()
                 {
                     { "Microsoft.AspNetCore", (t, s) => new HttpInListener(t, s, propagationComponent) },
                 },
                 tracer,
-                sampler);
+                (uri) => { return sampler; });
             this.diagnosticSourceSubscriber.Subscribe();
         }
 

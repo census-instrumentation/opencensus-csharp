@@ -25,14 +25,14 @@ namespace OpenCensus.Collector.Implementation.Common
 
     internal class DiagnosticSourceSubscriber : IDisposable, IObserver<DiagnosticListener>
     {
-        private readonly Dictionary<string, Func<ITracer, ISampler, ListenerHandler>> handlers;
+        private readonly Dictionary<string, Func<ITracer, Func<Uri, ISampler>, ListenerHandler>> handlers;
         private readonly ITracer tracer;
-        private readonly ISampler sampler;
+        private readonly Func<Uri, ISampler> sampler;
         private ConcurrentDictionary<string, DiagnosticSourceListener> subscriptions;
         private bool disposing;
         private IDisposable subscription;
 
-        public DiagnosticSourceSubscriber(Dictionary<string, Func<ITracer, ISampler, ListenerHandler>> handlers, ITracer tracer, ISampler sampler)
+        public DiagnosticSourceSubscriber(Dictionary<string, Func<ITracer, Func<Uri, ISampler>, ListenerHandler>> handlers, ITracer tracer, Func<Uri, ISampler> sampler)
         {
             this.subscriptions = new ConcurrentDictionary<string, DiagnosticSourceListener>();
             this.handlers = handlers;

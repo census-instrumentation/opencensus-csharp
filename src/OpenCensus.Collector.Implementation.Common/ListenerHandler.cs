@@ -16,16 +16,17 @@
 
 namespace OpenCensus.Collector.Implementation.Common
 {
+    using System;
     using System.Diagnostics;
     using OpenCensus.Trace;
 
-    internal class ListenerHandler
+    internal abstract class ListenerHandler
     {
         protected readonly ITracer Tracer;
 
-        protected readonly ISampler Sampler;
+        protected readonly Func<Uri, ISampler> Sampler;
 
-        public ListenerHandler(string sourceName, ITracer tracer, ISampler sampler)
+        public ListenerHandler(string sourceName, ITracer tracer, Func<Uri, ISampler> sampler)
         {
             this.SourceName = sourceName;
             this.Tracer = tracer;
@@ -34,10 +35,11 @@ namespace OpenCensus.Collector.Implementation.Common
 
         public string SourceName { get; }
 
-        public virtual void OnStartActivity(Activity activity, object payload)
-        {
-            this.Tracer.SpanBuilder(activity.OperationName).SetSampler(this.Sampler).StartScopedSpan();
-        }
+        public abstract void OnStartActivity(Activity activity, object payload);
+
+        // {
+            // this.Tracer.SpanBuilder(activity.OperationName).SetSampler(this.Sampler).StartScopedSpan();
+        // }
 
         public virtual void OnStopActivity(Activity activity, object payload)
         {

@@ -16,10 +16,12 @@
 
 namespace OpenCensus.Collector.AspNetCore.Implementation
 {
+    using System;
     using System.Diagnostics;
     using System.Linq;
     using System.Text;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Http.Extensions;
     using Microsoft.AspNetCore.Http.Features;
     using OpenCensus.Collector.Implementation.Common;
     using OpenCensus.Trace;
@@ -35,7 +37,7 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
         private readonly PropertyFetcher beforeActionTemplateFetcher = new PropertyFetcher("Template");
         private readonly IPropagationComponent propagationComponent;
 
-        public HttpInListener(ITracer tracer, ISampler sampler, IPropagationComponent propagationComponent)
+        public HttpInListener(ITracer tracer, Func<Uri, ISampler> sampler, IPropagationComponent propagationComponent)
             : base("Microsoft.AspNetCore", tracer, sampler)
         {
             this.propagationComponent = propagationComponent;
@@ -62,7 +64,7 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
             string path = (request.PathBase.HasValue || request.Path.HasValue) ? (request.PathBase + request.Path).ToString() : "/";
 
             ISpan span = null;
-            this.Tracer.SpanBuilderWithRemoteParent(path, SpanKind.Server, ctx).SetSampler(this.Sampler).StartScopedSpan(out span);
+            this.Tracer.SpanBuilderWithRemoteParent(path, SpanKind.Server, ctx).SetSampler(this.Sampler(new Uri(request.GetDisplayUrl()))).StartScopedSpan(out span);
             if (span == null)
             {
                 // Debug.WriteLine("span is null");

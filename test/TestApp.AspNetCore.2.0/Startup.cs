@@ -49,7 +49,7 @@ namespace TestApp.AspNetCore._2._0
             services.AddSingleton<ISampler>(Samplers.AlwaysSample);
             services.AddSingleton<RequestsCollectorOptions>(new RequestsCollectorOptions());
             services.AddSingleton<RequestsCollector>();
-            services.AddSingleton<DependenciesCollectorOptions>(new DependenciesCollectorOptions());
+            services.AddSingleton<DependenciesCollectorOptions>(new DependenciesCollectorOptions((uri) => { return Samplers.AlwaysSample; }));
             services.AddSingleton<DependenciesCollector>();
             services.AddSingleton<IPropagationComponent>(new DefaultPropagationComponent());
             services.AddSingleton<IExportComponent>(Tracing.ExportComponent);

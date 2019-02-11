@@ -40,10 +40,10 @@ namespace OpenCensus.Collector.Dependencies
         public DependenciesCollector(DependenciesCollectorOptions options, ITracer tracer, ISampler sampler, IPropagationComponent propagationComponent)
         {
             this.diagnosticSourceSubscriber = new DiagnosticSourceSubscriber(
-                new Dictionary<string, Func<ITracer, ISampler, ListenerHandler>>()
+                new Dictionary<string, Func<ITracer, Func<Uri, ISampler>, ListenerHandler>>()
                 { { "HttpHandlerDiagnosticListener", (t, s) => new HttpHandlerDiagnosticListener(t, s, propagationComponent) } },
                 tracer,
-                sampler);
+                options.CustomSampler);
             this.diagnosticSourceSubscriber.Subscribe();
         }
 
