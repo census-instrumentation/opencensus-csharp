@@ -72,18 +72,19 @@ namespace OpenCensus.Exporter.Ocagent.Implementation
             this.Start();
         }
 
-        public void Export(IEnumerable<ISpanData> spanDataList)
+        public async Task ExportAsync(IEnumerable<ISpanData> spanDataList)
         {
-            if (this.cts == null || this.cts.IsCancellationRequested)
+            await Task.Run(() =>
             {
-                return;
-            }
-
-            foreach (var spanData in spanDataList)
-            {
-                // TODO back-pressure on the queue
-                this.spans.Enqueue(spanData);
-            }
+                if (this.cts != null && !this.cts.IsCancellationRequested)
+                {
+                    foreach (var spanData in spanDataList)
+                    {
+                        // TODO back-pressure on the queue
+                        this.spans.Enqueue(spanData);
+                    }
+                }
+            });
         }
 
         public void Dispose()
