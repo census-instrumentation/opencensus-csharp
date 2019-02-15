@@ -32,7 +32,6 @@ namespace OpenCensus.Trace
         private readonly bool? hasRemoteParent;
         private readonly ITraceParams traceParams;
         private readonly IStartEndHandler startEndHandler;
-        private readonly IClock clock;
         private readonly TimestampConverter timestampConverter;
         private readonly DateTimeOffset startTime;
         private readonly object @lock = new object();
@@ -53,8 +52,7 @@ namespace OpenCensus.Trace
                 bool? hasRemoteParent,
                 ITraceParams traceParams,
                 IStartEndHandler startEndHandler,
-                TimestampConverter timestampConverter,
-                IClock clock)
+                TimestampConverter timestampConverter)
             : base(context, options)
         {
             this.parentSpanId = parentSpanId;
@@ -62,13 +60,20 @@ namespace OpenCensus.Trace
             this.Name = name;
             this.traceParams = traceParams ?? throw new ArgumentNullException(nameof(traceParams));
             this.startEndHandler = startEndHandler;
-            this.clock = clock;
             this.hasBeenEnded = false;
             this.sampleToLocalSpanStore = false;
             if (options.HasFlag(SpanOptions.RecordEvents))
             {
-                this.timestampConverter = timestampConverter ?? OpenCensus.Internal.TimestampConverter.Now(clock);
-                this.startTime = clock.NowDateTimeOffset;
+                if (timestampConverter == null)
+                {
+                    this.timestampConverter = TimestampConverter.StartNew();
+                    this.startTime = this.timestampConverter.StartTime;
+                }
+                else
+                {
+                    this.timestampConverter = timestampConverter;
+                    this.startTime = this.timestampConverter.Now;
+                }
             }
             else
             {
@@ -123,7 +128,7 @@ namespace OpenCensus.Trace
             {
                 lock (this.@lock)
                 {
-                    return this.hasBeenEnded ? this.endTime : this.clock.NowDateTimeOffset;
+                    return this.hasBeenEnded ? this.endTime : this.timestampConverter.Now;
                 }
             }
         }
@@ -134,7 +139,7 @@ namespace OpenCensus.Trace
             {
                 lock (this.@lock)
                 {
-                    return this.hasBeenEnded ? this.endTime - this.startTime : this.clock.NowDateTimeOffset - this.startTime;
+                    return this.hasBeenEnded ? this.endTime - this.startTime : this.timestampConverter.Now - this.startTime;
                 }
             }
         }
@@ -294,7 +299,7 @@ namespace OpenCensus.Trace
                     return;
                 }
 
-                this.InitializedAnnotations.AddEvent(new EventWithNanoTime<IAnnotation>(this.clock.NowDateTimeOffset, Annotation.FromDescriptionAndAttributes(description, attributes)));
+                this.InitializedAnnotations.AddEvent(new EventWithNanoTime<IAnnotation>(this.timestampConverter.Now, Annotation.FromDescriptionAndAttributes(description, attributes)));
             }
         }
 
@@ -318,7 +323,7 @@ namespace OpenCensus.Trace
                     throw new ArgumentNullException(nameof(annotation));
                 }
 
-                this.InitializedAnnotations.AddEvent(new EventWithNanoTime<IAnnotation>(this.clock.NowDateTimeOffset, annotation));
+                this.InitializedAnnotations.AddEvent(new EventWithNanoTime<IAnnotation>(this.timestampConverter.Now, annotation));
             }
         }
 
@@ -366,7 +371,7 @@ namespace OpenCensus.Trace
                     throw new ArgumentNullException(nameof(messageEvent));
                 }
 
-                this.InitializedMessageEvents.AddEvent(new EventWithNanoTime<IMessageEvent>(this.clock.NowDateTimeOffset, messageEvent));
+                this.InitializedMessageEvents.AddEvent(new EventWithNanoTime<IMessageEvent>(this.timestampConverter.Now, messageEvent));
             }
         }
 
@@ -391,19 +396,12 @@ namespace OpenCensus.Trace
                 }
 
                 this.sampleToLocalSpanStore = options.SampleToLocalSpanStore;
-                this.endTime = this.clock.NowDateTimeOffset;
+                this.endTime = this.timestampConverter.Now;
                 this.hasBeenEnded = true;
             }
 
             this.startEndHandler.OnEnd(this);
         }
-
-        // public virtual void AddMessageEvent(MessageEventBase messageEvent)
-        // {
-        // Default implementation by invoking addNetworkEvent() so that any existing derived classes,
-        // including implementation and the mocked ones, do not need to override this method explicitly.
-        // addNetworkEvent(BaseMessageEventUtil.asNetworkEvent(messageEvent));
-        // }
 
         public override ISpanData ToSpanData()
         {
@@ -443,8 +441,7 @@ namespace OpenCensus.Trace
                         bool? hasRemoteParent,
                         ITraceParams traceParams,
                         IStartEndHandler startEndHandler,
-                        TimestampConverter timestampConverter,
-                        IClock clock)
+                        TimestampConverter timestampConverter)
         {
             var span = new Span(
                context,
@@ -454,8 +451,7 @@ namespace OpenCensus.Trace
                hasRemoteParent,
                traceParams,
                startEndHandler,
-               timestampConverter,
-               clock);
+               timestampConverter);
 
             // Call onStart here instead of calling in the constructor to make sure the span is completely
             // initialized.

@@ -38,12 +38,5 @@ namespace OpenCensus.Common
                 return 0;
             }
         }
-        public DateTimeOffset NowDateTimeOffset
-        {
-            get
-            {
-                return DateTimeOffset.MinValue;
-            }
-        }
     }
 }

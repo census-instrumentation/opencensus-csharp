@@ -16,6 +16,8 @@
 
 namespace OpenCensus.Common
 {
+    using System;
+
     public class Duration : IDuration
     {
         private const long MaxSeconds = 315576000000L;
@@ -50,6 +52,13 @@ namespace OpenCensus.Common
             }
 
             return new Duration(seconds, nanos);
+        }
+
+        public static IDuration Create(TimeSpan duration)
+        {
+            var seconds = duration.Ticks / TimeSpan.TicksPerSecond;
+            int nanoseconds = (int)(duration.Ticks % TimeSpan.TicksPerSecond) * 100;
+            return Create(seconds, nanoseconds);
         }
 
         public int CompareTo(IDuration other)

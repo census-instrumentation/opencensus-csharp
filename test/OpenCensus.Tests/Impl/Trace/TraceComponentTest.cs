@@ -39,13 +39,6 @@ namespace OpenCensus.Trace.Test
             Assert.IsType<DefaultPropagationComponent>(traceComponent.PropagationComponent);
         }
 
-
-        [Fact]
-        public void ImplementationOfClock()
-        {
-            Assert.IsType<DateTimeOffsetClock>(traceComponent.Clock);
-        }
-
         [Fact]
         public void ImplementationOfTraceExporter()
         {

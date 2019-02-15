@@ -75,13 +75,6 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
                     return nowSecondsPrecision.ToUnixTimeSeconds() * 1000 * 1000 * 1000 + NanosecondsAfterSeconds;
                 }
             }
-            public DateTimeOffset NowDateTimeOffset
-            {
-                get
-                {
-                    return nowSecondsPrecision.Add(TimeSpan.FromTicks(NanosecondsAfterSeconds / 100));
-                }
-            }
         }
 
         private ConcurrentQueue<ITelemetry> ConvertSpan(ISpanData data)

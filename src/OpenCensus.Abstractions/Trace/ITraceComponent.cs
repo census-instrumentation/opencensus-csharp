@@ -37,11 +37,6 @@ namespace OpenCensus.Trace
         IPropagationComponent PropagationComponent { get; }
 
         /// <summary>
-        /// Gets the clock implementation to use.
-        /// </summary>
-        IClock Clock { get; }
-
-        /// <summary>
         /// Gets the exporter to use to upload spans.
         /// </summary>
         IExportComponent ExportComponent { get; }

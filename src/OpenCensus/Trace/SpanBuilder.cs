@@ -227,8 +227,7 @@ namespace OpenCensus.Trace
                         hasRemoteParent,
                         activeTraceParams,
                         this.Options.StartEndHandler,
-                        timestampConverter,
-                        this.Options.Clock);
+                        timestampConverter);
             LinkSpans(span, parentLinks);
             span.Kind = this.Kind;
             return span;

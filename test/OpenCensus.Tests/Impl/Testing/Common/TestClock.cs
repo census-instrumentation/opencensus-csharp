@@ -73,14 +73,6 @@ namespace OpenCensus.Testing.Common
             }
         }
 
-        public DateTimeOffset NowDateTimeOffset
-        {
-            get
-            {
-                lock (_lck) { return new DateTimeOffset(1970, 1, 1, 0,0,0, TimeSpan.Zero).Add(TimeSpan.FromTicks(GetNanos(currentTime) / 100)); }
-            }
-        }
-
         private static long GetNanos(Timestamp time)
         {
             var nanoSeconds = time.Seconds * NUM_NANOS_PER_SECOND;

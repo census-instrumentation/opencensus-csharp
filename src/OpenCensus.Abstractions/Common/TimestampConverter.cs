@@ -16,36 +16,66 @@
 
 namespace OpenCensus.Internal
 {
-    using OpenCensus.Common;
+    using System;
+    using System.Diagnostics;
 
     /// <summary>
     /// Converts nanoseconds into timestamp.
     /// </summary>
-    public class TimestampConverter
+    public sealed class TimestampConverter
     {
-        private readonly Timestamp timestamp;
-        private readonly long nanoTime;
+        private readonly DateTimeOffset timestamp;
+        private readonly Func<TimeSpan> stopwatch;
 
-        private TimestampConverter(Timestamp timestamp, long nanoTime)
+        private TimestampConverter(DateTimeOffset timestamp, Func<TimeSpan> watch)
         {
             this.timestamp = timestamp;
-            this.nanoTime = nanoTime;
-        }
-
-        // Returns a WallTimeConverter initialized to now.
-        public static TimestampConverter Now(IClock clock)
-        {
-            return new TimestampConverter(clock.Now, clock.NowNanos);
+            this.stopwatch = watch;
         }
 
         /// <summary>
-        /// Converts nanoseconds to the timestamp.
+        /// Gets the time of creation of this timer.
         /// </summary>
-        /// <param name="nanoTime">Nanoseconds time.</param>
-        /// <returns>Timestamp from the nanoseconds.</returns>
-        public Timestamp ConvertNanoTime(long nanoTime)
+        /// <returns>Time of this timer creation.</returns>
+        public DateTimeOffset StartTime
         {
-            return this.timestamp.AddNanos(nanoTime - this.nanoTime);
+            get
+            {
+                return this.timestamp;
+            }
+        }
+
+        /// <summary>
+        /// Gets the current timestamp based on start time and high precision elapsed time.
+        /// </summary>
+        /// <returns>Current timestamp based on start time and high precision elapsed time.<returns>
+        public DateTimeOffset Now
+        {
+            get
+            {
+                return this.timestamp.Add(this.stopwatch());
+            }
+        }
+
+        /// <summary>
+        /// Creates a new instance of a timer.
+        /// </summary>
+        /// <returns>New insance of a timer.</returns>
+        public static TimestampConverter StartNew()
+        {
+            var stopwatch = Stopwatch.StartNew();
+            return new TimestampConverter(DateTimeOffset.Now, () => stopwatch.Elapsed);
+        }
+
+        /// <summary>
+        /// Creates a new instance of a timer with the given start time. Used for test purposes.
+        /// </summary>
+        /// <param name="time">Start time to use in this timer.</param>
+        /// <param name="watch">Stopwatch to use. Should be started.</param>
+        /// <returns>New instance of a timer.</returns>
+        public static TimestampConverter StartNew(DateTimeOffset time, Func<TimeSpan> watch)
+        {
+            return new TimestampConverter(time, watch);
         }
     }
 }
