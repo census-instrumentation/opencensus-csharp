@@ -113,7 +113,7 @@ namespace OpenCensus.Stats
         }
 
         // Returns the milliseconds representation of a Duration.
-        internal static long ToMillis(IDuration duration)
+        internal static long ToMillis(Duration duration)
         {
             return (duration.Seconds * MillisPerSecond) + (duration.Nanos / NanosPerMilli);
         }

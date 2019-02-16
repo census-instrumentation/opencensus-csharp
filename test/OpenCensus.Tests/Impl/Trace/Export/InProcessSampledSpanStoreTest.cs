@@ -21,7 +21,6 @@ namespace OpenCensus.Trace.Export.Test
     using System.Linq;
     using OpenCensus.Common;
     using OpenCensus.Internal;
-    using OpenCensus.Testing.Common;
     using OpenCensus.Trace.Config;
     using OpenCensus.Trace.Internal;
     using OpenCensus.Utils;
@@ -31,7 +30,6 @@ namespace OpenCensus.Trace.Export.Test
     {
         private static readonly String REGISTERED_SPAN_NAME = "MySpanName/1";
         private static readonly String NOT_REGISTERED_SPAN_NAME = "MySpanName/2";
-        private static readonly long NUM_NANOS_PER_SECOND = 1000000000L;
         private readonly RandomGenerator random = new RandomGenerator(1234);
         private readonly ISpanContext sampledSpanContext;
 

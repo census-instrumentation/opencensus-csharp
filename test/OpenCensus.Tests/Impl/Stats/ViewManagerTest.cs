@@ -46,7 +46,7 @@ namespace OpenCensus.Stats.Test
         // private static readonly Cumulative CUMULATIVE = Cumulative.Create();
 
         private static readonly double EPSILON = 1e-7;
-        private static readonly IDuration TEN_SECONDS = Duration.Create(10, 0);
+        private static readonly Duration TEN_SECONDS = Duration.Create(10, 0);
         // private static readonly Interval INTERVAL = Interval.Create(TEN_SECONDS);
 
         private static readonly IBucketBoundaries BUCKET_BOUNDARIES =

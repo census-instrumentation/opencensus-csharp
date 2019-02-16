@@ -32,7 +32,7 @@ namespace OpenCensus.Stats.Test
         private static readonly String VIEW_DESCRIPTION = "view description";
         private static readonly ISum AGGREGATION = Sum.Create();
         // private static readonly Cumulative CUMULATIVE = Cumulative.create();
-        private static readonly IDuration TEN_SECONDS = Duration.Create(10, 0);
+        private static readonly Duration TEN_SECONDS = Duration.Create(10, 0);
         // private static readonly Interval INTERVAL = Interval.create(TEN_SECONDS);
 
         // @Rule public readonly ExpectedException thrown = ExpectedException.none();

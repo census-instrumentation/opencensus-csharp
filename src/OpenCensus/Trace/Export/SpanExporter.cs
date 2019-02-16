@@ -74,7 +74,7 @@ namespace OpenCensus.Trace.Export
             this.worker.Dispose();
         }
 
-        internal static ISpanExporter Create(int bufferSize, IDuration scheduleDelay)
+        internal static ISpanExporter Create(int bufferSize, Duration scheduleDelay)
         {
             SpanExporterWorker worker = new SpanExporterWorker(bufferSize, scheduleDelay);
             return new SpanExporter(worker);

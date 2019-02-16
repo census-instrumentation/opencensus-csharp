@@ -88,7 +88,7 @@ namespace OpenCensus.Common
         /// </summary>
         /// <param name="duration">Duration to add to the timestamp.</param>
         /// <returns>Returns the timestamp with added duration.</returns>
-        public Timestamp AddDuration(IDuration duration)
+        public Timestamp AddDuration(Duration duration)
         {
             return this.Plus(duration.Seconds, duration.Nanos);
         }
@@ -108,7 +108,7 @@ namespace OpenCensus.Common
         /// </summary>
         /// <param name="timestamp">Timestamp to substruct.</param>
         /// <returns>Returns the timestamp with the substructed duration.</returns>
-        public IDuration SubtractTimestamp(Timestamp timestamp)
+        public Duration SubtractTimestamp(Timestamp timestamp)
         {
             long durationSeconds = this.Seconds - timestamp.Seconds;
             int durationNanos = this.Nanos - timestamp.Nanos;

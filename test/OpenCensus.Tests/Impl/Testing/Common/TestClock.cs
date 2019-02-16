@@ -52,7 +52,7 @@ namespace OpenCensus.Testing.Common
 
         }
 
-        public void AdvanceTime(IDuration duration)
+        public void AdvanceTime(Duration duration)
         {
             lock (_lck) { currentTime = currentTime.AddDuration(duration); }
         }
