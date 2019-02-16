@@ -1,4 +1,4 @@
-﻿// <copyright file="TimestampConverter.cs" company="OpenCensus Authors">
+﻿// <copyright file="Timer.cs" company="OpenCensus Authors">
 // Copyright 2018, OpenCensus Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,12 +22,12 @@ namespace OpenCensus.Internal
     /// <summary>
     /// Converts nanoseconds into timestamp.
     /// </summary>
-    public sealed class TimestampConverter
+    public sealed class Timer
     {
         private readonly DateTimeOffset timestamp;
         private readonly Func<TimeSpan> stopwatch;
 
-        private TimestampConverter(DateTimeOffset timestamp, Func<TimeSpan> watch)
+        private Timer(DateTimeOffset timestamp, Func<TimeSpan> watch)
         {
             this.timestamp = timestamp;
             this.stopwatch = watch;
@@ -61,10 +61,10 @@ namespace OpenCensus.Internal
         /// Creates a new instance of a timer.
         /// </summary>
         /// <returns>New insance of a timer.</returns>
-        public static TimestampConverter StartNew()
+        public static Timer StartNew()
         {
             var stopwatch = Stopwatch.StartNew();
-            return new TimestampConverter(DateTimeOffset.Now, () => stopwatch.Elapsed);
+            return new Timer(DateTimeOffset.Now, () => stopwatch.Elapsed);
         }
 
         /// <summary>
@@ -73,9 +73,9 @@ namespace OpenCensus.Internal
         /// <param name="time">Start time to use in this timer.</param>
         /// <param name="watch">Stopwatch to use. Should be started.</param>
         /// <returns>New instance of a timer.</returns>
-        public static TimestampConverter StartNew(DateTimeOffset time, Func<TimeSpan> watch)
+        public static Timer StartNew(DateTimeOffset time, Func<TimeSpan> watch)
         {
-            return new TimestampConverter(time, watch);
+            return new Timer(time, watch);
         }
     }
 }

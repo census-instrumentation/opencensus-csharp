@@ -39,7 +39,7 @@ namespace OpenCensus.Trace.Test
         private TimeSpan interval = TimeSpan.FromMilliseconds(0);
         private readonly DateTimeOffset startTime = DateTimeOffset.Now;
         private readonly Timestamp timestamp;
-        private readonly TimestampConverter timestampConverter;
+        private readonly Timer timestampConverter;
         private readonly SpanOptions noRecordSpanOptions = SpanOptions.None;
         private readonly SpanOptions recordSpanOptions = SpanOptions.RecordEvents;
         private readonly IDictionary<String, IAttributeValue> attributes = new Dictionary<String, IAttributeValue>();
@@ -49,7 +49,7 @@ namespace OpenCensus.Trace.Test
         public SpanTest()
         {
             timestamp = Timestamp.FromDateTimeOffset(startTime);
-            timestampConverter = TimestampConverter.StartNew(startTime, () => interval);
+            timestampConverter = Timer.StartNew(startTime, () => interval);
             spanContext = SpanContext.Create(TraceId.GenerateRandomId(random), SpanId.GenerateRandomId(random), OpenCensus.Trace.TraceOptions.Default, Tracestate.Empty);
             parentSpanId = SpanId.GenerateRandomId(random);
             attributes.Add(

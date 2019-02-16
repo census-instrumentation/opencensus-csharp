@@ -42,7 +42,7 @@ namespace OpenCensus.Trace.Export.Test
         private TimeSpan interval = TimeSpan.FromMilliseconds(0);
         private readonly DateTimeOffset startTime = DateTimeOffset.Now;
         private readonly Timestamp timestamp;
-        private readonly TimestampConverter timestampConverter;
+        private readonly Timer timestampConverter;
 
         private readonly InProcessSampledSpanStore sampleStore = new InProcessSampledSpanStore(new SimpleEventQueue());
 
@@ -52,7 +52,7 @@ namespace OpenCensus.Trace.Export.Test
         public InProcessSampledSpanStoreTest()
         {
             timestamp = Timestamp.FromDateTimeOffset(startTime);
-            timestampConverter = TimestampConverter.StartNew(startTime, () => interval);
+            timestampConverter = Timer.StartNew(startTime, () => interval);
             sampledSpanContext = SpanContext.Create(TraceId.GenerateRandomId(random), SpanId.GenerateRandomId(random), TraceOptions.Builder().SetIsSampled(true).Build(), Tracestate.Empty);
             notSampledSpanContext = SpanContext.Create(TraceId.GenerateRandomId(random), SpanId.GenerateRandomId(random), TraceOptions.Default, Tracestate.Empty);
             parentSpanId = SpanId.GenerateRandomId(random);

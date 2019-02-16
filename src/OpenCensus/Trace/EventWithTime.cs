@@ -1,4 +1,4 @@
-﻿// <copyright file="EventWithNanoTime.cs" company="OpenCensus Authors">
+﻿// <copyright file="EventWithTime.cs" company="OpenCensus Authors">
 // Copyright 2018, OpenCensus Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,18 +21,18 @@ namespace OpenCensus.Trace
     using OpenCensus.Internal;
     using OpenCensus.Trace.Export;
 
-    internal class EventWithNanoTime<T>
+    internal class EventWithTime<T>
     {
         private readonly DateTimeOffset nanoTime;
         private readonly T @event;
 
-        public EventWithNanoTime(DateTimeOffset nanoTime, T @event)
+        public EventWithTime(DateTimeOffset nanoTime, T @event)
         {
             this.nanoTime = nanoTime;
             this.@event = @event;
         }
 
-        internal ITimedEvent<T> ToSpanDataTimedEvent(TimestampConverter timestampConverter)
+        internal ITimedEvent<T> ToSpanDataTimedEvent(Timer timestampConverter)
         {
             return TimedEvent<T>.Create(Timestamp.FromDateTimeOffset(this.nanoTime), this.@event);
         }
