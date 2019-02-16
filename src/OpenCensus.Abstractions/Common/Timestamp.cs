@@ -205,7 +205,7 @@ namespace OpenCensus.Common
 
             long sec = this.Seconds + secondsToAdd;
             long nanoSeconds = Math.DivRem(nanosToAdd, NanosPerSecond, out long nanosSpill);
-            sec = sec + nanoSeconds;
+            sec += nanoSeconds;
             long nanoAdjustment = this.Nanos + nanosSpill;
             return OfSecond(sec, nanoAdjustment);
         }

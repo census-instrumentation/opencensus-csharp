@@ -48,7 +48,7 @@ namespace OpenCensus.Internal
         /// <summary>
         /// Gets the current timestamp based on start time and high precision elapsed time.
         /// </summary>
-        /// <returns>Current timestamp based on start time and high precision elapsed time.<returns>
+        /// <returns>Current timestamp based on start time and high precision elapsed time.</returns>
         public DateTimeOffset Now
         {
             get
