@@ -7,7 +7,12 @@ the release.
 
 ## Unreleased
 
-TBD
+- (Func returning) Custom sampler added to DependenciesCollector and RequestsCollector options
+- The default implementation passed into DependenciesCollector excludes the "zipkin.azurewebsites.net" domain, the default for RequestsCollector is a pass through.
+- Callers can similarly pass in functions that decide upon the samplers used
+- Some code that was earlier common moved under folder and namespace OpenCensus.Collector.AspNetCore.Common in Collector.AspNetCore project
+- Hardcoded reference to the zipkin... url removed from HttpHandlerDiagnosticListener.
+
 
 ## 0.1.0-alpha-42253
 

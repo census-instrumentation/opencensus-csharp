@@ -37,7 +37,7 @@ namespace OpenCensus.Collector.Dependencies.Implementation
 
         private readonly IPropagationComponent propagationComponent;
 
-        public HttpHandlerDiagnosticListener(ITracer tracer, Func<Uri, ISampler> sampler, IPropagationComponent propagationComponent)
+        public HttpHandlerDiagnosticListener(ITracer tracer, Func<HttpRequestMessage, ISampler> sampler, IPropagationComponent propagationComponent)
             : base("HttpHandlerDiagnosticListener", tracer, sampler)
         {
             this.propagationComponent = propagationComponent;
@@ -51,14 +51,7 @@ namespace OpenCensus.Collector.Dependencies.Implementation
                 return;
             }
 
-            // TODO: this needs to be generalized
-            // if (request.RequestUri.ToString().Contains("zipkin.azurewebsites.net"))
-            // if (this.Sampler(request.RequestUri) == Samplers.NeverSample)
-            // {
-            //         return;
-            // }
-
-            this.Tracer.SpanBuilder(request.RequestUri.AbsolutePath, SpanKind.Client).SetSampler(this.Sampler(request.RequestUri)).StartScopedSpan(out ISpan span);
+            this.Tracer.SpanBuilder(request.RequestUri.AbsolutePath, SpanKind.Client).SetSampler(this.Sampler(request)).StartScopedSpan(out ISpan span);
             span.PutHttpMethodAttribute(request.Method.ToString());
             span.PutHttpHostAttribute(request.RequestUri.Host, request.RequestUri.Port);
             span.PutHttpPathAttribute(request.RequestUri.AbsolutePath);

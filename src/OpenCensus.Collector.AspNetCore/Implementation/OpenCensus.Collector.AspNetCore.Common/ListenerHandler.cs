@@ -14,20 +14,20 @@
 // limitations under the License.
 // </copyright>
 
-namespace OpenCensus.Collector.Implementation.Common
+namespace OpenCensus.Collector.AspNetCore.Common
 {
     using System;
     using System.Diagnostics;
-    using System.Net.Http;
+    using Microsoft.AspNetCore.Http;
     using OpenCensus.Trace;
 
     internal abstract class ListenerHandler
     {
         protected readonly ITracer Tracer;
 
-        protected readonly Func<HttpRequestMessage, ISampler> Sampler;
+        protected readonly Func<HttpRequest, ISampler> Sampler;
 
-        public ListenerHandler(string sourceName, ITracer tracer, Func<HttpRequestMessage, ISampler> sampler)
+        public ListenerHandler(string sourceName, ITracer tracer, Func<HttpRequest, ISampler> sampler)
         {
             this.SourceName = sourceName;
             this.Tracer = tracer;
