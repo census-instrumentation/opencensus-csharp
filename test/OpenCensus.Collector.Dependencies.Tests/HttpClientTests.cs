@@ -101,7 +101,7 @@ namespace OpenCensus.Collector.Dependencies.Tests
                 out int port);
 
             var startEndHandler = new Mock<IStartEndHandler>();
-            var tracer = new Tracer(new RandomGenerator(), startEndHandler.Object, new DateTimeOffsetClock(), new TraceConfig());
+            var tracer = new Tracer(new RandomGenerator(), startEndHandler.Object, new TraceConfig());
             tc.url = NormaizeValues(tc.url, host, port);
 
             using (serverLifeTime)

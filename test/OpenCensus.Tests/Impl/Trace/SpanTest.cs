@@ -417,7 +417,7 @@ namespace OpenCensus.Trace.Test
             for (i = 0; i < 2 * maxNumberOfAnnotations; i++)
             {
                 span.AddAnnotation(annotation);
-                interval = TimeSpan.FromMilliseconds(100);
+                interval += TimeSpan.FromMilliseconds(100);
             }
             ISpanData spanData = ((Span)span).ToSpanData();
             Assert.Equal(maxNumberOfAnnotations, spanData.Annotations.DroppedEventsCount);

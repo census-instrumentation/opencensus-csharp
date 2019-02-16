@@ -22,19 +22,16 @@ namespace OpenCensus.Trace
 
     internal class SpanBuilderOptions
     {
-        internal SpanBuilderOptions(IRandomGenerator randomGenerator, IStartEndHandler startEndHandler, IClock clock, ITraceConfig traceConfig)
+        internal SpanBuilderOptions(IRandomGenerator randomGenerator, IStartEndHandler startEndHandler, ITraceConfig traceConfig)
         {
             this.RandomHandler = randomGenerator;
             this.StartEndHandler = startEndHandler;
-            this.Clock = clock;
             this.TraceConfig = traceConfig;
         }
 
         internal IRandomGenerator RandomHandler { get; }
 
         internal IStartEndHandler StartEndHandler { get; }
-
-        internal IClock Clock { get; }
 
         internal ITraceConfig TraceConfig { get; }
     }

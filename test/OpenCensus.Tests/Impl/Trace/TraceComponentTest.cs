@@ -25,7 +25,7 @@ namespace OpenCensus.Trace.Test
 
     public class TraceComponentTest
     {
-        private readonly TraceComponent traceComponent = new TraceComponent(DateTimeOffsetClock.GetInstance(), new RandomGenerator(), new SimpleEventQueue());
+        private readonly TraceComponent traceComponent = new TraceComponent(new RandomGenerator(), new SimpleEventQueue());
 
         [Fact]
         public void ImplementationOfTracer()

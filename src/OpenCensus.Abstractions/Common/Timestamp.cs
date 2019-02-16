@@ -21,7 +21,7 @@ namespace OpenCensus.Common
     /// <summary>
     /// Timestamp with the nanoseconds precision.
     /// </summary>
-    public class Timestamp
+    public class Timestamp : IComparable<Timestamp>, IComparable
     {
         private const long MaxSeconds = 315576000000L;
         private const int MaxNanos = 999999999;
@@ -126,6 +126,7 @@ namespace OpenCensus.Common
             return Duration.Create(durationSeconds, durationNanos);
         }
 
+        /// <inheritdoc />
         public int CompareTo(Timestamp other)
         {
             int cmp = (this.Seconds < other.Seconds) ? -1 : ((this.Seconds > other.Seconds) ? 1 : 0);
@@ -135,6 +136,19 @@ namespace OpenCensus.Common
             }
 
             return (this.Nanos < other.Nanos) ? -1 : ((this.Nanos > other.Nanos) ? 1 : 0);
+        }
+
+        /// <inheritdoc />
+        public int CompareTo(object obj)
+        {
+            if (obj is Timestamp timestamp)
+            {
+                return this.CompareTo(timestamp);
+            }
+            else
+            {
+                throw new InvalidOperationException();
+            }
         }
 
         /// <inheritdoc/>

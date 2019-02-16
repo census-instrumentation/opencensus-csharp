@@ -343,7 +343,7 @@ namespace OpenCensus.Trace.Export.Test
             {
                 ISpan sampledSpan = CreateSampledSpan(spanName);
                 ISpan notSampledSpan = CreateNotSampledSpan(spanName);
-                interval += TimeSpan.FromTicks((int)boundaries.LatencyLowerNs / 100);
+                interval += TimeSpan.FromTicks((long)boundaries.LatencyLowerNs / 100);
                 sampledSpan.End();
                 notSampledSpan.End();
             }
