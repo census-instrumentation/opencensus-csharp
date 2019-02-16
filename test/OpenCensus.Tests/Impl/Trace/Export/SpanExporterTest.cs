@@ -130,7 +130,7 @@ namespace OpenCensus.Trace.Export.Test
         public void ServiceHandlerThrowsException()
         {
             var mockHandler = Mock.Get<IHandler>(mockServiceHandler);
-            mockHandler.Setup((h) => h.Export(It.IsAny<IList<ISpanData>>())).Throws(new ArgumentException("No export for you."));
+            mockHandler.Setup((h) => h.ExportAsync(It.IsAny<IList<ISpanData>>())).Throws(new ArgumentException("No export for you."));
             // doThrow(new IllegalArgumentException("No export for you."))
             //    .when(mockServiceHandler)
             //    .export(anyListOf(SpanData));
@@ -203,12 +203,12 @@ namespace OpenCensus.Trace.Export.Test
             var args = (IEnumerable<ISpanData>)handler1.Invocations.First().Arguments.First();
 
 
-            handler1.Verify(c => c.Export(It.Is<IEnumerable<ISpanData>>(
+            handler1.Verify(c => c.ExportAsync(It.Is<IEnumerable<ISpanData>>(
                 (x) => x.Where((s) => s == span1.Object).Count() > 0 &&
                        x.Where((s) => s == span2.Object).Count() > 0 &&
                        x.Count() == 2)));
 
-            handler2.Verify(c => c.Export(It.Is<IEnumerable<ISpanData>>(
+            handler2.Verify(c => c.ExportAsync(It.Is<IEnumerable<ISpanData>>(
                 (x) => x.Where((s) => s == span1.Object).Count() > 0 &&
                        x.Where((s) => s == span2.Object).Count() > 0 &&
                        x.Count() == 2)));
