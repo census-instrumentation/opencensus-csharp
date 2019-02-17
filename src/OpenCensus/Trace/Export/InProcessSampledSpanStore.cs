@@ -25,7 +25,7 @@ namespace OpenCensus.Trace.Export
     {
         private const int NumSampolesPerLatencySamples = 10;
         private const int NumSamplesPerErrorSamples = 5;
-        private const long TimeBetweenSamples = 1000000000;  // TimeUnit.SECONDS.toNanos(1);
+        private static TimeSpan timeBetweenSamples = TimeSpan.FromSeconds(1);
         // The total number of canonical codes - 1 (the OK code).
         private const int NumErrorBuckets = 17 - 1; // CanonicalCode.values().length - 1;
 
@@ -127,7 +127,7 @@ namespace OpenCensus.Trace.Export
                 PerSpanNameSamples perSpanNameSamples = this.samples[filter.SpanName];
                 if (perSpanNameSamples != null)
                 {
-                    spans = perSpanNameSamples.GetLatencySamples(filter.LatencyLowerNs, filter.LatencyUpperNs, numSpansToReturn);
+                    spans = perSpanNameSamples.GetLatencySamples(filter.LatencyLower, filter.LatencyUpper, numSpansToReturn);
                 }
             }
 
@@ -179,8 +179,8 @@ namespace OpenCensus.Trace.Export
         {
             private readonly EvictingQueue<SpanBase> sampledSpansQueue;
             private readonly EvictingQueue<SpanBase> notSampledSpansQueue;
-            private long lastSampledNanoTime;
-            private long lastNotSampledNanoTime;
+            private DateTimeOffset lastSampledTime;
+            private DateTimeOffset lastNotSampledTime;
 
             public Bucket(int numSamples)
             {
@@ -205,8 +205,8 @@ namespace OpenCensus.Trace.Export
             }
 
             public static void GetSamplesFilteredByLatency(
-                long latencyLowerNs,
-                long latencyUpperNs,
+                TimeSpan latencyLower,
+                TimeSpan latencyUpper,
                 int maxSpansToReturn,
                 List<SpanBase> output,
                 EvictingQueue<SpanBase> queue)
@@ -219,8 +219,8 @@ namespace OpenCensus.Trace.Export
                         break;
                     }
 
-                    long spanLatencyNs = span.Latency.Ticks * 100;
-                    if (spanLatencyNs >= latencyLowerNs && spanLatencyNs < latencyUpperNs)
+                    var spanLatency = span.Latency;
+                    if (spanLatency >= latencyLower && spanLatency < latencyUpper)
                     {
                         output.Add(span);
                     }
@@ -229,17 +229,16 @@ namespace OpenCensus.Trace.Export
 
             public void ConsiderForSampling(SpanBase span)
             {
-                // TODO: this should operate with DateTimeOffset
-                long spanEndNanoTime = span.EndTime.Subtract(new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).Ticks * 100;
+                var spanEndTime = span.EndTime;
                 if (span.Context.TraceOptions.IsSampled)
                 {
                     // Need to compare by doing the subtraction all the time because in case of an overflow,
                     // this may never sample again (at least for the next ~200 years). No real chance to
                     // overflow two times because that means the process runs for ~200 years.
-                    if (spanEndNanoTime - this.lastSampledNanoTime > TimeBetweenSamples)
+                    if (spanEndTime - this.lastSampledTime > timeBetweenSamples)
                     {
                         this.sampledSpansQueue.Add(span);
-                        this.lastSampledNanoTime = spanEndNanoTime;
+                        this.lastSampledTime = spanEndTime;
                     }
                 }
                 else
@@ -247,10 +246,10 @@ namespace OpenCensus.Trace.Export
                     // Need to compare by doing the subtraction all the time because in case of an overflow,
                     // this may never sample again (at least for the next ~200 years). No real chance to
                     // overflow two times because that means the process runs for ~200 years.
-                    if (spanEndNanoTime - this.lastNotSampledNanoTime > TimeBetweenSamples)
+                    if (spanEndTime - this.lastNotSampledTime > timeBetweenSamples)
                     {
                         this.notSampledSpansQueue.Add(span);
-                        this.lastNotSampledNanoTime = spanEndNanoTime;
+                        this.lastNotSampledTime = spanEndTime;
                     }
                 }
             }
@@ -262,12 +261,12 @@ namespace OpenCensus.Trace.Export
             }
 
             public void GetSamplesFilteredByLatency(
-                long latencyLowerNs, long latencyUpperNs, int maxSpansToReturn, List<SpanBase> output)
+                TimeSpan latencyLower, TimeSpan latencyUpper, int maxSpansToReturn, List<SpanBase> output)
             {
                 GetSamplesFilteredByLatency(
-                    latencyLowerNs, latencyUpperNs, maxSpansToReturn, output, this.sampledSpansQueue);
+                    latencyLower, latencyUpper, maxSpansToReturn, output, this.sampledSpansQueue);
                 GetSamplesFilteredByLatency(
-                    latencyLowerNs, latencyUpperNs, maxSpansToReturn, output, this.notSampledSpansQueue);
+                    latencyLower, latencyUpper, maxSpansToReturn, output, this.notSampledSpansQueue);
             }
 
             public int GetNumSamples()
@@ -296,13 +295,13 @@ namespace OpenCensus.Trace.Export
                 }
             }
 
-            public Bucket GetLatencyBucket(long latencyNs)
+            public Bucket GetLatencyBucket(TimeSpan latency)
             {
                 for (int i = 0; i < NumLatencyBuckets; i++)
                 {
                     ISampledLatencyBucketBoundaries boundaries = LatencyBucketBoundaries.Values[i];
-                    if (latencyNs >= boundaries.LatencyLowerNs
-                        && latencyNs < boundaries.LatencyUpperNs)
+                    if (latency >= boundaries.LatencyLower
+                        && latency < boundaries.LatencyUpper)
                     {
                         return this.latencyBuckets[i];
                     }
@@ -328,7 +327,7 @@ namespace OpenCensus.Trace.Export
                 {
                     Bucket bucket =
                         status.IsOk
-                            ? this.GetLatencyBucket(span.Latency.Ticks * 100)
+                            ? this.GetLatencyBucket(span.Latency)
                             : this.GetErrorBucket(status.CanonicalCode);
 
                     // If unable to find the bucket, ignore this Span.
@@ -379,16 +378,16 @@ namespace OpenCensus.Trace.Export
                 return output;
             }
 
-            public IList<SpanBase> GetLatencySamples(long latencyLowerNs, long latencyUpperNs, int maxSpansToReturn)
+            public IList<SpanBase> GetLatencySamples(TimeSpan latencyLower, TimeSpan latencyUpper, int maxSpansToReturn)
             {
                 List<SpanBase> output = new List<SpanBase>(maxSpansToReturn);
                 for (int i = 0; i < NumLatencyBuckets; i++)
                 {
                     ISampledLatencyBucketBoundaries boundaries = LatencyBucketBoundaries.Values[i];
-                    if (latencyUpperNs >= boundaries.LatencyLowerNs
-                        && latencyLowerNs < boundaries.LatencyUpperNs)
+                    if (latencyUpper >= boundaries.LatencyLower
+                        && latencyLower < boundaries.LatencyUpper)
                     {
-                        this.latencyBuckets[i].GetSamplesFilteredByLatency(latencyLowerNs, latencyUpperNs, maxSpansToReturn, output);
+                        this.latencyBuckets[i].GetSamplesFilteredByLatency(latencyLower, latencyUpper, maxSpansToReturn, output);
                     }
                 }
 
