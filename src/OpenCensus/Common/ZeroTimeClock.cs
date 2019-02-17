@@ -30,13 +30,5 @@ namespace OpenCensus.Common
                 return ZeroTimestamp;
             }
         }
-
-        public long NowNanos
-        {
-            get
-            {
-                return 0;
-            }
-        }
     }
 }
