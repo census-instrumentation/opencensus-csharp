@@ -21,7 +21,7 @@ namespace OpenCensus.Common
     /// <summary>
     /// Represents duration with the nanoseconds precition.
     /// </summary>
-    public class Duration : IComparable<Duration>
+    public sealed class Duration : IComparable<Duration>
     {
         private const long MaxSeconds = 315576000000L;
         private const int MaxNanos = 999999999;

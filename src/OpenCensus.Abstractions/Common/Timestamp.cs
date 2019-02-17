@@ -21,8 +21,13 @@ namespace OpenCensus.Common
     /// <summary>
     /// Timestamp with the nanoseconds precision.
     /// </summary>
-    public class Timestamp : IComparable<Timestamp>, IComparable
+    public sealed class Timestamp : IComparable<Timestamp>, IComparable
     {
+        /// <summary>
+        /// Represents zero timestamp.
+        /// </summary>
+        public static readonly Timestamp Zero = new Timestamp(0, 0);
+
         private const long MaxSeconds = 315576000000L;
         private const int MaxNanos = 999999999;
         private const long MillisPerSecond = 1000L;
@@ -46,6 +51,12 @@ namespace OpenCensus.Common
         /// </summary>
         public int Nanos { get; }
 
+        /// <summary>
+        /// Creates an instance of <see cref="Timestamp" /> class with the given seconds and nanoseconds values.
+        /// </summary>
+        /// <param name="seconds">Total number of seconds since the Unix Epoch represented by this <see cref="Timestamp"/>.</param>
+        /// <param name="nanos">The number of nanoseconds after the number of seconds since the Unix Epoch represented by this <see cref="Timestamp"/>.</param>
+        /// <returns>New instance of <see cref="Timestamp"/>.</returns>
         public static Timestamp Create(long seconds, int nanos)
         {
             // TODO:
@@ -62,6 +73,11 @@ namespace OpenCensus.Common
             return new Timestamp(seconds, nanos);
         }
 
+        /// <summary>
+        /// Creates an instance of <see cref="Timestamp" /> class with the given total milliseconds since Unix Epoch.
+        /// </summary>
+        /// <param name="millis">Total number of milliseconds since the Unix Epoch represented by this <see cref="Timestamp"/>.</param>
+        /// <returns>New instance of <see cref="Timestamp"/>.</returns>
         public static Timestamp FromMillis(long millis)
         {
             Timestamp zero = new Timestamp(0, 0);
@@ -69,6 +85,11 @@ namespace OpenCensus.Common
             return zero.Plus(0, nanos);
         }
 
+        /// <summary>
+        /// Creates an instance of <see cref="Timestamp" /> class with the given time as <see cref="DateTimeOffset"/>.
+        /// </summary>
+        /// <param name="time">Time to convert to <see cref="Timestamp"/>.</param>
+        /// <returns>New instance of <see cref="Timestamp"/>.</returns>
         public static Timestamp FromDateTimeOffset(DateTimeOffset time)
         {
             long seconds = 0;
@@ -163,11 +184,6 @@ namespace OpenCensus.Common
         /// <inheritdoc/>
         public override bool Equals(object o)
         {
-            if (o == this)
-            {
-                return true;
-            }
-
             if (o is Timestamp that)
             {
                 return (this.Seconds == that.Seconds)
