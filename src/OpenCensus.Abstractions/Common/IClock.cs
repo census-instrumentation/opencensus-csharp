@@ -17,7 +17,7 @@
 namespace OpenCensus.Common
 {
     /// <summary>
-    /// Clock to get the current time with the nanoseconds precision.
+    /// Clock to get the current time with the nanoseconds resolution.
     /// </summary>
     public interface IClock
     {

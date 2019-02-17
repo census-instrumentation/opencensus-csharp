@@ -20,7 +20,7 @@ namespace OpenCensus.Internal
     using System.Diagnostics;
 
     /// <summary>
-    /// Converts nanoseconds into timestamp.
+    /// Gets the current time based on start time and precise duration.
     /// </summary>
     public sealed class Timer
     {

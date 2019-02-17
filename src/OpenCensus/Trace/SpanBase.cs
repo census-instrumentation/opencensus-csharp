@@ -74,12 +74,12 @@ namespace OpenCensus.Trace
         public SpanBase Previous { get; set; }
 
         /// <summary>
-        /// Gets the span end time as nanoseconds.
+        /// Gets the span end time.
         /// </summary>
         public abstract DateTimeOffset EndTime { get; }
 
         /// <summary>
-        /// Gets the latency (difference beteen stat and end time) as nanoseconds.
+        /// Gets the latency (difference beteen stat and end time).
         /// </summary>
         public abstract TimeSpan Latency { get; }
 

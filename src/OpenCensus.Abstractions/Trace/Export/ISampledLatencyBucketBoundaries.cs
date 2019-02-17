@@ -24,12 +24,12 @@ namespace OpenCensus.Trace.Export
     public interface ISampledLatencyBucketBoundaries
     {
         /// <summary>
-        /// Gets the lower latency boundary in nanoseconds.
+        /// Gets the lower latency boundary.
         /// </summary>
         TimeSpan LatencyLower { get; }
 
         /// <summary>
-        /// Gets the upper latency boundary in nanoseconds.
+        /// Gets the upper latency boundary.
         /// </summary>
         TimeSpan LatencyUpper { get; }
     }
