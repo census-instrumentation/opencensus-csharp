@@ -37,8 +37,8 @@ namespace OpenCensus.Collector.Dependencies.Implementation
 
         private readonly IPropagationComponent propagationComponent;
 
-        public HttpHandlerDiagnosticListener(ITracer tracer, Func<HttpRequestMessage, ISampler> sampler, IPropagationComponent propagationComponent)
-            : base("HttpHandlerDiagnosticListener", tracer, sampler)
+        public HttpHandlerDiagnosticListener(ITracer tracer, Func<HttpRequestMessage, ISampler> samplerFactory, IPropagationComponent propagationComponent)
+            : base("HttpHandlerDiagnosticListener", tracer, samplerFactory)
         {
             this.propagationComponent = propagationComponent;
         }
@@ -51,7 +51,7 @@ namespace OpenCensus.Collector.Dependencies.Implementation
                 return;
             }
 
-            this.Tracer.SpanBuilder(request.RequestUri.AbsolutePath, SpanKind.Client).SetSampler(this.Sampler(request)).StartScopedSpan(out ISpan span);
+            this.Tracer.SpanBuilder(request.RequestUri.AbsolutePath, SpanKind.Client).SetSampler(this.SamplerFactory(request)).StartScopedSpan(out ISpan span);
             span.PutHttpMethodAttribute(request.Method.ToString());
             span.PutHttpHostAttribute(request.RequestUri.Host, request.RequestUri.Port);
             span.PutHttpPathAttribute(request.RequestUri.AbsolutePath);

@@ -46,7 +46,16 @@ namespace OpenCensus.Collector.Dependencies
                 tracer,
                 x =>
                 {
-                    ISampler s = options.CustomSampler(x);
+                    ISampler s = null;
+                    try
+                    {
+                        s = options.CustomSampler(x);
+                    }
+                    catch (Exception)
+                    {
+                        s = null;
+                    }
+
                     return s == null ? sampler : s;
                     });
             this.diagnosticSourceSubscriber.Subscribe();

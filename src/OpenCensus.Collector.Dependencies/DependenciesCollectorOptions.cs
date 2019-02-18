@@ -18,7 +18,6 @@ namespace OpenCensus.Collector.Dependencies
 {
     using System;
     using System.Net.Http;
-    using Microsoft.AspNetCore.Http;
     using OpenCensus.Trace;
     using OpenCensus.Trace.Sampler;
 

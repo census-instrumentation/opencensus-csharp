@@ -25,22 +25,18 @@ namespace OpenCensus.Collector.AspNetCore.Common
     {
         protected readonly ITracer Tracer;
 
-        protected readonly Func<HttpRequest, ISampler> Sampler;
+        protected readonly Func<HttpRequest, ISampler> SamplerFactory;
 
-        public ListenerHandler(string sourceName, ITracer tracer, Func<HttpRequest, ISampler> sampler)
+        public ListenerHandler(string sourceName, ITracer tracer, Func<HttpRequest, ISampler> samplerFactory)
         {
             this.SourceName = sourceName;
             this.Tracer = tracer;
-            this.Sampler = sampler;
+            this.SamplerFactory = samplerFactory;
         }
 
         public string SourceName { get; }
 
         public abstract void OnStartActivity(Activity activity, object payload);
-
-        // {
-            // this.Tracer.SpanBuilder(activity.OperationName).SetSampler(this.Sampler).StartScopedSpan();
-        // }
 
         public virtual void OnStopActivity(Activity activity, object payload)
         {
