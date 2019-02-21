@@ -16,6 +16,7 @@
 
 namespace OpenCensus.Trace
 {
+    using System;
     using System.Collections.Generic;
     using OpenCensus.Common;
 

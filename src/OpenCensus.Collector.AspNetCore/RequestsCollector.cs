@@ -18,8 +18,9 @@ namespace OpenCensus.Collector.AspNetCore
 {
     using System;
     using System.Collections.Generic;
+    using Microsoft.AspNetCore.Http;
+    using OpenCensus.Collector.AspNetCore.Common;
     using OpenCensus.Collector.AspNetCore.Implementation;
-    using OpenCensus.Collector.Implementation.Common;
     using OpenCensus.Trace;
     using OpenCensus.Trace.Propagation;
 
@@ -40,12 +41,27 @@ namespace OpenCensus.Collector.AspNetCore
         public RequestsCollector(RequestsCollectorOptions options, ITracer tracer, ISampler sampler, IPropagationComponent propagationComponent)
         {
             this.diagnosticSourceSubscriber = new DiagnosticSourceSubscriber(
-                new Dictionary<string, Func<ITracer, ISampler, ListenerHandler>>()
+                new Dictionary<string, Func<ITracer, Func<HttpRequest, ISampler>, ListenerHandler>>()
                 {
                     { "Microsoft.AspNetCore", (t, s) => new HttpInListener(t, s, propagationComponent) },
                 },
                 tracer,
-                sampler);
+                x =>
+                {
+                    ISampler s = null;
+                    try
+                    {
+                        s = options.CustomSampler(x);
+                    }
+                    catch (Exception)
+                    {
+                        s = null;
+
+                        // TODO: Add error logging
+                    }
+
+                    return s == null ? sampler : s;
+                });
             this.diagnosticSourceSubscriber.Subscribe();
         }
 

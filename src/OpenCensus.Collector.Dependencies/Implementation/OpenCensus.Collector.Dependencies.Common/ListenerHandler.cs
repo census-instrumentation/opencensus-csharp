@@ -14,30 +14,29 @@
 // limitations under the License.
 // </copyright>
 
-namespace OpenCensus.Collector.Implementation.Common
+namespace OpenCensus.Collector.Dependencies.Common
 {
+    using System;
     using System.Diagnostics;
+    using System.Net.Http;
     using OpenCensus.Trace;
 
-    internal class ListenerHandler
+    internal abstract class ListenerHandler
     {
         protected readonly ITracer Tracer;
 
-        protected readonly ISampler Sampler;
+        protected readonly Func<HttpRequestMessage, ISampler> SamplerFactory;
 
-        public ListenerHandler(string sourceName, ITracer tracer, ISampler sampler)
+        public ListenerHandler(string sourceName, ITracer tracer, Func<HttpRequestMessage, ISampler> samplerFactory)
         {
             this.SourceName = sourceName;
             this.Tracer = tracer;
-            this.Sampler = sampler;
+            this.SamplerFactory = samplerFactory;
         }
 
         public string SourceName { get; }
 
-        public virtual void OnStartActivity(Activity activity, object payload)
-        {
-            this.Tracer.SpanBuilder(activity.OperationName).SetSampler(this.Sampler).StartScopedSpan();
-        }
+        public abstract void OnStartActivity(Activity activity, object payload);
 
         public virtual void OnStopActivity(Activity activity, object payload)
         {

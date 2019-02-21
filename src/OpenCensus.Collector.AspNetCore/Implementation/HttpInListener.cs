@@ -16,12 +16,13 @@
 
 namespace OpenCensus.Collector.AspNetCore.Implementation
 {
+    using System;
     using System.Diagnostics;
     using System.Linq;
     using System.Text;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Http.Features;
-    using OpenCensus.Collector.Implementation.Common;
+    using OpenCensus.Collector.AspNetCore.Common;
     using OpenCensus.Trace;
     using OpenCensus.Trace.Propagation;
 
@@ -35,8 +36,8 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
         private readonly PropertyFetcher beforeActionTemplateFetcher = new PropertyFetcher("Template");
         private readonly IPropagationComponent propagationComponent;
 
-        public HttpInListener(ITracer tracer, ISampler sampler, IPropagationComponent propagationComponent)
-            : base("Microsoft.AspNetCore", tracer, sampler)
+        public HttpInListener(ITracer tracer, Func<HttpRequest, ISampler> samplerFactory, IPropagationComponent propagationComponent)
+            : base("Microsoft.AspNetCore", tracer, samplerFactory)
         {
             this.propagationComponent = propagationComponent;
         }
@@ -51,7 +52,7 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
                 return;
             }
 
-            var request = context.Request;
+            HttpRequest request = context.Request;
 
             var ctx = this.propagationComponent.TextFormat.Extract<HttpRequest>(
                 request,
@@ -62,7 +63,7 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
             string path = (request.PathBase.HasValue || request.Path.HasValue) ? (request.PathBase + request.Path).ToString() : "/";
 
             ISpan span = null;
-            this.Tracer.SpanBuilderWithRemoteParent(path, SpanKind.Server, ctx).SetSampler(this.Sampler).StartScopedSpan(out span);
+            this.Tracer.SpanBuilderWithRemoteParent(path, SpanKind.Server, ctx).SetSampler(this.SamplerFactory(request)).StartScopedSpan(out span);
             if (span == null)
             {
                 // Debug.WriteLine("span is null");
