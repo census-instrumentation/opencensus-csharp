@@ -48,7 +48,18 @@ namespace OpenCensus.Collector.AspNetCore
                 tracer,
                 x =>
                 {
-                    ISampler s = options.CustomSampler(x);
+                    ISampler s = null;
+                    try
+                    {
+                        s = options.CustomSampler(x);
+                    }
+                    catch (Exception)
+                    {
+                        s = null;
+
+                        // TODO: Add error logging
+                    }
+
                     return s == null ? sampler : s;
                 });
             this.diagnosticSourceSubscriber.Subscribe();

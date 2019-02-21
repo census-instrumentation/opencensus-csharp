@@ -19,8 +19,8 @@ namespace OpenCensus.Collector.Dependencies
     using System;
     using System.Collections.Generic;
     using System.Net.Http;
+    using OpenCensus.Collector.Dependencies.Common;
     using OpenCensus.Collector.Dependencies.Implementation;
-    using OpenCensus.Collector.Implementation.Common;
     using OpenCensus.Trace;
     using OpenCensus.Trace.Propagation;
 
@@ -54,6 +54,8 @@ namespace OpenCensus.Collector.Dependencies
                     catch (Exception)
                     {
                         s = null;
+
+                        // TODO: Add error logging
                     }
 
                     return s == null ? sampler : s;

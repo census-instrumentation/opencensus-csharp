@@ -9,9 +9,6 @@ the release.
 
 - OpenCensus.Collectors.AspNetCore: Allow to supply custom sampler based on request properties using custom code. For instance filter out telemetry from specific path.
 - OpenCensus.Collectors.Dependencies: Allow to supply custom sampler based on request properties using custom code. By default, filter out calls to Zipkin REST endpoint from the exporter.
-- Code rearranged: Some code that was earlier common (between OpenCensus.Collectors.Dependencies, OpenCensus.Collectors.AspNetCore) moved under folder and namespace OpenCensus.Collector.AspNetCore.Common in Collector.AspNetCore project
-- Hardcoding removed: Reference to the zipkin... endpoint removed from HttpHandlerDiagnosticListener and moved to default implementation of samplerFactory
-
 
 ## 0.1.0-alpha-42253
 

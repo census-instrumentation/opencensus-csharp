@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-namespace OpenCensus.Collector.Implementation.Common
+namespace OpenCensus.Collector.Dependencies.Common
 {
     using System;
     using System.Diagnostics;
