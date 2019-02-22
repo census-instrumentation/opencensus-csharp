@@ -16,10 +16,31 @@
 
 namespace OpenCensus.Collector.AspNetCore
 {
+    using System;
+    using Microsoft.AspNetCore.Http;
+    using OpenCensus.Trace;
+    using OpenCensus.Trace.Sampler;
+
     /// <summary>
     /// Options for dependencies collector.
     /// </summary>
     public class RequestsCollectorOptions
     {
+        private static Func<HttpRequest, ISampler> defaultSampler = (req) => { return null; };
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RequestsCollectorOptions"/> class.
+        /// </summary>
+        /// <param name="sampler">Custom sampling function, if any</param>
+        public RequestsCollectorOptions(Func<HttpRequest, ISampler> sampler = null)
+        {
+            this.CustomSampler = sampler ?? defaultSampler;
+        }
+
+        /// <summary>
+        /// Gets a hook to exclude calls based on domain
+        /// or other per-request criterion.
+        /// </summary>
+        public Func<HttpRequest, ISampler> CustomSampler { get; private set; }
     }
 }

@@ -14,25 +14,26 @@
 // limitations under the License.
 // </copyright>
 
-namespace OpenCensus.Collector.Implementation.Common
+namespace OpenCensus.Collector.AspNetCore.Common
 {
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Threading;
+    using Microsoft.AspNetCore.Http;
     using OpenCensus.Trace;
 
     internal class DiagnosticSourceSubscriber : IDisposable, IObserver<DiagnosticListener>
     {
-        private readonly Dictionary<string, Func<ITracer, ISampler, ListenerHandler>> handlers;
+        private readonly Dictionary<string, Func<ITracer, Func<HttpRequest, ISampler>, ListenerHandler>> handlers;
         private readonly ITracer tracer;
-        private readonly ISampler sampler;
+        private readonly Func<HttpRequest, ISampler> sampler;
         private ConcurrentDictionary<string, DiagnosticSourceListener> subscriptions;
         private bool disposing;
         private IDisposable subscription;
 
-        public DiagnosticSourceSubscriber(Dictionary<string, Func<ITracer, ISampler, ListenerHandler>> handlers, ITracer tracer, ISampler sampler)
+        public DiagnosticSourceSubscriber(Dictionary<string, Func<ITracer, Func<HttpRequest, ISampler>, ListenerHandler>> handlers, ITracer tracer, Func<HttpRequest, ISampler> sampler)
         {
             this.subscriptions = new ConcurrentDictionary<string, DiagnosticSourceListener>();
             this.handlers = handlers;
