@@ -20,40 +20,40 @@ namespace OpenCensus.Trace.Export
 
     public sealed class SampledSpanStoreLatencyFilter : ISampledSpanStoreLatencyFilter
     {
-        internal SampledSpanStoreLatencyFilter(string spanName, long latencyLowerNs, long latencyUpperNs, int maxSpansToReturn)
+        internal SampledSpanStoreLatencyFilter(string spanName, TimeSpan latencyLowerNs, TimeSpan latencyUpperNs, int maxSpansToReturn)
         {
             this.SpanName = spanName ?? throw new ArgumentNullException(nameof(spanName));
-            this.LatencyLowerNs = latencyLowerNs;
-            this.LatencyUpperNs = latencyUpperNs;
+            this.LatencyLower = latencyLowerNs;
+            this.LatencyUpper = latencyUpperNs;
             this.MaxSpansToReturn = maxSpansToReturn;
         }
 
         public string SpanName { get; }
 
-        public long LatencyLowerNs { get; }
+        public TimeSpan LatencyLower { get; }
 
-        public long LatencyUpperNs { get; }
+        public TimeSpan LatencyUpper { get; }
 
         public int MaxSpansToReturn { get; }
 
-        public static ISampledSpanStoreLatencyFilter Create(string spanName, long latencyLowerNs, long latencyUpperNs, int maxSpansToReturn)
+        public static ISampledSpanStoreLatencyFilter Create(string spanName, TimeSpan latencyLower, TimeSpan latencyUpper, int maxSpansToReturn)
         {
             if (maxSpansToReturn < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(maxSpansToReturn));
             }
 
-            if (latencyLowerNs < 0)
+            if (latencyLower < TimeSpan.Zero)
             {
-                throw new ArgumentOutOfRangeException(nameof(latencyLowerNs));
+                throw new ArgumentOutOfRangeException(nameof(latencyLower));
             }
 
-            if (latencyUpperNs < 0)
+            if (latencyUpper < TimeSpan.Zero)
             {
-                throw new ArgumentOutOfRangeException(nameof(latencyUpperNs));
+                throw new ArgumentOutOfRangeException(nameof(latencyUpper));
             }
 
-            return new SampledSpanStoreLatencyFilter(spanName, latencyLowerNs, latencyUpperNs, maxSpansToReturn);
+            return new SampledSpanStoreLatencyFilter(spanName, latencyLower, latencyUpper, maxSpansToReturn);
         }
 
         /// <inheritdoc/>
@@ -61,8 +61,8 @@ namespace OpenCensus.Trace.Export
         {
             return "LatencyFilter{"
                 + "spanName=" + this.SpanName + ", "
-                + "latencyLowerNs=" + this.LatencyLowerNs + ", "
-                + "latencyUpperNs=" + this.LatencyUpperNs + ", "
+                + "latencyLowerNs=" + this.LatencyLower + ", "
+                + "latencyUpperNs=" + this.LatencyUpper + ", "
                 + "maxSpansToReturn=" + this.MaxSpansToReturn
                 + "}";
         }
@@ -78,8 +78,8 @@ namespace OpenCensus.Trace.Export
             if (o is SampledSpanStoreLatencyFilter that)
             {
                 return this.SpanName.Equals(that.SpanName)
-                     && (this.LatencyLowerNs == that.LatencyLowerNs)
-                     && (this.LatencyUpperNs == that.LatencyUpperNs)
+                     && (this.LatencyLower == that.LatencyLower)
+                     && (this.LatencyUpper == that.LatencyUpper)
                      && (this.MaxSpansToReturn == that.MaxSpansToReturn);
             }
 
@@ -93,9 +93,9 @@ namespace OpenCensus.Trace.Export
             h *= 1000003;
             h ^= this.SpanName.GetHashCode();
             h *= 1000003;
-            h ^= (this.LatencyLowerNs >> 32) ^ this.LatencyLowerNs;
+            h ^= (this.LatencyLower.Ticks >> 32) ^ this.LatencyLower.Ticks;
             h *= 1000003;
-            h ^= (this.LatencyUpperNs >> 32) ^ this.LatencyUpperNs;
+            h ^= (this.LatencyUpper.Ticks >> 32) ^ this.LatencyUpper.Ticks;
             h *= 1000003;
             h ^= this.MaxSpansToReturn;
             return (int)h;

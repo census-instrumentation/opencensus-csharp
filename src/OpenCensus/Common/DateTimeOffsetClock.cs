@@ -26,23 +26,15 @@ namespace OpenCensus.Common
         internal const long NanosPerMilli = 1000 * 1000;
         internal const long NanosPerSecond = NanosPerMilli * MillisPerSecond;
 
-        public ITimestamp Now
-        {
-            get
-            {
-                var nowNanoTicks = this.NowNanos;
-                var nowSecTicks = nowNanoTicks / NanosPerSecond;
-                var excessNanos = nowNanoTicks - (nowSecTicks * NanosPerSecond);
-                return Timestamp.Create(nowSecTicks, (int)excessNanos);
-            }
-        }
-
-        public long NowNanos
+        public Timestamp Now
         {
             get
             {
                 var millis = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                return millis * NanosPerMilli;
+                var nowNanoTicks = millis * NanosPerMilli;
+                var nowSecTicks = nowNanoTicks / NanosPerSecond;
+                var excessNanos = nowNanoTicks - (nowSecTicks * NanosPerSecond);
+                return Timestamp.Create(nowSecTicks, (int)excessNanos);
             }
         }
 

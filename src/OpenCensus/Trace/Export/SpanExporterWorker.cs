@@ -32,7 +32,7 @@ namespace OpenCensus.Trace.Export
         private readonly TimeSpan scheduleDelay;
         private bool shutdown = false;
 
-        public SpanExporterWorker(int bufferSize, IDuration scheduleDelay)
+        public SpanExporterWorker(int bufferSize, Duration scheduleDelay)
         {
             this.bufferSize = bufferSize;
             this.scheduleDelay = TimeSpan.FromSeconds(scheduleDelay.Seconds);

@@ -16,23 +16,40 @@
 
 namespace OpenCensus.Common
 {
-    public class Duration : IDuration
+    using System;
+
+    /// <summary>
+    /// Represents duration with the nanoseconds precition.
+    /// </summary>
+    public sealed class Duration : IComparable<Duration>
     {
         private const long MaxSeconds = 315576000000L;
         private const int MaxNanos = 999999999;
-        private static readonly IDuration Zero = new Duration(0, 0);
+        private static readonly Duration Zero = new Duration(0, 0);
 
-        public Duration(long seconds, int nanos)
+        private Duration(long seconds, int nanos)
         {
             this.Seconds = seconds;
             this.Nanos = nanos;
         }
 
+        /// <summary>
+        /// Gets the number of second in duration.
+        /// </summary>
         public long Seconds { get; }
 
+        /// <summary>
+        /// Gets the number of nanoseconds in duration.
+        /// </summary>
         public int Nanos { get; }
 
-        public static IDuration Create(long seconds, int nanos)
+        /// <summary>
+        /// Creates a new instance of <see cref="Duration" /> class.
+        /// </summary>
+        /// <param name="seconds">Total seconds.</param>
+        /// <param name="nanos">Nanoseconds part of a duration up to 999999999.</param>
+        /// <returns>New instance of <see cref="Duration" /> class.</returns>
+        public static Duration Create(long seconds, int nanos)
         {
             if (seconds < -MaxSeconds || seconds > MaxSeconds)
             {
@@ -52,7 +69,24 @@ namespace OpenCensus.Common
             return new Duration(seconds, nanos);
         }
 
-        public int CompareTo(IDuration other)
+        /// <summary>
+        /// Creates a new instance of <see cref="Duration" /> class.
+        /// </summary>
+        /// <param name="duration">Duration as TimeStamp.</param>
+        /// <returns>New instance of <see cref="Duration" /> class.</returns>
+        public static Duration Create(TimeSpan duration)
+        {
+            var seconds = duration.Ticks / TimeSpan.TicksPerSecond;
+            int nanoseconds = (int)(duration.Ticks % TimeSpan.TicksPerSecond) * 100;
+            return Create(seconds, nanoseconds);
+        }
+
+        /// <summary>
+        /// Compares durations.
+        /// </summary>
+        /// <param name="other"><see cref="Duration" /> instasnce to compare to.</param>
+        /// <returns>Zero if equal, -1 when lesser and +1 when greater than given value.</returns>
+        public int CompareTo(Duration other)
         {
             int cmp = (this.Seconds < other.Seconds) ? -1 : ((this.Seconds > other.Seconds) ? 1 : 0);
             if (cmp != 0)

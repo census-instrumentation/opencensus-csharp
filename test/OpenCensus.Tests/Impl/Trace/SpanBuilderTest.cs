@@ -19,6 +19,7 @@ namespace OpenCensus.Trace.Test
     using System;
     using System.Collections.Generic;
     using Moq;
+    using OpenCensus.Common;
     using OpenCensus.Testing.Common;
     using OpenCensus.Trace.Config;
     using OpenCensus.Trace.Export;
@@ -31,7 +32,6 @@ namespace OpenCensus.Trace.Test
         private static readonly String SPAN_NAME = "MySpanName";
         private SpanBuilderOptions spanBuilderOptions;
         private TraceParams alwaysSampleTraceParams = TraceParams.Default.ToBuilder().SetSampler(Samplers.AlwaysSample).Build();
-        private readonly TestClock testClock = TestClock.Create();
         private readonly IRandomGenerator randomHandler = new FakeRandomHandler();
         private IStartEndHandler startEndHandler = Mock.Of<IStartEndHandler>();
         private ITraceConfig traceConfig = Mock.Of<ITraceConfig>();
@@ -40,7 +40,7 @@ namespace OpenCensus.Trace.Test
         {
             // MockitoAnnotations.initMocks(this);
             spanBuilderOptions =
-                new SpanBuilderOptions(randomHandler, startEndHandler, testClock, traceConfig);
+                new SpanBuilderOptions(randomHandler, startEndHandler, traceConfig);
             var configMock = Mock.Get<ITraceConfig>(traceConfig);
             configMock.Setup((c) => c.ActiveTraceParams).Returns(alwaysSampleTraceParams);
             // when(traceConfig.getActiveTraceParams()).thenReturn(alwaysSampleTraceParams);
@@ -57,7 +57,7 @@ namespace OpenCensus.Trace.Test
             ISpanData spanData = ((Span)span).ToSpanData();
             Assert.Null(spanData.ParentSpanId);
             Assert.False(spanData.HasRemoteParent);
-            Assert.Equal(testClock.Now, spanData.StartTimestamp);
+            Assert.InRange(spanData.StartTimestamp, Timestamp.FromDateTimeOffset(DateTimeOffset.Now).AddDuration(Duration.Create(-1, 0)), Timestamp.FromDateTimeOffset(DateTimeOffset.Now).AddDuration(Duration.Create(1, 0)));
             Assert.Equal(SPAN_NAME, spanData.Name);
         }
 

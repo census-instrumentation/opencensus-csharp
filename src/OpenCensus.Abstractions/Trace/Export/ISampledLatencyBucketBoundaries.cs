@@ -16,19 +16,21 @@
 
 namespace OpenCensus.Trace.Export
 {
+    using System;
+
     /// <summary>
     /// Sampoled spans latency buckets for histograms calculations.
     /// </summary>
     public interface ISampledLatencyBucketBoundaries
     {
         /// <summary>
-        /// Gets the lower latency boundary in nanoseconds.
+        /// Gets the lower latency boundary.
         /// </summary>
-        long LatencyLowerNs { get; }
+        TimeSpan LatencyLower { get; }
 
         /// <summary>
-        /// Gets the upper latency boundary in nanoseconds.
+        /// Gets the upper latency boundary.
         /// </summary>
-        long LatencyUpperNs { get; }
+        TimeSpan LatencyUpper { get; }
     }
 }

@@ -36,7 +36,7 @@ namespace OpenCensus.Trace
         {
             if (enabled)
             {
-                this.traceComponent = new TraceComponent(DateTimeOffsetClock.Instance, new RandomGenerator(), new SimpleEventQueue());
+                this.traceComponent = new TraceComponent(new RandomGenerator(), new SimpleEventQueue());
             }
             else
             {

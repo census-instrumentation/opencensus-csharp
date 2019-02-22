@@ -16,6 +16,7 @@
 
 namespace OpenCensus.Trace.Export.Test
 {
+    using System;
     using System.Collections.Generic;
     using Xunit;
 
@@ -62,7 +63,7 @@ namespace OpenCensus.Trace.Export.Test
             ISampledSpanStore sampledSpanStore = ExportComponentBase.NewNoopExportComponent.SampledSpanStore;
             var latencySampledSpans =
                 sampledSpanStore.GetLatencySampledSpans(
-                    SampledSpanStoreLatencyFilter.Create("TestLatencyFilter", 0, 0, 0));
+                    SampledSpanStoreLatencyFilter.Create("TestLatencyFilter", TimeSpan.Zero, TimeSpan.Zero, 0));
             Assert.Empty(latencySampledSpans);
         }
 

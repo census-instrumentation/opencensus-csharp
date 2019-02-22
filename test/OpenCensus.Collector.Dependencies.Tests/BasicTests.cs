@@ -51,7 +51,7 @@ namespace OpenCensus.Collector.Dependencies.Tests
 
             using (serverLifeTime)
             {
-                var tracer = new Tracer(new RandomGenerator(), startEndHandler.Object, new DateTimeOffsetClock(), new TraceConfig());
+                var tracer = new Tracer(new RandomGenerator(), startEndHandler.Object, new TraceConfig());
 
                 var tf = new Mock<ITextFormat>();
                 tf

@@ -66,8 +66,8 @@ namespace OpenCensus.Stats.Test
         public void TestCumulativeViewData()
         {
             IView view = View.Create(NAME, DESCRIPTION, MEASURE_DOUBLE, DISTRIBUTION, TAG_KEYS);
-            ITimestamp start = Timestamp.FromMillis(1000);
-            ITimestamp end = Timestamp.FromMillis(2000);
+            Timestamp start = Timestamp.FromMillis(1000);
+            Timestamp end = Timestamp.FromMillis(2000);
             IViewData viewData = ViewData.Create(view, ENTRIES, start, end);
             Assert.Equal(view, viewData.View);
             Assert.Equal(ENTRIES, viewData.AggregationMap);

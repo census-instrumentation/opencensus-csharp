@@ -26,7 +26,7 @@ namespace OpenCensus.Stats.Test
 
     internal static class StatsTestUtil
     {
-        static readonly ITimestamp ZERO_TIMESTAMP = Timestamp.Create(0, 0);
+        static readonly Timestamp ZERO_TIMESTAMP = Timestamp.Create(0, 0);
 
         internal static IAggregationData CreateAggregationData(IAggregation aggregation, IMeasure measure, params double[] values)
         {

@@ -36,19 +36,19 @@ namespace OpenCensus.Trace.Internal
 
         public override SpanKind? Kind { get; set; }
 
-        public override long EndNanoTime
+        public override DateTimeOffset EndTime
         {
             get
             {
-                return 0;
+                return DateTimeOffset.MinValue;
             }
         }
 
-        public override long LatencyNs
+        public override TimeSpan Latency
         {
             get
             {
-                return 0;
+                return TimeSpan.Zero;
             }
         }
 

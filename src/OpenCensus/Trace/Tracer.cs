@@ -16,17 +16,15 @@
 
 namespace OpenCensus.Trace
 {
-    using OpenCensus.Common;
     using OpenCensus.Trace.Config;
-    using OpenCensus.Trace.Internal;
 
     public sealed class Tracer : TracerBase
     {
         private readonly SpanBuilderOptions spanBuilderOptions;
 
-        public Tracer(IRandomGenerator randomGenerator, IStartEndHandler startEndHandler, IClock clock, ITraceConfig traceConfig)
+        public Tracer(IRandomGenerator randomGenerator, IStartEndHandler startEndHandler, ITraceConfig traceConfig)
         {
-            this.spanBuilderOptions = new SpanBuilderOptions(randomGenerator, startEndHandler, clock, traceConfig);
+            this.spanBuilderOptions = new SpanBuilderOptions(randomGenerator, startEndHandler, traceConfig);
         }
 
         public override ISpanBuilder SpanBuilderWithExplicitParent(string spanName, SpanKind spanKind = SpanKind.Unspecified, ISpan parent = null)

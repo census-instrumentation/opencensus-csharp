@@ -110,7 +110,7 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
             return spanBuilder.Build();
         }
 
-        private long ToEpochMicroseconds(ITimestamp timestamp)
+        private long ToEpochMicroseconds(Timestamp timestamp)
         {
             long nanos = (timestamp.Seconds * NanosPerSecond) + timestamp.Nanos;
             long micros = nanos / 1000L;

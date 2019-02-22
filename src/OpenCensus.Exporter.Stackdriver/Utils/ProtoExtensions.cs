@@ -16,7 +16,6 @@
 
 namespace OpenCensus.Exporter.Stackdriver.Utils
 {
-    using Google.Protobuf.WellKnownTypes;
     using OpenCensus.Common;
 
     /// <summary>
@@ -30,7 +29,7 @@ namespace OpenCensus.Exporter.Stackdriver.Utils
         /// </summary>
         /// <param name="timestamp">Opencensus timestamp</param>
         /// <returns>Protobuf's timestamp</returns>
-        public static Google.Protobuf.WellKnownTypes.Timestamp ToTimestamp(this ITimestamp timestamp)
+        public static Google.Protobuf.WellKnownTypes.Timestamp ToTimestamp(this Timestamp timestamp)
         {
             return new Google.Protobuf.WellKnownTypes.Timestamp { Seconds = timestamp.Seconds, Nanos = timestamp.Nanos };
         }

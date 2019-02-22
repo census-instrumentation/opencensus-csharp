@@ -40,7 +40,7 @@ namespace OpenCensus.Stats.Test
         private IViewManager viewManager;
         private IStatsRecorder statsRecorder;
 
-        static readonly ITimestamp ZERO_TIMESTAMP = Timestamp.Create(0, 0);
+        static readonly Timestamp ZERO_TIMESTAMP = Timestamp.Create(0, 0);
 
         public StatsRecorderTest()
         {

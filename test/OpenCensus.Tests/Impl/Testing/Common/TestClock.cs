@@ -20,8 +20,7 @@ namespace OpenCensus.Testing.Common
 
     public class TestClock : IClock
     {
-        private const int NUM_NANOS_PER_SECOND = 1000 * 1000 * 1000;
-        private ITimestamp currentTime = Timestamp.Create(1493419949, 223123456);
+        private Timestamp currentTime = Timestamp.Create(1493419949, 223123400);
         private object _lck = new object();
 
         public static TestClock Create()
@@ -29,14 +28,14 @@ namespace OpenCensus.Testing.Common
             return new TestClock();
         }
 
-        public static TestClock Create(ITimestamp time)
+        public static TestClock Create(Timestamp time)
         {
             TestClock clock = new TestClock();
             clock.Time = time;
             return clock;
         }
 
-        public ITimestamp Time
+        public Timestamp Time
         {
             get
             {
@@ -51,31 +50,17 @@ namespace OpenCensus.Testing.Common
 
         }
 
-        public void AdvanceTime(IDuration duration)
+        public void AdvanceTime(Duration duration)
         {
             lock (_lck) { currentTime = currentTime.AddDuration(duration); }
         }
 
-        public ITimestamp Now
+        public Timestamp Now
         {
             get
             {
                 lock (_lck) { return currentTime; }
             }
-        }
-
-        public long NowNanos
-        {
-            get
-            {
-                lock (_lck) { return GetNanos(currentTime); }
-            }
-        }
-
-        private static long GetNanos(ITimestamp time)
-        {
-            var nanoSeconds = time.Seconds * NUM_NANOS_PER_SECOND;
-            return nanoSeconds + time.Nanos;
         }
 
         private TestClock() { }

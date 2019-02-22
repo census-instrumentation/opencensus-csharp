@@ -17,18 +17,13 @@
 namespace OpenCensus.Common
 {
     /// <summary>
-    /// Clock to get the current time with the nanoseconds precision.
+    /// Clock to get the current time with the nanoseconds resolution.
     /// </summary>
     public interface IClock
     {
         /// <summary>
         /// Gets the current instant from this clock as a timestamp.
         /// </summary>
-        ITimestamp Now { get; }
-
-        /// <summary>
-        /// Gets a time measurement with nanosecond precision that can only be used to calculate elapsed time.
-        /// </summary>
-        long NowNanos { get; }
+        Timestamp Now { get; }
     }
 }

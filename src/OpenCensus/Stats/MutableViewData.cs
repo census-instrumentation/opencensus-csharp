@@ -26,7 +26,7 @@ namespace OpenCensus.Stats
     {
         internal static readonly ITagValue UnknownTagValue = null;
 
-        internal static readonly ITimestamp ZeroTimestamp = Timestamp.Create(0, 0);
+        internal static readonly Timestamp ZeroTimestamp = Timestamp.Create(0, 0);
 
         private const long MillisPerSecond = 1000L;
         private const long NanosPerMilli = 1000 * 1000;
@@ -113,7 +113,7 @@ namespace OpenCensus.Stats
         }
 
         // Returns the milliseconds representation of a Duration.
-        internal static long ToMillis(IDuration duration)
+        internal static long ToMillis(Duration duration)
         {
             return (duration.Seconds * MillisPerSecond) + (duration.Nanos / NanosPerMilli);
         }
@@ -187,29 +187,29 @@ namespace OpenCensus.Stats
             return map;
         }
 
-        internal static MutableViewData Create(IView view, ITimestamp start)
+        internal static MutableViewData Create(IView view, Timestamp start)
         {
             return new CumulativeMutableViewData(view, start);
         }
 
         /** Record double stats with the given tags. */
-        internal abstract void Record(ITagContext context, double value, ITimestamp timestamp);
+        internal abstract void Record(ITagContext context, double value, Timestamp timestamp);
 
         /** Record long stats with the given tags. */
-        internal void Record(ITagContext tags, long value, ITimestamp timestamp)
+        internal void Record(ITagContext tags, long value, Timestamp timestamp)
         {
             // TODO(songya): shall we check for precision loss here?
             this.Record(tags, (double)value, timestamp);
         }
 
         /** Convert this {@link MutableViewData} to {@link ViewData}. */
-        internal abstract IViewData ToViewData(ITimestamp now, StatsCollectionState state);
+        internal abstract IViewData ToViewData(Timestamp now, StatsCollectionState state);
 
         // Clear recorded stats.
         internal abstract void ClearStats();
 
         // Resume stats collection, and reset Start Timestamp (for CumulativeMutableViewData), or refresh
         // bucket list (for InternalMutableViewData).
-        internal abstract void ResumeStatsCollection(ITimestamp now);
+        internal abstract void ResumeStatsCollection(Timestamp now);
     }
 }

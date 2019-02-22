@@ -41,14 +41,6 @@ namespace OpenCensus.Trace
             }
         }
 
-        public IClock Clock
-        {
-            get
-            {
-                return ZeroTimeClock.Instance;
-            }
-        }
-
         public IExportComponent ExportComponent
         {
             get

@@ -23,11 +23,11 @@ namespace OpenCensus.Trace.Export.Test
 
     public class SpanDataTest
     {
-        private static readonly ITimestamp startTimestamp = Timestamp.Create(123, 456);
-        private static readonly ITimestamp eventTimestamp1 = Timestamp.Create(123, 457);
-        private static readonly ITimestamp eventTimestamp2 = Timestamp.Create(123, 458);
-        private static readonly ITimestamp eventTimestamp3 = Timestamp.Create(123, 459);
-        private static readonly ITimestamp endTimestamp = Timestamp.Create(123, 460);
+        private static readonly Timestamp startTimestamp = Timestamp.Create(123, 456);
+        private static readonly Timestamp eventTimestamp1 = Timestamp.Create(123, 457);
+        private static readonly Timestamp eventTimestamp2 = Timestamp.Create(123, 458);
+        private static readonly Timestamp eventTimestamp3 = Timestamp.Create(123, 459);
+        private static readonly Timestamp endTimestamp = Timestamp.Create(123, 460);
         private static readonly string SPAN_NAME = "MySpanName";
         private static readonly string ANNOTATION_TEXT = "MyAnnotationText";
         private static readonly IAnnotation annotation = Annotation.FromDescription(ANNOTATION_TEXT);

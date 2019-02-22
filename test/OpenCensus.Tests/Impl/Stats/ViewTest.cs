@@ -35,9 +35,9 @@ namespace OpenCensus.Stats.Test
         private static readonly ITagKey BAR = TagKey.Create("bar");
         private static readonly List<ITagKey> keys = new List<ITagKey>() { FOO, BAR };
         private static readonly IMean MEAN = Mean.Create();
-        private static readonly IDuration MINUTE = Duration.Create(60, 0);
-        private static readonly IDuration TWO_MINUTES = Duration.Create(120, 0);
-        private static readonly IDuration NEG_TEN_SECONDS = Duration.Create(-10, 0);
+        private static readonly Duration MINUTE = Duration.Create(60, 0);
+        private static readonly Duration TWO_MINUTES = Duration.Create(120, 0);
+        private static readonly Duration NEG_TEN_SECONDS = Duration.Create(-10, 0);
 
         [Fact]
         public void TestConstants()

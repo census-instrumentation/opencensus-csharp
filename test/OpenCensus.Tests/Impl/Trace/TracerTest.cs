@@ -34,7 +34,7 @@ namespace OpenCensus.Trace.Test
         {
             startEndHandler = Mock.Of<IStartEndHandler>();
             traceConfig = Mock.Of<ITraceConfig>();
-            tracer = new Tracer(new RandomGenerator(), startEndHandler, TestClock.Create(), traceConfig);
+            tracer = new Tracer(new RandomGenerator(), startEndHandler, traceConfig);
         }
 
         [Fact]

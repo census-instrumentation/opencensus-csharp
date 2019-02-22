@@ -16,6 +16,8 @@
 
 namespace OpenCensus.Trace.Export
 {
+    using System;
+
     /// <summary>
     /// Sampled span store latency filter.
     /// </summary>
@@ -27,14 +29,14 @@ namespace OpenCensus.Trace.Export
         string SpanName { get; }
 
         /// <summary>
-        /// Gets the latency lower boundery as nanoseconds to filter by.
+        /// Gets the latency lower boundery to filter by.
         /// </summary>
-        long LatencyLowerNs { get; }
+        TimeSpan LatencyLower { get; }
 
         /// <summary>
-        /// Gets the latency upper boundary as a nanosecond to filter by.
+        /// Gets the latency upper boundary to filter by.
         /// </summary>
-        long LatencyUpperNs { get; }
+        TimeSpan LatencyUpper { get; }
 
         /// <summary>
         /// Gets the maximum number of spans to return.
