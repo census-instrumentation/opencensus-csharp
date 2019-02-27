@@ -3,6 +3,8 @@
 variables:
   DotNetVersion: "2.2.101"
 
+pr: [ 'master', 'develop' ]
+
 jobs:
 
 - job: Windows
