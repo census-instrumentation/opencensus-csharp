@@ -87,7 +87,7 @@ namespace OpenCensus.Collector.AspNetCore.Implementation
 
             if (context == null)
             {
-                // TODO: Debug.WriteLine("context is null");
+                AspNetCoreCollectorEventSource.Log.NullContext();
                 return;
             }
 

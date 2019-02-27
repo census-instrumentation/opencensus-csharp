@@ -53,11 +53,10 @@ namespace OpenCensus.Collector.AspNetCore
                     {
                         s = options.CustomSampler(x);
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
                         s = null;
-
-                        // TODO: Add error logging
+                        AspNetCoreCollectorEventSource.Log.ExceptionInCustomSampler(e.Message, e.StackTrace);
                     }
 
                     return s == null ? sampler : s;
