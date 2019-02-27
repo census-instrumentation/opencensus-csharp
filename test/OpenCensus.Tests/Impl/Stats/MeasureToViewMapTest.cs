@@ -43,9 +43,7 @@ namespace OpenCensus.Stats.Test
         public void TestRegisterAndGetView()
         {
             MeasureToViewMap measureToViewMap = new MeasureToViewMap();
-            //TestClock clock = TestClock.Create(Timestamp.Create(10, 20));
             measureToViewMap.RegisterView(VIEW);
-            //clock.Time = Timestamp.Create(30, 40);
             IViewData viewData = measureToViewMap.GetView(VIEW_NAME, StatsCollectionState.ENABLED);
             Assert.Equal(VIEW, viewData.View);
             Assert.Empty(viewData.AggregationMap);
