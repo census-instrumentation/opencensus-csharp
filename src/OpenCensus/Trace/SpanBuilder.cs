@@ -21,7 +21,6 @@ namespace OpenCensus.Trace
     using System.Linq;
     using OpenCensus.Internal;
     using OpenCensus.Trace.Config;
-    using OpenCensus.Trace.Internal;
 
     public class SpanBuilder : SpanBuilderBase
     {

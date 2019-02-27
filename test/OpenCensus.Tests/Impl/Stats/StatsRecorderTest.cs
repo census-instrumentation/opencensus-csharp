@@ -16,6 +16,7 @@
 
 namespace OpenCensus.Stats.Test
 {
+    using System;
     using System.Collections.Generic;
     using OpenCensus.Common;
     using OpenCensus.Internal;
@@ -23,7 +24,6 @@ namespace OpenCensus.Stats.Test
     using OpenCensus.Stats.Measures;
     using OpenCensus.Tags;
     using OpenCensus.Tags.Unsafe;
-    using OpenCensus.Testing.Common;
     using Xunit;
 
     public class StatsRecorderTest
@@ -40,11 +40,9 @@ namespace OpenCensus.Stats.Test
         private IViewManager viewManager;
         private IStatsRecorder statsRecorder;
 
-        static readonly Timestamp ZERO_TIMESTAMP = Timestamp.Create(0, 0);
-
         public StatsRecorderTest()
         {
-            statsComponent = new StatsComponent(new SimpleEventQueue(), TestClock.Create());
+            statsComponent = new StatsComponent(new SimpleEventQueue());
             viewManager = statsComponent.ViewManager;
             statsRecorder = statsComponent.StatsRecorder;
         }
@@ -220,7 +218,7 @@ namespace OpenCensus.Stats.Test
             return ViewData.Create(
                 view,
                 new Dictionary<TagValues, IAggregationData>(),
-                ZERO_TIMESTAMP, ZERO_TIMESTAMP);
+                DateTimeOffset.MinValue, DateTimeOffset.MinValue);
 
         }
 
