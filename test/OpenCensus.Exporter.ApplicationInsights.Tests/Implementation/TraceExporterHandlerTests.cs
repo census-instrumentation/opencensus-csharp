@@ -55,7 +55,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
 
         public OpenCensusTelemetryConverterTests()
         {
-            nowDateTimeOffset = DateTimeOffset.Now;
+            nowDateTimeOffset = DateTimeOffset.Now.Subtract(TimeSpan.FromSeconds(1));
         }
 
         private ConcurrentQueue<ITelemetry> ConvertSpan(ISpanData data)
