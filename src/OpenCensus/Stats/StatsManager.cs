@@ -18,7 +18,6 @@ namespace OpenCensus.Stats
 {
     using System;
     using System.Collections.Generic;
-    using OpenCensus.Common;
     using OpenCensus.Internal;
     using OpenCensus.Tags;
 
@@ -26,16 +25,12 @@ namespace OpenCensus.Stats
     {
         private readonly IEventQueue queue;
 
-        // clock used throughout the stats implementation
-        private readonly IClock clock;
-
         private readonly CurrentStatsState state;
         private readonly MeasureToViewMap measureToViewMap = new MeasureToViewMap();
 
-        internal StatsManager(IEventQueue queue, IClock clock, CurrentStatsState state)
+        internal StatsManager(IEventQueue queue, CurrentStatsState state)
         {
             this.queue = queue ?? throw new ArgumentNullException(nameof(queue));
-            this.clock = clock ?? throw new ArgumentNullException(nameof(clock));
             this.state = state ?? throw new ArgumentNullException(nameof(state));
         }
 
@@ -49,12 +44,12 @@ namespace OpenCensus.Stats
 
         internal void RegisterView(IView view)
         {
-            this.measureToViewMap.RegisterView(view, this.clock);
+            this.measureToViewMap.RegisterView(view);
         }
 
         internal IViewData GetView(IViewName viewName)
         {
-            return this.measureToViewMap.GetView(viewName, this.clock, this.state.Internal);
+            return this.measureToViewMap.GetView(viewName, this.state.Internal);
         }
 
         internal void Record(ITagContext tags, IEnumerable<IMeasurement> measurementValues)
@@ -74,7 +69,7 @@ namespace OpenCensus.Stats
 
         internal void ResumeStatsCollection()
         {
-            this.measureToViewMap.ResumeStatsCollection(this.clock.Now);
+            this.measureToViewMap.ResumeStatsCollection(DateTimeOffset.Now);
         }
 
         private class StatsEvent : IEventQueueEntry
@@ -93,7 +88,7 @@ namespace OpenCensus.Stats
             public void Process()
             {
                 // Add Timestamp to value after it went through the DisruptorQueue.
-                this.statsManager.measureToViewMap.Record(this.tags, this.stats, this.statsManager.clock.Now);
+                this.statsManager.measureToViewMap.Record(this.tags, this.stats, DateTimeOffset.Now);
             }
         }
 }

@@ -19,7 +19,6 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
     using Google.Api;
     using Google.Cloud.Monitoring.V3;
     using Google.Protobuf.WellKnownTypes;
-    using OpenCensus.Common;
     using OpenCensus.Exporter.Stackdriver.Utils;
     using OpenCensus.Stats;
     using OpenCensus.Stats.Aggregations;
@@ -292,8 +291,8 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         }
 
         private static Point ExtractPointInInterval(
-            Common.Timestamp startTime,
-            Common.Timestamp endTime, 
+            System.DateTimeOffset startTime,
+            System.DateTimeOffset endTime, 
             IAggregation aggregation, 
             IAggregationData points)
         {
@@ -304,7 +303,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             };
         }
 
-        private static TimeInterval CreateTimeInterval(Common.Timestamp start, Common.Timestamp end)
+        private static TimeInterval CreateTimeInterval(System.DateTimeOffset start, System.DateTimeOffset end)
         {
             return new TimeInterval { StartTime = start.ToTimestamp(), EndTime = end.ToTimestamp() };
         }

@@ -18,12 +18,10 @@ namespace OpenCensus.Trace.Test
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Linq;
     using Moq;
     using OpenCensus.Common;
     using OpenCensus.Internal;
-    using OpenCensus.Testing.Common;
     using OpenCensus.Trace.Config;
     using OpenCensus.Trace.Export;
     using OpenCensus.Trace.Internal;

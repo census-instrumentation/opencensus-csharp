@@ -92,8 +92,8 @@ namespace OpenCensus.Stats
                     return ViewData.Create(
                         view,
                         new Dictionary<TagValues, IAggregationData>(),
-                        ZeroTimestamp,
-                        ZeroTimestamp);
+                        DateTimeOffset.MinValue,
+                        DateTimeOffset.MinValue);
                 }
             }
         }

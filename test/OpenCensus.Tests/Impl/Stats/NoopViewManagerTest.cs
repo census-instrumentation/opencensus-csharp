@@ -96,8 +96,8 @@ namespace OpenCensus.Stats.Test
             IViewData viewData = viewManager.GetView(VIEW_NAME);
             Assert.Equal(view, viewData.View);
             Assert.Empty(viewData.AggregationMap);
-            Assert.Equal(Timestamp.Create(0, 0), viewData.Start);
-            Assert.Equal(Timestamp.Create(0, 0), viewData.End);
+            Assert.Equal(DateTimeOffset.MinValue, viewData.Start);
+            Assert.Equal(DateTimeOffset.MinValue, viewData.End);
 
         }
 
@@ -113,8 +113,8 @@ namespace OpenCensus.Stats.Test
             IViewData viewData = viewManager.GetView(VIEW_NAME);
             Assert.Equal(view, viewData.View);
             Assert.Empty(viewData.AggregationMap);
-            Assert.Equal(Timestamp.Create(0, 0), viewData.Start);
-            Assert.Equal(Timestamp.Create(0, 0), viewData.End);
+            Assert.Equal(DateTimeOffset.MinValue, viewData.Start);
+            Assert.Equal(DateTimeOffset.MinValue, viewData.End);
 
         }
 

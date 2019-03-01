@@ -16,7 +16,6 @@
 
 namespace OpenCensus.Stats
 {
-    using OpenCensus.Common;
     using OpenCensus.Internal;
 
     public class StatsComponent : StatsComponentBase
@@ -28,13 +27,13 @@ namespace OpenCensus.Stats
         private readonly IStatsRecorder statsRecorder;
 
         public StatsComponent()
-            : this(new SimpleEventQueue(), DateTimeOffsetClock.Instance)
+            : this(new SimpleEventQueue())
         {
         }
 
-        public StatsComponent(IEventQueue queue, IClock clock)
+        public StatsComponent(IEventQueue queue)
         {
-            StatsManager statsManager = new StatsManager(queue, clock, this.state);
+            StatsManager statsManager = new StatsManager(queue, this.state);
             this.viewManager = new ViewManager(statsManager);
             this.statsRecorder = new StatsRecorder(statsManager);
         }

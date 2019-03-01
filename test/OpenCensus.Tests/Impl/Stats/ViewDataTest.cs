@@ -66,8 +66,8 @@ namespace OpenCensus.Stats.Test
         public void TestCumulativeViewData()
         {
             IView view = View.Create(NAME, DESCRIPTION, MEASURE_DOUBLE, DISTRIBUTION, TAG_KEYS);
-            Timestamp start = Timestamp.FromMillis(1000);
-            Timestamp end = Timestamp.FromMillis(2000);
+            var start = DateTimeOffset.FromUnixTimeMilliseconds(1000);
+            var end = DateTimeOffset.FromUnixTimeMilliseconds(2000);
             IViewData viewData = ViewData.Create(view, ENTRIES, start, end);
             Assert.Equal(view, viewData.View);
             Assert.Equal(ENTRIES, viewData.AggregationMap);
@@ -99,18 +99,18 @@ namespace OpenCensus.Stats.Test
             IViewData data1 = ViewData.Create(
                         cumulativeView,
                         ENTRIES,
-                        Timestamp.FromMillis(1000), Timestamp.FromMillis(2000));
+                        DateTimeOffset.FromUnixTimeMilliseconds(1000), DateTimeOffset.FromUnixTimeMilliseconds(2000));
             IViewData data2 = ViewData.Create(
                         cumulativeView,
                         ENTRIES,
-                        Timestamp.FromMillis(1000), Timestamp.FromMillis(2000));
+                        DateTimeOffset.FromUnixTimeMilliseconds(1000), DateTimeOffset.FromUnixTimeMilliseconds(2000));
             Assert.Equal(data1, data2);
 
             // .addEqualityGroup(
             IViewData data3 = ViewData.Create(
                         cumulativeView,
                         ENTRIES,
-                        Timestamp.FromMillis(1000), Timestamp.FromMillis(3000));
+                        DateTimeOffset.FromUnixTimeMilliseconds(1000), DateTimeOffset.FromUnixTimeMilliseconds(3000));
             Assert.NotEqual(data1, data3);
             Assert.NotEqual(data2, data3);
 
@@ -290,7 +290,7 @@ namespace OpenCensus.Stats.Test
             //    CumulativeData.Create(Timestamp.fromMillis(1000), Timestamp.fromMillis(2000));
             // thrown.expect(IllegalArgumentException);
             // thrown.expectMessage("Aggregation and AggregationData types mismatch. ");
-            Assert.Throws<ArgumentException>(() => ViewData.Create(view, entries, Timestamp.FromMillis(1000), Timestamp.FromMillis(2000)));
+            Assert.Throws<ArgumentException>(() => ViewData.Create(view, entries, DateTimeOffset.FromUnixTimeMilliseconds(1000), DateTimeOffset.FromUnixTimeMilliseconds(2000)));
         }
     }
 }
