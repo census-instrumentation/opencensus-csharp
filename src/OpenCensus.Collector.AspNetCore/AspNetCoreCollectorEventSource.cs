@@ -25,28 +25,20 @@ namespace OpenCensus.Collector.AspNetCore
     /// EventSource listing ETW events emitted from the project.
     /// </summary>
     [EventSource(Name = "OpenCensus.Collector.AspNetCore")]
-    public class AspNetCoreCollectorEventSource : EventSource
+    internal class AspNetCoreCollectorEventSource : EventSource
     {
-        public static AspNetCoreCollectorEventSource Log = new AspNetCoreCollectorEventSource();
+        internal static AspNetCoreCollectorEventSource Log = new AspNetCoreCollectorEventSource();
 
-        /// <summary>
-        /// Log Context is null event
-        /// </summary>
-        [Event(100, Message = "Context is NULL", Level = EventLevel.Warning)]
+        [Event(1, Message = "Context is NULL in end callback. Span will not be recorded.", Level = EventLevel.Warning)]
         public void NullContext()
         {
-            this.WriteEvent(100);
+            this.WriteEvent(1);
         }
 
-        /// <summary>
-        /// Exception executing Custom Sampler event.
-        /// </summary>
-        /// <param name="message">Exception message.</param>
-        /// <param name="stackTrace">Exception stack trace.</param>
-        [Event(200, Message = "Exception executing Custom Sampler", Level = EventLevel.Warning)]
+        [Event(2, Message = "Error getting custom sampler, the default sampler will be used", Level = EventLevel.Warning)]
         public void ExceptionInCustomSampler(string message, string stackTrace)
         {
-            this.WriteEvent(200, message, stackTrace);
+            this.WriteEvent(2, message, stackTrace);
         }
     }
 }
