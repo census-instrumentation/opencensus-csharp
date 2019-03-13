@@ -34,7 +34,7 @@ namespace OpenCensus.Collector.AspNetCore
         [NonEvent]
         public void ExceptionInCustomSampler(Exception ex)
         {
-            if (Log.IsEnabled(EventLevel.Error, EventKeywords.All))
+            if (Log.IsEnabled(EventLevel.Warning, EventKeywords.All))
             {
                 this.ExceptionInCustomSampler(ToInvariantString(ex));
             }
