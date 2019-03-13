@@ -51,11 +51,10 @@ namespace OpenCensus.Collector.Dependencies
                     {
                         s = options.CustomSampler(x);
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
                         s = null;
-
-                        // TODO: Add error logging
+                        DependenciesCollectorEventSource.Log.ExceptionInCustomSampler(e);
                     }
 
                     return s == null ? sampler : s;
