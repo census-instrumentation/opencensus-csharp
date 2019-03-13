@@ -3,10 +3,12 @@
 variables:
   DotNetVersion: "2.2.101"
 
-phases:
+pr: [ 'master', 'develop' ]
 
-- phase: Windows
-  queue: Hosted VS2017
+jobs:
+
+- job: Windows
+  pool: Hosted VS2017
   steps:
   
   - task: DotNetCoreInstaller@0
@@ -32,8 +34,8 @@ phases:
 
   - task: PublishTestResults@2
 
-- phase: Linux
-  queue: Hosted Ubuntu 1604
+- job: Linux
+  pool: Hosted Ubuntu 1604
   steps:
   - task: DotNetCoreInstaller@0
     displayName: force use of desired dotnet version

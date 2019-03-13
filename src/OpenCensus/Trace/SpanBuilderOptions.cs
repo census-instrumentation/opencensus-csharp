@@ -16,9 +16,7 @@
 
 namespace OpenCensus.Trace
 {
-    using OpenCensus.Common;
     using OpenCensus.Trace.Config;
-    using OpenCensus.Trace.Internal;
 
     internal class SpanBuilderOptions
     {

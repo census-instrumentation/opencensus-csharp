@@ -17,12 +17,11 @@
 namespace OpenCensus.Stats.Test
 {
     using OpenCensus.Internal;
-    using OpenCensus.Testing.Common;
     using Xunit;
 
     public class StatsComponentTest
     {
-        private readonly StatsComponent statsComponent = new StatsComponent(new SimpleEventQueue(), TestClock.Create());
+        private readonly StatsComponent statsComponent = new StatsComponent(new SimpleEventQueue());
 
         [Fact]
         public void DefaultState()

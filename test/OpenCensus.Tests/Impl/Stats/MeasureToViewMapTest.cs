@@ -21,7 +21,6 @@ namespace OpenCensus.Stats.Test
     using OpenCensus.Stats.Aggregations;
     using OpenCensus.Stats.Measures;
     using OpenCensus.Tags;
-    using OpenCensus.Testing.Common;
     using Xunit;
 
     public class MeasureToViewMapTest
@@ -44,10 +43,8 @@ namespace OpenCensus.Stats.Test
         public void TestRegisterAndGetView()
         {
             MeasureToViewMap measureToViewMap = new MeasureToViewMap();
-            TestClock clock = TestClock.Create(Timestamp.Create(10, 20));
-            measureToViewMap.RegisterView(VIEW, clock);
-            clock.Time = Timestamp.Create(30, 40);
-            IViewData viewData = measureToViewMap.GetView(VIEW_NAME, clock, StatsCollectionState.ENABLED);
+            measureToViewMap.RegisterView(VIEW);
+            IViewData viewData = measureToViewMap.GetView(VIEW_NAME, StatsCollectionState.ENABLED);
             Assert.Equal(VIEW, viewData.View);
             Assert.Empty(viewData.AggregationMap);
         }
