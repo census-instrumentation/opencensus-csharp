@@ -18,6 +18,8 @@ namespace OpenCensus.Collector.AspNetCore
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
+    using System.Threading;
     using Microsoft.AspNetCore.Http;
     using OpenCensus.Collector.AspNetCore.Common;
     using OpenCensus.Collector.AspNetCore.Implementation;
@@ -53,11 +55,10 @@ namespace OpenCensus.Collector.AspNetCore
                     {
                         s = options.CustomSampler(x);
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
                         s = null;
-
-                        // TODO: Add error logging
+                        AspNetCoreCollectorEventSource.Log.ExceptionInCustomSampler(e);
                     }
 
                     return s == null ? sampler : s;

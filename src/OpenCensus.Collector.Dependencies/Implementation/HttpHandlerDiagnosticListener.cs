@@ -68,7 +68,7 @@ namespace OpenCensus.Collector.Dependencies.Implementation
 
             if (span == null)
             {
-                // TODO: Notify that span got lost
+                DependenciesCollectorEventSource.Log.NullContext();
                 return;
             }
 
