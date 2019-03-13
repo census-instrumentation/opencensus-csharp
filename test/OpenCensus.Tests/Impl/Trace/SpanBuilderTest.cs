@@ -20,10 +20,8 @@ namespace OpenCensus.Trace.Test
     using System.Collections.Generic;
     using Moq;
     using OpenCensus.Common;
-    using OpenCensus.Testing.Common;
     using OpenCensus.Trace.Config;
     using OpenCensus.Trace.Export;
-    using OpenCensus.Trace.Internal;
     using OpenCensus.Trace.Sampler;
     using Xunit;
 

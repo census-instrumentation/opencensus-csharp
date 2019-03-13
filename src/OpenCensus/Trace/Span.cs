@@ -23,7 +23,6 @@ namespace OpenCensus.Trace
     using OpenCensus.Internal;
     using OpenCensus.Trace.Config;
     using OpenCensus.Trace.Export;
-    using OpenCensus.Trace.Internal;
     using OpenCensus.Utils;
 
     public sealed class Span : SpanBase

@@ -43,7 +43,7 @@ namespace OpenCensus.Stats.Test
             return ViewData.Create(
                 view,
                 new Dictionary<TagValues, IAggregationData>(),
-                ZERO_TIMESTAMP, ZERO_TIMESTAMP);
+                DateTimeOffset.MinValue, DateTimeOffset.MinValue);
         }
 
         internal static void AssertAggregationMapEquals(
