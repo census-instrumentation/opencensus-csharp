@@ -19,7 +19,9 @@ namespace OpenCensus.Collector.AspNetCore
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Tracing;
+    using System.Globalization;
     using System.Text;
+    using System.Threading;
 
     /// <summary>
     /// EventSource listing ETW events emitted from the project.
@@ -29,16 +31,44 @@ namespace OpenCensus.Collector.AspNetCore
     {
         internal static AspNetCoreCollectorEventSource Log = new AspNetCoreCollectorEventSource();
 
+        [NonEvent]
+        public void ExceptionInCustomSampler(Exception ex)
+        {
+            if (Log.IsEnabled(EventLevel.Error, EventKeywords.All))
+            {
+                this.ExceptionInCustomSampler(ToInvariantString(ex));
+            }
+        }
+
         [Event(1, Message = "Context is NULL in end callback. Span will not be recorded.", Level = EventLevel.Warning)]
         public void NullContext()
         {
             this.WriteEvent(1);
         }
 
-        [Event(2, Message = "Error getting custom sampler, the default sampler will be used", Level = EventLevel.Warning)]
-        public void ExceptionInCustomSampler(string message, string stackTrace)
+        [Event(2, Message = "Error getting custom sampler, the default sampler will be used. Exception : {0}", Level = EventLevel.Warning)]
+        public void ExceptionInCustomSampler(string ex)
         {
-            this.WriteEvent(2, message, stackTrace);
+            this.WriteEvent(2, ex);
+        }
+
+        /// <summary>
+        /// Returns a culture-independent string representation of the given <paramref name="exception"/> object,
+        /// appropriate for diagnostics tracing.
+        /// </summary>
+        private static string ToInvariantString(Exception exception)
+        {
+            CultureInfo originalUICulture = Thread.CurrentThread.CurrentUICulture;
+
+            try
+            {
+                Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+                return exception.ToString();
+            }
+            finally
+            {
+                Thread.CurrentThread.CurrentUICulture = originalUICulture;
+            }
         }
     }
 }

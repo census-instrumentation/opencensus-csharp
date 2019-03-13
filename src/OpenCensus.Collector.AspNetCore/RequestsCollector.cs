@@ -51,11 +51,6 @@ namespace OpenCensus.Collector.AspNetCore
                 x =>
                 {
                     ISampler s = null;
-
-                    CultureInfo oldCI = Thread.CurrentThread.CurrentCulture;
-
-                    Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
-                    Thread.CurrentThread.CurrentUICulture = CultureInfo.CreateSpecificCulture("en-US");
                     try
                     {
                         s = options.CustomSampler(x);
@@ -63,12 +58,7 @@ namespace OpenCensus.Collector.AspNetCore
                     catch (Exception e)
                     {
                         s = null;
-                        AspNetCoreCollectorEventSource.Log.ExceptionInCustomSampler(e.Message, e.StackTrace);
-                    }
-                    finally
-                    {
-                        Thread.CurrentThread.CurrentCulture = oldCI;
-                        Thread.CurrentThread.CurrentUICulture = oldCI;
+                        AspNetCoreCollectorEventSource.Log.ExceptionInCustomSampler(e);
                     }
 
                     return s == null ? sampler : s;
