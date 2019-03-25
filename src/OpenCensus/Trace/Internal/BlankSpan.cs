@@ -18,6 +18,7 @@ namespace OpenCensus.Trace.Internal
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using OpenCensus.Trace.Export;
 
     internal sealed class BlankSpan : SpanBase
@@ -60,13 +61,7 @@ namespace OpenCensus.Trace.Internal
             }
         }
 
-        public override ISpanId ParentSpanId
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public override ActivitySpanId? ParentSpanId => null;
 
         public override bool HasEnded => true;
 

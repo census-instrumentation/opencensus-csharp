@@ -125,8 +125,8 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                     var linkId = 0;
                     foreach (var link in span.Links.Links)
                     {
-                        AddPropertyWithAdjustedName(props, "link" + linkId + "_traceId", link.TraceId.ToLowerBase16());
-                        AddPropertyWithAdjustedName(props, "link" + linkId + "_spanId", link.SpanId.ToLowerBase16());
+                        AddPropertyWithAdjustedName(props, "link" + linkId + "_traceId", link.TraceId.ToHexString());
+                        AddPropertyWithAdjustedName(props, "link" + linkId + "_spanId", link.SpanId.ToHexString());
                         AddPropertyWithAdjustedName(props, "link" + linkId + "_type", link.Type.ToString());
 
                         foreach (var attr in link.Attributes)
@@ -308,12 +308,12 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
 
             props = new Dictionary<string, string>();
 
-            traceId = span.Context.TraceId.ToLowerBase16();
-            spanId = span.Context.SpanId.ToLowerBase16();
+            traceId = span.Context.TraceId.ToHexString();
+            spanId = span.Context.SpanId.ToHexString();
             parentId = null;
-            if (span.ParentSpanId != null && span.ParentSpanId.IsValid)
+            if (span.ParentSpanId.HasValue)
             {
-                parentId = span.ParentSpanId.ToLowerBase16();
+                parentId = span.ParentSpanId.Value.ToHexString();
             }
 
             resultCode = null;

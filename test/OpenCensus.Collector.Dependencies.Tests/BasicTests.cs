@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using System.Diagnostics;
+
 namespace OpenCensus.Collector.Dependencies.Tests
 {
     using Moq;
@@ -46,8 +48,8 @@ namespace OpenCensus.Collector.Dependencies.Tests
 
             var url = $"http://{host}:{port}/";
 
-            ITraceId expectedTraceId = TraceId.Invalid;
-            ISpanId expectedSpanId = SpanId.Invalid;
+            ActivityTraceId expectedTraceId = default;
+            ActivitySpanId expectedSpanId = default;
 
             using (serverLifeTime)
             {

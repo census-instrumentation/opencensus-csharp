@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using System.Diagnostics;
+
 namespace OpenCensus.Trace.Test
 {
     using System;
@@ -33,7 +35,7 @@ namespace OpenCensus.Trace.Test
         private static readonly String ANNOTATION_DESCRIPTION = "MyAnnotation";
         private readonly RandomGenerator random = new RandomGenerator(1234);
         private readonly ISpanContext spanContext;
-        private readonly ISpanId parentSpanId;
+        private readonly ActivitySpanId parentSpanId;
         private TimeSpan interval = TimeSpan.FromMilliseconds(0);
         private readonly DateTimeOffset startTime = DateTimeOffset.Now;
         private readonly Timestamp timestamp;
@@ -48,8 +50,8 @@ namespace OpenCensus.Trace.Test
         {
             timestamp = Timestamp.FromDateTimeOffset(startTime);
             timestampConverter = Timer.StartNew(startTime, () => interval);
-            spanContext = SpanContext.Create(TraceId.GenerateRandomId(random), SpanId.GenerateRandomId(random), OpenCensus.Trace.TraceOptions.Default, Tracestate.Empty);
-            parentSpanId = SpanId.GenerateRandomId(random);
+            spanContext = SpanContext.Create(ActivityTraceId.CreateRandom(), ActivitySpanId.CreateRandom(), TraceOptions.Default, Tracestate.Empty);
+            parentSpanId = ActivitySpanId.CreateRandom();
             attributes.Add(
                 "MyStringAttributeKey", AttributeValue.StringAttributeValue("MyStringAttributeValue"));
             attributes.Add("MyLongAttributeKey", AttributeValue.LongAttributeValue(123L));

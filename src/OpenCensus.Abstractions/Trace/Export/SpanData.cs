@@ -18,13 +18,14 @@ namespace OpenCensus.Trace.Export
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using OpenCensus.Common;
 
     public sealed class SpanData : ISpanData
     {
         internal SpanData(
             ISpanContext context,
-            ISpanId parentSpanId,
+            ActivitySpanId? parentSpanId,
             bool? hasRemoteParent,
             string name,
             Timestamp startTimestamp,
@@ -54,7 +55,7 @@ namespace OpenCensus.Trace.Export
 
         public ISpanContext Context { get; }
 
-        public ISpanId ParentSpanId { get; }
+        public ActivitySpanId? ParentSpanId { get; }
 
         public bool? HasRemoteParent { get; }
 
@@ -82,7 +83,7 @@ namespace OpenCensus.Trace.Export
 
         public static ISpanData Create(
                         ISpanContext context,
-                        ISpanId parentSpanId,
+                        ActivitySpanId? parentSpanId,
                         bool? hasRemoteParent,
                         string name,
                         Timestamp startTimestamp,

@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using System.Diagnostics;
+
 namespace OpenCensus.Trace.Propagation
 {
     using System;
@@ -25,6 +27,9 @@ namespace OpenCensus.Trace.Propagation
     /// </summary>
     public sealed class B3Format : TextFormatBase
     {
+        private const int TraceIdSize = 16;
+        private const int SpanIdSize = 8;
+
         internal const string XB3TraceId = "X-B3-TraceId";
         internal const string XB3SpanId = "X-B3-SpanId";
         internal const string XB3ParentSpanId = "X-B3-ParentSpanId";
@@ -67,28 +72,28 @@ namespace OpenCensus.Trace.Propagation
 
             try
             {
-                ITraceId traceId;
+                ActivityTraceId traceId;
                 string traceIdStr = getter(carrier, XB3TraceId)?.FirstOrDefault();
                 if (traceIdStr != null)
                 {
-                    if (traceIdStr.Length == TraceId.Size)
+                    if (traceIdStr.Length == TraceIdSize)
                     {
                         // This is an 8-byte traceID.
                         traceIdStr = UpperTraceId + traceIdStr;
                     }
 
-                    traceId = TraceId.FromLowerBase16(traceIdStr);
+                    traceId = ActivityTraceId.CreateFromString(traceIdStr.AsSpan());
                 }
                 else
                 {
                     throw new SpanContextParseException("Missing X_B3_TRACE_ID.");
                 }
 
-                ISpanId spanId;
+                ActivitySpanId spanId;
                 string spanIdStr = getter(carrier, XB3SpanId)?.FirstOrDefault();
                 if (spanIdStr != null)
                 {
-                    spanId = SpanId.FromLowerBase16(spanIdStr);
+                    spanId = ActivitySpanId.CreateFromString(spanIdStr.AsSpan());
                 }
                 else
                 {
@@ -128,8 +133,8 @@ namespace OpenCensus.Trace.Propagation
                 throw new ArgumentNullException(nameof(setter));
             }
 
-            setter(carrier, XB3TraceId, spanContext.TraceId.ToLowerBase16());
-            setter(carrier, XB3SpanId, spanContext.SpanId.ToLowerBase16());
+            setter(carrier, XB3TraceId, spanContext.TraceId.ToHexString());
+            setter(carrier, XB3SpanId, spanContext.SpanId.ToHexString());
             if (spanContext.TraceOptions.IsSampled)
             {
                 setter(carrier, XB3Sampled, SampledValue);

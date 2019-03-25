@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using System.Diagnostics;
+
 namespace OpenCensus.Trace.Export.Test
 {
     using System;
@@ -35,7 +37,7 @@ namespace OpenCensus.Trace.Export.Test
 
         private readonly ISpanContext notSampledSpanContext;
 
-        private readonly ISpanId parentSpanId;
+        private readonly ActivitySpanId parentSpanId;
         private readonly SpanOptions recordSpanOptions = SpanOptions.RecordEvents;
         private TimeSpan interval = TimeSpan.FromMilliseconds(0);
         private readonly DateTimeOffset startTime = DateTimeOffset.Now;
@@ -51,9 +53,9 @@ namespace OpenCensus.Trace.Export.Test
         {
             timestamp = Timestamp.FromDateTimeOffset(startTime);
             timestampConverter = Timer.StartNew(startTime, () => interval);
-            sampledSpanContext = SpanContext.Create(TraceId.GenerateRandomId(random), SpanId.GenerateRandomId(random), TraceOptions.Builder().SetIsSampled(true).Build(), Tracestate.Empty);
-            notSampledSpanContext = SpanContext.Create(TraceId.GenerateRandomId(random), SpanId.GenerateRandomId(random), TraceOptions.Default, Tracestate.Empty);
-            parentSpanId = SpanId.GenerateRandomId(random);
+            sampledSpanContext = SpanContext.Create(ActivityTraceId.CreateRandom(), ActivitySpanId.CreateRandom(), TraceOptions.Builder().SetIsSampled(true).Build(), Tracestate.Empty);
+            notSampledSpanContext = SpanContext.Create(ActivityTraceId.CreateRandom(), ActivitySpanId.CreateRandom(), TraceOptions.Default, Tracestate.Empty);
+            parentSpanId = ActivitySpanId.CreateRandom();
             startEndHandler = new TestStartEndHandler(sampleStore);
             sampleStore.RegisterSpanNamesForCollection(new List<string>() { REGISTERED_SPAN_NAME });
         }

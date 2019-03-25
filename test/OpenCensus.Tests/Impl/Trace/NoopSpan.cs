@@ -18,6 +18,7 @@ namespace OpenCensus.Trace.Test
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using OpenCensus.Trace.Export;
 
     public class NoopSpan : SpanBase
@@ -39,7 +40,7 @@ namespace OpenCensus.Trace.Test
 
         public override string Name { get; set; }
 
-        public override ISpanId ParentSpanId { get; }
+        public override ActivitySpanId? ParentSpanId { get; }
 
         public override bool HasEnded => true;
 

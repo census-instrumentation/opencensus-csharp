@@ -16,8 +16,8 @@
 
 namespace OpenCensus.Trace.Export.Test
 {
-    using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -31,9 +31,9 @@ namespace OpenCensus.Trace.Export.Test
 
     public class SpanExporterTest
     {
-        private static readonly String SPAN_NAME_1 = "MySpanName/1";
-        private static readonly String SPAN_NAME_2 = "MySpanName/2";
-        private readonly RandomGenerator random = new RandomGenerator(1234);
+        private static readonly System.String SPAN_NAME_1 = "MySpanName/1";
+        private static readonly System.String SPAN_NAME_2 = "MySpanName/2";
+
         private readonly ISpanContext sampledSpanContext;
         private readonly ISpanContext notSampledSpanContext;
         private readonly ISpanExporter spanExporter = SpanExporter.Create(4, Duration.Create(1, 0));
@@ -45,8 +45,8 @@ namespace OpenCensus.Trace.Export.Test
 
         public SpanExporterTest()
         {
-            sampledSpanContext = SpanContext.Create(TraceId.GenerateRandomId(random), SpanId.GenerateRandomId(random), TraceOptions.Builder().SetIsSampled(true).Build(), Tracestate.Empty);
-            notSampledSpanContext = SpanContext.Create(TraceId.GenerateRandomId(random), SpanId.GenerateRandomId(random), TraceOptions.Default, Tracestate.Empty);
+            sampledSpanContext = SpanContext.Create(ActivityTraceId.CreateRandom(), ActivitySpanId.CreateRandom(), OpenCensus.Trace.TraceOptions.Builder().SetIsSampled(true).Build(), Tracestate.Empty);
+            notSampledSpanContext = SpanContext.Create(ActivityTraceId.CreateRandom(), ActivitySpanId.CreateRandom(), OpenCensus.Trace.TraceOptions.Default, Tracestate.Empty);
             startEndHandler = new StartEndHandler(spanExporter, runningSpanStore, null, new SimpleEventQueue());
 
             spanExporter.RegisterHandler("test.service", serviceHandler);
@@ -59,7 +59,7 @@ namespace OpenCensus.Trace.Export.Test
                     sampledSpanContext,
                     recordSpanOptions,
                     spanName,
-                    null,
+                    default,
                     false,
                     TraceParams.Default,
                     startEndHandler,
@@ -75,7 +75,7 @@ namespace OpenCensus.Trace.Export.Test
                     notSampledSpanContext,
                     recordSpanOptions,
                     spanName,
-                    null,
+                    default,
                     false,
                     TraceParams.Default,
                     startEndHandler,
@@ -130,7 +130,7 @@ namespace OpenCensus.Trace.Export.Test
         public void ServiceHandlerThrowsException()
         {
             var mockHandler = Mock.Get<IHandler>(mockServiceHandler);
-            mockHandler.Setup((h) => h.ExportAsync(It.IsAny<IList<ISpanData>>())).Throws(new ArgumentException("No export for you."));
+            mockHandler.Setup((h) => h.ExportAsync(It.IsAny<IList<ISpanData>>())).Throws(new System.ArgumentException("No export for you."));
             // doThrow(new IllegalArgumentException("No export for you."))
             //    .when(mockServiceHandler)
             //    .export(anyListOf(SpanData));

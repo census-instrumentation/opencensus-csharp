@@ -14,11 +14,14 @@
 // limitations under the License.
 // </copyright>
 
+using System.Linq;
+
 namespace OpenCensus.Trace.Test
 {
     using Moq;
     using OpenCensus.Common;
     using OpenCensus.Trace.Internal;
+    using System.Diagnostics;
     using Xunit;
 
     public class CurrentSpanUtilsTest
@@ -30,12 +33,14 @@ namespace OpenCensus.Trace.Test
 
         public CurrentSpanUtilsTest()
         {
-            random = new RandomGenerator(1234);
+            // TODO
+            var aaa = System.AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.Contains("System.Runtime"));
+
             spanContext =
                 SpanContext.Create(
-                    TraceId.GenerateRandomId(random),
-                    SpanId.GenerateRandomId(random),
-                    TraceOptions.Builder().SetIsSampled(true).Build(),
+                    ActivityTraceId.CreateRandom(),
+                    ActivitySpanId.CreateRandom(),
+                    OpenCensus.Trace.TraceOptions.Builder().SetIsSampled(true).Build(),
                     Tracestate.Empty);
 
             spanOptions = SpanOptions.RecordEvents;

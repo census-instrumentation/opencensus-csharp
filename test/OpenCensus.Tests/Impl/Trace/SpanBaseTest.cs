@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using System.Diagnostics;
+
 namespace OpenCensus.Trace.Test
 {
     using System;
@@ -34,13 +36,13 @@ namespace OpenCensus.Trace.Test
             random = new RandomGenerator(1234);
             spanContext =
                 SpanContext.Create(
-                    TraceId.GenerateRandomId(random),
-                    SpanId.GenerateRandomId(random),
+                    ActivityTraceId.CreateRandom(), 
+                    ActivitySpanId.CreateRandom(),
                     TraceOptions.Builder().SetIsSampled(true).Build(), Tracestate.Empty);
             notSampledSpanContext =
                 SpanContext.Create(
-                    TraceId.GenerateRandomId(random),
-                    SpanId.GenerateRandomId(random),
+                    ActivityTraceId.CreateRandom(),
+                    ActivitySpanId.CreateRandom(),
                     TraceOptions.Default, Tracestate.Empty);
             spanOptions = SpanOptions.RecordEvents;
         }

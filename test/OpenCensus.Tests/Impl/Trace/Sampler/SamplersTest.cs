@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using System.Diagnostics;
+
 namespace OpenCensus.Trace.Sampler.Test
 {
     using System;
@@ -28,18 +30,18 @@ namespace OpenCensus.Trace.Sampler.Test
         private static readonly String SPAN_NAME = "MySpanName";
         private static readonly int NUM_SAMPLE_TRIES = 1000;
         private readonly IRandomGenerator random = new RandomGenerator(1234);
-        private readonly ITraceId traceId;
-        private readonly ISpanId parentSpanId;
-        private readonly ISpanId spanId;
+        private readonly ActivityTraceId traceId;
+        private readonly ActivitySpanId parentSpanId;
+        private readonly ActivitySpanId spanId;
         private readonly ISpanContext sampledSpanContext;
         private readonly ISpanContext notSampledSpanContext;
         private readonly ISpan sampledSpan;
 
         public SamplersTest()
         {
-            traceId = TraceId.GenerateRandomId(random);
-            parentSpanId = SpanId.GenerateRandomId(random);
-            spanId = SpanId.GenerateRandomId(random);
+            traceId = ActivityTraceId.CreateRandom();
+            parentSpanId = ActivitySpanId.CreateRandom();
+            spanId = ActivitySpanId.CreateRandom();
             sampledSpanContext = SpanContext.Create(traceId, parentSpanId, TraceOptions.Builder().SetIsSampled(true).Build(), Tracestate.Empty);
             notSampledSpanContext = SpanContext.Create(traceId, parentSpanId, TraceOptions.Default, Tracestate.Empty);
             sampledSpan = new NoopSpan(sampledSpanContext, SpanOptions.RecordEvents);
@@ -188,8 +190,8 @@ namespace OpenCensus.Trace.Sampler.Test
             ISampler defaultProbability = Samplers.GetProbabilitySampler(0.0001);
             // This traceId will not be sampled by the ProbabilitySampler because the first 8 bytes as long
             // is not less than probability * Long.MAX_VALUE;
-            ITraceId notSampledtraceId =
-                TraceId.FromBytes(
+            ActivityTraceId notSampledtraceId =
+                ActivityTraceId.CreateFromBytes(
                     new byte[] {
               0x8F,
               0xFF,
@@ -213,13 +215,13 @@ namespace OpenCensus.Trace.Sampler.Test
                         null,
                         false,
                         notSampledtraceId,
-                        SpanId.GenerateRandomId(random),
+                        ActivitySpanId.CreateRandom(),
                         SPAN_NAME,
                         new List<ISpan>()));
             // This traceId will be sampled by the ProbabilitySampler because the first 8 bytes as long
             // is less than probability * Long.MAX_VALUE;
-            ITraceId sampledtraceId =
-                TraceId.FromBytes(
+            ActivityTraceId sampledtraceId =
+                ActivityTraceId.CreateFromBytes(
                     new byte[] {
               0x00,
               0x00,
@@ -243,7 +245,7 @@ namespace OpenCensus.Trace.Sampler.Test
                         null,
                         false,
                         sampledtraceId,
-                        SpanId.GenerateRandomId(random),
+                        ActivitySpanId.CreateRandom(),
                         SPAN_NAME,
                         new List<ISpan>()));
         }
@@ -272,8 +274,8 @@ namespace OpenCensus.Trace.Sampler.Test
                 if (sampler.ShouldSample(
                     parent,
                     false,
-                    TraceId.GenerateRandomId(random),
-                    SpanId.GenerateRandomId(random),
+                    ActivityTraceId.CreateRandom(), 
+                    ActivitySpanId.CreateRandom(),
                     SPAN_NAME,
                     parentLinks))
                 {

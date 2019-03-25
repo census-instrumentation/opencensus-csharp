@@ -20,6 +20,7 @@ namespace OpenCensus.Trace.Export.Test
     using OpenCensus.Internal;
     using OpenCensus.Trace.Config;
     using OpenCensus.Trace.Internal;
+    using System.Diagnostics;
     using Xunit;
 
     public class InProcessRunningSpanStoreTest
@@ -42,14 +43,14 @@ namespace OpenCensus.Trace.Export.Test
         {
             ISpanContext spanContext =
                 SpanContext.Create(
-                    TraceId.GenerateRandomId(random),
-                    SpanId.GenerateRandomId(random),
-                    TraceOptions.Default, Tracestate.Empty);
+                    ActivityTraceId.CreateRandom(),
+                    ActivitySpanId.CreateRandom(),
+                    OpenCensus.Trace.TraceOptions.Default, Tracestate.Empty);
             return Span.StartSpan(
                 spanContext,
                 recordSpanOptions,
                 spanName,
-                SpanId.GenerateRandomId(random),
+                ActivitySpanId.CreateRandom(),
                 false,
                 TraceParams.Default,
                 startEndHandler,

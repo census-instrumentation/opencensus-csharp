@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using System.Diagnostics;
+
 namespace OpenCensus.Trace.Propagation
 {
     using System;
@@ -53,7 +55,8 @@ namespace OpenCensus.Trace.Propagation
                 }
 
                 var traceparent = traceparentCollection?.FirstOrDefault();
-                var traceparentParsed = this.TryExtractTraceparent(traceparent, out ITraceId traceId, out ISpanId spanId, out TraceOptions traceoptions);
+                var traceparentParsed = this.TryExtractTraceparent(traceparent,
+                    out ActivityTraceId traceId, out ActivitySpanId spanId, out TraceOptions traceoptions);
 
                 if (!traceparentParsed)
                 {
@@ -164,7 +167,7 @@ namespace OpenCensus.Trace.Propagation
         /// <inheritdoc/>
         public override void Inject<T>(ISpanContext spanContext, T carrier, Action<T, string, string> setter)
         {
-            var traceparent = string.Concat("00-", spanContext.TraceId.ToLowerBase16(), "-", spanContext.SpanId.ToLowerBase16());
+            var traceparent = string.Concat("00-", spanContext.TraceId.ToHexString(), "-", spanContext.SpanId.ToHexString());
             traceparent = string.Concat(traceparent, spanContext.TraceOptions.IsSampled ? "-01" : "-00");
 
             setter(carrier, "traceparent", traceparent);
@@ -192,13 +195,13 @@ namespace OpenCensus.Trace.Propagation
             }
         }
 
-        private bool TryExtractTraceparent(string traceparent, out ITraceId traceId, out ISpanId spanId, out TraceOptions traceoptions)
+        private bool TryExtractTraceparent(string traceparent, out ActivityTraceId traceId, out ActivitySpanId spanId, out TraceOptions traceoptions)
         {
             // from https://github.com/w3c/distributed-tracing/blob/master/trace_context/HTTP_HEADER_FORMAT.md
             // traceparent: 00-0af7651916cd43dd8448eb211c80319c-00f067aa0ba902b7-01
 
-            traceId = TraceId.Invalid;
-            spanId = SpanId.Invalid;
+            traceId = default;
+            spanId = default;
             traceoptions = TraceOptions.Default;
             var bestAttempt = false;
 
@@ -235,7 +238,7 @@ namespace OpenCensus.Trace.Propagation
 
             try
             {
-                traceId = TraceId.FromBytes(Arrays.StringToByteArray(traceparent, VersionPrefixIdLength, TraceIdLength));
+                traceId = ActivityTraceId.CreateFromBytes(Arrays.StringToByteArray(traceparent, VersionPrefixIdLength, TraceIdLength));
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -250,7 +253,7 @@ namespace OpenCensus.Trace.Propagation
 
             try
             {
-                spanId = SpanId.FromBytes(Arrays.StringToByteArray(traceparent, VersionAndTraceIdLength, SpanIdLength));
+                spanId = ActivitySpanId.CreateFromBytes(Arrays.StringToByteArray(traceparent, VersionAndTraceIdLength, SpanIdLength));
             }
             catch (ArgumentOutOfRangeException)
             {

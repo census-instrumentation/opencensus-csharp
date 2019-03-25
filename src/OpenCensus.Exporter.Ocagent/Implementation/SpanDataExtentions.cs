@@ -18,11 +18,10 @@ namespace OpenCensus.Exporter.Ocagent.Implementation
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
-
     using Google.Protobuf;
     using Google.Protobuf.WellKnownTypes;
-
     using Opencensus.Proto.Trace.V1;
     using OpenCensus.Trace;
     using OpenCensus.Trace.Export;
@@ -33,14 +32,22 @@ namespace OpenCensus.Exporter.Ocagent.Implementation
         {
             try
             {
+                System.Span<byte> traceIdBytes = stackalloc byte[16];
+                System.Span<byte> spanIdBytes = stackalloc byte[8];
+                System.Span<byte> parentSpanIdBytes = stackalloc byte[8];
+
+                spanData.Context.TraceId.CopyTo(traceIdBytes);
+                spanData.Context.SpanId.CopyTo(spanIdBytes);
+                spanData.ParentSpanId?.CopyTo(parentSpanIdBytes);
+
                 return new Span
                 {
                     Name = new TruncatableString { Value = spanData.Name },
                     Kind = spanData.Kind == SpanKind.Client ? Span.Types.SpanKind.Client : Span.Types.SpanKind.Server,
-                    TraceId = ByteString.CopyFrom(spanData.Context.TraceId.Bytes),
-                    SpanId = ByteString.CopyFrom(spanData.Context.SpanId.Bytes),
+                    TraceId = ByteString.CopyFrom(traceIdBytes.ToArray()), // TODO optimize?
+                    SpanId = ByteString.CopyFrom(spanIdBytes.ToArray()), // TODO optimize?
                     ParentSpanId =
-                        ByteString.CopyFrom(spanData.ParentSpanId?.Bytes ?? new byte[0]),
+                        ByteString.CopyFrom(spanData.ParentSpanId.HasValue ? parentSpanIdBytes.ToArray() : new byte[0]),
 
                     StartTime = new Timestamp
                     {
@@ -60,7 +67,7 @@ namespace OpenCensus.Exporter.Ocagent.Implementation
                             Message = spanData.Status.Description ?? string.Empty,
                         },
                     SameProcessAsParentSpan =
-                        !spanData.HasRemoteParent.GetValueOrDefault() && spanData.ParentSpanId != null,
+                        !spanData.HasRemoteParent.GetValueOrDefault() && spanData.ParentSpanId != default,
                     ChildSpanCount = spanData.ChildSpanCount.HasValue ? (uint)spanData.ChildSpanCount.Value : 0,
                     Attributes = FromIAttributes(spanData.Attributes),
                     TimeEvents = FromITimeEvents(spanData.MessageEvents, spanData.Annotations),
@@ -137,10 +144,16 @@ namespace OpenCensus.Exporter.Ocagent.Implementation
 
         private static Span.Types.Link FromILink(ILink source)
         {
+            Span<byte> traceIdBytes = stackalloc byte[16];
+            source.TraceId.CopyTo(traceIdBytes);
+
+            Span<byte> spanIdBytes = stackalloc byte[8];
+            source.SpanId.CopyTo(spanIdBytes);
+
             return new Span.Types.Link
             {
-                TraceId = ByteString.CopyFrom(source.TraceId.Bytes),
-                SpanId = ByteString.CopyFrom(source.SpanId.Bytes),
+                TraceId = ByteString.CopyFrom(traceIdBytes.ToArray()), // TODO optimize
+                SpanId = ByteString.CopyFrom(spanIdBytes.ToArray()), // TODO optimize
                 Type = source.Type == LinkType.ChildLinkedSpan ? Span.Types.Link.Types.Type.ChildLinkedSpan : Span.Types.Link.Types.Type.ParentLinkedSpan,
                 Attributes = FromIAttributeMap(source.Attributes),
             };

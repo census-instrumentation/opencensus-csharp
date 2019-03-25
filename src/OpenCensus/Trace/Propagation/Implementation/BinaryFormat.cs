@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using System.Diagnostics;
+
 namespace OpenCensus.Trace.Propagation.Implementation
 {
     using System;
@@ -29,15 +31,19 @@ namespace OpenCensus.Trace.Propagation.Implementation
         private const int TraceIdFieldIdOffset = VersionIdOffset + IdSize;
         private const int TraceIdOffset = TraceIdFieldIdOffset + IdSize;
         private const byte SpanIdFieldId = 1;
-        private const int SpaneIdFieldIdOffset = TraceIdOffset + TraceId.Size;
-        private const int SpanIdOffset = SpaneIdFieldIdOffset + IdSize;
+        private const int TraceIdSize = 16;
+        private const int SpanIdFieldIdOffset = TraceIdOffset + TraceIdSize;
+        private const int SpanIdOffset = SpanIdFieldIdOffset + IdSize;
         private const byte TraceOptionsFieldId = 2;
-        private const int TraceOptionFieldIdOffset = SpanIdOffset + SpanId.Size;
+        private const int SpanIdSize = 8;
+        private const int TraceOptionFieldIdOffset = SpanIdOffset + SpanIdSize;
         private const int TraceOptionOffset = TraceOptionFieldIdOffset + IdSize;
-        private const int FormatLength = (4 * IdSize) + TraceId.Size + SpanId.Size + TraceOptions.Size;
+        private const int FormatLength = (4 * IdSize) + TraceIdSize + SpanIdSize + TraceOptions.Size;
 
         public override ISpanContext FromByteArray(byte[] bytes)
         {
+            // TODO we should rewrite it with Span<byte>
+
             if (bytes == null)
             {
                 throw new ArgumentNullException(nameof(bytes));
@@ -48,23 +54,24 @@ namespace OpenCensus.Trace.Propagation.Implementation
                 throw new SpanContextParseException("Unsupported version.");
             }
 
-            ITraceId traceId = TraceId.Invalid;
-            ISpanId spanId = SpanId.Invalid;
+            ActivityTraceId traceId = default;
+            ActivitySpanId spanId = default;
             TraceOptions traceOptions = TraceOptions.Default;
 
             int pos = 1;
             try
             {
+                Span<byte> bytesSpan = new Span<byte>(bytes);
                 if (bytes.Length > pos && bytes[pos] == TraceIdFieldId)
                 {
-                    traceId = TraceId.FromBytes(bytes, pos + IdSize);
-                    pos += IdSize + TraceId.Size;
+                    traceId = ActivityTraceId.CreateFromBytes(bytesSpan.Slice(pos + IdSize, 16));
+                    pos += IdSize + TraceIdSize;
                 }
 
                 if (bytes.Length > pos && bytes[pos] == SpanIdFieldId)
                 {
-                    spanId = SpanId.FromBytes(bytes, pos + IdSize);
-                    pos += IdSize + SpanId.Size;
+                    spanId = ActivitySpanId.CreateFromBytes(bytesSpan.Slice(pos + IdSize, 8));
+                    pos += IdSize + SpanIdSize;
                 }
 
                 if (bytes.Length > pos && bytes[pos] == TraceOptionsFieldId)
@@ -87,12 +94,29 @@ namespace OpenCensus.Trace.Propagation.Implementation
                 throw new ArgumentNullException(nameof(spanContext));
             }
 
+            // TODO we should do it with Span<t>
             byte[] bytes = new byte[FormatLength];
             bytes[VersionIdOffset] = VersionId;
             bytes[TraceIdFieldIdOffset] = TraceIdFieldId;
-            spanContext.TraceId.CopyBytesTo(bytes, TraceIdOffset);
-            bytes[SpaneIdFieldIdOffset] = SpanIdFieldId;
-            spanContext.SpanId.CopyBytesTo(bytes, SpanIdOffset);
+
+            // todo optimize
+            Span<byte> traceIdBytes = stackalloc byte[TraceIdSize];
+            spanContext.TraceId.CopyTo(traceIdBytes);
+
+            for (int i = 0; i < TraceIdSize; i++)
+            {
+                bytes[TraceIdOffset + i] = traceIdBytes[i];
+            }
+
+            bytes[SpanIdFieldIdOffset] = SpanIdFieldId;
+            Span<byte> spanIdBytes = stackalloc byte[SpanIdSize];
+            spanContext.SpanId.CopyTo(spanIdBytes);
+
+            for (int i = 0; i < SpanIdSize; i++)
+            {
+                bytes[SpanIdOffset + i] = spanIdBytes[i];
+            }
+
             bytes[TraceOptionFieldIdOffset] = TraceOptionsFieldId;
             spanContext.TraceOptions.CopyBytesTo(bytes, TraceOptionOffset);
             return bytes;

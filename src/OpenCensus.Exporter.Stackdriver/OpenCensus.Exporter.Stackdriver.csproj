@@ -12,6 +12,7 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <Authors>OpenCensus authors</Authors>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">

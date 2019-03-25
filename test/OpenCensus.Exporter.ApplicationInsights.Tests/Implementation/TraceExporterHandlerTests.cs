@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using System.Diagnostics;
+
 namespace OpenCensus.Exporter.ApplicationInsights.Tests
 {
     using Microsoft.ApplicationInsights.Channel;
@@ -144,7 +146,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             // ARRANGE
             this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
 
-            parentSpanId = SpanId.FromBytes(this.testParentSpanIdBytes);
+            parentSpanId = ActivitySpanId.CreateFromBytes(this.testParentSpanIdBytes);
 
             var span = SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
 
@@ -160,8 +162,6 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         {
             // ARRANGE
             this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
-
-            parentSpanId = SpanId.Invalid;
 
             var span = SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
 
@@ -400,7 +400,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             // ARRANGE
             this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             kind = SpanKind.Client;
-            parentSpanId = SpanId.FromBytes(this.testParentSpanIdBytes);
+            parentSpanId = ActivitySpanId.CreateFromBytes(this.testParentSpanIdBytes);
             var span = SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
 
             // ACT
@@ -510,7 +510,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         public void OpenCensusTelemetryConverterTests_TracksRequestBasedOnSpanKindProperty()
         {
             this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
-            parentSpanId = SpanId.FromBytes(this.testParentSpanIdBytes);
+            parentSpanId = ActivitySpanId.CreateFromBytes(this.testParentSpanIdBytes);
             hasRemoteParent = null;
             var span = SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
 
@@ -524,7 +524,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         {
             this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             kind = SpanKind.Client;
-            parentSpanId = SpanId.FromBytes(this.testParentSpanIdBytes);
+            parentSpanId = ActivitySpanId.CreateFromBytes(this.testParentSpanIdBytes);
             hasRemoteParent = null;
             var span = SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
 
@@ -1218,11 +1218,11 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
 
             links = LinkList.Create(new List<ILink>() {
                     Link.FromSpanContext(
-                        SpanContext.Create(TraceId.FromBytes(link0TraceIdBytes), SpanId.FromBytes(link0SpanIdBytes), TraceOptions.Default, Tracestate.Empty), LinkType.ChildLinkedSpan),
+                        SpanContext.Create(ActivityTraceId.CreateFromBytes(link0TraceIdBytes), ActivitySpanId.CreateFromBytes(link0SpanIdBytes), TraceOptions.Default, Tracestate.Empty), LinkType.ChildLinkedSpan),
                     Link.FromSpanContext(
-                        SpanContext.Create(TraceId.FromBytes(link1TraceIdBytes), SpanId.FromBytes(link1SpanIdBytes), TraceOptions.Default, Tracestate.Empty), LinkType.ParentLinkedSpan),
+                        SpanContext.Create(ActivityTraceId.CreateFromBytes(link1TraceIdBytes), ActivitySpanId.CreateFromBytes(link1SpanIdBytes), TraceOptions.Default, Tracestate.Empty), LinkType.ParentLinkedSpan),
                     Link.FromSpanContext(
-                        SpanContext.Create(TraceId.FromBytes(link2TraceIdBytes), SpanId.FromBytes(link2SpanIdBytes), TraceOptions.Default, Tracestate.Empty), LinkType.Unspecified),
+                        SpanContext.Create(ActivityTraceId.CreateFromBytes(link2TraceIdBytes), ActivitySpanId.CreateFromBytes(link2SpanIdBytes), TraceOptions.Default, Tracestate.Empty), LinkType.Unspecified),
                     }, 0);
 
             var span = SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
@@ -1268,8 +1268,8 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
                 new List<ILink>() {
                     Link.FromSpanContext(
                         SpanContext.Create(
-                            TraceId.FromBytes(GenerateRandomId(16).Item2),
-                            SpanId.FromBytes(GenerateRandomId(8).Item2),
+                            ActivityTraceId.CreateFromBytes(GenerateRandomId(16).Item2),
+                            ActivitySpanId.CreateFromBytes(GenerateRandomId(8).Item2),
                             TraceOptions.Default,
                             Tracestate.Empty),
                         LinkType.ChildLinkedSpan,
@@ -1316,11 +1316,11 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
 
             links = LinkList.Create(new List<ILink>() {
                     Link.FromSpanContext(
-                        SpanContext.Create(TraceId.FromBytes(link0TraceIdBytes), SpanId.FromBytes(link0SpanIdBytes), TraceOptions.Default, Tracestate.Empty), LinkType.ChildLinkedSpan),
+                        SpanContext.Create(ActivityTraceId.CreateFromBytes(link0TraceIdBytes), ActivitySpanId.CreateFromBytes(link0SpanIdBytes), TraceOptions.Default, Tracestate.Empty), LinkType.ChildLinkedSpan),
                     Link.FromSpanContext(
-                        SpanContext.Create(TraceId.FromBytes(link1TraceIdBytes), SpanId.FromBytes(link1SpanIdBytes), TraceOptions.Default, Tracestate.Empty), LinkType.ParentLinkedSpan),
+                        SpanContext.Create(ActivityTraceId.CreateFromBytes(link1TraceIdBytes), ActivitySpanId.CreateFromBytes(link1SpanIdBytes), TraceOptions.Default, Tracestate.Empty), LinkType.ParentLinkedSpan),
                     Link.FromSpanContext(
-                        SpanContext.Create(TraceId.FromBytes(link2TraceIdBytes), SpanId.FromBytes(link2SpanIdBytes), TraceOptions.Default, Tracestate.Empty), LinkType.Unspecified),
+                        SpanContext.Create(ActivityTraceId.CreateFromBytes(link2TraceIdBytes), ActivitySpanId.CreateFromBytes(link2SpanIdBytes), TraceOptions.Default, Tracestate.Empty), LinkType.Unspecified),
             }, 0);
 
             var span = SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
@@ -1366,8 +1366,8 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
                 new List<ILink>() {
                     Link.FromSpanContext(
                         SpanContext.Create(
-                            TraceId.FromBytes(GenerateRandomId(16).Item2),
-                            SpanId.FromBytes(GenerateRandomId(8).Item2),
+                            ActivityTraceId.CreateFromBytes(GenerateRandomId(16).Item2),
+                            ActivitySpanId.CreateFromBytes(GenerateRandomId(8).Item2),
                             TraceOptions.Default,
                             Tracestate.Empty),
                         LinkType.ChildLinkedSpan,
@@ -1842,7 +1842,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
 
         private void GetDefaults(
             out ISpanContext context,
-            out ISpanId parentSpanId,
+            out ActivitySpanId? parentSpanId,
             out bool? hasRemoteParent,
             out string name,
             out Timestamp startTimestamp,
@@ -1855,8 +1855,8 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             out SpanKind kind,
             out Timestamp endTimestamp)
         {
-            context = SpanContext.Create(TraceId.FromBytes(this.testTraceIdBytes), SpanId.FromBytes(this.testSpanIdBytes), TraceOptions.Default, Tracestate.Empty);
-            parentSpanId = SpanId.Invalid;
+            context = SpanContext.Create(ActivityTraceId.CreateFromBytes(this.testTraceIdBytes), ActivitySpanId.CreateFromBytes(this.testSpanIdBytes), TraceOptions.Default, Tracestate.Empty);
+            parentSpanId = null;
             hasRemoteParent = null;
             name = "spanName";
             startTimestamp = NowTimestamp.AddDuration(Duration.Create(TimeSpan.FromSeconds(-1)));

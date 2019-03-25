@@ -16,6 +16,8 @@
 
 namespace OpenCensus.Trace
 {
+    using System.Diagnostics;
+
     /// <summary>
     /// A class that represents a span context. A span context contains the state that must propagate to
     /// child <see cref="SpanBase"/> and across process boundaries. It contains the identifiers <see cref="TraceId"/>
@@ -23,27 +25,36 @@ namespace OpenCensus.Trace
     /// </summary>
     public sealed class SpanContext : ISpanContext
     {
-        public static readonly SpanContext Invalid = new SpanContext(Trace.TraceId.Invalid, Trace.SpanId.Invalid, TraceOptions.Default, Tracestate.Empty);
+        public static readonly SpanContext Invalid = new SpanContext(InvalidTraceId, InvalidSpanId, TraceOptions.Default, Tracestate.Empty);
 
-        private SpanContext(ITraceId traceId, ISpanId spanId, TraceOptions traceOptions, Tracestate tracestate)
+        private static readonly ActivityTraceId InvalidTraceId = default(ActivityTraceId);
+        private static readonly ActivitySpanId InvalidSpanId = default(ActivitySpanId);
+        private readonly Activity activity;
+
+        private SpanContext(ActivityTraceId traceId, ActivitySpanId spanId, TraceOptions traceOptions, Tracestate tracestate)
         {
+            this.activity = new Activity("TODO"); // TODO name
+            this.activity.SetParentId(traceId, spanId);
+            this.activity.TraceStateString = tracestate.ToString();
             this.TraceId = traceId;
             this.SpanId = spanId;
-            this.TraceOptions = traceOptions;
             this.Tracestate = tracestate;
+
+            // TODO: options in activity
+            this.TraceOptions = traceOptions;
         }
 
-        public ITraceId TraceId { get; }
+        public ActivityTraceId TraceId { get; }
 
-        public ISpanId SpanId { get; }
+        public ActivitySpanId SpanId { get; }
 
         public TraceOptions TraceOptions { get; }
 
-        public bool IsValid => this.TraceId.IsValid && this.SpanId.IsValid;
+        public bool IsValid => this.IsTraceIdValid(this.TraceId) && this.IsSpanIdValid(this.SpanId);
 
         public Tracestate Tracestate { get; }
 
-        public static ISpanContext Create(ITraceId traceId, ISpanId spanId, TraceOptions traceOptions, Tracestate tracestate)
+        public static ISpanContext Create(ActivityTraceId traceId, ActivitySpanId spanId, TraceOptions traceOptions, Tracestate tracestate)
         {
             return new SpanContext(traceId, spanId, traceOptions, tracestate);
         }
@@ -81,10 +92,20 @@ namespace OpenCensus.Trace
         public override string ToString()
         {
             return "SpanContext{"
-                   + "traceId=" + this.TraceId + ", "
-                   + "spanId=" + this.SpanId + ", "
+                   + "traceId=" + this.TraceId.ToHexString() + ", "
+                   + "spanId=" + this.SpanId.ToHexString() + ", "
                    + "traceOptions=" + this.TraceOptions
                    + "}";
+        }
+
+        private bool IsTraceIdValid(ActivityTraceId traceId)
+        {
+            return traceId != InvalidTraceId;
+        }
+
+        private bool IsSpanIdValid(ActivitySpanId spanId)
+        {
+            return spanId != InvalidSpanId;
         }
     }
 }

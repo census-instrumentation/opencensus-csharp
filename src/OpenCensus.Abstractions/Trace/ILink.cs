@@ -17,6 +17,7 @@
 namespace OpenCensus.Trace
 {
     using System.Collections.Generic;
+    using System.Diagnostics;
 
     /// <summary>
     /// Link associated with the span.
@@ -26,12 +27,12 @@ namespace OpenCensus.Trace
         /// <summary>
         /// Gets the trace ID of the linked span.
         /// </summary>
-        ITraceId TraceId { get; }
+        ActivityTraceId TraceId { get; }
 
         /// <summary>
         /// Gets the span ID of the linked span.
         /// </summary>
-        ISpanId SpanId { get; }
+        ActivitySpanId SpanId { get; }
 
         /// <summary>
         /// Gets the type of the link.

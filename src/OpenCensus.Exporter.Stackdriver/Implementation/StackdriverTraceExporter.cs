@@ -39,25 +39,22 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         /// <returns></returns>
         public static Span ToSpan(this ISpanData spanData, string projectId)
         {
-            string spanId = spanData.Context.SpanId.ToLowerBase16();
+            string spanId = spanData.Context.SpanId.ToHexString();
 
             // Base span settings
             var span = new Span
             {
-                SpanName = new SpanName(projectId, spanData.Context.TraceId.ToLowerBase16(), spanId),
+                SpanName = new SpanName(projectId, spanData.Context.TraceId.ToHexString(), spanId),
                 SpanId = spanId,
                 DisplayName = new TruncatableString { Value = spanData.Name },
                 StartTime = spanData.StartTimestamp.ToTimestamp(),
                 EndTime = spanData.EndTimestamp.ToTimestamp(),
                 ChildSpanCount = spanData.ChildSpanCount,
             };
-            if (spanData.ParentSpanId != null)
+            if (spanData.ParentSpanId.HasValue)
             {
-                string parentSpanId = spanData.ParentSpanId.ToLowerBase16();
-                if (!string.IsNullOrEmpty(parentSpanId))
-                {
-                    span.ParentSpanId = parentSpanId;
-                }
+                string parentSpanId = spanData.ParentSpanId.Value.ToHexString();
+                span.ParentSpanId = parentSpanId;
             }
 
             // Span Links
@@ -89,8 +86,8 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         public static Span.Types.Link ToLink(this ILink link)
         {
             var ret = new Span.Types.Link();
-            ret.SpanId = link.SpanId.ToLowerBase16();
-            ret.TraceId = link.TraceId.ToLowerBase16();
+            ret.SpanId = link.SpanId.ToHexString();
+            ret.TraceId = link.TraceId.ToHexString();
 
             if (link.Attributes != null)
             {

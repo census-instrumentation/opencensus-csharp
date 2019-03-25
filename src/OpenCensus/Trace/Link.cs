@@ -19,6 +19,7 @@ namespace OpenCensus.Trace
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Diagnostics;
     using System.Linq;
     using OpenCensus.Utils;
 
@@ -26,17 +27,17 @@ namespace OpenCensus.Trace
     {
         private static readonly IDictionary<string, IAttributeValue> EmptyAttributes = new Dictionary<string, IAttributeValue>();
 
-        private Link(ITraceId traceId, ISpanId spanId, LinkType type, IDictionary<string, IAttributeValue> attributes)
+        private Link(ActivityTraceId traceId, ActivitySpanId spanId, LinkType type, IDictionary<string, IAttributeValue> attributes)
         {
-            this.TraceId = traceId ?? throw new ArgumentNullException(nameof(traceId));
-            this.SpanId = spanId ?? throw new ArgumentNullException(nameof(spanId));
+            this.TraceId = traceId;
+            this.SpanId = spanId;
             this.Type = type;
             this.Attributes = attributes ?? throw new ArgumentNullException(nameof(attributes));
         }
 
-        public ITraceId TraceId { get; }
+        public ActivityTraceId TraceId { get; }
 
-        public ISpanId SpanId { get; }
+        public ActivitySpanId SpanId { get; }
 
         public LinkType Type { get; }
 
@@ -61,8 +62,8 @@ namespace OpenCensus.Trace
         public override string ToString()
         {
             return "Link{"
-                + "traceId=" + this.TraceId + ", "
-                + "spanId=" + this.SpanId + ", "
+                + "traceId=" + this.TraceId.ToHexString() + ", "
+                + "spanId=" + this.SpanId.ToHexString() + ", "
                 + "type=" + this.Type + ", "
                 + "attributes=" + Collections.ToString(this.Attributes)
                 + "}";

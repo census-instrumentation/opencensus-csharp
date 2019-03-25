@@ -18,6 +18,7 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Net;
     using System.Net.Http;
     using System.Net.Sockets;
@@ -75,9 +76,9 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
                     .Duration(endTimestamp - startTimestamp)
                     .LocalEndpoint(localEndpoint);
 
-            if (spanData.ParentSpanId != null && spanData.ParentSpanId.IsValid)
+            if (spanData.ParentSpanId.HasValue)
             {
-                spanBuilder.ParentId(this.EncodeSpanId(spanData.ParentSpanId));
+                spanBuilder.ParentId(this.EncodeSpanId(spanData.ParentSpanId.Value));
             }
 
             foreach (var label in spanData.Attributes.AttributeMap)
@@ -127,9 +128,9 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
                 (arg) => { return null; });
         }
 
-        private string EncodeTraceId(ITraceId traceId)
+        private string EncodeTraceId(ActivityTraceId traceId)
         {
-            var id = traceId.ToLowerBase16();
+            var id = traceId.ToHexString();
 
             if (id.Length > 16 && this.options.UseShortTraceIds)
             {
@@ -139,9 +140,9 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
             return id;
         }
 
-        private string EncodeSpanId(ISpanId spanId)
+        private string EncodeSpanId(ActivitySpanId spanId)
         {
-            return spanId.ToLowerBase16();
+            return spanId.ToHexString();
         }
 
         private ZipkinSpanKind ToSpanKind(ISpanData spanData)

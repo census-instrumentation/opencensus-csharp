@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using System.Diagnostics;
+
 namespace OpenCensus.Trace.Test
 {
     using System;
@@ -137,8 +139,8 @@ namespace OpenCensus.Trace.Test
         {
             ISpanContext spanContext =
                 SpanContext.Create(
-                    TraceId.GenerateRandomId(randomHandler),
-                    SpanId.GenerateRandomId(randomHandler),
+                    ActivityTraceId.CreateRandom(),
+                    ActivitySpanId.CreateRandom(),
                     TraceOptions.Default, Tracestate.Empty);
             ISpan span =
                 SpanBuilder.CreateWithRemoteParent(SPAN_NAME, SpanKind.Unspecified, spanContext, spanBuilderOptions)
@@ -276,8 +278,8 @@ namespace OpenCensus.Trace.Test
             configMock.Setup((c) => c.ActiveTraceParams).Returns(TraceParams.Default);
             // This traceId will not be sampled by the ProbabilitySampler because the first 8 bytes as long
             // is not less than probability * Long.MAX_VALUE;
-            ITraceId traceId =
-                TraceId.FromBytes(
+            ActivityTraceId traceId =
+                ActivityTraceId.CreateFromBytes(
                     new byte[] {
                         0x8F,
                         0xFF,
@@ -304,7 +306,7 @@ namespace OpenCensus.Trace.Test
                         SpanKind.Unspecified,
                         SpanContext.Create(
                             traceId,
-                            SpanId.GenerateRandomId(randomHandler),
+                            ActivitySpanId.CreateRandom(),
                             TraceOptions.Builder().SetIsSampled(true).Build(), Tracestate.Empty),
                         spanBuilderOptions)
                     .StartSpan();
@@ -322,7 +324,7 @@ namespace OpenCensus.Trace.Test
                         SpanKind.Unspecified,
                         SpanContext.Create(
                             traceId,
-                            SpanId.GenerateRandomId(randomHandler),
+                            ActivitySpanId.CreateRandom(),
                             TraceOptions.Default, Tracestate.Empty),
                         spanBuilderOptions)
                     .StartSpan();

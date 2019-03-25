@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using System.Diagnostics;
+
 namespace OpenCensus.Trace
 {
     using System;
@@ -144,8 +146,8 @@ namespace OpenCensus.Trace
             string name,
             ISampler sampler,
             IEnumerable<ISpan> parentLinks,
-            ITraceId traceId,
-            ISpanId spanId,
+            ActivityTraceId traceId,
+            ActivitySpanId spanId,
             ITraceParams activeTraceParams)
         {
             // If users set a specific sampler in the SpanBuilder, use it.
@@ -177,15 +179,14 @@ namespace OpenCensus.Trace
                      Timer timestampConverter)
         {
             ITraceParams activeTraceParams = this.Options.TraceConfig.ActiveTraceParams;
-            IRandomGenerator random = this.Options.RandomHandler;
-            ITraceId traceId;
-            ISpanId spanId = SpanId.GenerateRandomId(random);
-            ISpanId parentSpanId = null;
+            ActivityTraceId traceId;
+            ActivitySpanId spanId = ActivitySpanId.CreateRandom();
+            ActivitySpanId? parentSpanId = null;
             TraceOptionsBuilder traceOptionsBuilder;
             if (parent == null || !parent.IsValid)
             {
                 // New root span.
-                traceId = TraceId.GenerateRandomId(random);
+                traceId = ActivityTraceId.CreateRandom();
                 traceOptionsBuilder = TraceOptions.Builder();
 
                 // This is a root span so no remote or local parent.

@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using System.Diagnostics;
+
 namespace OpenCensus.Collector.AspNetCore.Tests
 {
     using Xunit;
@@ -94,8 +96,8 @@ namespace OpenCensus.Collector.AspNetCore.Tests
             var startEndHandler = new Mock<IStartEndHandler>();
             var tracer = new Tracer(new RandomGenerator(), startEndHandler.Object, new TraceConfig());
 
-            var expectedTraceId = TraceId.GenerateRandomId(new RandomGenerator());
-            var expectedSpanId = SpanId.GenerateRandomId(new RandomGenerator());
+            var expectedTraceId = ActivityTraceId.CreateRandom();
+            var expectedSpanId = ActivitySpanId.CreateRandom();
 
             var tf = new Mock<ITextFormat>();
             tf.Setup(m => m.Extract<HttpRequest>(It.IsAny<HttpRequest>(), It.IsAny<Func<HttpRequest, string, IEnumerable<string>>>())).Returns(SpanContext.Create(

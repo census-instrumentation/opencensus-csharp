@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using System.Diagnostics;
+
 namespace OpenCensus.Trace.Propagation.Test
 {
     using OpenCensus.Trace.Propagation.Implementation;
@@ -23,9 +25,9 @@ namespace OpenCensus.Trace.Propagation.Test
     public class BinaryFormatTest
     {
         private static readonly byte[] TRACE_ID_BYTES = new byte[] { 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79 };
-        private static readonly ITraceId TRACE_ID = TraceId.FromBytes(TRACE_ID_BYTES);
+        private static readonly ActivityTraceId TRACE_ID = ActivityTraceId.CreateFromBytes(TRACE_ID_BYTES);
         private static readonly byte[] SPAN_ID_BYTES = new byte[] { 97, 98, 99, 100, 101, 102, 103, 104 };
-        private static readonly ISpanId SPAN_ID = SpanId.FromBytes(SPAN_ID_BYTES);
+        private static readonly ActivitySpanId SPAN_ID = ActivitySpanId.CreateFromBytes(SPAN_ID_BYTES);
         private static readonly byte[] TRACE_OPTIONS_BYTES = new byte[] { 1 };
         private static readonly TraceOptions TRACE_OPTIONS = TraceOptions.FromBytes(TRACE_OPTIONS_BYTES);
         private static readonly byte[] EXAMPLE_BYTES =
@@ -103,7 +105,7 @@ namespace OpenCensus.Trace.Propagation.Test
         public void FromBinaryValue_UnsupportedFieldIdFirst()
         {
             Assert.Equal(
-                SpanContext.Create(TraceId.Invalid, SpanId.Invalid, TraceOptions.Default, Tracestate.Empty),
+                SpanContext.Create(default, default, TraceOptions.Default, Tracestate.Empty),
                 binaryFormat.FromByteArray(
                         new byte[] {
                   0, 4, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 1, 97, 98,
@@ -116,9 +118,9 @@ namespace OpenCensus.Trace.Propagation.Test
         {
             Assert.Equal(
                  SpanContext.Create(
-                        TraceId.FromBytes(
+                        ActivityTraceId.CreateFromBytes(
                             new byte[] { 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79 }),
-                        SpanId.Invalid,
+                        default,
                         TraceOptions.Default, Tracestate.Empty),
                  binaryFormat.FromByteArray(
                         new byte[] {

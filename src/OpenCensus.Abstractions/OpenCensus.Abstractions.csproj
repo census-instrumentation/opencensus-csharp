@@ -15,6 +15,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <CodeAnalysisRuleSet>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), 'OpenCensus.sln'))/build/OpenCensus.prod.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <DebugType>full</DebugType>
@@ -24,6 +25,11 @@
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.1-beta.61">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="4.6.0-preview4.19164.7" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.6.0-preview4.19164.7" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+    <PackageReference Include="System.Memory" Version="4.5.2" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Stats\" />

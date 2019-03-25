@@ -16,6 +16,7 @@
 
 namespace OpenCensus.Trace.Export
 {
+    using System.Diagnostics;
     using OpenCensus.Common;
 
     /// <summary>
@@ -31,7 +32,7 @@ namespace OpenCensus.Trace.Export
         /// <summary>
         /// Gets the parent span id.
         /// </summary>
-        ISpanId ParentSpanId { get; }
+        ActivitySpanId? ParentSpanId { get; }
 
         /// <summary>
         /// Gets a value indicating whether span has a remote parent.

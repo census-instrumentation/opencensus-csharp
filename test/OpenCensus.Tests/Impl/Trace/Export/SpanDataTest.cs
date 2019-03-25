@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using System.Diagnostics;
+
 namespace OpenCensus.Trace.Export.Test
 {
     using System.Collections.Generic;
@@ -42,7 +44,7 @@ namespace OpenCensus.Trace.Export.Test
         private static readonly int CHILD_SPAN_COUNT = 13;
         private readonly IRandomGenerator random = new RandomGenerator(1234);
         private readonly ISpanContext spanContext;
-        private readonly ISpanId parentSpanId; 
+        private readonly ActivitySpanId parentSpanId; 
         private readonly IDictionary<string, IAttributeValue> attributesMap = new Dictionary<string, IAttributeValue>();
         private readonly List<ITimedEvent<IAnnotation>> annotationsList = new List<ITimedEvent<IAnnotation>>();
         // private readonly List<TimedEvent<NetworkEvent>> networkEventsList =
@@ -58,8 +60,8 @@ namespace OpenCensus.Trace.Export.Test
 
         public SpanDataTest()
         {
-            spanContext = SpanContext.Create(TraceId.GenerateRandomId(random), SpanId.GenerateRandomId(random), TraceOptions.Default, Tracestate.Empty);
-            parentSpanId = SpanId.GenerateRandomId(random);
+            spanContext = SpanContext.Create(ActivityTraceId.CreateRandom(), ActivitySpanId.CreateRandom(), TraceOptions.Default, Tracestate.Empty);
+            parentSpanId = ActivitySpanId.CreateRandom();
 
             attributesMap.Add("MyAttributeKey1", AttributeValue.LongAttributeValue(10));
             attributesMap.Add("MyAttributeKey2", AttributeValue.BooleanAttributeValue(true));
@@ -151,7 +153,7 @@ namespace OpenCensus.Trace.Export.Test
             ISpanData spanData =
                 SpanData.Create(
                     spanContext,
-                    null,
+                    default,
                     null,
                     SPAN_NAME,
                     startTimestamp,

@@ -16,6 +16,8 @@
 
 namespace OpenCensus.Trace
 {
+    using System.Diagnostics;
+
     /// <summary>
     /// Context associated with the span.
     /// </summary>
@@ -29,12 +31,12 @@ namespace OpenCensus.Trace
         /// <summary>
         /// Gets trace identifier.
         /// </summary>
-        ITraceId TraceId { get; }
+        ActivityTraceId TraceId { get; }
 
         /// <summary>
-        /// Gets stan identifier.
+        /// Gets span identifier.
         /// </summary>
-        ISpanId SpanId { get; }
+        ActivitySpanId SpanId { get; }
 
         /// <summary>
         /// Gets trace options.

@@ -18,6 +18,7 @@ namespace OpenCensus.Trace
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using OpenCensus.Common;
     using OpenCensus.Internal;
@@ -27,7 +28,7 @@ namespace OpenCensus.Trace
 
     public sealed class Span : SpanBase
     {
-        private readonly ISpanId parentSpanId;
+        private readonly ActivitySpanId? parentSpanId;
         private readonly bool? hasRemoteParent;
         private readonly ITraceParams traceParams;
         private readonly IStartEndHandler startEndHandler;
@@ -47,7 +48,7 @@ namespace OpenCensus.Trace
                 ISpanContext context,
                 SpanOptions options,
                 string name,
-                ISpanId parentSpanId,
+                ActivitySpanId? parentSpanId,
                 bool? hasRemoteParent,
                 ITraceParams traceParams,
                 IStartEndHandler startEndHandler,
@@ -159,13 +160,7 @@ namespace OpenCensus.Trace
             }
         }
 
-        public override ISpanId ParentSpanId
-        {
-            get
-            {
-                return this.parentSpanId;
-            }
-        }
+        public override ActivitySpanId? ParentSpanId => this.parentSpanId;
 
         public override bool HasEnded
         {
@@ -237,13 +232,7 @@ namespace OpenCensus.Trace
             }
         }
 
-        private Status StatusWithDefault
-        {
-            get
-            {
-                return this.status ?? Trace.Status.Ok;
-            }
-        }
+        private Status StatusWithDefault => this.status ?? Status.Ok;
 
         public override void PutAttribute(string key, IAttributeValue value)
         {
@@ -436,7 +425,7 @@ namespace OpenCensus.Trace
                         ISpanContext context,
                         SpanOptions options,
                         string name,
-                        ISpanId parentSpanId,
+                        ActivitySpanId? parentSpanId,
                         bool? hasRemoteParent,
                         ITraceParams traceParams,
                         IStartEndHandler startEndHandler,

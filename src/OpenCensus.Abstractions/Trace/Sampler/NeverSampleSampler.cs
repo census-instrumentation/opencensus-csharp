@@ -17,6 +17,7 @@
 namespace OpenCensus.Trace.Sampler
 {
     using System.Collections.Generic;
+    using System.Diagnostics;
 
     internal sealed class NeverSampleSampler : ISampler
     {
@@ -32,7 +33,7 @@ namespace OpenCensus.Trace.Sampler
             }
         }
 
-        public bool ShouldSample(ISpanContext parentContext, bool hasRemoteParent, ITraceId traceId, ISpanId spanId, string name, IEnumerable<ISpan> parentLinks)
+        public bool ShouldSample(ISpanContext parentContext, bool hasRemoteParent, ActivityTraceId traceId, ActivitySpanId spanId, string name, IEnumerable<ISpan> parentLinks)
         {
             return false;
         }

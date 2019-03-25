@@ -18,10 +18,12 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using OpenCensus.Common;
     using OpenCensus.Trace;
     using OpenCensus.Trace.Export;
     using StackExchange.Redis.Profiling;
+    using TraceOptions = Trace.TraceOptions;
 
     internal static class RedisProfilerEntryToSpanConverter
     {
@@ -45,11 +47,11 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
             }
         }
 
-        internal static bool ShouldSample(ISpanContext parentContext, string name, ISampler sampler, out ISpanContext context, out ISpanId parentSpanId)
+        internal static bool ShouldSample(ISpanContext parentContext, string name, ISampler sampler, out ISpanContext context, out ActivitySpanId? parentSpanId)
         {
-            var traceId = TraceId.Invalid;
+            var traceId = default(ActivityTraceId);
             var tracestate = Tracestate.Empty;
-            parentSpanId = SpanId.Invalid;
+            parentSpanId = null;
             var parentOptions = TraceOptions.Default;
 
             if (parentContext.IsValid)
@@ -60,12 +62,12 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
             }
             else
             {
-                traceId = TraceId.FromBytes(Guid.NewGuid().ToByteArray());
+                traceId = ActivityTraceId.CreateRandom();
             }
 
             var result = parentOptions.IsSampled;
             bool hasRemoteParent = false;
-            var spanId = SpanId.FromBytes(Guid.NewGuid().ToByteArray(), 8);
+            var spanId = ActivitySpanId.CreateRandom();
             var traceOptions = TraceOptions.Default;
 
             if (sampler != null)
@@ -81,7 +83,7 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
             return result;
         }
 
-        internal static ISpanData ProfiledCommandToSpanData(ISpanContext context, string name, ISpanId parentSpanId, IProfiledCommand command)
+        internal static ISpanData ProfiledCommandToSpanData(ISpanContext context, string name, ActivitySpanId? parentSpanId, IProfiledCommand command)
         {
             var hasRemoteParent = false;
 

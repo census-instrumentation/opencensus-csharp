@@ -18,6 +18,7 @@ namespace OpenCensus.Trace
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using OpenCensus.Trace.Export;
     using OpenCensus.Utils;
 
@@ -91,7 +92,7 @@ namespace OpenCensus.Trace
         /// <summary>
         /// Gets the parent span id.
         /// </summary>
-        public abstract ISpanId ParentSpanId { get; }
+        public abstract ActivitySpanId? ParentSpanId { get; }
 
         /// <summary>
         /// Gets a value indicating whether this span was already stopped.

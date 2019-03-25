@@ -18,6 +18,7 @@ namespace OpenCensus.Trace.Sampler
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using OpenCensus.Utils;
 
     internal sealed class ProbabilitySampler : ISampler
@@ -40,7 +41,7 @@ namespace OpenCensus.Trace.Sampler
 
         public long IdUpperBound { get; }
 
-        public bool ShouldSample(ISpanContext parentContext, bool hasRemoteParent, ITraceId traceId, ISpanId spanId, string name, IEnumerable<ISpan> parentLinks)
+        public bool ShouldSample(ISpanContext parentContext, bool hasRemoteParent, ActivityTraceId traceId, ActivitySpanId spanId, string name, IEnumerable<ISpan> parentLinks)
         {
             // If the parent is sampled keep the sampling decision.
             if (parentContext != null && parentContext.TraceOptions.IsSampled)
@@ -67,7 +68,11 @@ namespace OpenCensus.Trace.Sampler
             // while allowing for a (very) small chance of *not* sampling if the id == Long.MAX_VALUE.
             // This is considered a reasonable tradeoff for the simplicity/performance requirements (this
             // code is executed in-line for every Span creation).
-            return Math.Abs(traceId.LowerLong) < this.IdUpperBound;
+
+            // TODO optimize
+            Span<byte> traceIdBytes = stackalloc byte[16];
+            traceId.CopyTo(traceIdBytes);
+            return Math.Abs(this.LowerLong(traceIdBytes)) < this.IdUpperBound;
         }
 
         /// <inheritdoc/>
@@ -134,6 +139,25 @@ namespace OpenCensus.Trace.Sampler
             }
 
             return new ProbabilitySampler(probability, idUpperBound);
+        }
+
+        private long LowerLong(Span<byte> bytes)
+        {
+            long result = 0;
+            for (int i = 0; i < 8; i++)
+            {
+                result <<= 8;
+#pragma warning disable CS0675 // Bitwise-or operator used on a sign-extended operand
+                result |= bytes[i] & 0xff;
+#pragma warning restore CS0675 // Bitwise-or operator used on a sign-extended operand
+            }
+
+            if (result < 0)
+            {
+                return -result;
+            }
+
+            return result;
         }
     }
 }

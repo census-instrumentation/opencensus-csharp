@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using System.Diagnostics;
+
 namespace OpenCensus.Trace.Propagation.Test
 {
     using System;
@@ -24,11 +26,11 @@ namespace OpenCensus.Trace.Propagation.Test
     public class B3FormatTest
     {
         private static readonly string TRACE_ID_BASE16 = "ff000000000000000000000000000041";
-        private static readonly ITraceId TRACE_ID = TraceId.FromLowerBase16(TRACE_ID_BASE16);
+        private static readonly ActivityTraceId TRACE_ID = ActivityTraceId.CreateFromString(TRACE_ID_BASE16.AsSpan());
         private static readonly string TRACE_ID_BASE16_EIGHT_BYTES = "0000000000000041";
-        private static readonly ITraceId TRACE_ID_EIGHT_BYTES = TraceId.FromLowerBase16("0000000000000000" + TRACE_ID_BASE16_EIGHT_BYTES);
+        private static readonly ActivityTraceId TRACE_ID_EIGHT_BYTES = ActivityTraceId.CreateFromString(("0000000000000000" + TRACE_ID_BASE16_EIGHT_BYTES).AsSpan());
         private static readonly string SPAN_ID_BASE16 = "ff00000000000041";
-        private static readonly ISpanId SPAN_ID = SpanId.FromLowerBase16(SPAN_ID_BASE16);
+        private static readonly ActivitySpanId SPAN_ID = ActivitySpanId.CreateFromString(SPAN_ID_BASE16.AsSpan());
         private static readonly byte[] TRACE_OPTIONS_BYTES = new byte[] { 1 };
         private static readonly TraceOptions TRACE_OPTIONS = TraceOptions.FromBytes(TRACE_OPTIONS_BYTES);
         private readonly B3Format b3Format = new B3Format();

@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using System.Diagnostics;
+
 namespace OpenCensus.Collector.StackExchangeRedis.Implementation
 {
     using Moq;
@@ -30,11 +32,11 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
         public void ShouldSampleRespectsSamplerChoice()
         {
             var m = new Mock<ISampler>();
-            m.Setup(x => x.ShouldSample(It.IsAny<ISpanContext>(), It.IsAny<bool>(), It.IsAny<ITraceId>(), It.IsAny<ISpanId>(), It.IsAny<string>(), It.IsAny<IEnumerable<ISpan>>())).Returns(true);
+            m.Setup(x => x.ShouldSample(It.IsAny<ISpanContext>(), It.IsAny<bool>(), It.IsAny<ActivityTraceId>(), It.IsAny<ActivitySpanId>(), It.IsAny<string>(), It.IsAny<IEnumerable<ISpan>>())).Returns(true);
             Assert.True(RedisProfilerEntryToSpanConverter.ShouldSample(SpanContext.Invalid, "SET", m.Object, out var context, out var parentId));
 
             m = new Mock<ISampler>();
-            m.Setup(x => x.ShouldSample(It.IsAny<ISpanContext>(), It.IsAny<bool>(), It.IsAny<ITraceId>(), It.IsAny<ISpanId>(), It.IsAny<string>(), It.IsAny<IEnumerable<ISpan>>())).Returns(false);
+            m.Setup(x => x.ShouldSample(It.IsAny<ISpanContext>(), It.IsAny<bool>(), It.IsAny<ActivityTraceId>(), It.IsAny<ActivitySpanId>(), It.IsAny<string>(), It.IsAny<IEnumerable<ISpan>>())).Returns(false);
             Assert.False(RedisProfilerEntryToSpanConverter.ShouldSample(SpanContext.Invalid, "SET", m.Object, out context, out parentId));
         }
 
@@ -49,15 +51,15 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
         {
             var m = new Mock<ISampler>();
             var r = new RandomGenerator();
-            var traceId = TraceId.GenerateRandomId(r);
-            var parentContext = SpanContext.Create(traceId, SpanId.GenerateRandomId(r), TraceOptions.Sampled, Tracestate.Builder.Set("a", "b").Build());
+            var traceId = ActivityTraceId.CreateRandom();
+            var parentContext = SpanContext.Create(traceId, ActivitySpanId.CreateRandom(), TraceOptions.Sampled, Tracestate.Builder.Set("a", "b").Build());
             RedisProfilerEntryToSpanConverter.ShouldSample(parentContext, "SET", m.Object, out var context, out var parentId);
 
             m.Verify(x => x.ShouldSample(
                 It.Is<ISpanContext>(y => y == parentContext),
                 It.Is<bool>(y => y == false),
-                It.Is<ITraceId>(y => y == traceId && y == context.TraceId),
-                It.Is<ISpanId>(y => y.IsValid && y == context.SpanId),
+                It.Is<ActivityTraceId>(y => y == traceId && y == context.TraceId),
+                It.Is<ActivitySpanId>(y => y != default && y == context.SpanId),
                 It.Is<string>(y => y == "SET"),
                 It.Is<IEnumerable<ISpan>>(y => y == null)));
         }
@@ -66,15 +68,15 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
         public void ShouldSampleGeneratesNewTraceIdForInvalidContext()
         {
             var m = new Mock<ISampler>();
-            m.Setup(x => x.ShouldSample(It.IsAny<ISpanContext>(), It.IsAny<bool>(), It.IsAny<ITraceId>(), It.IsAny<ISpanId>(), It.IsAny<string>(), It.IsAny<IEnumerable<ISpan>>())).Returns((ISpanContext parentContext, bool hasRemoteParent, ITraceId traceId, ISpanId spanId, string name, IEnumerable<ISpan> parentLinks) => parentContext.TraceOptions.IsSampled);
+            m.Setup(x => x.ShouldSample(It.IsAny<ISpanContext>(), It.IsAny<bool>(), It.IsAny<ActivityTraceId>(), It.IsAny<ActivitySpanId>(), It.IsAny<string>(), It.IsAny<IEnumerable<ISpan>>())).Returns((ISpanContext parentContext, bool hasRemoteParent, ActivityTraceId traceId, ActivitySpanId spanId, string name, IEnumerable<ISpan> parentLinks) => parentContext.TraceOptions.IsSampled);
 
             RedisProfilerEntryToSpanConverter.ShouldSample(SpanContext.Invalid, "SET", m.Object, out var context, out var parentId);
 
             m.Verify(x => x.ShouldSample(
-                It.Is<ISpanContext>(y => y == SpanContext.Invalid),
+                It.Is<ISpanContext>(y => !y.IsValid),
                 It.Is<bool>(y => y == false),
-                It.Is<ITraceId>(y => y.IsValid && y == context.TraceId),
-                It.Is<ISpanId>(y => y.IsValid && y == context.SpanId),
+                It.Is<ActivityTraceId>(y => y != default && y == context.TraceId),
+                It.Is<ActivitySpanId>(y => y != default && y == context.SpanId),
                 It.Is<string>(y => y == "SET"),
                 It.Is<IEnumerable<ISpan>>(y => y == null)));
 

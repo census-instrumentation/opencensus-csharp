@@ -17,6 +17,7 @@
 namespace OpenCensus.Trace
 {
     using System.Collections.Generic;
+    using System.Diagnostics;
 
     /// <summary>
     /// Sampler to reduce data volume. This sampler executes before Span object was created.
@@ -42,6 +43,6 @@ namespace OpenCensus.Trace
         /// </param>
         /// <param name="parentLinks">Links associated with the parent span.</param>
         /// <returns>True of span needs to be created. False otherwise.</returns>
-        bool ShouldSample(ISpanContext parentContext, bool hasRemoteParent, ITraceId traceId, ISpanId spanId, string name, IEnumerable<ISpan> parentLinks);
+        bool ShouldSample(ISpanContext parentContext, bool hasRemoteParent, ActivityTraceId traceId, ActivitySpanId spanId, string name, IEnumerable<ISpan> parentLinks);
     }
 }
