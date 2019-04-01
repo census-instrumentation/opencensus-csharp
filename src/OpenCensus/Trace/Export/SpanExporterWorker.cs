@@ -125,7 +125,7 @@ namespace OpenCensus.Trace.Export
             return spanImpl.ToSpanData();
         }
 
-        private void BuildList(ISpan item, List<ISpanData> toExport)
+        private void BuildList(ISpan item, ICollection<ISpanData> toExport)
         {
             if (item is Span span)
             {

@@ -25,7 +25,7 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
 
     internal static class RedisProfilerEntryToSpanConverter
     {
-        public static void DrainSession(ISpan parentSpan, IEnumerable<IProfiledCommand> sessionCommands, ISampler sampler, IList<ISpanData> spans)
+        public static void DrainSession(ISpan parentSpan, IEnumerable<IProfiledCommand> sessionCommands, ISampler sampler, ICollection<ISpanData> spans)
         {
             var parentContext = parentSpan?.Context ?? SpanContext.Invalid;
 

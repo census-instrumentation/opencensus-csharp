@@ -23,7 +23,7 @@ namespace OpenCensus.Stats.Aggregations
 
     public class DistributionData : AggregationData, IDistributionData
     {
-        internal DistributionData(double mean, long count, double min, double max, double sumOfSquaredDeviations, IList<long> bucketCounts)
+        internal DistributionData(double mean, long count, double min, double max, double sumOfSquaredDeviations, IReadOnlyList<long> bucketCounts)
         {
             this.Mean = mean;
             this.Count = count;
@@ -43,9 +43,9 @@ namespace OpenCensus.Stats.Aggregations
 
         public double SumOfSquaredDeviations { get; }
 
-        public IList<long> BucketCounts { get; }
+        public IReadOnlyList<long> BucketCounts { get; }
 
-        public static IDistributionData Create(double mean, long count, double min, double max, double sumOfSquaredDeviations, IList<long> bucketCounts)
+        public static IDistributionData Create(double mean, long count, double min, double max, double sumOfSquaredDeviations, IReadOnlyList<long> bucketCounts)
         {
             if (!double.IsPositiveInfinity(min) || !double.IsNegativeInfinity(max))
             {
@@ -60,7 +60,7 @@ namespace OpenCensus.Stats.Aggregations
                 throw new ArgumentNullException(nameof(bucketCounts));
             }
 
-            IList<long> bucketCountsCopy = new List<long>(bucketCounts).AsReadOnly();
+            IReadOnlyList<long> bucketCountsCopy = new List<long>(bucketCounts).AsReadOnly();
 
             return new DistributionData(
                 mean, count, min, max, sumOfSquaredDeviations, bucketCountsCopy);

@@ -26,6 +26,6 @@ namespace OpenCensus.Stats
         /// <summary>
         /// Gets the list of boundaries for the distribution aggregator.
         /// </summary>
-        IList<double> Boundaries { get; }
+        IReadOnlyList<double> Boundaries { get; }
     }
 }

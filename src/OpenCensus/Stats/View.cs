@@ -23,7 +23,7 @@ namespace OpenCensus.Stats
 
     public sealed class View : IView
     {
-        internal View(IViewName name, string description, IMeasure measure, IAggregation aggregation, IList<ITagKey> columns)
+        internal View(IViewName name, string description, IMeasure measure, IAggregation aggregation, IReadOnlyList<ITagKey> columns)
         {
             this.Name = name ?? throw new ArgumentNullException(nameof(name));
             this.Description = description ?? throw new ArgumentNullException(nameof(description));
@@ -40,9 +40,9 @@ namespace OpenCensus.Stats
 
         public IAggregation Aggregation { get; }
 
-        public IList<ITagKey> Columns { get; }
+        public IReadOnlyList<ITagKey> Columns { get; }
 
-        public static IView Create(IViewName name, string description, IMeasure measure, IAggregation aggregation, IList<ITagKey> columns)
+        public static IView Create(IViewName name, string description, IMeasure measure, IAggregation aggregation, IReadOnlyList<ITagKey> columns)
         {
             var set = new HashSet<ITagKey>(columns);
             if (set.Count != columns.Count)

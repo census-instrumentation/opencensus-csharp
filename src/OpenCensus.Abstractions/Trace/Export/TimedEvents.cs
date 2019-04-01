@@ -39,9 +39,7 @@ namespace OpenCensus.Trace.Export
                 throw new ArgumentNullException(nameof(events));
             }
 
-            List<ITimedEvent<T>> ev = new List<ITimedEvent<T>>();
-            ev.AddRange(events);
-            return new TimedEvents<T>(ev.AsReadOnly(), droppedEventsCount);
+            return new TimedEvents<T>(events, droppedEventsCount);
         }
 
         /// <inheritdoc/>

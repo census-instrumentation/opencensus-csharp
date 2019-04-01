@@ -130,7 +130,7 @@ namespace OpenCensus.Trace.Export.Test
         public void ServiceHandlerThrowsException()
         {
             var mockHandler = Mock.Get<IHandler>(mockServiceHandler);
-            mockHandler.Setup((h) => h.ExportAsync(It.IsAny<IList<ISpanData>>())).Throws(new ArgumentException("No export for you."));
+            mockHandler.Setup((h) => h.ExportAsync(It.IsAny<IEnumerable<ISpanData>>())).Throws(new ArgumentException("No export for you."));
             // doThrow(new IllegalArgumentException("No export for you."))
             //    .when(mockServiceHandler)
             //    .export(anyListOf(SpanData));

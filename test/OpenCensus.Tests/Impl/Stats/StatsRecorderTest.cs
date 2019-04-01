@@ -18,7 +18,6 @@ namespace OpenCensus.Stats.Test
 {
     using System;
     using System.Collections.Generic;
-    using OpenCensus.Common;
     using OpenCensus.Internal;
     using OpenCensus.Stats.Aggregations;
     using OpenCensus.Stats.Measures;
@@ -63,8 +62,7 @@ namespace OpenCensus.Stats.Test
 
             // record() should have used the default TagContext, so the tag value should be null.
             ICollection<TagValues> expected = new List<TagValues>() { TagValues.Create(new List<ITagValue>() { null }) };
-            Assert.Equal(expected, viewData.AggregationMap.Keys);
-          
+            Assert.Equal(expected, viewData.AggregationMap.Keys); 
         }
 
         [Fact]
@@ -147,7 +145,8 @@ namespace OpenCensus.Stats.Test
 
             StatsTestUtil.AssertAggregationMapEquals(
                 viewData.AggregationMap,
-                new Dictionary<TagValues, IAggregationData>() {
+                new Dictionary<TagValues, IAggregationData>()
+                {
                     { tv, StatsTestUtil.CreateAggregationData(Sum.Create(), MEASURE_DOUBLE, 1.0) },
                     { tv2, StatsTestUtil.CreateAggregationData(Sum.Create(), MEASURE_DOUBLE, 1.0) },
                 },
@@ -219,12 +218,11 @@ namespace OpenCensus.Stats.Test
                 view,
                 new Dictionary<TagValues, IAggregationData>(),
                 DateTimeOffset.MinValue, DateTimeOffset.MinValue);
-
         }
 
         class SimpleTagContext : TagContextBase
         {
-            private readonly IList<ITag> tags;
+            private readonly IEnumerable<ITag> tags;
 
             public SimpleTagContext(params ITag[] tags)
             {
@@ -235,7 +233,6 @@ namespace OpenCensus.Stats.Test
             {
                 return tags.GetEnumerator();
             }
-
         }
     }
 }

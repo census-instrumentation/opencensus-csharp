@@ -98,7 +98,7 @@ namespace OpenCensus.Utils
             }
         }
 
-        public IList<T> Copy()
+        public IReadOnlyList<T> Copy()
         {
             lock (this.lck)
             {

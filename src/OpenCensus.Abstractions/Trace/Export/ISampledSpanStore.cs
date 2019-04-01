@@ -51,13 +51,13 @@ namespace OpenCensus.Trace.Export
         /// Registers span names for collection.
         /// </summary>
         /// <param name="spanNames">List of span names.</param>
-        void RegisterSpanNamesForCollection(IList<string> spanNames);
+        void RegisterSpanNamesForCollection(IEnumerable<string> spanNames);
 
         /// <summary>
         /// Unregister span names for the collection.
         /// </summary>
         /// <param name="spanNames">Span names to unregister.</param>
-        void UnregisterSpanNamesForCollection(IList<string> spanNames);
+        void UnregisterSpanNamesForCollection(IEnumerable<string> spanNames);
 
         /// <summary>
         /// Consider span for sampling.

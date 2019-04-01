@@ -31,7 +31,7 @@ namespace OpenCensus.Trace.Export
         public static readonly ISampledLatencyBucketBoundaries Secondx10Secondx100 = new LatencyBucketBoundaries(TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(100));
         public static readonly ISampledLatencyBucketBoundaries Secondx100Max = new LatencyBucketBoundaries(TimeSpan.FromSeconds(100), TimeSpan.MaxValue);
 
-        public static IList<ISampledLatencyBucketBoundaries> Values = new List<ISampledLatencyBucketBoundaries>()
+        public static IReadOnlyList<ISampledLatencyBucketBoundaries> Values = new List<ISampledLatencyBucketBoundaries>
         {
             ZeroMicrosx10, Microsx10Microsx100, Microsx100Millix1, Millix1Millix10, Millix10Millix100, Millix100Secondx1, Secondx1Secondx10, Secondx10Secondx100, Secondx100Max,
         };

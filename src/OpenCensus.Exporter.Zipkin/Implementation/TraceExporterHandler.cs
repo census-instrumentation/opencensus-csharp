@@ -163,7 +163,7 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
             return ZipkinSpanKind.CLIENT;
         }
 
-        private async Task SendSpansAsync(List<ZipkinSpan> spans)
+        private async Task SendSpansAsync(IEnumerable<ZipkinSpan> spans)
         {
             try
             {
@@ -206,7 +206,7 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
             return request;
         }
 
-        private HttpContent GetRequestContent(IList<ZipkinSpan> toSerialize)
+        private HttpContent GetRequestContent(IEnumerable<ZipkinSpan> toSerialize)
         {
             try
             {

@@ -47,6 +47,6 @@ namespace OpenCensus.Stats
         /// <summary>
         /// Gets the columns (dimensions) recorded by this view.
         /// </summary>
-        IList<ITagKey> Columns { get; }
+        IReadOnlyList<ITagKey> Columns { get; }
     }
 }
