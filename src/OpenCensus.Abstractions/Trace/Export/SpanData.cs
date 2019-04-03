@@ -18,6 +18,7 @@ namespace OpenCensus.Trace.Export
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using OpenCensus.Common;
 
     public sealed class SpanData : ISpanData
@@ -43,9 +44,9 @@ namespace OpenCensus.Trace.Export
             this.Name = name ?? throw new ArgumentNullException(nameof(name));
             this.StartTimestamp = startTimestamp ?? throw new ArgumentNullException(nameof(startTimestamp));
             this.Attributes = attributes ?? Export.Attributes.Create(new Dictionary<string, IAttributeValue>(), 0);
-            this.Annotations = annotations ?? TimedEvents<IAnnotation>.Create(new List<ITimedEvent<IAnnotation>>(), 0);
-            this.MessageEvents = messageEvents ?? TimedEvents<IMessageEvent>.Create(new List<ITimedEvent<IMessageEvent>>(), 0);
-            this.Links = links ?? LinkList.Create(new List<ILink>(), 0);
+            this.Annotations = annotations ?? TimedEvents<IAnnotation>.Create(Enumerable.Empty<ITimedEvent<IAnnotation>>(), 0);
+            this.MessageEvents = messageEvents ?? TimedEvents<IMessageEvent>.Create(Enumerable.Empty<ITimedEvent<IMessageEvent>>(), 0);
+            this.Links = links ?? LinkList.Create(Enumerable.Empty<ILink>(), 0);
             this.ChildSpanCount = childSpanCount;
             this.Status = status;
             this.Kind = kind;

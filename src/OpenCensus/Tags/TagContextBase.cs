@@ -24,13 +24,13 @@ namespace OpenCensus.Tags
     public abstract class TagContextBase : ITagContext
     {
         /// <inheritdoc/>
-public override string ToString()
+        public override string ToString()
         {
             return "TagContext";
         }
 
-    /// <inheritdoc/>
-public override bool Equals(object other)
+        /// <inheritdoc/>
+        public override bool Equals(object other)
         {
             if (!(other is TagContextBase))
             {
@@ -66,8 +66,8 @@ public override bool Equals(object other)
             return Collections.AreEquivalent(tags1, tags2);
         }
 
-    /// <inheritdoc/>
-public override int GetHashCode()
+        /// <inheritdoc/>
+        public override int GetHashCode()
         {
             int hashCode = 0;
             foreach (var t in this)
@@ -78,9 +78,9 @@ public override int GetHashCode()
             return hashCode;
         }
 
-public abstract IEnumerator<ITag> GetEnumerator();
+        public abstract IEnumerator<ITag> GetEnumerator();
 
-IEnumerator IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
         }

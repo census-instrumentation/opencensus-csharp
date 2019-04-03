@@ -18,6 +18,7 @@ namespace OpenCensus.Trace
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// Tracestate entries allowing different vendors to participate in a trace.
@@ -28,7 +29,7 @@ namespace OpenCensus.Trace
         /// <summary>
         /// An instance of empty tracestate.
         /// </summary>
-        public static readonly Tracestate Empty = new Tracestate(new List<Entry>());
+        public static readonly Tracestate Empty = new Tracestate(Enumerable.Empty<Entry>());
 
         private const int KeyMaxSize = 256;
         private const int ValueMaxSize = 256;
@@ -185,7 +186,7 @@ namespace OpenCensus.Trace
             return true;
         }
 
-        private static Tracestate Create(List<Entry> entries)
+        private static Tracestate Create(ICollection<Entry> entries)
         {
             // TODO: discard last entries instead of throwing
 
@@ -253,7 +254,7 @@ namespace OpenCensus.Trace
         {
             private readonly Tracestate parent;
 
-            private List<Entry> entries;
+            private IList<Entry> entries;
 
             internal TracestateBuilder(Tracestate parent)
             {

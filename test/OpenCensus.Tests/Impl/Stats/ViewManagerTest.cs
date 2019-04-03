@@ -18,6 +18,7 @@ namespace OpenCensus.Stats.Test
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using OpenCensus.Common;
     using OpenCensus.Internal;
     using OpenCensus.Stats.Aggregations;
@@ -583,7 +584,7 @@ namespace OpenCensus.Stats.Test
         public void TestGetCumulativeViewDataWithEmptyBucketBoundaries()
         {
             IAggregation noHistogram =
-                Distribution.Create(BucketBoundaries.Create(new List<double>()));
+                Distribution.Create(BucketBoundaries.Create(Enumerable.Empty<double>()));
             IView view = CreateCumulativeView(VIEW_NAME, MEASURE_DOUBLE, noHistogram, new List<ITagKey>() { KEY });
             viewManager.RegisterView(view);
             statsRecorder

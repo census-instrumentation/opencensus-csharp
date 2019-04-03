@@ -32,7 +32,7 @@ namespace OpenCensus.Trace.Export
         {
             get
             {
-                ICollection<SpanBase> allRunningSpans = this.runningSpans.Copy();
+                IEnumerable<SpanBase> allRunningSpans = this.runningSpans.Copy();
                 Dictionary<string, int> numSpansPerName = new Dictionary<string, int>();
                 foreach (var span in allRunningSpans)
                 {
@@ -55,7 +55,7 @@ namespace OpenCensus.Trace.Export
 
         public override IEnumerable<ISpanData> GetRunningSpans(IRunningSpanStoreFilter filter)
         {
-            ICollection<SpanBase> allRunningSpans = this.runningSpans.Copy();
+            IReadOnlyCollection<SpanBase> allRunningSpans = this.runningSpans.Copy();
             int maxSpansToReturn = filter.MaxSpansToReturn == 0 ? allRunningSpans.Count : filter.MaxSpansToReturn;
             List<ISpanData> ret = new List<ISpanData>(maxSpansToReturn);
             foreach (var span in allRunningSpans)

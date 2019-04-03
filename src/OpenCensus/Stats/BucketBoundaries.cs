@@ -23,14 +23,14 @@ namespace OpenCensus.Stats
 
     public sealed class BucketBoundaries : IBucketBoundaries
     {
-        private BucketBoundaries(IList<double> boundaries)
+        private BucketBoundaries(IReadOnlyList<double> boundaries)
         {
             this.Boundaries = boundaries;
         }
 
-        public IList<double> Boundaries { get; }
+        public IReadOnlyList<double> Boundaries { get; }
 
-        public static IBucketBoundaries Create(IList<double> bucketBoundaries)
+        public static IBucketBoundaries Create(IEnumerable<double> bucketBoundaries)
         {
             if (bucketBoundaries == null)
             {

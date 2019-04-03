@@ -42,7 +42,7 @@ namespace OpenCensus.Trace
 
         private ISampler Sampler { get; set; }
 
-        private IEnumerable<ISpan> ParentLinks { get; set; } = new List<ISpan>();
+        private IEnumerable<ISpan> ParentLinks { get; set; } = Enumerable.Empty<ISpan>();
 
         private bool RecordEvents { get; set; }
 

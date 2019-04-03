@@ -18,6 +18,7 @@ namespace OpenCensus.Trace.Export
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using OpenCensus.Internal;
     using OpenCensus.Utils;
 
@@ -95,7 +96,7 @@ namespace OpenCensus.Trace.Export
         public override IEnumerable<ISpanData> GetErrorSampledSpans(ISampledSpanStoreErrorFilter filter)
         {
             int numSpansToReturn = filter.MaxSpansToReturn == 0 ? MaxPerSpanNameSamples : filter.MaxSpansToReturn;
-            IList<SpanBase> spans = new List<SpanBase>();
+            IEnumerable<SpanBase> spans = Enumerable.Empty<SpanBase>();
 
             // Try to not keep the lock to much, do the SpanImpl -> SpanData conversion outside the lock.
             lock (this.samples)
@@ -107,7 +108,7 @@ namespace OpenCensus.Trace.Export
                 }
             }
 
-            List<ISpanData> ret = new List<ISpanData>(spans.Count);
+            List<ISpanData> ret = new List<ISpanData>(spans.Count());
             foreach (SpanBase span in spans)
             {
                 ret.Add(span.ToSpanData());
@@ -119,7 +120,7 @@ namespace OpenCensus.Trace.Export
         public override IEnumerable<ISpanData> GetLatencySampledSpans(ISampledSpanStoreLatencyFilter filter)
         {
             int numSpansToReturn = filter.MaxSpansToReturn == 0 ? MaxPerSpanNameSamples : filter.MaxSpansToReturn;
-            IList<SpanBase> spans = new List<SpanBase>();
+            IEnumerable<SpanBase> spans = Enumerable.Empty<SpanBase>();
 
             // Try to not keep the lock to much, do the SpanImpl -> SpanData conversion outside the lock.
             lock (this.samples)
@@ -131,7 +132,7 @@ namespace OpenCensus.Trace.Export
                 }
             }
 
-            List<ISpanData> ret = new List<ISpanData>(spans.Count);
+            List<ISpanData> ret = new List<ISpanData>(spans.Count());
             foreach (SpanBase span in spans)
             {
                 ret.Add(span.ToSpanData());
@@ -140,12 +141,12 @@ namespace OpenCensus.Trace.Export
             return ret.AsReadOnly();
         }
 
-        public override void RegisterSpanNamesForCollection(IList<string> spanNames)
+        public override void RegisterSpanNamesForCollection(IEnumerable<string> spanNames)
         {
             this.eventQueue.Enqueue(new RegisterSpanNameEvent(this, spanNames));
         }
 
-        public override void UnregisterSpanNamesForCollection(IList<string> spanNames)
+        public override void UnregisterSpanNamesForCollection(IEnumerable<string> spanNames)
         {
             this.eventQueue.Enqueue(new UnregisterSpanNameEvent(this, spanNames));
         }
@@ -189,7 +190,7 @@ namespace OpenCensus.Trace.Export
             }
 
             public static void GetSamples(
-                int maxSpansToReturn, List<SpanBase> output, EvictingQueue<SpanBase> queue)
+                int maxSpansToReturn, ICollection<SpanBase> output, EvictingQueue<SpanBase> queue)
             {
                 SpanBase[] copy = queue.ToArray();
 
@@ -208,7 +209,7 @@ namespace OpenCensus.Trace.Export
                 TimeSpan latencyLower,
                 TimeSpan latencyUpper,
                 int maxSpansToReturn,
-                List<SpanBase> output,
+                ICollection<SpanBase> output,
                 EvictingQueue<SpanBase> queue)
             {
                 SpanBase[] copy = queue.ToArray();
@@ -254,14 +255,14 @@ namespace OpenCensus.Trace.Export
                 }
             }
 
-            public void GetSamples(int maxSpansToReturn, List<SpanBase> output)
+            public void GetSamples(int maxSpansToReturn, ICollection<SpanBase> output)
             {
                 GetSamples(maxSpansToReturn, output, this.sampledSpansQueue);
                 GetSamples(maxSpansToReturn, output, this.notSampledSpansQueue);
             }
 
             public void GetSamplesFilteredByLatency(
-                TimeSpan latencyLower, TimeSpan latencyUpper, int maxSpansToReturn, List<SpanBase> output)
+                TimeSpan latencyLower, TimeSpan latencyUpper, int maxSpansToReturn, ICollection<SpanBase> output)
             {
                 GetSamplesFilteredByLatency(
                     latencyLower, latencyUpper, maxSpansToReturn, output, this.sampledSpansQueue);
@@ -360,7 +361,7 @@ namespace OpenCensus.Trace.Export
                 return errorBucketSummaries;
             }
 
-            public IList<SpanBase> GetErrorSamples(CanonicalCode? code, int maxSpansToReturn)
+            public IEnumerable<SpanBase> GetErrorSamples(CanonicalCode? code, int maxSpansToReturn)
             {
                 List<SpanBase> output = new List<SpanBase>(maxSpansToReturn);
                 if (code.HasValue)
@@ -378,7 +379,7 @@ namespace OpenCensus.Trace.Export
                 return output;
             }
 
-            public IList<SpanBase> GetLatencySamples(TimeSpan latencyLower, TimeSpan latencyUpper, int maxSpansToReturn)
+            public IEnumerable<SpanBase> GetLatencySamples(TimeSpan latencyLower, TimeSpan latencyUpper, int maxSpansToReturn)
             {
                 List<SpanBase> output = new List<SpanBase>(maxSpansToReturn);
                 for (int i = 0; i < NumLatencyBuckets; i++)
@@ -400,7 +401,7 @@ namespace OpenCensus.Trace.Export
             private readonly InProcessSampledSpanStore sampledSpanStore;
             private readonly ICollection<string> spanNames;
 
-            public RegisterSpanNameEvent(InProcessSampledSpanStore sampledSpanStore, ICollection<string> spanNames)
+            public RegisterSpanNameEvent(InProcessSampledSpanStore sampledSpanStore, IEnumerable<string> spanNames)
             {
                 this.sampledSpanStore = sampledSpanStore;
                 this.spanNames = new List<string>(spanNames);
@@ -417,7 +418,7 @@ namespace OpenCensus.Trace.Export
             private readonly InProcessSampledSpanStore sampledSpanStore;
             private readonly ICollection<string> spanNames;
 
-            public UnregisterSpanNameEvent(InProcessSampledSpanStore sampledSpanStore, ICollection<string> spanNames)
+            public UnregisterSpanNameEvent(InProcessSampledSpanStore sampledSpanStore, IEnumerable<string> spanNames)
             {
                 this.sampledSpanStore = sampledSpanStore;
                 this.spanNames = new List<string>(spanNames);

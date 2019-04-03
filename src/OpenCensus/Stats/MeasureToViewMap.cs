@@ -24,7 +24,7 @@ namespace OpenCensus.Stats
     internal sealed class MeasureToViewMap
     {
         private readonly object lck = new object();
-        private readonly IDictionary<string, IList<MutableViewData>> mutableMap = new Dictionary<string, IList<MutableViewData>>();
+        private readonly IDictionary<string, ICollection<MutableViewData>> mutableMap = new Dictionary<string, ICollection<MutableViewData>>();
 
         private readonly IDictionary<IViewName, IView> registeredViews = new Dictionary<IViewName, IView>();
 
@@ -197,7 +197,7 @@ namespace OpenCensus.Stats
                     return null;
                 }
 
-                this.mutableMap.TryGetValue(view.Measure.Name, out IList<MutableViewData> views);
+                this.mutableMap.TryGetValue(view.Measure.Name, out ICollection<MutableViewData> views);
                 if (views != null)
                 {
                     foreach (MutableViewData viewData in views)

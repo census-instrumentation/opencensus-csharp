@@ -89,9 +89,9 @@ namespace OpenCensus.Stats
             }
         }
 
-        internal static IList<ITagValue> GetTagValues(IDictionary<ITagKey, ITagValue> tags, IList<ITagKey> columns)
+        internal static IReadOnlyList<ITagValue> GetTagValues(IDictionary<ITagKey, ITagValue> tags, IReadOnlyList<ITagKey> columns)
         {
-            IList<ITagValue> tagValues = new List<ITagValue>(columns.Count);
+            List<ITagValue> tagValues = new List<ITagValue>(columns.Count);
 
             // Record all the measures in a "Greedy" way.
             // Every view aggregates every measure. This is similar to doing a GROUPBY view’s keys.
@@ -109,7 +109,7 @@ namespace OpenCensus.Stats
                 }
             }
 
-            return tagValues;
+            return tagValues.AsReadOnly();
         }
 
         // Returns the milliseconds representation of a Duration.

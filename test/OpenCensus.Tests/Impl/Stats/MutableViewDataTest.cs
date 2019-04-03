@@ -47,7 +47,7 @@ namespace OpenCensus.Stats.Test
         [Fact]
         public void TestGetTagValues()
         {
-            List<ITagKey> columns = new List<ITagKey>() { CALLER, METHOD, ORIGINATOR };
+            IReadOnlyList<ITagKey> columns = new List<ITagKey>() { CALLER, METHOD, ORIGINATOR };
             IDictionary<ITagKey, ITagValue> tags = new Dictionary<ITagKey, ITagValue>() { { CALLER, CALLER_V }, { METHOD, METHOD_V } };
 
             Assert.Equal(new List<ITagValue>() { CALLER_V, METHOD_V, MutableViewData.UnknownTagValue },

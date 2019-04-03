@@ -51,6 +51,6 @@ namespace OpenCensus.Stats.Aggregations
         /// <summary>
         /// Gets the counts in buckets.
         /// </summary>
-        IList<long> BucketCounts { get; }
+        IReadOnlyList<long> BucketCounts { get; }
     }
 }

@@ -18,7 +18,6 @@ namespace OpenCensus.Stats.Test
 {
     using System;
     using System.Collections.Generic;
-    using OpenCensus.Common;
     using OpenCensus.Stats.Aggregations;
     using OpenCensus.Stats.Measures;
     using OpenCensus.Tags;
@@ -29,7 +28,7 @@ namespace OpenCensus.Stats.Test
         // tag keys
         private static readonly ITagKey K1 = TagKey.Create("k1");
         private static readonly ITagKey K2 = TagKey.Create("k2");
-        private static readonly IList<ITagKey> TAG_KEYS = new List<ITagKey>() { K1, K2 };
+        private static readonly IReadOnlyList<ITagKey> TAG_KEYS = new List<ITagKey>() { K1, K2 };
 
         // tag values
         private static readonly ITagValue V1 = TagValue.Create("v1");

@@ -172,7 +172,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         /// </summary>
         /// <param name="bucketCounts">Opencensus list of counts</param>
         /// <returns></returns>
-        private static IList<long> CreateBucketCounts(IList<long> bucketCounts)
+        private static IEnumerable<long> CreateBucketCounts(IReadOnlyList<long> bucketCounts)
         {
             // The first bucket (underflow bucket) should always be 0 count because the Metrics first bucket
             // is [0, first_bound) but Stackdriver distribution consists of an underflow bucket (number 0).
@@ -216,14 +216,14 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
         /// <returns></returns>
         public static Metric GetMetric(
             IView view,
-            IList<ITagValue> tagValues,
+            IReadOnlyList<ITagValue> tagValues,
             MetricDescriptor metricDescriptor,
             string domain)
         {
             var metric = new Metric();
             metric.Type = metricDescriptor.Type;
 
-            IList<ITagKey> columns = view.Columns;
+            IReadOnlyList<ITagKey> columns = view.Columns;
 
             // Populate metric labels
             for (int i = 0; i < tagValues.Count; i++)
@@ -271,7 +271,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             foreach (var entry in viewData.AggregationMap)
             {
                 var timeSeries = new TimeSeries();
-                IList<ITagValue> labels = entry.Key.Values;
+                IReadOnlyList<ITagValue> labels = entry.Key.Values;
                 IAggregationData points = entry.Value;
                 
                 timeSeries.Resource = monitoredResource;
