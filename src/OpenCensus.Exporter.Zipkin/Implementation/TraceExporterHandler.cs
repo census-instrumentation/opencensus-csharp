@@ -201,8 +201,6 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
         {
             var request = new HttpRequestMessage(method, requestUri);
 
-            request.Headers.Add("Accept", "application/json");
-
             return request;
         }
 
