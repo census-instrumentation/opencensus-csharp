@@ -35,6 +35,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
 
     public class OpenCensusTelemetryConverterTests
     {
+        private const string ChannelEndpoint = "http://app-insights-endpoint.com/v2/track";
         private const string TestTraceId = "d79bdda7eb9c4a9fa9bda52fe7b48b95";
         private const string TestSpanId = "d7ddeb4aa9a5e78b";
         private const string TestParentSpanId = "9ba79c9fbd2fb495";
@@ -64,6 +65,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             var configuration = new TelemetryConfiguration();
             ITelemetryChannel channel = new StubTelemetryChannel
             {
+                EndpointAddress = ChannelEndpoint,
                 OnSend = t => sentItems.Enqueue(t),
             };
 
@@ -937,6 +939,36 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             Assert.Equal("200", dependency.ResultCode);
             Assert.Equal("host", dependency.Target);
             Assert.Equal("Http", dependency.Type);
+        }
+
+        [Fact]
+        public void OpenCensusTelemetryConverterTests_DoesNotTrackAppInsightsCalls()
+        {
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var _, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            name = "HttpOut";
+            kind = SpanKind.Client;
+
+            var url1 = new Uri(ChannelEndpoint);
+            var url2 = new Uri($"{ChannelEndpoint}/123");
+            var attributes1 = Attributes.Create(new Dictionary<string, IAttributeValue>()
+            {
+                { "http.url", AttributeValue.StringAttributeValue(url1.ToString()) },
+                { "http.method", AttributeValue.StringAttributeValue("POST") },
+                { "http.status_code", AttributeValue.LongAttributeValue(200) },
+            }, 0);
+
+            var attributes2 = Attributes.Create(new Dictionary<string, IAttributeValue>()
+            {
+                { "http.url", AttributeValue.StringAttributeValue(url2.ToString()) },
+                { "http.method", AttributeValue.StringAttributeValue("POST") },
+                { "http.status_code", AttributeValue.LongAttributeValue(200) },
+            }, 0);
+
+            var span1 = SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes1, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
+            var span2 = SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes2, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
+
+            Assert.Empty(this.ConvertSpan(span1));
+            Assert.Empty(this.ConvertSpan(span2));
         }
 
         [Fact]

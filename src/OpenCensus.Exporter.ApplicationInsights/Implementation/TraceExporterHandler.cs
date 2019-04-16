@@ -30,10 +30,12 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
     internal class TraceExporterHandler : IHandler
     {
         private readonly TelemetryClient telemetryClient;
+        private readonly string applicationInsightsEndpoint;
 
         public TraceExporterHandler(TelemetryConfiguration telemetryConfiguration)
         {
             this.telemetryClient = new TelemetryClient(telemetryConfiguration);
+            this.applicationInsightsEndpoint = telemetryConfiguration.TelemetryChannel.EndpointAddress ?? string.Empty;
         }
 
         public async Task ExportAsync(IEnumerable<ISpanData> spanDataList)
@@ -110,11 +112,11 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                                 break;
                             default:
                                 var value = attr.Value.Match<string>(
-                                    (s) => { return s; },
-                                    (b) => { return b.ToString(); },
-                                    (l) => { return l.ToString(); },
-                                    (d) => { return d.ToString(); },
-                                    (obj) => { return obj.ToString(); });
+                                    (s) => s,
+                                    (b) => b.ToString(),
+                                    (l) => l.ToString(),
+                                    (d) => d.ToString(),
+                                    (obj) => obj.ToString());
 
                                 AddPropertyWithAdjustedName(props, attr.Key, value);
 
@@ -151,11 +153,11 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                         foreach (var attr in t.Event.Attributes)
                         {
                             var value = attr.Value.Match<string>(
-                                (s) => { return s; },
-                                (b) => { return b.ToString(); },
-                                (l) => { return l.ToString(); },
-                                (d) => { return d.ToString(); },
-                                (obj) => { return obj.ToString(); });
+                                (s) => s,
+                                (b) => b.ToString(),
+                                (l) => l.ToString(),
+                                (d) => d.ToString(),
+                                (obj) => obj.ToString());
 
                             AddPropertyWithAdjustedName(log.Properties, attr.Key, value);
                         }
@@ -216,6 +218,11 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                     OperationTelemetry result;
                     if (resultKind == SpanKind.Client)
                     {
+                        if (data != null && data.StartsWith(this.applicationInsightsEndpoint))
+                        {
+                            continue;
+                        }
+
                         var resultD = new DependencyTelemetry();
                         resultD.ResultCode = resultCode;
                         resultD.Data = data;
@@ -250,7 +257,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                         result.Context.Operation.ParentId = string.Concat("|", traceId, ".", parentId, ".");
                     }
 
-                    // TODO: I don't understant why this concatanation is required
+                    // This is required for backward compatibility and interop with old ApplicationInsights SDKs
                     result.Id = string.Concat("|", traceId, ".", spanId, ".");
 
                     foreach (var ts in tracestate.Entries)
