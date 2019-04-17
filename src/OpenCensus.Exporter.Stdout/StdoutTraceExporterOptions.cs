@@ -19,34 +19,13 @@ namespace OpenCensus.Exporter.Stdout
     using System;
 
     /// <summary>
-    /// Specifies Lineending types.
-    /// </summary>
-    public enum LineEndings
-    {
-        /// <summary>
-        /// CRLF : Carriage return - line feed - Windows
-        /// </summary>
-        CRLF,
-
-        /// <summary>
-        /// CR : Carriage return only
-        /// </summary>
-        CR,
-
-        /// <summary>
-        /// LF : Line feed only
-        /// </summary>
-        LF,
-    }
-
-    /// <summary>
     /// Stdout trace exporter options.
     /// </summary>
     public sealed class StdoutTraceExporterOptions
     {
         /// <summary>
-        /// Gets or sets the line ending types, defaulting to Windows style.
+        /// Gets or sets the line ending types, defaulting to current platform style.
         /// </summary>
-        public LineEndings LineTermination { get; set; } = LineEndings.CRLF;
+        public string LineTermination { get; set; } = Console.Out.NewLine;
     }
 }

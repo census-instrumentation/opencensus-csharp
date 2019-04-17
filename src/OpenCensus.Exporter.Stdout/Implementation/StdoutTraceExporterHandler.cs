@@ -35,8 +35,11 @@ namespace OpenCensus.Exporter.Stdout.Implementation
 
         public async Task ExportAsync(IEnumerable<ISpanData> spanDataList)
         {
+            string savedLineTermination = Console.Out.NewLine;
+            Console.Out.NewLine = this.options.LineTermination;
+
             var settings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
-            Console.WriteLine("{ \"values\" : [ ");
+            Console.WriteLine("[ ");
             foreach (var data in spanDataList)
             {
                 string serialized = JsonConvert.SerializeObject(data, Formatting.Indented, settings);
@@ -44,7 +47,8 @@ namespace OpenCensus.Exporter.Stdout.Implementation
                 Console.WriteLine(" , ");
             }
 
-            Console.WriteLine("]}");
+            Console.WriteLine("]");
+            Console.Out.NewLine = savedLineTermination;
         }
     }
 }
