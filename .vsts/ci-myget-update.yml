@@ -22,7 +22,7 @@ steps:
   displayName: pack solution with symbols (Release)
   inputs:
     command: "pack"
-    projects: "*.sln"
+    projects: "OpenCensus.proj"
     configuration: 'Release'
     packDirectory: '$(build.artifactStagingDirectory)'
     buildProperties: "SymbolPackageFormat=snupkg"
