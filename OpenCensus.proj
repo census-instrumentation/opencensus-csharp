@@ -9,11 +9,11 @@
   <!-- The only need for this file is to synchronize the PreReleaseVersion -->
 
   <Target Name="Build">
-    <MSBuild Projects="@(Solution)" Targets="Build" ContinueOnError="ErrorAndStop" Properties="PreReleaseVersion=$(PreReleaseVersion)"/> 	
+    <MSBuild Projects="@(Solution)" Targets="Restore;Build" ContinueOnError="ErrorAndStop" Properties="PreReleaseVersion=$(PreReleaseVersion)"/> 	
   </Target>
 
   <Target Name="Pack">
-    <MSBuild Projects="@(Solution)" Targets="Pack" ContinueOnError="ErrorAndStop" Properties="PreReleaseVersion=$(PreReleaseVersion)"/> 	
+    <MSBuild Projects="@(Solution)" Targets="Restore;Build;Pack" ContinueOnError="ErrorAndStop" Properties="PreReleaseVersion=$(PreReleaseVersion)"/> 	
   </Target>
 
 </Project>
