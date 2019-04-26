@@ -33,7 +33,7 @@ namespace OpenCensus.Common
                 var nowNanoTicks = this.NowNanos;
                 var nowSecTicks = nowNanoTicks / NanosPerSecond;
                 var excessNanos = nowNanoTicks - (nowSecTicks * NanosPerSecond);
-                return new Timestamp(nowSecTicks, (int)excessNanos);
+                return Timestamp.Create(nowSecTicks, (int)excessNanos);
             }
         }
 

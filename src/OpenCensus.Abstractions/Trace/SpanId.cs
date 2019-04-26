@@ -1,4 +1,4 @@
-﻿// <copyright file="TraceId.cs" company="OpenCensus Authors">
+﻿// <copyright file="SpanId.cs" company="OpenCensus Authors">
 // Copyright 2018, OpenCensus Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,19 +17,27 @@
 namespace OpenCensus.Trace
 {
     using System;
-    using OpenCensus.Trace.Internal;
     using OpenCensus.Utils;
 
-    public sealed class TraceId : ITraceId
+    public sealed class SpanId : ISpanId
     {
-        public const int Size = 16;
-        public static readonly TraceId Invalid = new TraceId(new byte[Size]);
+        public const int Size = 8;
+
+        private static readonly SpanId InvalidSpanId = new SpanId(new byte[Size]);
 
         private readonly byte[] bytes;
 
-        private TraceId(byte[] bytes)
+        private SpanId(byte[] bytes)
         {
             this.bytes = bytes;
+        }
+
+        public static ISpanId Invalid
+        {
+            get
+            {
+                return InvalidSpanId;
+            }
         }
 
         public byte[] Bytes
@@ -44,35 +52,10 @@ namespace OpenCensus.Trace
 
         public bool IsValid
         {
-            get
-            {
-                return !Arrays.Equals(this.bytes, Invalid.bytes);
-            }
+            get { return !Arrays.Equals(this.bytes, InvalidSpanId.bytes); }
         }
 
-        public long LowerLong
-        {
-            get
-            {
-                long result = 0;
-                for (int i = 0; i < 8; i++)
-                {
-                    result <<= 8;
-#pragma warning disable CS0675 // Bitwise-or operator used on a sign-extended operand
-                    result |= this.bytes[i] & 0xff;
-#pragma warning restore CS0675 // Bitwise-or operator used on a sign-extended operand
-                }
-
-                if (result < 0)
-                {
-                    return -result;
-                }
-
-                return result;
-            }
-        }
-
-        public static ITraceId FromBytes(byte[] buffer)
+        public static ISpanId FromBytes(byte[] buffer)
         {
             if (buffer == null)
             {
@@ -86,17 +69,17 @@ namespace OpenCensus.Trace
 
             byte[] bytesCopied = new byte[Size];
             Buffer.BlockCopy(buffer, 0, bytesCopied, 0, Size);
-            return new TraceId(bytesCopied);
+            return new SpanId(bytesCopied);
         }
 
-        public static ITraceId FromBytes(byte[] src, int srcOffset)
+        public static ISpanId FromBytes(byte[] src, int srcOffset)
         {
             byte[] bytes = new byte[Size];
             Buffer.BlockCopy(src, srcOffset, bytes, 0, Size);
-            return new TraceId(bytes);
+            return new SpanId(bytes);
         }
 
-        public static ITraceId FromLowerBase16(string src)
+        public static ISpanId FromLowerBase16(string src)
         {
             if (src.Length != 2 * Size)
             {
@@ -104,18 +87,18 @@ namespace OpenCensus.Trace
             }
 
             byte[] bytes = Arrays.StringToByteArray(src);
-            return new TraceId(bytes);
+            return new SpanId(bytes);
         }
 
-        public static ITraceId GenerateRandomId(IRandomGenerator random)
+        public static ISpanId GenerateRandomId(IRandomGenerator random)
         {
             byte[] bytes = new byte[Size];
             do
             {
                 random.NextBytes(bytes);
             }
-            while (Arrays.Equals(bytes, Invalid.bytes));
-            return new TraceId(bytes);
+            while (Arrays.Equals(bytes, InvalidSpanId.bytes));
+            return new SpanId(bytes);
         }
 
         public void CopyBytesTo(byte[] dest, int destOffset)
@@ -126,8 +109,7 @@ namespace OpenCensus.Trace
         public string ToLowerBase16()
         {
             var bytes = this.Bytes;
-            var result = Arrays.ByteArrayToString(bytes);
-            return result;
+            return Arrays.ByteArrayToString(bytes);
         }
 
         /// <inheritdoc/>
@@ -138,12 +120,12 @@ namespace OpenCensus.Trace
                 return true;
             }
 
-            if (!(obj is TraceId))
+            if (!(obj is SpanId))
             {
                 return false;
             }
 
-            TraceId that = (TraceId)obj;
+            SpanId that = (SpanId)obj;
             return Arrays.Equals(this.bytes, that.bytes);
         }
 
@@ -156,14 +138,14 @@ namespace OpenCensus.Trace
         /// <inheritdoc/>
         public override string ToString()
         {
-            return "TraceId{"
-               + "bytes=" + this.ToLowerBase16()
-               + "}";
+            return "SpanId{"
+                + "bytes=" + this.ToLowerBase16()
+                + "}";
         }
 
-        public int CompareTo(ITraceId other)
+        public int CompareTo(ISpanId other)
         {
-            TraceId that = other as TraceId;
+            SpanId that = other as SpanId;
             for (int i = 0; i < Size; i++)
             {
                 if (this.bytes[i] != that.bytes[i])

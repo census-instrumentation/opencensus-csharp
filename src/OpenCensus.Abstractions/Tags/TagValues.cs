@@ -17,7 +17,8 @@
 namespace OpenCensus.Tags
 {
     using System.Collections.Generic;
-    using OpenCensus.Utils.Abstractions;
+    using OpenCensus.Abstractions.Utils;
+    using OpenCensus.Utils;
 
     /// <summary>
     /// Collection of tags.

@@ -20,7 +20,7 @@ namespace OpenCensus.Trace
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
-    using OpenCensus.Utils;
+    using OpenCensus.Abstractions.Utils;
 
     public sealed class Annotation : IAnnotation
     {

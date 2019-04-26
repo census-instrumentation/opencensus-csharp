@@ -32,6 +32,7 @@ We encourage contributions. Use tags [up-for-grabs][up-for-grabs-issues] and
 | ----------------------- | ---------------- | -----------------|
 | Asp.Net Core            | [![MyGet Nightly][opencensus-collect-aspnetcore-myget-image]][opencensus-collect-aspnetcore-myget-url]       | [![NuGet Release][opencensus-collect-aspnetcore-nuget-image]][opencensus-collect-aspnetcore-nuget-url]   |
 | .Net Core HttpClient    | [![MyGet Nightly][opencensus-collect-deps-myget-image]][opencensus-collect-deps-myget-url]                   | [![NuGet Release][opencensus-collect-deps-nuget-image]][opencensus-collect-deps-nuget-url]               |
+| StackExchange.Redis     | [![MyGet Nightly][opencensus-collect-stackexchange-redis-myget-image]][opencensus-collect-stackexchange-redis-myget-url]    | [![NuGet Release][opencensus-collect-stackexchange-redis-nuget-image]][opencensus-collect-stackexchange-redis-nuget-url]|
 
 ### Exporters Packages
 
@@ -108,6 +109,41 @@ Outgoing http calls made by .NET Core `HttpClient` can be automatically tracked.
     {
         // ...
         var depCollector = app.ApplicationServices.GetService<DependenciesCollector>();
+    ```
+
+### Using StackExchange.Redis collector
+
+Outgoing http calls to Redis made usign StackExchange.Redis library can be automatically tracked.
+
+1. Install package to your project:
+   [OpenCensus.Collector.StackExchangeRedis][opencensus-collect-stackexchange-redis-nuget-url]
+
+2. Make sure `ITracer`, `ISampler`, and `IExportComponent` registered in DI.
+    ``` csharp
+    services.AddSingleton<ITracer>(Tracing.Tracer);
+    services.AddSingleton<ISampler>(Samplers.AlwaysSample);
+    services.AddSingleton<IExportComponent>(Tracing.ExportComponent);
+    ```
+
+3. Configure data collection singletons in ConfigureServices method:
+    ``` csharp
+    public void ConfigureServices(IServiceCollection services)
+    {
+        // ...
+        services.AddSingleton<StackExchangeRedisCallsCollectorOptions>(new StackExchangeRedisCallsCollectorOptions());
+        services.AddSingleton<StackExchangeRedisCallsCollector>();
+    ```
+
+4. Initiate data collection by instantiating singleton in Configure method
+    ``` csharp
+    public void Configure(IApplicationBuilder app, /*... other arguments*/ )
+    {
+        // ...
+        var redisCollector = app.ApplicationServices.GetService<StackExchangeRedisCallsCollector>();
+
+        // use collector to configure the profiler
+        ConnectionMultiplexer connection = ConnectionMultiplexer.Connect("localhost:6379");
+        connection.RegisterProfiler(redisCollector.GetProfilerSessionsFactory());
     ```
 
 ## OpenCensus QuickStart: exporting data
@@ -242,6 +278,8 @@ deprecate it for 18 months before removing it, if possible.
 [opencensus-collect-aspnetcore-myget-url]: https://www.myget.org/feed/opencensus/package/nuget/OpenCensus.Collector.AspNetCore
 [opencensus-collect-deps-myget-image]:https://img.shields.io/myget/opencensus/vpre/OpenCensus.Collector.Dependencies.svg
 [opencensus-collect-deps-myget-url]: https://www.myget.org/feed/opencensus/package/nuget/OpenCensus.Collector.Dependencies
+[opencensus-collect-stackexchange-redis-myget-image]:https://img.shields.io/myget/opencensus/vpre/OpenCensus.Collector.StackExchangeRedis.svg
+[opencensus-collect-stackexchange-redis-myget-url]: https://www.myget.org/feed/opencensus/package/nuget/OpenCensus.Collector.StackExchangeRedis
 [opencensus-nuget-image]:https://img.shields.io/nuget/vpre/OpenCensus.svg
 [opencensus-nuget-url]:https://www.nuget.org/packages/OpenCensus
 [opencensus-abs-nuget-image]:https://img.shields.io/nuget/vpre/OpenCensus.Abstractions.svg
@@ -258,6 +296,8 @@ deprecate it for 18 months before removing it, if possible.
 [opencensus-collect-aspnetcore-nuget-url]: https://www.nuget.org/packages/OpenCensus.Collector.AspNetCore
 [opencensus-collect-deps-nuget-image]:https://img.shields.io/nuget/vpre/OpenCensus.Collector.Dependencies.svg
 [opencensus-collect-deps-nuget-url]: https://www.nuget.org/packages/OpenCensus.Collector.Dependencies
+[opencensus-collect-stackexchange-redis-nuget-image]:https://img.shields.io/nuget/vpre/OpenCensus.Collector.StackExchangeRedis.svg
+[opencensus-collect-stackexchange-redis-nuget-url]: https://www.nuget.org/packages/OpenCensus.Collector.StackExchangeRedis
 [up-for-grabs-issues]: https://github.com/census-instrumentation/opencensus-csharp/issues?q=is%3Aissue+is%3Aopen+label%3Aup-for-grabs
 [good-first-issues]: https://github.com/census-instrumentation/opencensus-csharp/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22
 [zipkin-get-started]: https://zipkin.io/pages/quickstart.html

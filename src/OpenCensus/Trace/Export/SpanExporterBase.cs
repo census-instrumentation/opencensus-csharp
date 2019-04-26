@@ -14,12 +14,12 @@
 // limitations under the License.
 // </copyright>
 
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-
 namespace OpenCensus.Trace.Export
 {
+    using System.Collections.Generic;
+    using System.Threading;
+    using System.Threading.Tasks;
+
     public abstract class SpanExporterBase : ISpanExporter
     {
         private static readonly ISpanExporter NoopSpanExporterInstance = new NoopSpanExporter();
