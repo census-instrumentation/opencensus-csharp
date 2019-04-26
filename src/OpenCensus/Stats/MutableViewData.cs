@@ -26,7 +26,7 @@ namespace OpenCensus.Stats
     {
         internal static readonly ITagValue UnknownTagValue = null;
 
-        internal static readonly ITimestamp ZeroTimestamp = Timestamp.Create(0, 0);
+        internal static readonly Timestamp ZeroTimestamp = Timestamp.Create(0, 0);
 
         private const long MillisPerSecond = 1000L;
         private const long NanosPerMilli = 1000 * 1000;
@@ -89,9 +89,9 @@ namespace OpenCensus.Stats
             }
         }
 
-        internal static IList<ITagValue> GetTagValues(IDictionary<ITagKey, ITagValue> tags, IList<ITagKey> columns)
+        internal static IReadOnlyList<ITagValue> GetTagValues(IDictionary<ITagKey, ITagValue> tags, IReadOnlyList<ITagKey> columns)
         {
-            IList<ITagValue> tagValues = new List<ITagValue>(columns.Count);
+            List<ITagValue> tagValues = new List<ITagValue>(columns.Count);
 
             // Record all the measures in a "Greedy" way.
             // Every view aggregates every measure. This is similar to doing a GROUPBY view’s keys.
@@ -109,11 +109,11 @@ namespace OpenCensus.Stats
                 }
             }
 
-            return tagValues;
+            return tagValues.AsReadOnly();
         }
 
         // Returns the milliseconds representation of a Duration.
-        internal static long ToMillis(IDuration duration)
+        internal static long ToMillis(Duration duration)
         {
             return (duration.Seconds * MillisPerSecond) + (duration.Nanos / NanosPerMilli);
         }
@@ -187,29 +187,29 @@ namespace OpenCensus.Stats
             return map;
         }
 
-        internal static MutableViewData Create(IView view, ITimestamp start)
+        internal static MutableViewData Create(IView view, DateTimeOffset start)
         {
             return new CumulativeMutableViewData(view, start);
         }
 
         /** Record double stats with the given tags. */
-        internal abstract void Record(ITagContext context, double value, ITimestamp timestamp);
+        internal abstract void Record(ITagContext context, double value, DateTimeOffset timestamp);
 
         /** Record long stats with the given tags. */
-        internal void Record(ITagContext tags, long value, ITimestamp timestamp)
+        internal void Record(ITagContext tags, long value, DateTimeOffset timestamp)
         {
             // TODO(songya): shall we check for precision loss here?
             this.Record(tags, (double)value, timestamp);
         }
 
         /** Convert this {@link MutableViewData} to {@link ViewData}. */
-        internal abstract IViewData ToViewData(ITimestamp now, StatsCollectionState state);
+        internal abstract IViewData ToViewData(DateTimeOffset now, StatsCollectionState state);
 
         // Clear recorded stats.
         internal abstract void ClearStats();
 
         // Resume stats collection, and reset Start Timestamp (for CumulativeMutableViewData), or refresh
         // bucket list (for InternalMutableViewData).
-        internal abstract void ResumeStatsCollection(ITimestamp now);
+        internal abstract void ResumeStatsCollection(DateTimeOffset now);
     }
 }

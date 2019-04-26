@@ -22,7 +22,6 @@ namespace OpenCensus.Trace.Test
     using Moq;
     using OpenCensus.Common;
     using OpenCensus.Internal;
-    using OpenCensus.Testing.Common;
     using OpenCensus.Trace.Config;
     using OpenCensus.Trace.Export;
     using OpenCensus.Trace.Internal;
@@ -35,23 +34,22 @@ namespace OpenCensus.Trace.Test
         private readonly RandomGenerator random = new RandomGenerator(1234);
         private readonly ISpanContext spanContext;
         private readonly ISpanId parentSpanId;
-        private readonly ITimestamp timestamp = Timestamp.Create(1234, 5678);
-        private readonly TestClock testClock;
-        private readonly ITimestampConverter timestampConverter;
+        private TimeSpan interval = TimeSpan.FromMilliseconds(0);
+        private readonly DateTimeOffset startTime = DateTimeOffset.Now;
+        private readonly Timestamp timestamp;
+        private readonly Timer timestampConverter;
         private readonly SpanOptions noRecordSpanOptions = SpanOptions.None;
         private readonly SpanOptions recordSpanOptions = SpanOptions.RecordEvents;
         private readonly IDictionary<String, IAttributeValue> attributes = new Dictionary<String, IAttributeValue>();
         private readonly IDictionary<String, IAttributeValue> expectedAttributes;
         private IStartEndHandler startEndHandler = Mock.Of<IStartEndHandler>();
-        // @Rule public readonly ExpectedException exception = ExpectedException.none();
-
 
         public SpanTest()
         {
-            spanContext = SpanContext.Create(TraceId.GenerateRandomId(random), SpanId.GenerateRandomId(random), TraceOptions.Default, Tracestate.Empty);
+            timestamp = Timestamp.FromDateTimeOffset(startTime);
+            timestampConverter = Timer.StartNew(startTime, () => interval);
+            spanContext = SpanContext.Create(TraceId.GenerateRandomId(random), SpanId.GenerateRandomId(random), OpenCensus.Trace.TraceOptions.Default, Tracestate.Empty);
             parentSpanId = SpanId.GenerateRandomId(random);
-            testClock = TestClock.Create(timestamp);
-            timestampConverter = TimestampConverter.Now(testClock);
             attributes.Add(
                 "MyStringAttributeKey", AttributeValue.StringAttributeValue("MyStringAttributeValue"));
             attributes.Add("MyLongAttributeKey", AttributeValue.LongAttributeValue(123L));
@@ -74,8 +72,7 @@ namespace OpenCensus.Trace.Test
                     false,
                     TraceParams.Default,
                     startEndHandler,
-                    timestampConverter,
-                    testClock);
+                    timestampConverter);
             // Check that adding trace events after Span#End() does not throw any exception.
             span.PutAttributes(attributes);
             span.AddAnnotation(Annotation.FromDescription(ANNOTATION_DESCRIPTION));
@@ -100,8 +97,7 @@ namespace OpenCensus.Trace.Test
                     false,
                     TraceParams.Default,
                     startEndHandler,
-                    timestampConverter,
-                    testClock);
+                    timestampConverter);
             span.End();
             // Check that adding trace events after Span#End() does not throw any exception and are not
             // recorded.
@@ -124,26 +120,6 @@ namespace OpenCensus.Trace.Test
             Assert.Equal(timestamp, spanData.EndTimestamp);
         }
 
-        // [Fact]
-        // public void DeprecatedAddAttributesStillWorks()
-        //  {
-        //      ISpan span =
-        //          Span.StartSpan(
-        //              spanContext,
-        //              recordSpanOptions,
-        //              SPAN_NAME,
-        //              parentSpanId,
-        //              false,
-        //              TraceParams.DEFAULT,
-        //              startEndHandler,
-        //              timestampConverter,
-        //              testClock);
-        //      span.AddAttributes(attributes);
-        //      span.End();
-        //      SpanData spanData = ((Span)span).ToSpanData();
-        //      Assert.Equal(spanData.Attributes.AttributeMap).isEqualTo(attributes);
-        //  }
-
         [Fact]
         public void ToSpanData_ActiveSpan()
         {
@@ -156,22 +132,21 @@ namespace OpenCensus.Trace.Test
                     true,
                     TraceParams.Default,
                     startEndHandler,
-                    timestampConverter,
-                    testClock);
+                    timestampConverter);
    
             span.PutAttribute(
                 "MySingleStringAttributeKey",
                 AttributeValue.StringAttributeValue("MySingleStringAttributeValue"));
             span.PutAttributes(attributes);
-            testClock.AdvanceTime(Duration.Create(0, 100));
+            interval = TimeSpan.FromMilliseconds(100);
             span.AddAnnotation(Annotation.FromDescription(ANNOTATION_DESCRIPTION));
-            testClock.AdvanceTime(Duration.Create(0, 100));
+            interval = TimeSpan.FromMilliseconds(200);
             span.AddAnnotation(ANNOTATION_DESCRIPTION, attributes);
-            testClock.AdvanceTime(Duration.Create(0, 100));
+            interval = TimeSpan.FromMilliseconds(300);
             IMessageEvent networkEvent =
                 MessageEvent.Builder(MessageEventType.Received, 1).SetUncompressedMessageSize(3).Build();
             span.AddMessageEvent(networkEvent);
-            testClock.AdvanceTime(Duration.Create(0, 100));
+            interval = TimeSpan.FromMilliseconds(400);
             ILink link = Link.FromSpanContext(spanContext, LinkType.ChildLinkedSpan);
             span.AddLink(link);
             ISpanData spanData = ((Span)span).ToSpanData();
@@ -183,13 +158,13 @@ namespace OpenCensus.Trace.Test
             Assert.Equal(expectedAttributes, spanData.Attributes.AttributeMap); 
             Assert.Equal(0, spanData.Annotations.DroppedEventsCount);
             Assert.Equal(2, spanData.Annotations.Events.Count());
-            Assert.Equal(timestamp.AddNanos(100), spanData.Annotations.Events.ToList()[0].Timestamp);
+            Assert.Equal(timestamp.AddDuration(Duration.Create(TimeSpan.FromMilliseconds(100))), spanData.Annotations.Events.ToList()[0].Timestamp);
             Assert.Equal(Annotation.FromDescription(ANNOTATION_DESCRIPTION), spanData.Annotations.Events.ToList()[0].Event);
-            Assert.Equal(timestamp.AddNanos(200), spanData.Annotations.Events.ToList()[1].Timestamp);
+            Assert.Equal(timestamp.AddDuration(Duration.Create(TimeSpan.FromMilliseconds(200))), spanData.Annotations.Events.ToList()[1].Timestamp);
             Assert.Equal(Annotation.FromDescriptionAndAttributes(ANNOTATION_DESCRIPTION, attributes), spanData.Annotations.Events.ToList()[1].Event);
             Assert.Equal(0, spanData.MessageEvents.DroppedEventsCount);
             Assert.Single(spanData.MessageEvents.Events);
-            Assert.Equal(timestamp.AddNanos(300), spanData.MessageEvents.Events.First().Timestamp);
+            Assert.Equal(timestamp.AddDuration(Duration.Create(TimeSpan.FromMilliseconds(300))), spanData.MessageEvents.Events.First().Timestamp);
             Assert.Equal(networkEvent, spanData.MessageEvents.Events.First().Event);
             Assert.Equal(0, spanData.Links.DroppedLinksCount);
             Assert.Single(spanData.Links.Links);
@@ -215,24 +190,23 @@ namespace OpenCensus.Trace.Test
                     false,
                     TraceParams.Default,
                     startEndHandler,
-                    timestampConverter,
-                    testClock);
+                    timestampConverter);
      
             span.PutAttribute(
                 "MySingleStringAttributeKey",
                 AttributeValue.StringAttributeValue("MySingleStringAttributeValue"));
             span.PutAttributes(attributes);
-            testClock.AdvanceTime(Duration.Create(0, 100));
+            interval = TimeSpan.FromMilliseconds(100);
             span.AddAnnotation(Annotation.FromDescription(ANNOTATION_DESCRIPTION));
-            testClock.AdvanceTime(Duration.Create(0, 100));
+            interval = TimeSpan.FromMilliseconds(200);
             span.AddAnnotation(ANNOTATION_DESCRIPTION, attributes);
-            testClock.AdvanceTime(Duration.Create(0, 100));
+            interval = TimeSpan.FromMilliseconds(300);
             IMessageEvent networkEvent =
                 MessageEvent.Builder(MessageEventType.Received, 1).SetUncompressedMessageSize(3).Build();
             span.AddMessageEvent(networkEvent);
             ILink link = Link.FromSpanContext(spanContext, LinkType.ChildLinkedSpan);
             span.AddLink(link);
-            testClock.AdvanceTime(Duration.Create(0, 100));
+            interval = TimeSpan.FromMilliseconds(400);
             span.End(EndSpanOptions.Builder().SetStatus(Status.Cancelled).Build());
           
             ISpanData spanData = ((Span)span).ToSpanData();
@@ -244,20 +218,20 @@ namespace OpenCensus.Trace.Test
             Assert.Equal(expectedAttributes, spanData.Attributes.AttributeMap);
             Assert.Equal(0, spanData.Annotations.DroppedEventsCount);
             Assert.Equal(2, spanData.Annotations.Events.Count());
-            Assert.Equal(timestamp.AddNanos(100), spanData.Annotations.Events.ToList()[0].Timestamp);
+            Assert.Equal(timestamp.AddDuration(Duration.Create(TimeSpan.FromMilliseconds(100))), spanData.Annotations.Events.ToList()[0].Timestamp);
             Assert.Equal(Annotation.FromDescription(ANNOTATION_DESCRIPTION), spanData.Annotations.Events.ToList()[0].Event);
-            Assert.Equal(timestamp.AddNanos(200), spanData.Annotations.Events.ToList()[1].Timestamp);
+            Assert.Equal(timestamp.AddDuration(Duration.Create(TimeSpan.FromMilliseconds(200))), spanData.Annotations.Events.ToList()[1].Timestamp);
             Assert.Equal(Annotation.FromDescriptionAndAttributes(ANNOTATION_DESCRIPTION, attributes), spanData.Annotations.Events.ToList()[1].Event);
             Assert.Equal(0, spanData.MessageEvents.DroppedEventsCount);
             Assert.Single(spanData.MessageEvents.Events);
-            Assert.Equal(timestamp.AddNanos(300), spanData.MessageEvents.Events.First().Timestamp);
+            Assert.Equal(timestamp.AddDuration(Duration.Create(TimeSpan.FromMilliseconds(300))), spanData.MessageEvents.Events.First().Timestamp);
             Assert.Equal(networkEvent, spanData.MessageEvents.Events.First().Event);
             Assert.Equal(0, spanData.Links.DroppedLinksCount);
             Assert.Single(spanData.Links.Links);
             Assert.Equal(link, spanData.Links.Links.First());
             Assert.Equal(timestamp, spanData.StartTimestamp);
             Assert.Equal(Status.Cancelled, spanData.Status);
-            Assert.Equal(timestamp.AddNanos(400), spanData.EndTimestamp);
+            Assert.Equal(timestamp.AddDuration(Duration.Create(TimeSpan.FromMilliseconds(400))), spanData.EndTimestamp);
 
             var startEndMock = Mock.Get<IStartEndHandler>(startEndHandler);
             var spanBase = span as SpanBase;
@@ -277,9 +251,8 @@ namespace OpenCensus.Trace.Test
                     false,
                     TraceParams.Default,
                     startEndHandler,
-                    timestampConverter,
-                    testClock);
-            testClock.AdvanceTime(Duration.Create(0, 100));
+                    timestampConverter);
+            interval = TimeSpan.FromMilliseconds(100);
             Assert.Equal(Status.Ok, span.Status);
             ((Span)span).Status = Status.Cancelled;
             Assert.Equal(Status.Cancelled, span.Status);
@@ -303,9 +276,8 @@ namespace OpenCensus.Trace.Test
                     false,
                     TraceParams.Default,
                     startEndHandler,
-                    timestampConverter,
-                    testClock);
-            testClock.AdvanceTime(Duration.Create(0, 100));
+                    timestampConverter);
+            interval = TimeSpan.FromMilliseconds(100);
             Assert.Equal(Status.Ok, span.Status);
             ((Span)span).Status = Status.Cancelled;
             Assert.Equal(Status.Cancelled, span.Status);
@@ -332,8 +304,7 @@ namespace OpenCensus.Trace.Test
                     false,
                     traceParams,
                     startEndHandler,
-                    timestampConverter,
-                    testClock);
+                    timestampConverter);
             for (int i = 0; i < 2 * maxNumberOfAttributes; i++)
             {
                 IDictionary<String, IAttributeValue> attributes = new Dictionary<String, IAttributeValue>();
@@ -380,8 +351,7 @@ namespace OpenCensus.Trace.Test
                     false,
                     traceParams,
                     startEndHandler,
-                    timestampConverter,
-                    testClock);
+                    timestampConverter);
             for (int i = 0; i < 2 * maxNumberOfAttributes; i++)
             {
                 IDictionary<String, IAttributeValue> attributes = new Dictionary<String, IAttributeValue>();
@@ -439,14 +409,13 @@ namespace OpenCensus.Trace.Test
                     false,
                     traceParams,
                     startEndHandler,
-                    timestampConverter,
-                    testClock);
+                    timestampConverter);
             IAnnotation annotation = Annotation.FromDescription(ANNOTATION_DESCRIPTION);
             int i = 0;
             for (i = 0; i < 2 * maxNumberOfAnnotations; i++)
             {
                 span.AddAnnotation(annotation);
-                testClock.AdvanceTime(Duration.Create(0, 100));
+                interval += TimeSpan.FromMilliseconds(100);
             }
             ISpanData spanData = ((Span)span).ToSpanData();
             Assert.Equal(maxNumberOfAnnotations, spanData.Annotations.DroppedEventsCount);
@@ -454,7 +423,7 @@ namespace OpenCensus.Trace.Test
             i = 0;
             foreach (var te in spanData.Annotations.Events)
             {
-                Assert.Equal(timestamp.AddNanos(100 * (maxNumberOfAnnotations + i)), te.Timestamp);
+                Assert.Equal(timestamp.AddDuration(Duration.Create(TimeSpan.FromMilliseconds(100 * (maxNumberOfAnnotations + i)))), te.Timestamp);
                 Assert.Equal(annotation, te.Event);
                 i++;
             }
@@ -465,7 +434,7 @@ namespace OpenCensus.Trace.Test
             i = 0;
             foreach (var te in spanData.Annotations.Events)
             {
-                Assert.Equal(timestamp.AddNanos(100 * (maxNumberOfAnnotations + i)), te.Timestamp);
+                Assert.Equal(timestamp.AddDuration(Duration.Create(TimeSpan.FromMilliseconds(100 * (maxNumberOfAnnotations + i)))), te.Timestamp);
                 Assert.Equal(annotation, te.Event);
                 i++;
             }
@@ -489,14 +458,13 @@ namespace OpenCensus.Trace.Test
                     false,
                     traceParams,
                     startEndHandler,
-                    timestampConverter,
-                    testClock);
+                    timestampConverter);
             IMessageEvent networkEvent =
                 MessageEvent.Builder(MessageEventType.Received, 1).SetUncompressedMessageSize(3).Build();
             for (int i = 0; i < 2 * maxNumberOfNetworkEvents; i++)
             {
                 span.AddMessageEvent(networkEvent);
-                testClock.AdvanceTime(Duration.Create(0, 100));
+                interval += TimeSpan.FromMilliseconds(100);
             }
             ISpanData spanData = ((Span)span).ToSpanData();
             Assert.Equal(maxNumberOfNetworkEvents, spanData.MessageEvents.DroppedEventsCount);
@@ -504,7 +472,7 @@ namespace OpenCensus.Trace.Test
             var list = spanData.MessageEvents.Events.ToList();
             for (int i = 0; i < maxNumberOfNetworkEvents; i++)
             {
-                Assert.Equal(timestamp.AddNanos(100 * (maxNumberOfNetworkEvents + i)), list[i].Timestamp);
+                Assert.Equal(timestamp.AddDuration(Duration.Create(TimeSpan.FromMilliseconds(100 * (maxNumberOfNetworkEvents + i)))), list[i].Timestamp);
                 Assert.Equal(networkEvent, list[i].Event);
             }
             span.End();
@@ -514,7 +482,7 @@ namespace OpenCensus.Trace.Test
             list = spanData.MessageEvents.Events.ToList();
             for (int i = 0; i < maxNumberOfNetworkEvents; i++)
             {
-                Assert.Equal(timestamp.AddNanos(100 * (maxNumberOfNetworkEvents + i)), list[i].Timestamp);
+                Assert.Equal(timestamp.AddDuration(Duration.Create(TimeSpan.FromMilliseconds(100 * (maxNumberOfNetworkEvents + i)))), list[i].Timestamp);
                 Assert.Equal(networkEvent, list[i].Event);
             }
         }
@@ -534,8 +502,7 @@ namespace OpenCensus.Trace.Test
                     false,
                     traceParams,
                     startEndHandler,
-                    timestampConverter,
-                    testClock);
+                    timestampConverter);
             ILink link = Link.FromSpanContext(spanContext, LinkType.ChildLinkedSpan);
             for (int i = 0; i < 2 * maxNumberOfLinks; i++)
             {
@@ -570,8 +537,7 @@ namespace OpenCensus.Trace.Test
                     false,
                     TraceParams.Default,
                     startEndHandler,
-                    timestampConverter,
-                    testClock);
+                    timestampConverter);
             span.End(EndSpanOptions.Builder().SetSampleToLocalSpanStore(true).Build());
 
             Assert.True(((Span)span).IsSampleToLocalSpanStore);
@@ -584,8 +550,7 @@ namespace OpenCensus.Trace.Test
                     false,
                     TraceParams.Default,
                     startEndHandler,
-                    timestampConverter,
-                    testClock);
+                    timestampConverter);
             span2.End();
 
             Assert.False(((Span)span2).IsSampleToLocalSpanStore);
@@ -609,8 +574,7 @@ namespace OpenCensus.Trace.Test
                     false,
                     TraceParams.Default,
                     startEndHandler,
-                    timestampConverter,
-                    testClock);
+                    timestampConverter);
 
             Assert.Throws<InvalidOperationException>(() => ((Span)span).IsSampleToLocalSpanStore);
         }

@@ -24,7 +24,7 @@ namespace OpenCensus.Trace.Export
         private const int ExporterBufferSize = 32;
 
         // Enforces that trace export exports data at least once every 5 seconds.
-        private static readonly IDuration ExporterScheduleDelay = Duration.Create(5, 0);
+        private static readonly Duration ExporterScheduleDelay = Duration.Create(5, 0);
 
         private ExportComponent(bool supportInProcessStores, IEventQueue eventQueue)
         {

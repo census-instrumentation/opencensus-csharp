@@ -16,10 +16,31 @@
 
 namespace OpenCensus.Collector.Dependencies
 {
+    using System;
+    using System.Net.Http;
+    using OpenCensus.Trace;
+    using OpenCensus.Trace.Sampler;
+
     /// <summary>
     /// Options for dependencies collector.
     /// </summary>
     public class DependenciesCollectorOptions
     {
+        private static Func<HttpRequestMessage, ISampler> defaultSampler = (req) => { return ((req.RequestUri != null) && req.RequestUri.ToString().Contains("zipkin.azurewebsites.net")) ? Samplers.NeverSample : null; };
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DependenciesCollectorOptions"/> class.
+        /// </summary>
+        /// <param name="sampler">Custom sampling function, if any</param>
+        public DependenciesCollectorOptions(Func<HttpRequestMessage, ISampler> sampler = null)
+        {
+            this.CustomSampler = sampler ?? defaultSampler;
+        }
+
+        /// <summary>
+        /// Gets a hook to exclude calls based on domain
+        /// or other per-request criterion.
+        /// </summary>
+        public Func<HttpRequestMessage, ISampler> CustomSampler { get; private set; }
     }
 }

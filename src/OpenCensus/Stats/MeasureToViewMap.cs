@@ -19,13 +19,12 @@ namespace OpenCensus.Stats
     using System;
     using System.Collections.Generic;
     using System.Collections.Immutable;
-    using OpenCensus.Common;
     using OpenCensus.Tags;
 
     internal sealed class MeasureToViewMap
     {
         private readonly object lck = new object();
-        private readonly IDictionary<string, IList<MutableViewData>> mutableMap = new Dictionary<string, IList<MutableViewData>>();
+        private readonly IDictionary<string, ICollection<MutableViewData>> mutableMap = new Dictionary<string, ICollection<MutableViewData>>();
 
         private readonly IDictionary<IViewName, IView> registeredViews = new Dictionary<IViewName, IView>();
 
@@ -56,17 +55,17 @@ namespace OpenCensus.Stats
             }
         }
 
-        internal IViewData GetView(IViewName viewName, IClock clock, StatsCollectionState state)
+        internal IViewData GetView(IViewName viewName, StatsCollectionState state)
         {
             lock (this.lck)
             {
                 MutableViewData view = this.GetMutableViewData(viewName);
-                return view?.ToViewData(clock.Now, state);
+                return view?.ToViewData(DateTimeOffset.Now, state);
             }
         }
 
         /** Enable stats collection for the given {@link View}. */
-        internal void RegisterView(IView view, IClock clock)
+        internal void RegisterView(IView view)
         {
             lock (this.lck)
             {
@@ -98,12 +97,12 @@ namespace OpenCensus.Stats
                     this.registeredMeasures.Add(measure.Name, measure);
                 }
 
-                this.AddMutableViewData(view.Measure.Name, MutableViewData.Create(view, clock.Now));
+                this.AddMutableViewData(view.Measure.Name, MutableViewData.Create(view, DateTimeOffset.Now));
             }
         }
 
         // Records stats with a set of tags.
-        internal void Record(ITagContext tags, IEnumerable<IMeasurement> stats, ITimestamp timestamp)
+        internal void Record(ITagContext tags, IEnumerable<IMeasurement> stats, DateTimeOffset timestamp)
         {
             lock (this.lck)
             {
@@ -156,7 +155,7 @@ namespace OpenCensus.Stats
         }
 
         // Resume stats collection for all MutableViewData.
-        internal void ResumeStatsCollection(ITimestamp now)
+        internal void ResumeStatsCollection(DateTimeOffset now)
         {
             lock (this.lck)
             {
@@ -198,7 +197,7 @@ namespace OpenCensus.Stats
                     return null;
                 }
 
-                this.mutableMap.TryGetValue(view.Measure.Name, out IList<MutableViewData> views);
+                this.mutableMap.TryGetValue(view.Measure.Name, out ICollection<MutableViewData> views);
                 if (views != null)
                 {
                     foreach (MutableViewData viewData in views)

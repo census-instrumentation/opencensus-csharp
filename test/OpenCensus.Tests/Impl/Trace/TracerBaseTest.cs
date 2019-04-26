@@ -27,7 +27,7 @@ namespace OpenCensus.Trace.Test
         private static readonly ITracer noopTracer = TracerBase.NoopTracer;
         private static readonly string SPAN_NAME = "MySpanName";
         private TracerBase tracer = Mock.Of<TracerBase>();
-        private SpanBuilderBase spanBuilder = Mock.Of<SpanBuilderBase>();
+        private SpanBuilderBase spanBuilder = new Mock<SpanBuilderBase>(SpanKind.Unspecified).Object;
         private SpanBase span = Mock.Of<SpanBase>();
 
         public TracerBaseTest()
@@ -121,31 +121,31 @@ namespace OpenCensus.Trace.Test
         [Fact]
         public void SpanBuilderWithParentAndName_NullName()
         {
-            Assert.Throws<ArgumentNullException>(() => noopTracer.SpanBuilderWithExplicitParent(null, null));
+            Assert.Throws<ArgumentNullException>(() => noopTracer.SpanBuilderWithExplicitParent(spanName: null, parent: null));
         }
 
         [Fact]
         public void DefaultSpanBuilderWithParentAndName()
         {
-            Assert.Same(BlankSpan.Instance, noopTracer.SpanBuilderWithExplicitParent(SPAN_NAME, null).StartSpan());
+            Assert.Same(BlankSpan.Instance, noopTracer.SpanBuilderWithExplicitParent(SPAN_NAME, parent: null).StartSpan());
         }
 
         [Fact]
         public void spanBuilderWithRemoteParent_NullName()
         {
-            Assert.Throws<ArgumentNullException>(() => noopTracer.SpanBuilderWithRemoteParent(null, null));
+            Assert.Throws<ArgumentNullException>(() => noopTracer.SpanBuilderWithRemoteParent(null, remoteParentSpanContext: null));
         }
 
         [Fact]
         public void DefaultSpanBuilderWithRemoteParent_NullParent()
         {
-            Assert.Same(BlankSpan.Instance, noopTracer.SpanBuilderWithRemoteParent(SPAN_NAME, null).StartSpan());
+            Assert.Same(BlankSpan.Instance, noopTracer.SpanBuilderWithRemoteParent(SPAN_NAME, remoteParentSpanContext: null).StartSpan());
         }
 
         [Fact]
         public void DefaultSpanBuilderWithRemoteParent()
         {
-            Assert.Same(BlankSpan.Instance, noopTracer.SpanBuilderWithRemoteParent(SPAN_NAME, SpanContext.Invalid).StartSpan());
+            Assert.Same(BlankSpan.Instance, noopTracer.SpanBuilderWithRemoteParent(SPAN_NAME, remoteParentSpanContext: SpanContext.Invalid).StartSpan());
         }
 
         [Fact]
@@ -155,7 +155,7 @@ namespace OpenCensus.Trace.Test
             try
             {
                 Assert.Same(span, tracer.CurrentSpan);
-                Mock.Get(tracer).Setup((tracer) => tracer.SpanBuilderWithExplicitParent(SPAN_NAME, span)).Returns(spanBuilder);
+                Mock.Get(tracer).Setup((tracer) => tracer.SpanBuilderWithExplicitParent(SPAN_NAME, SpanKind.Unspecified, span)).Returns(spanBuilder);
                 Assert.Same(spanBuilder, tracer.SpanBuilder(SPAN_NAME));
             }
             finally
@@ -171,7 +171,7 @@ namespace OpenCensus.Trace.Test
             try
             {
                 Assert.Same(BlankSpan.Instance, tracer.CurrentSpan);
-                Mock.Get(tracer).Setup((t) => t.SpanBuilderWithExplicitParent(SPAN_NAME, BlankSpan.Instance)).Returns(spanBuilder);
+                Mock.Get(tracer).Setup((t) => t.SpanBuilderWithExplicitParent(SPAN_NAME, SpanKind.Unspecified, BlankSpan.Instance)).Returns(spanBuilder);
                 Assert.Same(spanBuilder, tracer.SpanBuilder(SPAN_NAME));
             }
             finally

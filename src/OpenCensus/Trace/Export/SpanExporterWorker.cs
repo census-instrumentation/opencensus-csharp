@@ -32,7 +32,7 @@ namespace OpenCensus.Trace.Export
         private readonly TimeSpan scheduleDelay;
         private bool shutdown = false;
 
-        public SpanExporterWorker(int bufferSize, IDuration scheduleDelay)
+        public SpanExporterWorker(int bufferSize, Duration scheduleDelay)
         {
             this.bufferSize = bufferSize;
             this.scheduleDelay = TimeSpan.FromSeconds(scheduleDelay.Seconds);
@@ -56,26 +56,24 @@ namespace OpenCensus.Trace.Export
             }
         }
 
-        internal Task ExportAsync(IEnumerable<ISpanData> export, CancellationToken token)
+        internal async Task ExportAsync(IEnumerable<ISpanData> export, CancellationToken token)
         {
             var handlers = this.serviceHandlers.Values;
             foreach (var handler in handlers)
             {
                 try
                 {
-                    // TODO: when handlers interface will be switched to async - this need to await
-                    handler.Export(export);
+                    // TODO: the async handlers could be run in parallel.
+                    await handler.ExportAsync(export);
                 }
                 catch (Exception ex)
                 {
                     OpenCensusEventSource.Log.ExporterThrownExceptionWarning(ex);
                 }
             }
-
-            return Task.CompletedTask;
         }
 
-        internal void Run(object obj)
+        internal async void Run(object obj)
         {
             List<ISpanData> toExport = new List<ISpanData>();
             while (!this.shutdown)
@@ -88,7 +86,7 @@ namespace OpenCensus.Trace.Export
                         this.BuildList(item, toExport);
 
                         // Export them
-                        this.ExportAsync(toExport, CancellationToken.None);
+                        await this.ExportAsync(toExport, CancellationToken.None);
 
                         // Get ready for next batch
                         toExport.Clear();
@@ -127,7 +125,7 @@ namespace OpenCensus.Trace.Export
             return spanImpl.ToSpanData();
         }
 
-        private void BuildList(ISpan item, List<ISpanData> toExport)
+        private void BuildList(ISpan item, ICollection<ISpanData> toExport)
         {
             if (item is Span span)
             {

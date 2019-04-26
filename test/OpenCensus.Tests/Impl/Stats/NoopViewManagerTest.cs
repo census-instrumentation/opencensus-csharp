@@ -32,7 +32,7 @@ namespace OpenCensus.Stats.Test
         private static readonly String VIEW_DESCRIPTION = "view description";
         private static readonly ISum AGGREGATION = Sum.Create();
         // private static readonly Cumulative CUMULATIVE = Cumulative.create();
-        private static readonly IDuration TEN_SECONDS = Duration.Create(10, 0);
+        private static readonly Duration TEN_SECONDS = Duration.Create(10, 0);
         // private static readonly Interval INTERVAL = Interval.create(TEN_SECONDS);
 
         // @Rule public readonly ExpectedException thrown = ExpectedException.none();
@@ -96,8 +96,8 @@ namespace OpenCensus.Stats.Test
             IViewData viewData = viewManager.GetView(VIEW_NAME);
             Assert.Equal(view, viewData.View);
             Assert.Empty(viewData.AggregationMap);
-            Assert.Equal(Timestamp.Create(0, 0), viewData.Start);
-            Assert.Equal(Timestamp.Create(0, 0), viewData.End);
+            Assert.Equal(DateTimeOffset.MinValue, viewData.Start);
+            Assert.Equal(DateTimeOffset.MinValue, viewData.End);
 
         }
 
@@ -113,8 +113,8 @@ namespace OpenCensus.Stats.Test
             IViewData viewData = viewManager.GetView(VIEW_NAME);
             Assert.Equal(view, viewData.View);
             Assert.Empty(viewData.AggregationMap);
-            Assert.Equal(Timestamp.Create(0, 0), viewData.Start);
-            Assert.Equal(Timestamp.Create(0, 0), viewData.End);
+            Assert.Equal(DateTimeOffset.MinValue, viewData.Start);
+            Assert.Equal(DateTimeOffset.MinValue, viewData.End);
 
         }
 

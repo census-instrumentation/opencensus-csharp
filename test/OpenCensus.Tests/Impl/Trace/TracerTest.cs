@@ -17,7 +17,6 @@
 namespace OpenCensus.Trace.Test
 {
     using Moq;
-    using OpenCensus.Testing.Common;
     using OpenCensus.Trace.Config;
     using OpenCensus.Trace.Internal;
     using Xunit;
@@ -34,20 +33,20 @@ namespace OpenCensus.Trace.Test
         {
             startEndHandler = Mock.Of<IStartEndHandler>();
             traceConfig = Mock.Of<ITraceConfig>();
-            tracer = new Tracer(new RandomGenerator(), startEndHandler, TestClock.Create(), traceConfig);
+            tracer = new Tracer(new RandomGenerator(), startEndHandler, traceConfig);
         }
 
         [Fact]
         public void CreateSpanBuilder()
         {
-            ISpanBuilder spanBuilder = tracer.SpanBuilderWithExplicitParent(SPAN_NAME, BlankSpan.Instance);
+            ISpanBuilder spanBuilder = tracer.SpanBuilderWithExplicitParent(SPAN_NAME, parent: BlankSpan.Instance);
             Assert.IsType<SpanBuilder>(spanBuilder);
         }
 
         [Fact]
         public void CreateSpanBuilderWithRemoteParet()
         {
-            ISpanBuilder spanBuilder = tracer.SpanBuilderWithRemoteParent(SPAN_NAME, SpanContext.Invalid);
+            ISpanBuilder spanBuilder = tracer.SpanBuilderWithRemoteParent(SPAN_NAME, remoteParentSpanContext: SpanContext.Invalid);
             Assert.IsType<SpanBuilder>(spanBuilder);
         }
     }

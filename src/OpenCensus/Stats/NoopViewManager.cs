@@ -24,7 +24,7 @@ namespace OpenCensus.Stats
 
     internal sealed class NoopViewManager : ViewManagerBase
     {
-        private static readonly ITimestamp ZeroTimestamp = Timestamp.Create(0, 0);
+        private static readonly Timestamp ZeroTimestamp = Timestamp.Create(0, 0);
 
         private readonly IDictionary<IViewName, IView> registeredViews = new Dictionary<IViewName, IView>();
 
@@ -92,8 +92,8 @@ namespace OpenCensus.Stats
                     return ViewData.Create(
                         view,
                         new Dictionary<TagValues, IAggregationData>(),
-                        ZeroTimestamp,
-                        ZeroTimestamp);
+                        DateTimeOffset.MinValue,
+                        DateTimeOffset.MinValue);
                 }
             }
         }

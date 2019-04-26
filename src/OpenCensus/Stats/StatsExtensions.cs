@@ -23,7 +23,7 @@ namespace OpenCensus.Stats
 
     public static class StatsExtensions
     {
-        public static bool ContainsKeys(this IView view, List<ITagKey> keys)
+        public static bool ContainsKeys(this IView view, IEnumerable<ITagKey> keys)
         {
             var columns = view.Columns;
             foreach (var key in keys)
@@ -37,12 +37,12 @@ namespace OpenCensus.Stats
             return true;
         }
 
-        public static IAggregationData SumWithTags(this IViewData viewData, IList<ITagValue> values = null)
+        public static IAggregationData SumWithTags(this IViewData viewData, IEnumerable<ITagValue> values = null)
         {
             return viewData.AggregationMap.WithTags(values).Sum(viewData.View);
         }
 
-        public static IDictionary<TagValues, IAggregationData> WithTags(this IDictionary<TagValues, IAggregationData> aggMap, IList<ITagValue> values)
+        public static IDictionary<TagValues, IAggregationData> WithTags(this IDictionary<TagValues, IAggregationData> aggMap, IEnumerable<ITagValue> values)
         {
             Dictionary<TagValues, IAggregationData> results = new Dictionary<TagValues, IAggregationData>();
 
@@ -183,7 +183,7 @@ namespace OpenCensus.Stats
                             dist.Max = arg.Max;
                         }
 
-                        IList<long> bucketCounts = arg.BucketCounts;
+                        IReadOnlyList<long> bucketCounts = arg.BucketCounts;
                         for (int i = 0; i < bucketCounts.Count; i++)
                         {
                             dist.BucketCounts[i] += bucketCounts[i];

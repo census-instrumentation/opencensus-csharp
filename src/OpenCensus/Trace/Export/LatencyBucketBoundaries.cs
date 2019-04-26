@@ -16,33 +16,34 @@
 
 namespace OpenCensus.Trace.Export
 {
+    using System;
     using System.Collections.Generic;
 
     public class LatencyBucketBoundaries : ISampledLatencyBucketBoundaries
     {
-        public static readonly ISampledLatencyBucketBoundaries ZeroMicrosx10 = new LatencyBucketBoundaries(0, 10000);
-        public static readonly ISampledLatencyBucketBoundaries Microsx10Microsx100 = new LatencyBucketBoundaries(10000, 100000);
-        public static readonly ISampledLatencyBucketBoundaries Microsx100Millix1 = new LatencyBucketBoundaries(100000, 1000000);
-        public static readonly ISampledLatencyBucketBoundaries Millix1Millix10 = new LatencyBucketBoundaries(1000000, 10000000);
-        public static readonly ISampledLatencyBucketBoundaries Millix10Millix100 = new LatencyBucketBoundaries(10000000, 100000000);
-        public static readonly ISampledLatencyBucketBoundaries Millix100Secondx1 = new LatencyBucketBoundaries(100000000, 1000000000);
-        public static readonly ISampledLatencyBucketBoundaries Secondx1Secondx10 = new LatencyBucketBoundaries(1000000000,  10000000000);
-        public static readonly ISampledLatencyBucketBoundaries Secondx10Secondx100 = new LatencyBucketBoundaries(10000000000, 100000000000);
-        public static readonly ISampledLatencyBucketBoundaries Secondx100Max = new LatencyBucketBoundaries(100000000000, long.MaxValue);
+        public static readonly ISampledLatencyBucketBoundaries ZeroMicrosx10 = new LatencyBucketBoundaries(TimeSpan.Zero, TimeSpan.FromTicks(100));
+        public static readonly ISampledLatencyBucketBoundaries Microsx10Microsx100 = new LatencyBucketBoundaries(TimeSpan.FromTicks(100), TimeSpan.FromTicks(1000));
+        public static readonly ISampledLatencyBucketBoundaries Microsx100Millix1 = new LatencyBucketBoundaries(TimeSpan.FromTicks(1000), TimeSpan.FromMilliseconds(1));
+        public static readonly ISampledLatencyBucketBoundaries Millix1Millix10 = new LatencyBucketBoundaries(TimeSpan.FromMilliseconds(1), TimeSpan.FromMilliseconds(10));
+        public static readonly ISampledLatencyBucketBoundaries Millix10Millix100 = new LatencyBucketBoundaries(TimeSpan.FromMilliseconds(10), TimeSpan.FromMilliseconds(100));
+        public static readonly ISampledLatencyBucketBoundaries Millix100Secondx1 = new LatencyBucketBoundaries(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(1));
+        public static readonly ISampledLatencyBucketBoundaries Secondx1Secondx10 = new LatencyBucketBoundaries(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(10));
+        public static readonly ISampledLatencyBucketBoundaries Secondx10Secondx100 = new LatencyBucketBoundaries(TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(100));
+        public static readonly ISampledLatencyBucketBoundaries Secondx100Max = new LatencyBucketBoundaries(TimeSpan.FromSeconds(100), TimeSpan.MaxValue);
 
-        public static IList<ISampledLatencyBucketBoundaries> Values = new List<ISampledLatencyBucketBoundaries>()
+        public static IReadOnlyList<ISampledLatencyBucketBoundaries> Values = new List<ISampledLatencyBucketBoundaries>
         {
             ZeroMicrosx10, Microsx10Microsx100, Microsx100Millix1, Millix1Millix10, Millix10Millix100, Millix100Secondx1, Secondx1Secondx10, Secondx10Secondx100, Secondx100Max,
         };
 
-        internal LatencyBucketBoundaries(long latencyLowerNs, long latencyUpperNs)
+        internal LatencyBucketBoundaries(TimeSpan latencyLowerNs, TimeSpan latencyUpperNs)
         {
-            this.LatencyLowerNs = latencyLowerNs;
-            this.LatencyUpperNs = latencyUpperNs;
+            this.LatencyLower = latencyLowerNs;
+            this.LatencyUpper = latencyUpperNs;
         }
 
-        public long LatencyLowerNs { get; }
+        public TimeSpan LatencyLower { get; }
 
-        public long LatencyUpperNs { get; }
+        public TimeSpan LatencyUpper { get; }
     }
 }

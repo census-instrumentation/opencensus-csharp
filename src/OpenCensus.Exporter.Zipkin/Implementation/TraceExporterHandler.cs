@@ -46,7 +46,7 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
             this.httpClient = client ?? new HttpClient();
         }
 
-        public void Export(IEnumerable<ISpanData> spanDataList)
+        public async Task ExportAsync(IEnumerable<ISpanData> spanDataList)
         {
             List<ZipkinSpan> zipkinSpans = new List<ZipkinSpan>();
 
@@ -56,7 +56,7 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
                 zipkinSpans.Add(zipkinSpan);
             }
 
-            this.SendSpansAsync(zipkinSpans);
+            await this.SendSpansAsync(zipkinSpans);
         }
 
         internal ZipkinSpan GenerateSpan(ISpanData spanData, ZipkinEndpoint localEndpoint)
@@ -110,7 +110,7 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
             return spanBuilder.Build();
         }
 
-        private long ToEpochMicroseconds(ITimestamp timestamp)
+        private long ToEpochMicroseconds(Timestamp timestamp)
         {
             long nanos = (timestamp.Seconds * NanosPerSecond) + timestamp.Nanos;
             long micros = nanos / 1000L;
@@ -163,7 +163,7 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
             return ZipkinSpanKind.CLIENT;
         }
 
-        private async void SendSpansAsync(List<ZipkinSpan> spans)
+        private async Task SendSpansAsync(IEnumerable<ZipkinSpan> spans)
         {
             try
             {
@@ -201,12 +201,10 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
         {
             var request = new HttpRequestMessage(method, requestUri);
 
-            request.Headers.Add("Accept", "application/json");
-
             return request;
         }
 
-        private HttpContent GetRequestContent(IList<ZipkinSpan> toSerialize)
+        private HttpContent GetRequestContent(IEnumerable<ZipkinSpan> toSerialize)
         {
             try
             {
@@ -254,7 +252,8 @@ namespace OpenCensus.Exporter.Zipkin.Implementation
                     {
                         if (addr.AddressFamily.Equals(family))
                         {
-                            result = addr.ToString();
+                            var sanitizedAddress = new IPAddress(addr.GetAddressBytes()); // Construct address sans ScopeID
+                            result = sanitizedAddress.ToString();
 
                             break;
                         }

@@ -31,7 +31,7 @@ namespace OpenCensus.Collector.StackExchangeRedis
         public async void ProfilerSessionUsesTheSameDefault()
         {
             var startEndHandler = new Mock<IStartEndHandler>();
-            var tracer = new Tracer(new RandomGenerator(), startEndHandler.Object, new DateTimeOffsetClock(), new TraceConfig());
+            var tracer = new Tracer(new RandomGenerator(), startEndHandler.Object, new TraceConfig());
 
             using (var collector = new StackExchangeRedisCallsCollector(null, tracer, null, null))
             {

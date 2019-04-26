@@ -20,6 +20,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using System.Threading.Tasks;
     using Google.Api.Gax.Grpc;
     using Google.Cloud.Trace.V2;
     using Grpc.Core;
@@ -164,7 +165,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             }
         }
 
-        public void Export(IEnumerable<ISpanData> spanDataList)
+        public async Task ExportAsync(IEnumerable<ISpanData> spanDataList)
         {
             TraceServiceClient traceWriter = TraceServiceClient.Create(settings: traceServiceSettings);
             
@@ -174,7 +175,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
                 Spans = { spanDataList.Select(s => s.ToSpan(googleCloudProjectId.ProjectId)) },
             };
             
-            traceWriter.BatchWriteSpansAsync(batchSpansRequest);
+            await traceWriter.BatchWriteSpansAsync(batchSpansRequest);
         }
 
         /// <summary>

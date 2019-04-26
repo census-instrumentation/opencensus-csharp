@@ -21,15 +21,10 @@ namespace OpenCensus.Trace
     using System.Linq;
     using OpenCensus.Internal;
     using OpenCensus.Trace.Config;
-    using OpenCensus.Trace.Internal;
 
     public class SpanBuilder : SpanBuilderBase
     {
-        internal SpanBuilder()
-        {
-        }
-
-        private SpanBuilder(string name, SpanBuilderOptions options, ISpanContext remoteParentSpanContext = null, ISpan parent = null)
+        private SpanBuilder(string name, SpanKind kind, SpanBuilderOptions options, ISpanContext remoteParentSpanContext = null, ISpan parent = null) : base(kind)
         {
             this.Name = name ?? throw new ArgumentNullException(nameof(name));
             this.Parent = parent;
@@ -47,7 +42,7 @@ namespace OpenCensus.Trace
 
         private ISampler Sampler { get; set; }
 
-        private IEnumerable<ISpan> ParentLinks { get; set; } = new List<ISpan>();
+        private IEnumerable<ISpan> ParentLinks { get; set; } = Enumerable.Empty<ISpan>();
 
         private bool RecordEvents { get; set; }
 
@@ -55,7 +50,7 @@ namespace OpenCensus.Trace
         {
             ISpanContext parentContext = this.RemoteParentSpanContext;
             bool hasRemoteParent = true;
-            ITimestampConverter timestampConverter = null;
+            Timer timestampConverter = null;
             if (this.RemoteParentSpanContext == null)
             {
                 // This is not a child of a remote Span. Get the parent SpanContext from the parent Span if
@@ -107,14 +102,14 @@ namespace OpenCensus.Trace
             return this;
         }
 
-        internal static ISpanBuilder CreateWithParent(string spanName, ISpan parent, SpanBuilderOptions options)
+        internal static ISpanBuilder CreateWithParent(string spanName, SpanKind kind, ISpan parent, SpanBuilderOptions options)
         {
-            return new SpanBuilder(spanName, options, null, parent);
+            return new SpanBuilder(spanName, kind, options, null, parent);
         }
 
-        internal static ISpanBuilder CreateWithRemoteParent(string spanName, ISpanContext remoteParentSpanContext, SpanBuilderOptions options)
+        internal static ISpanBuilder CreateWithRemoteParent(string spanName, SpanKind kind, ISpanContext remoteParentSpanContext, SpanBuilderOptions options)
         {
-            return new SpanBuilder(spanName, options, remoteParentSpanContext, null);
+            return new SpanBuilder(spanName, kind, options, remoteParentSpanContext, null);
         }
 
         private static bool IsAnyParentLinkSampled(IEnumerable<ISpan> parentLinks)
@@ -179,7 +174,7 @@ namespace OpenCensus.Trace
                      ISampler sampler,
                      IEnumerable<ISpan> parentLinks,
                      bool recordEvents,
-                     ITimestampConverter timestampConverter)
+                     Timer timestampConverter)
         {
             ITraceParams activeTraceParams = this.Options.TraceConfig.ActiveTraceParams;
             IRandomGenerator random = this.Options.RandomHandler;
@@ -231,9 +226,9 @@ namespace OpenCensus.Trace
                         hasRemoteParent,
                         activeTraceParams,
                         this.Options.StartEndHandler,
-                        timestampConverter,
-                        this.Options.Clock);
+                        timestampConverter);
             LinkSpans(span, parentLinks);
+            span.Kind = this.Kind;
             return span;
         }
     }

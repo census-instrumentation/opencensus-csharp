@@ -39,23 +39,26 @@ namespace OpenCensus.Trace
         /// Gets the span builder for the span with the given name.
         /// </summary>
         /// <param name="spanName">Span name.</param>
+        /// <param name="spanKind">Span kind.</param>
         /// <returns>Span builder for the span with the given name.</returns>
-        ISpanBuilder SpanBuilder(string spanName);
+        ISpanBuilder SpanBuilder(string spanName, SpanKind spanKind = SpanKind.Unspecified);
 
         /// <summary>
         /// Gets the span builder for the span with the given name and parent.
         /// </summary>
         /// <param name="spanName">Span name.</param>
+        /// <param name="spanKind">Span kind.</param>
         /// <param name="parent">Parent of the span.</param>
         /// <returns>Span builder for the span with the given name and specified parent.</returns>
-        ISpanBuilder SpanBuilderWithExplicitParent(string spanName, ISpan parent = null);
+        ISpanBuilder SpanBuilderWithExplicitParent(string spanName, SpanKind spanKind = SpanKind.Unspecified, ISpan parent = null);
 
         /// <summary>
         /// Gets the span builder for the span with the give name and remote parent context.
         /// </summary>
         /// <param name="spanName">Span name.</param>
+        /// <param name="spanKind">Span kind.</param>
         /// <param name="remoteParentSpanContext">Remote parent context extracted from the wire.</param>
         /// <returns>Span builder for the span with the given name and specified parent span context.</returns>
-        ISpanBuilder SpanBuilderWithRemoteParent(string spanName, ISpanContext remoteParentSpanContext = null);
+        ISpanBuilder SpanBuilderWithRemoteParent(string spanName, SpanKind spanKind = SpanKind.Unspecified, ISpanContext remoteParentSpanContext = null);
     }
 }

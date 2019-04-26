@@ -20,30 +20,29 @@ namespace OpenCensus.Stats
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
-    using OpenCensus.Common;
     using OpenCensus.Stats.Aggregations;
     using OpenCensus.Tags;
     using OpenCensus.Utils;
 
     public sealed class ViewData : IViewData
     {
-        internal ViewData(IView view, IDictionary<TagValues, IAggregationData> aggregationMap, ITimestamp start, ITimestamp end)
+        internal ViewData(IView view, IDictionary<TagValues, IAggregationData> aggregationMap, DateTimeOffset start, DateTimeOffset end)
         {
             this.View = view ?? throw new ArgumentNullException(nameof(view));
             this.AggregationMap = aggregationMap ?? throw new ArgumentNullException(nameof(aggregationMap));
-            this.Start = start ?? throw new ArgumentNullException(nameof(start));
-            this.End = end ?? throw new ArgumentNullException(nameof(end));
+            this.Start = start;
+            this.End = end;
         }
 
         public IView View { get; }
 
         public IDictionary<TagValues, IAggregationData> AggregationMap { get; }
 
-        public ITimestamp Start { get; }
+        public DateTimeOffset Start { get; }
 
-        public ITimestamp End { get; }
+        public DateTimeOffset End { get; }
 
-        public static IViewData Create(IView view, IDictionary<TagValues, IAggregationData> map, ITimestamp start, ITimestamp end)
+        public static IViewData Create(IView view, IDictionary<TagValues, IAggregationData> map, DateTimeOffset start, DateTimeOffset end)
         {
             IDictionary<TagValues, IAggregationData> deepCopy = new Dictionary<TagValues, IAggregationData>();
             foreach (var entry in map)

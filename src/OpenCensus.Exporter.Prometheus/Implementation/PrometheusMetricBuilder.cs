@@ -58,7 +58,7 @@ namespace OpenCensus.Exporter.Prometheus.Implementation
             '_',
         };
 
-        private readonly IList<PrometheusMetricValueBuilder> values = new List<PrometheusMetricValueBuilder>();
+        private readonly ICollection<PrometheusMetricValueBuilder> values = new List<PrometheusMetricValueBuilder>();
 
         private string name;
         private string description;
@@ -330,7 +330,7 @@ namespace OpenCensus.Exporter.Prometheus.Implementation
 
         internal class PrometheusMetricValueBuilder
         {
-            public readonly IList<Tuple<string, string>> Labels = new List<Tuple<string, string>>();
+            public readonly ICollection<Tuple<string, string>> Labels = new List<Tuple<string, string>>();
             public double Value;
 
             public PrometheusMetricValueBuilder WithLabel(string name, string value)

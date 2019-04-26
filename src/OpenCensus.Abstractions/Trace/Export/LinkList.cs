@@ -22,7 +22,7 @@ namespace OpenCensus.Trace.Export
 
     public sealed class LinkList : ILinks
     {
-        internal LinkList(IList<ILink> links, int droppedLinksCount)
+        internal LinkList(IEnumerable<ILink> links, int droppedLinksCount)
         {
             this.Links = links ?? throw new ArgumentNullException("Null links");
             this.DroppedLinksCount = droppedLinksCount;
@@ -32,16 +32,16 @@ namespace OpenCensus.Trace.Export
 
         public IEnumerable<ILink> Links { get; }
 
-        public static LinkList Create(IList<ILink> links, int droppedLinksCount)
+        public static LinkList Create(IEnumerable<ILink> links, int droppedLinksCount)
         {
             if (links == null)
             {
                 throw new ArgumentNullException(nameof(links));
             }
 
-            List<ILink> copy = new List<ILink>(links);
+            IEnumerable<ILink> copy = new List<ILink>(links);
 
-            return new LinkList(copy.AsReadOnly(), droppedLinksCount);
+            return new LinkList(copy, droppedLinksCount);
         }
 
         /// <inheritdoc/>

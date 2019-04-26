@@ -16,7 +16,6 @@
 
 namespace OpenCensus.Trace
 {
-    using OpenCensus.Common;
     using OpenCensus.Trace.Config;
     using OpenCensus.Trace.Export;
     using OpenCensus.Trace.Propagation;
@@ -38,14 +37,6 @@ namespace OpenCensus.Trace
             get
             {
                 return Propagation.PropagationComponentBase.NoopPropagationComponent;
-            }
-        }
-
-        public IClock Clock
-        {
-            get
-            {
-                return ZeroTimeClock.Instance;
             }
         }
 

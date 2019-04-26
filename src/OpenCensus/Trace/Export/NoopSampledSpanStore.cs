@@ -69,7 +69,7 @@ namespace OpenCensus.Trace.Export
             return EmptySpanData;
         }
 
-        public override void RegisterSpanNamesForCollection(IList<string> spanNames)
+        public override void RegisterSpanNamesForCollection(IEnumerable<string> spanNames)
         {
             if (spanNames == null)
             {
@@ -85,7 +85,7 @@ namespace OpenCensus.Trace.Export
             }
         }
 
-        public override void UnregisterSpanNamesForCollection(IList<string> spanNames)
+        public override void UnregisterSpanNamesForCollection(IEnumerable<string> spanNames)
         {
             if (spanNames == null)
             {

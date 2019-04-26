@@ -16,7 +16,6 @@
 
 namespace OpenCensus.Trace
 {
-    using OpenCensus.Common;
     using OpenCensus.Internal;
     using OpenCensus.Trace.Config;
     using OpenCensus.Trace.Export;
@@ -32,19 +31,17 @@ namespace OpenCensus.Trace
         /// Initializes a new instance of the <see cref="TraceComponent"/> class.
         /// </summary>
         public TraceComponent()
-            : this(DateTimeOffsetClock.Instance, new RandomGenerator(), new SimpleEventQueue())
+            : this(new RandomGenerator(), new SimpleEventQueue())
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TraceComponent"/> class.
         /// </summary>
-        /// <param name="clock">Clock to use to get the current time.</param>
         /// <param name="randomHandler">Random numbers generator.</param>
         /// <param name="eventQueue">Event queue to use before the exporter.</param>
-        public TraceComponent(IClock clock, IRandomGenerator randomHandler, IEventQueue eventQueue)
+        public TraceComponent(IRandomGenerator randomHandler, IEventQueue eventQueue)
         {
-            this.Clock = clock;
             this.TraceConfig = new Config.TraceConfig();
 
             // TODO(bdrutu): Add a config/argument for supportInProcessStores.
@@ -64,7 +61,7 @@ namespace OpenCensus.Trace
                     this.ExportComponent.RunningSpanStore,
                     this.ExportComponent.SampledSpanStore,
                     eventQueue);
-            this.Tracer = new Tracer(randomHandler, startEndHandler, clock, this.TraceConfig);
+            this.Tracer = new Tracer(randomHandler, startEndHandler, this.TraceConfig);
         }
 
         /// <inheritdoc/>
@@ -72,9 +69,6 @@ namespace OpenCensus.Trace
 
         /// <inheritdoc/>
         public IPropagationComponent PropagationComponent { get; }
-
-        /// <inheritdoc/>
-        public IClock Clock { get; }
 
         /// <inheritdoc/>
         public IExportComponent ExportComponent { get; }

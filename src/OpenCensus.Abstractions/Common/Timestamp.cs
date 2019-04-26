@@ -18,8 +18,16 @@ namespace OpenCensus.Common
 {
     using System;
 
-    public class Timestamp : ITimestamp
+    /// <summary>
+    /// Timestamp with the nanoseconds precision.
+    /// </summary>
+    public sealed class Timestamp : IComparable<Timestamp>, IComparable
     {
+        /// <summary>
+        /// Represents zero timestamp.
+        /// </summary>
+        public static readonly Timestamp Zero = new Timestamp(0, 0);
+
         private const long MaxSeconds = 315576000000L;
         private const int MaxNanos = 999999999;
         private const long MillisPerSecond = 1000L;
@@ -32,11 +40,24 @@ namespace OpenCensus.Common
             this.Nanos = nanos;
         }
 
+        /// <summary>
+        /// Gets the number of seconds since the Unix Epoch represented by this timestamp.
+        /// </summary>
         public long Seconds { get; }
 
+        /// <summary>
+        /// Gets the the number of nanoseconds after the number of seconds since the Unix Epoch represented
+        /// by this timestamp.
+        /// </summary>
         public int Nanos { get; }
 
-        public static ITimestamp Create(long seconds, int nanos)
+        /// <summary>
+        /// Creates an instance of <see cref="Timestamp" /> class with the given seconds and nanoseconds values.
+        /// </summary>
+        /// <param name="seconds">Total number of seconds since the Unix Epoch represented by this <see cref="Timestamp"/>.</param>
+        /// <param name="nanos">The number of nanoseconds after the number of seconds since the Unix Epoch represented by this <see cref="Timestamp"/>.</param>
+        /// <returns>New instance of <see cref="Timestamp"/>.</returns>
+        public static Timestamp Create(long seconds, int nanos)
         {
             // TODO:
             if (seconds < -MaxSeconds || seconds > MaxSeconds)
@@ -52,24 +73,63 @@ namespace OpenCensus.Common
             return new Timestamp(seconds, nanos);
         }
 
-        public static ITimestamp FromMillis(long millis)
+        /// <summary>
+        /// Creates an instance of <see cref="Timestamp" /> class with the given total milliseconds since Unix Epoch.
+        /// </summary>
+        /// <param name="millis">Total number of milliseconds since the Unix Epoch represented by this <see cref="Timestamp"/>.</param>
+        /// <returns>New instance of <see cref="Timestamp"/>.</returns>
+        public static Timestamp FromMillis(long millis)
         {
             Timestamp zero = new Timestamp(0, 0);
             long nanos = millis * NanosPerMilli;
             return zero.Plus(0, nanos);
         }
 
-        public ITimestamp AddDuration(IDuration duration)
+        /// <summary>
+        /// Creates an instance of <see cref="Timestamp" /> class with the given time as <see cref="DateTimeOffset"/>.
+        /// </summary>
+        /// <param name="time">Time to convert to <see cref="Timestamp"/>.</param>
+        /// <returns>New instance of <see cref="Timestamp"/>.</returns>
+        public static Timestamp FromDateTimeOffset(DateTimeOffset time)
+        {
+            long seconds = 0;
+#if NET45
+            var unixZero = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);
+            seconds = (int)Math.Floor(time.Subtract(unixZero).TotalSeconds);
+#else
+            seconds = time.ToUnixTimeSeconds();
+#endif
+
+            int nanos = (int)time.Subtract(new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).Subtract(TimeSpan.FromSeconds(seconds)).Ticks * 100;
+            return Timestamp.Create(seconds, nanos);
+        }
+
+        /// <summary>
+        /// Adds duration to the timestamp.
+        /// </summary>
+        /// <param name="duration">Duration to add to the timestamp.</param>
+        /// <returns>Returns the timestamp with added duration.</returns>
+        public Timestamp AddDuration(Duration duration)
         {
             return this.Plus(duration.Seconds, duration.Nanos);
         }
 
-        public ITimestamp AddNanos(long nanosToAdd)
+        /// <summary>
+        /// Adds nanosToAdd nanosecond to the current timestamp.
+        /// </summary>
+        /// <param name="nanosToAdd">Number of nanoseconds to add.</param>
+        /// <returns>Returns the timstemp with added nanoseconds.</returns>
+        public Timestamp AddNanos(long nanosToAdd)
         {
             return this.Plus(0, nanosToAdd);
         }
 
-        public IDuration SubtractTimestamp(ITimestamp timestamp)
+        /// <summary>
+        /// Substructs timestamp from the current timestamp. Typically to calculate duration.
+        /// </summary>
+        /// <param name="timestamp">Timestamp to substruct.</param>
+        /// <returns>Returns the timestamp with the substructed duration.</returns>
+        public Duration SubtractTimestamp(Timestamp timestamp)
         {
             long durationSeconds = this.Seconds - timestamp.Seconds;
             int durationNanos = this.Nanos - timestamp.Nanos;
@@ -87,7 +147,8 @@ namespace OpenCensus.Common
             return Duration.Create(durationSeconds, durationNanos);
         }
 
-        public int CompareTo(ITimestamp other)
+        /// <inheritdoc />
+        public int CompareTo(Timestamp other)
         {
             int cmp = (this.Seconds < other.Seconds) ? -1 : ((this.Seconds > other.Seconds) ? 1 : 0);
             if (cmp != 0)
@@ -96,6 +157,19 @@ namespace OpenCensus.Common
             }
 
             return (this.Nanos < other.Nanos) ? -1 : ((this.Nanos > other.Nanos) ? 1 : 0);
+        }
+
+        /// <inheritdoc />
+        public int CompareTo(object obj)
+        {
+            if (obj is Timestamp timestamp)
+            {
+                return this.CompareTo(timestamp);
+            }
+            else
+            {
+                throw new InvalidOperationException();
+            }
         }
 
         /// <inheritdoc/>
@@ -110,11 +184,6 @@ namespace OpenCensus.Common
         /// <inheritdoc/>
         public override bool Equals(object o)
         {
-            if (o == this)
-            {
-                return true;
-            }
-
             if (o is Timestamp that)
             {
                 return (this.Seconds == that.Seconds)
@@ -135,7 +204,7 @@ namespace OpenCensus.Common
             return (int)h;
         }
 
-        private static ITimestamp OfSecond(long seconds, long nanoAdjustment)
+        private static Timestamp OfSecond(long seconds, long nanoAdjustment)
         {
             long floor = (long)Math.Floor((double)nanoAdjustment / NanosPerSecond);
             long secs = seconds + floor;
@@ -143,7 +212,7 @@ namespace OpenCensus.Common
             return Create(secs, (int)nos);
         }
 
-        private ITimestamp Plus(long secondsToAdd, long nanosToAdd)
+        private Timestamp Plus(long secondsToAdd, long nanosToAdd)
         {
             if ((secondsToAdd | nanosToAdd) == 0)
             {
@@ -152,7 +221,7 @@ namespace OpenCensus.Common
 
             long sec = this.Seconds + secondsToAdd;
             long nanoSeconds = Math.DivRem(nanosToAdd, NanosPerSecond, out long nanosSpill);
-            sec = sec + nanoSeconds;
+            sec += nanoSeconds;
             long nanoAdjustment = this.Nanos + nanosSpill;
             return OfSecond(sec, nanoAdjustment);
         }

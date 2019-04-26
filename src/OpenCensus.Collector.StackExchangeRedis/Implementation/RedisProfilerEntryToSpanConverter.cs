@@ -25,7 +25,7 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
 
     internal static class RedisProfilerEntryToSpanConverter
     {
-        public static void DrainSession(ISpan parentSpan, IEnumerable<IProfiledCommand> sessionCommands, ISampler sampler, IList<ISpanData> spans)
+        public static void DrainSession(ISpan parentSpan, IEnumerable<IProfiledCommand> sessionCommands, ISampler sampler, ICollection<ISpanData> spans)
         {
             var parentContext = parentSpan?.Context ?? SpanContext.Invalid;
 
@@ -99,7 +99,7 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
             // command.ElapsedTime;             // 00:00:32.4988020
 
             // TODO: make timestamp with the better precision
-            ITimestamp startTimestamp = Timestamp.FromMillis(new DateTimeOffset(command.CommandCreated).ToUnixTimeMilliseconds());
+            Timestamp startTimestamp = Timestamp.FromMillis(new DateTimeOffset(command.CommandCreated).ToUnixTimeMilliseconds());
 
             var timestamp = new DateTimeOffset(command.CommandCreated).Add(command.CreationToEnqueued);
             var annotations = TimedEvents<IAnnotation>.Create(
@@ -111,7 +111,7 @@ namespace OpenCensus.Collector.StackExchangeRedis.Implementation
                 },
                 droppedEventsCount: 0);
 
-            ITimestamp endTimestamp = Timestamp.FromMillis(new DateTimeOffset(command.CommandCreated.Add(command.ElapsedTime)).ToUnixTimeMilliseconds());
+            Timestamp endTimestamp = Timestamp.FromMillis(new DateTimeOffset(command.CommandCreated.Add(command.ElapsedTime)).ToUnixTimeMilliseconds());
 
             // TODO: deal with the re-transmission
             // command.RetransmissionOf;

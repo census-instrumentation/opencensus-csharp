@@ -22,28 +22,6 @@ namespace OpenCensus.Trace
     public static class SpanExtensions
     {
         /// <summary>
-        /// Helper method that sets span kind to client.
-        /// </summary>
-        /// <param name="span">Span to fill out.</param>
-        /// <returns>Span set client span.</returns>
-        public static ISpan PutClientSpanKindAttribute(this ISpan span)
-        {
-            span.Kind = SpanKind.Client;
-            return span;
-        }
-
-        /// <summary>
-        /// Helper method that sets span kind to server.
-        /// </summary>
-        /// <param name="span">Span to fill out.</param>
-        /// <returns>Span set server span.</returns>
-        public static ISpan PutServerSpanKindAttribute(this ISpan span)
-        {
-            span.Kind = SpanKind.Server;
-            return span;
-        }
-
-        /// <summary>
         /// Helper method that populates span properties from http method according
         /// to https://github.com/census-instrumentation/opencensus-specs/blob/4954074adf815f437534457331178194f6847ff9/trace/HTTP.md.
         /// </summary>

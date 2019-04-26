@@ -27,7 +27,7 @@ namespace OpenCensus.Trace.Export
         /// <summary>
         /// Gets the timestamp associated with this timed event.
         /// </summary>
-        ITimestamp Timestamp { get; }
+        Timestamp Timestamp { get; }
 
         /// <summary>
         /// Gets the typed event content.

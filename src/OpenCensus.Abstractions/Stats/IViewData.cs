@@ -16,8 +16,8 @@
 
 namespace OpenCensus.Stats
 {
+    using System;
     using System.Collections.Generic;
-    using OpenCensus.Common;
     using OpenCensus.Tags;
 
     /// <summary>
@@ -38,11 +38,11 @@ namespace OpenCensus.Stats
         /// <summary>
         /// Gets the timestamp of a start of this aggregation.
         /// </summary>
-        ITimestamp Start { get; }
+        DateTimeOffset Start { get; }
 
         /// <summary>
         /// Gets the timestamp of the end of this aggregation.
         /// </summary>
-        ITimestamp End { get; }
+        DateTimeOffset End { get; }
     }
 }

@@ -31,7 +31,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
 
         private readonly TelemetryClient telemetryClient;
 
-        private readonly TimeSpan collectionInterval = TimeSpan.FromSeconds(10);
+        private readonly TimeSpan collectionInterval;
 
         private readonly TimeSpan cancellationInterval = TimeSpan.FromMilliseconds(10);
 
@@ -49,7 +49,6 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
         {
             try
             {
-                var sleepInterval = this.collectionInterval;
                 Stopwatch sw = new Stopwatch();
 
                 while (!this.token.IsCancellationRequested)
@@ -59,21 +58,21 @@ namespace OpenCensus.Exporter.ApplicationInsights.Implementation
                     sw.Stop();
 
                     // adjust interval for data collection time
-                    sleepInterval = this.collectionInterval.Subtract(sw.Elapsed);
+                    var sleepInterval = this.collectionInterval.Subtract(sw.Elapsed);
 
                     // allow faster thread cancellation
                     while (sleepInterval > this.cancellationInterval && !this.token.IsCancellationRequested)
                     {
                         Thread.Sleep(this.cancellationInterval);
-                        sleepInterval.Subtract(this.cancellationInterval);
+                        sleepInterval = sleepInterval.Subtract(this.cancellationInterval);
                     }
 
                     Thread.Sleep(sleepInterval);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // TODO: report error
+                Debug.WriteLine(ex);
             }
         }
 

@@ -48,7 +48,7 @@ namespace OpenCensus.Collector.AspNetCore.Tests
         public async Task SuccesfulTemplateControllerCallGeneratesASpan()
         {
             var startEndHandler = new Mock<IStartEndHandler>();
-            var tracer = new Tracer(new RandomGenerator(), startEndHandler.Object, new DateTimeOffsetClock(), new TraceConfig());
+            var tracer = new Tracer(new RandomGenerator(), startEndHandler.Object, new TraceConfig());
 
             void ConfigureTestServices(IServiceCollection services) =>
                 services.AddSingleton<ITracer>(tracer);
@@ -92,7 +92,7 @@ namespace OpenCensus.Collector.AspNetCore.Tests
         public async Task SuccesfulTemplateControllerCallUsesRemoteParentContext()
         {
             var startEndHandler = new Mock<IStartEndHandler>();
-            var tracer = new Tracer(new RandomGenerator(), startEndHandler.Object, new DateTimeOffsetClock(), new TraceConfig());
+            var tracer = new Tracer(new RandomGenerator(), startEndHandler.Object, new TraceConfig());
 
             var expectedTraceId = TraceId.GenerateRandomId(new RandomGenerator());
             var expectedSpanId = SpanId.GenerateRandomId(new RandomGenerator());

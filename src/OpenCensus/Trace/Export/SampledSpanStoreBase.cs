@@ -52,8 +52,8 @@ namespace OpenCensus.Trace.Export
 
         public abstract IEnumerable<ISpanData> GetLatencySampledSpans(ISampledSpanStoreLatencyFilter filter);
 
-        public abstract void RegisterSpanNamesForCollection(IList<string> spanNames);
+        public abstract void RegisterSpanNamesForCollection(IEnumerable<string> spanNames);
 
-        public abstract void UnregisterSpanNamesForCollection(IList<string> spanNames);
+        public abstract void UnregisterSpanNamesForCollection(IEnumerable<string> spanNames);
     }
 }

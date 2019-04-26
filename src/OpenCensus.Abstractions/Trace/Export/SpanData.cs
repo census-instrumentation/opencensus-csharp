@@ -18,6 +18,7 @@ namespace OpenCensus.Trace.Export
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using OpenCensus.Common;
 
     public sealed class SpanData : ISpanData
@@ -27,7 +28,7 @@ namespace OpenCensus.Trace.Export
             ISpanId parentSpanId,
             bool? hasRemoteParent,
             string name,
-            ITimestamp startTimestamp,
+            Timestamp startTimestamp,
             IAttributes attributes,
             ITimedEvents<IAnnotation> annotations,
             ITimedEvents<IMessageEvent> messageEvents,
@@ -35,7 +36,7 @@ namespace OpenCensus.Trace.Export
             int? childSpanCount,
             Status status,
             SpanKind kind,
-            ITimestamp endTimestamp)
+            Timestamp endTimestamp)
         {
             this.Context = context ?? throw new ArgumentNullException(nameof(context));
             this.ParentSpanId = parentSpanId;
@@ -43,9 +44,9 @@ namespace OpenCensus.Trace.Export
             this.Name = name ?? throw new ArgumentNullException(nameof(name));
             this.StartTimestamp = startTimestamp ?? throw new ArgumentNullException(nameof(startTimestamp));
             this.Attributes = attributes ?? Export.Attributes.Create(new Dictionary<string, IAttributeValue>(), 0);
-            this.Annotations = annotations ?? TimedEvents<IAnnotation>.Create(new List<ITimedEvent<IAnnotation>>(), 0);
-            this.MessageEvents = messageEvents ?? TimedEvents<IMessageEvent>.Create(new List<ITimedEvent<IMessageEvent>>(), 0);
-            this.Links = links ?? LinkList.Create(new List<ILink>(), 0);
+            this.Annotations = annotations ?? TimedEvents<IAnnotation>.Create(Enumerable.Empty<ITimedEvent<IAnnotation>>(), 0);
+            this.MessageEvents = messageEvents ?? TimedEvents<IMessageEvent>.Create(Enumerable.Empty<ITimedEvent<IMessageEvent>>(), 0);
+            this.Links = links ?? LinkList.Create(Enumerable.Empty<ILink>(), 0);
             this.ChildSpanCount = childSpanCount;
             this.Status = status;
             this.Kind = kind;
@@ -60,7 +61,7 @@ namespace OpenCensus.Trace.Export
 
         public string Name { get; }
 
-        public ITimestamp Timestamp { get; }
+        public Timestamp Timestamp { get; }
 
         public IAttributes Attributes { get; }
 
@@ -76,16 +77,16 @@ namespace OpenCensus.Trace.Export
 
         public SpanKind Kind { get; }
 
-        public ITimestamp EndTimestamp { get; }
+        public Timestamp EndTimestamp { get; }
 
-        public ITimestamp StartTimestamp { get; }
+        public Timestamp StartTimestamp { get; }
 
         public static ISpanData Create(
                         ISpanContext context,
                         ISpanId parentSpanId,
                         bool? hasRemoteParent,
                         string name,
-                        ITimestamp startTimestamp,
+                        Timestamp startTimestamp,
                         IAttributes attributes,
                         ITimedEvents<IAnnotation> annotations,
                         ITimedEvents<IMessageEvent> messageOrNetworkEvents,
@@ -93,7 +94,7 @@ namespace OpenCensus.Trace.Export
                         int? childSpanCount,
                         Status status,
                         SpanKind kind,
-                        ITimestamp endTimestamp)
+                        Timestamp endTimestamp)
         {
             if (messageOrNetworkEvents == null)
             {

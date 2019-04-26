@@ -43,38 +43,19 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         private readonly byte[] testSpanIdBytes = { 0xd7, 0xdd, 0xeb, 0x4a, 0xa9, 0xa5, 0xe7, 0x8b };
         private readonly byte[] testParentSpanIdBytes = { 0x9b, 0xa7, 0x9c, 0x9f, 0xbd, 0x2f, 0xb4, 0x95 };
 
-        public class TestClock : IClock
+        private DateTimeOffset nowDateTimeOffset;
+
+        private Timestamp NowTimestamp
         {
-            private readonly DateTimeOffset nowSecondsPrecision;
-            private int NanosecondsAfterSeconds;
-
-            public TestClock(DateTimeOffset now)
+            get
             {
-                // remove ticks
-                this.nowSecondsPrecision = DateTimeOffset.FromUnixTimeSeconds(now.ToUnixTimeSeconds());
-                this.NanosecondsAfterSeconds = (int)(now.Subtract(this.nowSecondsPrecision).Ticks * 100 + 23); //23 is just a random constant
+                return Timestamp.FromDateTimeOffset(nowDateTimeOffset);
             }
+        }
 
-            public TestClock GetBefore(TimeSpan span)
-            {
-                return new TestClock(this.nowSecondsPrecision.Subtract(span).AddTicks(this.NanosecondsAfterSeconds / 100));
-            }
-
-            public ITimestamp Now
-            {
-                get
-                {
-                    return Timestamp.Create(this.nowSecondsPrecision.ToUnixTimeSeconds(), NanosecondsAfterSeconds);
-                }
-            }
-
-            public long NowNanos
-            {
-                get
-                {
-                    return nowSecondsPrecision.ToUnixTimeSeconds() * 1000 * 1000 * 1000 + NanosecondsAfterSeconds;
-                }
-            }
+        public OpenCensusTelemetryConverterTests()
+        {
+            nowDateTimeOffset = DateTimeOffset.Now.Subtract(TimeSpan.FromSeconds(1));
         }
 
         private ConcurrentQueue<ITelemetry> ConvertSpan(ISpanData data)
@@ -89,7 +70,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             configuration.TelemetryChannel = channel;
 
             TraceExporterHandler exporter = new TraceExporterHandler(configuration);
-            exporter.Export(new List<ISpanData> { data });
+            exporter.ExportAsync(new List<ISpanData> { data }).Wait();
 
             return sentItems;
         }
@@ -98,7 +79,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         public void OpenCensusTelemetryConverterTests_TracksRequest()
         {
             // ARRANGE
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             var span = SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
 
             // ACT
@@ -110,7 +91,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
 
             var request = sentItems.OfType<RequestTelemetry>().Single();
             Assert.Equal("spanName", request.Name);
-            Assert.Equal(now.GetBefore(TimeSpan.FromSeconds(1)).NowNanos, new TestClock(request.Timestamp).NowNanos);
+            Assert.Equal(nowDateTimeOffset.Subtract(TimeSpan.FromSeconds(1)), request.Timestamp);
             Assert.Equal(1, request.Duration.TotalSeconds);
 
             Assert.Equal(TestTraceId, request.Context.Operation.Id);
@@ -130,7 +111,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         {
             // ARRANGE
 
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
 
             context = SpanContext.Create(
                 context.TraceId,
@@ -161,7 +142,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         public void OpenCensusTelemetryConverterTests_TracksRequestWithParent()
         {
             // ARRANGE
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
 
             parentSpanId = SpanId.FromBytes(this.testParentSpanIdBytes);
 
@@ -178,7 +159,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         public void OpenCensusTelemetryConverterTests_TracksRequestWithInvalidParent()
         {
             // ARRANGE
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
 
             parentSpanId = SpanId.Invalid;
 
@@ -195,7 +176,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         public void OpenCensusTelemetryConverterTests_TracksRequestWithStatus()
         {
             // ARRANGE
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
 
             status = Status.Ok;
 
@@ -216,7 +197,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         public void OpenCensusTelemetryConverterTests_TracksRequestWithStatusAndDescription()
         {
             // ARRANGE
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
 
             status = Status.Ok.WithDescription("all good");
 
@@ -237,7 +218,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         public void OpenCensusTelemetryConverterTests_TracksRequestWithNonSuccessStatusAndDescription()
         {
             // ARRANGE
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
 
             status = Status.Cancelled.WithDescription("all bad");
 
@@ -259,7 +240,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksRequestErrorAttribute()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
 
             attributes = Attributes.Create(new Dictionary<string, IAttributeValue>() { { "error", AttributeValue.BooleanAttributeValue(true) } }, 0);
 
@@ -276,7 +257,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         public void OpenCensusTelemetryConverterTests_TracksDependency()
         {
             // ARRANGE
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
 
             kind = SpanKind.Client;
 
@@ -291,7 +272,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
 
             var dependency = sentItems.OfType<DependencyTelemetry>().Single();
             Assert.Equal("spanName", dependency.Name);
-            Assert.Equal(now.GetBefore(TimeSpan.FromSeconds(1)).NowNanos, new TestClock(dependency.Timestamp).NowNanos);
+            Assert.Equal(nowDateTimeOffset.Subtract(TimeSpan.FromSeconds(1)), dependency.Timestamp);
             Assert.Equal(1, dependency.Duration.TotalSeconds);
 
             Assert.Equal(TestTraceId, dependency.Context.Operation.Id);
@@ -310,7 +291,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         public void OpenCensusTelemetryConverterTests_TracksDependencyWithTracestate()
         {
             // ARRANGE
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
 
             kind = SpanKind.Client;
             context = SpanContext.Create(
@@ -347,7 +328,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             // ARRANGE
             var now = DateTime.UtcNow;
 
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
 
             kind = SpanKind.Client;
 
@@ -417,7 +398,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         public void OpenCensusTelemetryConverterTests_TracksDependencyWithParent()
         {
             // ARRANGE
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             kind = SpanKind.Client;
             parentSpanId = SpanId.FromBytes(this.testParentSpanIdBytes);
             var span = SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
@@ -434,7 +415,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         public void OpenCensusTelemetryConverterTests_TracksDependencyWithStatus()
         {
             // ARRANGE
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             kind = SpanKind.Client;
             status = Status.Ok;
             var span = SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
@@ -455,7 +436,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         public void OpenCensusTelemetryConverterTests_TracksDependencyWithStatusAndDescription()
         {
             // ARRANGE
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             kind = SpanKind.Client;
             status = Status.Ok.WithDescription("all good");
             var span = SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
@@ -478,7 +459,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         public void OpenCensusTelemetryConverterTests_TracksDependencyWithNonSuccessStatusAndDescription()
         {
             // ARRANGE
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             kind = SpanKind.Client;
             status = Status.Cancelled.WithDescription("all bad");
             var span = SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
@@ -499,7 +480,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksDependencyErrorAttribute()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             kind = SpanKind.Client;
             attributes = Attributes.Create(new Dictionary<string, IAttributeValue>() { { "error", AttributeValue.BooleanAttributeValue(true) } }, 0);
             var span = SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
@@ -514,7 +495,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksRequestBasedOnSpanKindAttribute()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             kind = SpanKind.Client;
             attributes = Attributes.Create(new Dictionary<string, IAttributeValue>() { { "span.kind", AttributeValue.StringAttributeValue("server") } }, 0);
 
@@ -528,7 +509,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksRequestBasedOnSpanKindProperty()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             parentSpanId = SpanId.FromBytes(this.testParentSpanIdBytes);
             hasRemoteParent = null;
             var span = SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
@@ -541,7 +522,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksDependencyBasedOnSpanKindProperty()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             kind = SpanKind.Client;
             parentSpanId = SpanId.FromBytes(this.testParentSpanIdBytes);
             hasRemoteParent = null;
@@ -555,7 +536,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksDependenciesBasedOnSpanKindAttribute()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             kind = SpanKind.Unspecified;
             attributes = Attributes.Create(new Dictionary<string, IAttributeValue>() { { "span.kind", AttributeValue.StringAttributeValue("client") } }, 0);
             var span = SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
@@ -568,7 +549,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksRequestBasedOnSameProcessAsParentFlag()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             kind = SpanKind.Unspecified;
             hasRemoteParent = true;
             var span = SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
@@ -580,7 +561,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksDepednencyBasedOnSameProcessAsParentFlag()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             kind = SpanKind.Unspecified;
             hasRemoteParent = false;
             var span = SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
@@ -592,7 +573,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksDepednencyBasedOnSameProcessAsParentFlagNotSet()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             kind = SpanKind.Unspecified;
             hasRemoteParent = null;
             var span = SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
@@ -606,7 +587,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         //[Fact]
         //public void OpenCensusTelemetryConverterTests_TracksRequestWithoutName()
         //{
-        //    this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+        //    this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
         //    name = null;
         //    var span = SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
 
@@ -618,7 +599,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksDependencyWithoutKind()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             kind = SpanKind.Unspecified;
             var span = SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
 
@@ -631,7 +612,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         //[Fact]
         //public void OpenCensusTelemetryConverterTests_TracksRequestWithoutStartAndEndTime()
         //{
-        //    this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+        //    this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
         //    startTimestamp = null;
         //    endTimestamp = null;
         //    var span = SpanData.Create(context, parentSpanId, hasRemoteParent, name, startTimestamp, attributes, annotations, messageOrNetworkEvents, links, childSpanCount, status, kind, endTimestamp);
@@ -646,7 +627,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpRequestWithUrl()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             var url = new Uri("https://host:123/path?query");
             name = "HttpIn";
             attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
@@ -668,7 +649,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpRequestWithRelativeUrl()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             var url = new Uri("https://host:123/path?query");
             name = "HttpIn";
             attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
@@ -690,7 +671,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpRequestWithUrlAndRoute()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             var url = new Uri("https://host:123/path?query");
             name = "HttpIn";
             attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
@@ -713,7 +694,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpRequestWithUrlAndNoMethod()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             var url = new Uri("https://host:123/path?query");
             name = "HttpIn";
             attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
@@ -734,7 +715,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpRequestWithUrlOtherAttributesAreIgnored()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             var url = new Uri("https://host:123/path?query");
             name = "HttpIn";
             attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
@@ -760,7 +741,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         public void OpenCensusTelemetryConverterTests_TracksRequestWithStringStatusCode()
         {
             // ARRANGE
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             var url = new Uri("https://host:123/path?query");
             name = "HttpIn";
             attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
@@ -781,7 +762,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpRequestHostPortPathAttributes()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             var url = new Uri("https://host:123/path?query");
             name = "HttpIn";
             attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
@@ -805,7 +786,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpRequestPortPathAndEmptyHostAttributes()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             name = "HttpIn";
             attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
                 {
@@ -828,7 +809,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpRequestHostPathAttributes()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             var url = new Uri("https://host:123/path?query");
             name = "HttpIn";
             attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
@@ -851,7 +832,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpRequestHostAttributes()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             name = "HttpIn";
             attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
                 {
@@ -872,7 +853,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpRequestOnlyMethodAttributes()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             var url = new Uri("https://host:123/path?query");
             name = "HttpIn";
             attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
@@ -894,7 +875,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         public void OpenCensusTelemetryConverterTests_TracksDependencyWithStringStatusCode()
         {
             // ARRANGE
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             var url = new Uri("https://host:123/path?query");
             kind = SpanKind.Client;
             name = "HttpIn";
@@ -916,7 +897,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpRequestUserAgent()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             var url = new Uri("https://host/path");
             var userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36";
             name = "HttpIn";
@@ -936,7 +917,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpDependencyWithUrl()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             var url = new Uri("https://host:123/path?query");
             name = "HttpOut";
             kind = SpanKind.Client;
@@ -961,7 +942,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpDependencyWithRelativeUrl()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             var url = new Uri("https://host:123/path?query");
             name = "HttpOut";
             kind = SpanKind.Client;
@@ -986,7 +967,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpDependencyWithUrlIgnoresHostPortPath()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             var url = new Uri("https://host:123/path?query");
             name = "HttpOut";
             kind = SpanKind.Client;
@@ -1014,7 +995,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpDependencyWithHostPortPath()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             name = "HttpOut";
             kind = SpanKind.Client;
             attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
@@ -1040,7 +1021,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpDependencyWithHostPort()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             name = "HttpOut";
             kind = SpanKind.Client;
             attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
@@ -1065,7 +1046,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpDependencyWithPathAndEmptyHost()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             name = "HttpOut";
             kind = SpanKind.Client;
             attributes = Attributes.Create(new Dictionary<string, IAttributeValue>()
@@ -1090,7 +1071,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpDependencyWithHost()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             var url = new Uri("https://host:123/path?query");
             name = "HttpOut";
             kind = SpanKind.Client;
@@ -1115,7 +1096,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpDependencyWithMethod()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             var url = new Uri("https://host:123/path?query");
             name = "HttpOut";
             kind = SpanKind.Client;
@@ -1140,7 +1121,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksHttpDependencyWithStatusCodeOnly()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             var url = new Uri("https://host:123/path?query");
             name = "HttpOut";
             kind = SpanKind.Client;
@@ -1163,7 +1144,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksDependencyWithCustomAttributes()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             var url = new Uri("https://host:123/path?query");
             name = "spanName";
             kind = SpanKind.Client;
@@ -1193,7 +1174,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksRequestsWithCustomAttributes()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             var url = new Uri("https://host:123/path?query");
             name = "spanName";
             kind = SpanKind.Server;
@@ -1231,7 +1212,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             var (link1SpanId, link1SpanIdBytes) = GenerateRandomId(8);
             var (link2SpanId, link2SpanIdBytes) = GenerateRandomId(8);
 
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             name = "spanName";
             kind = SpanKind.Client;
 
@@ -1279,7 +1260,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksDependencyWithLinksAndAttributes()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             name = "spanName";
             kind = SpanKind.Client;
 
@@ -1329,7 +1310,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             var (link1SpanId, link1SpanIdBytes) = GenerateRandomId(8);
             var (link2SpanId, link2SpanIdBytes) = GenerateRandomId(8);
 
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             name = "spanName";
             kind = SpanKind.Server;
 
@@ -1377,7 +1358,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksRequestWithLinksAndAttributes()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             name = "spanName";
             kind = SpanKind.Server;
 
@@ -1419,14 +1400,14 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksRequestWithAnnotations()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             Thread.Sleep(TimeSpan.FromTicks(10));
             name = "spanName";
             kind = SpanKind.Server;
 
             annotations = TimedEvents<IAnnotation>.Create(
                 new List<ITimedEvent<IAnnotation>>() {
-                    TimedEvent<IAnnotation>.Create(now.Now, Annotation.FromDescription("test message1")),
+                    TimedEvent<IAnnotation>.Create(NowTimestamp, Annotation.FromDescription("test message1")),
                     TimedEvent<IAnnotation>.Create(null, Annotation.FromDescriptionAndAttributes("test message2", new Dictionary<string, IAttributeValue>()
                         {
                             { "custom.stringAttribute", AttributeValue.StringAttributeValue("string") },
@@ -1456,8 +1437,8 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             Assert.Equal("test message1", trace1.Message);
             Assert.Equal("test message2", trace2.Message);
 
-            Assert.Equal(now.NowNanos, new TestClock(trace1.Timestamp).NowNanos);
-            Assert.NotEqual(now.NowNanos, new TestClock(trace2.Timestamp).NowNanos);
+            Assert.Equal(nowDateTimeOffset, trace1.Timestamp);
+            Assert.NotEqual(nowDateTimeOffset, trace2.Timestamp);
             Assert.True(Math.Abs((DateTime.UtcNow - trace2.Timestamp).TotalSeconds) < 1);
 
             Assert.False(trace1.Properties.Any());
@@ -1543,14 +1524,14 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksDependenciesWithAnnotations()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
-            now = now.GetBefore(TimeSpan.FromSeconds(1));
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            nowDateTimeOffset = nowDateTimeOffset.Subtract(TimeSpan.FromSeconds(1));
             name = "spanName";
             kind = SpanKind.Client;
 
             annotations = TimedEvents<IAnnotation>.Create(
                 new List<ITimedEvent<IAnnotation>>() {
-                    TimedEvent<IAnnotation>.Create(now.Now, Annotation.FromDescription("test message1")),
+                    TimedEvent<IAnnotation>.Create(NowTimestamp, Annotation.FromDescription("test message1")),
                     TimedEvent<IAnnotation>.Create(null, Annotation.FromDescriptionAndAttributes("test message2", new Dictionary<string, IAttributeValue>()
                         {
                             { "custom.stringAttribute", AttributeValue.StringAttributeValue("string") },
@@ -1580,8 +1561,8 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             Assert.Equal("test message1", trace1.Message);
             Assert.Equal("test message2", trace2.Message);
 
-            Assert.Equal(now.NowNanos, new TestClock(trace1.Timestamp).NowNanos);
-            Assert.NotEqual(now.NowNanos, new TestClock(trace2.Timestamp).NowNanos);
+            Assert.Equal(nowDateTimeOffset, trace1.Timestamp);
+            Assert.NotEqual(nowDateTimeOffset, trace2.Timestamp);
             Assert.True(Math.Abs((DateTime.UtcNow - trace2.Timestamp).TotalSeconds) < 1);
 
             Assert.False(trace1.Properties.Any());
@@ -1599,7 +1580,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         [Fact]
         public void OpenCensusTelemetryConverterTests_TracksRequestWithMessage()
         {
-            this.GetDefaults(out var now, out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
+            this.GetDefaults(out var context, out var parentSpanId, out var hasRemoteParent, out var name, out var startTimestamp, out var attributes, out var annotations, out var messageOrNetworkEvents, out var links, out var childSpanCount, out var status, out var kind, out var endTimestamp);
             Thread.Sleep(TimeSpan.FromTicks(10));
             name = "spanName";
             kind = SpanKind.Server;
@@ -1607,8 +1588,8 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             messageOrNetworkEvents = TimedEvents<IMessageEvent>.Create(
                 new List<ITimedEvent<IMessageEvent>>()
                 {
-                    TimedEvent<IMessageEvent>.Create(now.Now, MessageEvent.Builder(MessageEventType.Received, 1).SetCompressedMessageSize(2).SetUncompressedMessageSize(3).Build()),
-                    TimedEvent<IMessageEvent>.Create(now.Now, MessageEvent.Builder(MessageEventType.Sent, 4).SetCompressedMessageSize(5).SetUncompressedMessageSize(6).Build()),
+                    TimedEvent<IMessageEvent>.Create(NowTimestamp, MessageEvent.Builder(MessageEventType.Received, 1).SetCompressedMessageSize(2).SetUncompressedMessageSize(3).Build()),
+                    TimedEvent<IMessageEvent>.Create(NowTimestamp, MessageEvent.Builder(MessageEventType.Sent, 4).SetCompressedMessageSize(5).SetUncompressedMessageSize(6).Build()),
                     TimedEvent<IMessageEvent>.Create(null, MessageEvent.Builder(MessageEventType.Unspecified, 7).SetCompressedMessageSize(8).SetUncompressedMessageSize(9).Build()),
                 },
                 droppedEventsCount: 0);
@@ -1860,12 +1841,11 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
         */
 
         private void GetDefaults(
-            out TestClock now,
             out ISpanContext context,
             out ISpanId parentSpanId,
             out bool? hasRemoteParent,
             out string name,
-            out ITimestamp startTimestamp,
+            out Timestamp startTimestamp,
             out IAttributes attributes,
             out ITimedEvents<IAnnotation> annotations,
             out ITimedEvents<IMessageEvent> messageOrNetworkEvents,
@@ -1873,14 +1853,13 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             out int? childSpanCount,
             out Status status,
             out SpanKind kind,
-            out ITimestamp endTimestamp)
+            out Timestamp endTimestamp)
         {
-            now = new TestClock(DateTimeOffset.UtcNow);
             context = SpanContext.Create(TraceId.FromBytes(this.testTraceIdBytes), SpanId.FromBytes(this.testSpanIdBytes), TraceOptions.Default, Tracestate.Empty);
             parentSpanId = SpanId.Invalid;
             hasRemoteParent = null;
             name = "spanName";
-            startTimestamp = now.GetBefore(TimeSpan.FromSeconds(1)).Now;
+            startTimestamp = NowTimestamp.AddDuration(Duration.Create(TimeSpan.FromSeconds(-1)));
             attributes = null;
             annotations = null;
             messageOrNetworkEvents = null;
@@ -1888,7 +1867,7 @@ namespace OpenCensus.Exporter.ApplicationInsights.Tests
             childSpanCount = null;
             status = null;
             kind = SpanKind.Server;
-            endTimestamp = now.Now;
+            endTimestamp = NowTimestamp;
         }
     }
 };
