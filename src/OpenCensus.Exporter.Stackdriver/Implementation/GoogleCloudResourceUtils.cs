@@ -47,7 +47,7 @@ namespace OpenCensus.Exporter.Stackdriver.Implementation
             string serviceAccountFilePath = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS");
             if (!string.IsNullOrEmpty(serviceAccountFilePath) && File.Exists(serviceAccountFilePath))
             {
-                using (var stream = new FileStream(serviceAccountFilePath, FileMode.Open))
+                using (var stream = new FileStream(serviceAccountFilePath, FileMode.Open, FileAccess.Read))
                 {
                     var credential = Google.Apis.Auth.OAuth2.ServiceAccountCredential.FromServiceAccountData(stream);
                     return credential.ProjectId;
