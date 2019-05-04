@@ -30,7 +30,6 @@ namespace OpenCensus.Trace.Export
         private readonly BlockingCollection<ISpan> spans;
         private readonly ConcurrentDictionary<string, IHandler> serviceHandlers = new ConcurrentDictionary<string, IHandler>();
         private readonly TimeSpan scheduleDelay;
-        private bool shutdown = false;
 
         public SpanExporterWorker(int bufferSize, Duration scheduleDelay)
         {
@@ -41,7 +40,6 @@ namespace OpenCensus.Trace.Export
 
         public void Dispose()
         {
-            this.shutdown = true;
             this.spans.CompleteAdding();
         }
 
@@ -76,7 +74,7 @@ namespace OpenCensus.Trace.Export
         internal async void Run(object obj)
         {
             List<ISpanData> toExport = new List<ISpanData>();
-            while (!this.shutdown)
+            while (!this.spans.IsAddingCompleted)
             {
                 try
                 {
