@@ -15,6 +15,9 @@ SDK](https://github.com/open-telemetry/opentelemetry-dotnet/).
 
 [![OpenTelemetryLogo](https://opentelemetry.io/img/logos/opentelemetry-horizontal-color.png)](https://github.com/open-telemetry/opentelemetry-dotnet/)
 
+All the open issues and PRs on this repository will be moved to the new project
+or closed. We do not expect any new versions of OpenTelemetry .NET SDK shipped.
+
 OpenCensus C# has never left the Alpha release stage. Please see this [project
 description](PROJECT_DESCRIPTION.md) for details of what was built. If you took
 a dependency on OpenCensus C# project - please let us know at .NET gitter
