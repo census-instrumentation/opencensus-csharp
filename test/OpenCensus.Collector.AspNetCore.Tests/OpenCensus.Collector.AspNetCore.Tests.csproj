@@ -35,7 +35,7 @@
     <ProjectReference Include="..\..\src\OpenCensus.Collector.AspNetCore\OpenCensus.Collector.AspNetCore.csproj" />
     <ProjectReference Include="..\..\src\OpenCensus\OpenCensus.csproj" />
     <ProjectReference Include="..\TestApp.AspNetCore.2.0\TestApp.AspNetCore.2.0.csproj" />
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.4" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.22" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="2.1.2" />
   </ItemGroup>
 
